@@ -1,0 +1,7 @@
+{
+  "singleQuote": true,
+  "singleAttributePerLine": true,
+  "htmlWhitespaceSensitivity": "ignore",
+  "trailingComma": "es5",
+  "endOfLine": "auto"
+}
