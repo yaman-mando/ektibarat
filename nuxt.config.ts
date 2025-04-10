@@ -129,7 +129,7 @@ export default defineNuxtConfig({
   },
   auth: {
     originEnvKey: 'NUXT_BASE_URL',
-    baseURL: getEnv().websiteUrl,
+    baseURL: getEnv().baseUrl,
     provider: {
       type: 'local',
       endpoints: {
