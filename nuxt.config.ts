@@ -1,13 +1,15 @@
 import tailwindcss from '@tailwindcss/vite';
 import { process } from 'std-env';
+import type { LinkWithoutEvents, ScriptWithoutEvents } from 'unhead/types';
 
 const IS_PROD_ENV = process.env.NODE_ENV === 'production';
 const APP_ENVS = {
   prod: 'prod',
   local_prod: 'local_prod',
   dev: 'dev',
+  local_dev: 'local_dev',
 };
-const currentEnv = APP_ENVS.dev;
+const currentEnv = APP_ENVS.local_dev;
 const getEnv = () => {
   const buildEnvOptions = {
     [APP_ENVS.prod]: {
@@ -109,8 +111,54 @@ const getEnv = () => {
       },
     },
   };
+  buildEnvOptions[APP_ENVS.local_dev] = buildEnvOptions[APP_ENVS.dev];
   return buildEnvOptions[currentEnv];
 };
+
+const jsLinks = (): ScriptWithoutEvents[] => {
+  const buildEnvOptions: { [key: string]: ScriptWithoutEvents[] } = {
+    [APP_ENVS.prod]: IS_PROD_ENV ? [{ src: '/clarity.js', defer: true }] : [],
+    [APP_ENVS.dev]: [],
+    [APP_ENVS.local_dev]: [],
+    [APP_ENVS.local_prod]: [],
+  };
+  return buildEnvOptions[currentEnv];
+};
+
+const getPrefetchAndPreconnect = (url: string) => {
+  const { protocol, hostname } = new URL(url);
+  return {
+    preconnect: `${protocol}//${hostname}`, // >  "https://media.ekhtibarat.com"
+    dnsPrefetch: `//${hostname}`, // > "//media.ekhtibarat.com"
+  };
+};
+const prefetch_preConnect_urls = getPrefetchAndPreconnect(
+  getEnv().baseImageUrl
+);
+
+const appFonts: LinkWithoutEvents[] = [
+  {
+    rel: 'preload',
+    href: '/fonts/abdoLine/AbdoLine.woff2',
+    as: 'font',
+    type: 'font/woff2',
+    crossorigin: 'anonymous',
+  },
+  {
+    rel: 'preload',
+    href: '/fonts/Tajawal/Tajawal-Regular.woff2',
+    as: 'font',
+    type: 'font/woff2',
+    crossorigin: 'anonymous',
+  },
+  {
+    rel: 'preload',
+    href: '/fonts/Tajawal/Tajawal-Bold.woff2',
+    as: 'font',
+    type: 'font/woff2',
+    crossorigin: 'anonymous',
+  },
+];
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -119,10 +167,46 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@sidebase/nuxt-auth', '@nuxt/image', '@nuxt/eslint'],
-  css: ['~/assets/css/main.css'],
   vite: {
     plugins: [tailwindcss()],
+  },
+  modules: [
+    '@sidebase/nuxt-auth',
+    '@nuxt/image',
+    '@nuxt/eslint',
+    'nuxt-security',
+  ],
+  css: ['~/assets/css/app-font.css', '~/assets/css/main.css'],
+  app: {
+    head: {
+      title: 'اختبارات',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        {
+          name: 'Content-Security-Policy',
+          content: 'upgrade-insecure-requests',
+        },
+        { name: 'referrer', content: 'origin' },
+      ],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        {
+          rel: 'preconnect',
+          href: prefetch_preConnect_urls.preconnect,
+        },
+        { rel: 'dns-prefetch', href: prefetch_preConnect_urls.dnsPrefetch },
+        //@ts-ignore
+        ...appFonts,
+      ],
+      //@ts-ignore
+      script: [...jsLinks()],
+    },
+  },
+  security: {
+    headers: {
+      xFrameOptions: 'DENY',
+    },
   },
   runtimeConfig: {
     baseURL: getEnv().websiteUrl,
@@ -165,6 +249,17 @@ export default defineNuxtConfig({
           httpOnlyCookieAttribute: false,
         },
       },
+    },
+  },
+  image: {
+    domains: [getEnv().baseImageUrl, getEnv().websiteUrl, 'localhost'],
+    format: ['jpg', 'png', 'webp'],
+    screens: {
+      sm: 320,
+      md: 640,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536,
     },
   },
 });

@@ -1,0 +1,55 @@
+@font-face {
+  font-family: 'Tajawal';
+  src: url('/fonts/Tajawal/Tajawal-Regular.woff2') format('woff2'),
+  url('/fonts/Tajawal/Tajawal-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  src: url('/fonts/Tajawal/Tajawal-Medium.woff2') format('woff2'),
+  url('/fonts/Tajawal/Tajawal-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  src: url('/fonts/Tajawal/Tajawal-Bold.woff2') format('woff2'),
+  url('/fonts/Tajawal/Tajawal-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/*abdo line*/
+@font-face {
+  font-family: 'AbdoLine';
+  src: url('/fonts/abdoLine/AbdoLine-Bold.woff2') format('woff2'),
+  url('/fonts/abdoLine/Abdo Line Bold.otf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AbdoLine';
+  src: url('/fonts/abdoLine/AbdoLine.woff2') format('woff2'),
+  url('/fonts/abdoLine/Abdo Line.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AbdoLine';
+  src: url('/fonts/abdoLine/AbdoLine-Black.woff2') format('woff2'),
+  url('/fonts/abdoLine/Abdo Line Black.otf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
