@@ -1,5 +1,6 @@
 <template>
   <div>
+    statuss:{{ status }}
     <slot />
   </div>
 </template>

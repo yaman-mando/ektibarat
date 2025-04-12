@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { process } from 'std-env';
 import type { LinkWithoutEvents, ScriptWithoutEvents } from 'unhead/types';
 
-const IS_PROD_ENV = process.env.NODE_ENV === 'production';
+const IS_PRODUCTION_APP = process.env.NODE_ENV === 'production';
 const APP_ENVS = {
   prod: 'prod',
   local_prod: 'local_prod',
@@ -117,7 +117,9 @@ const getEnv = () => {
 
 const jsLinks = (): ScriptWithoutEvents[] => {
   const buildEnvOptions: { [key: string]: ScriptWithoutEvents[] } = {
-    [APP_ENVS.prod]: IS_PROD_ENV ? [{ src: '/clarity.js', defer: true }] : [],
+    [APP_ENVS.prod]: IS_PRODUCTION_APP
+      ? [{ src: '/clarity.js', defer: true }]
+      : [],
     [APP_ENVS.dev]: [],
     [APP_ENVS.local_dev]: [],
     [APP_ENVS.local_prod]: [],
@@ -171,12 +173,13 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   modules: [
+    'nuxt-security',
     '@sidebase/nuxt-auth',
     '@nuxt/image',
     '@nuxt/eslint',
-    'nuxt-security',
   ],
   css: ['~/assets/css/app-font.css', '~/assets/css/main.css'],
+  // plugins: ['~/plugins/shared/init-auth.ts'],
   app: {
     head: {
       title: 'اختبارات',
@@ -204,15 +207,99 @@ export default defineNuxtConfig({
     },
   },
   security: {
+    strict: false,
     headers: {
+      crossOriginResourcePolicy: 'same-origin',
+      crossOriginOpenerPolicy: 'same-origin',
+      crossOriginEmbedderPolicy: 'credentialless',
+      contentSecurityPolicy: {
+        'base-uri': ["'none'"],
+        'font-src': ["'self'", 'https:', 'data:'],
+        'form-action': ["'self'"],
+        'frame-ancestors': ["'self'"],
+        'img-src': ["'self'", 'data:'],
+        'object-src': ["'none'"],
+        'script-src-attr': ["'none'"],
+        'style-src': ["'self'", 'https:', "'unsafe-inline'"],
+        'script-src': [
+          "'self'",
+          'https:',
+          "'unsafe-inline'",
+          "'strict-dynamic'",
+          "'nonce-{{nonce}}'",
+        ],
+        'upgrade-insecure-requests': [APP_ENVS.prod, APP_ENVS.local_prod].some(
+          (env) => currentEnv === env
+        ),
+      },
+      originAgentCluster: '?1',
+      referrerPolicy: 'no-referrer',
+      strictTransportSecurity: {
+        maxAge: 15552000,
+        includeSubdomains: true,
+      },
+      xContentTypeOptions: 'nosniff',
+      xDNSPrefetchControl: 'off',
+      xDownloadOptions: 'noopen',
       xFrameOptions: 'DENY',
+      xPermittedCrossDomainPolicies: 'none',
+      xXSSProtection: '0',
+      permissionsPolicy: {
+        camera: [],
+        'display-capture': [],
+        fullscreen: [],
+        geolocation: [],
+        microphone: [],
+      },
     },
+    requestSizeLimiter: {
+      maxRequestSizeInBytes: 2000000,
+      maxUploadFileRequestInBytes: 8000000,
+      throwError: true,
+    },
+    rateLimiter: {
+      tokensPerInterval: 150,
+      interval: 300000,
+      headers: false,
+      driver: {
+        name: 'lruCache',
+      },
+      throwError: true,
+    },
+    xssValidator: {
+      throwError: true,
+    },
+    corsHandler: {
+      origin: getEnv().websiteUrl,
+      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+      preflight: {
+        statusCode: 204,
+      },
+    },
+    allowedMethodsRestricter: {
+      methods: '*',
+      throwError: true,
+    },
+    hidePoweredBy: true,
+    basicAuth: false,
+    enabled: true,
+    csrf: false,
+    nonce: true,
+    removeLoggers: true,
+    ssg: {
+      meta: true,
+      hashScripts: true,
+      hashStyles: false,
+      nitroHeaders: true,
+      exportToPresets: true,
+    },
+    sri: true,
   },
   runtimeConfig: {
     baseURL: getEnv().websiteUrl,
   },
   auth: {
-    originEnvKey: 'NUXT_BASE_URL',
+    // originEnvKey: 'NUXT_BASE_URL',
     baseURL: getEnv().baseUrl,
     provider: {
       type: 'local',
@@ -229,7 +316,9 @@ export default defineNuxtConfig({
         headerName: 'Authorization',
         maxAgeInSeconds: 60 * 60 * 5,
         // sameSiteAttribute: 'lax',
-        // cookieDomain: 'sidebase.io',
+        cookieDomain: IS_PRODUCTION_APP
+          ? new URL(getEnv().websiteUrl).hostname
+          : undefined,
         secureCookieAttribute: false,
         httpOnlyCookieAttribute: false,
       },
@@ -239,12 +328,14 @@ export default defineNuxtConfig({
         refreshOnlyToken: false,
         token: {
           signInResponseRefreshTokenPointer: '/refreshToken',
-          refreshResponseTokenPointer: '/refreshToken',
+          refreshResponseTokenPointer: '/token',
           refreshRequestTokenPointer: '/refreshToken',
-          cookieName: 'auth.token',
+          cookieName: 'auth.refresh-token',
           maxAgeInSeconds: 60 * 60 * 5,
           // sameSiteAttribute: 'lax',
-          // cookieDomain: 'sidebase.io',
+          cookieDomain: IS_PRODUCTION_APP
+            ? new URL(getEnv().websiteUrl).hostname
+            : undefined,
           secureCookieAttribute: false,
           httpOnlyCookieAttribute: false,
         },
