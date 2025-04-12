@@ -1,6 +1,7 @@
 import tailwindcss from '@tailwindcss/vite';
 import { process } from 'std-env';
 import type { LinkWithoutEvents, ScriptWithoutEvents } from 'unhead/types';
+import PrimeTheme from '@primeuix/themes/aura';
 
 const IS_PRODUCTION_APP = process.env.NODE_ENV === 'production';
 const APP_ENVS = {
@@ -167,6 +168,12 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true,
   },
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false,
+    },
+  ],
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   vite: {
@@ -175,9 +182,23 @@ export default defineNuxtConfig({
   modules: [
     'nuxt-security',
     '@sidebase/nuxt-auth',
+    '@primevue/nuxt-module',
     '@nuxt/image',
     '@nuxt/eslint',
   ],
+  primevue: {
+    usePrimeVue: true,
+    autoImport: true,
+    components: {
+      prefix: 'Prime',
+      exclude: ['Editor', 'FormField', 'Form', 'Chart'],
+    },
+    options: {
+      theme: {
+        preset: PrimeTheme,
+      },
+    },
+  },
   css: ['~/assets/css/app-font.css', '~/assets/css/main.css'],
   // plugins: ['~/plugins/shared/init-auth.ts'],
   app: {

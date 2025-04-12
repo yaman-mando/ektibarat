@@ -1,0 +1,920 @@
+<template>
+  <div class="web-header-container">
+    <header
+      v-if="$mq == 'mobile' || $mq == 'ipad'"
+      class="web-header hide-from-tablet"
+    >
+      <span @click="toggleMenu">
+        <i class="em-icon-Group-3396" />
+      </span>
+      <nuxt-link to="/">
+        <nuxt-img
+          style="cursor: pointer"
+          width="126px"
+          height="40px"
+          src="/images/EkhtibaratLogoColor.webp"
+          alt="شعار اختبارات - منصة الاختبارات الإلكترونية"
+          title="شعار منصة اختبارات - اختبارات إلكترونية متنوعة"
+          loading="lazy"
+          format="webp"
+          quality="80"
+          class="logo"
+        />
+      </nuxt-link>
+
+      <client-only>
+        <div
+          v-if="!isLoggedIn"
+          class="actions"
+        >
+          <span
+            class="login"
+            @click="onLoginClick"
+          >
+            الدخول
+          </span>
+        </div>
+        <div
+          v-else
+          class="actions"
+        >
+          <div class="drop-menu">
+            <div
+              class="profile"
+              @click="openList()"
+            >
+              <div
+                v-if="isLoggedIn"
+                data-toggle="tooltip"
+                data-placement="top"
+              >
+                <custom-image
+                  :folder-name="imagesFolderName.Users"
+                  :url="userData.pictureUrl"
+                  :size="imagesSize.xs"
+                  :ext="imageExt.jpg"
+                  width="40"
+                  height="40"
+                  radius="50%"
+                />
+              </div>
+            </div>
+            <div
+              v-if="showList"
+              ref="dropDown"
+              class="dropdown"
+              tabindex="-1"
+              @blur.self="hideList"
+            >
+              <div class="dropdown-menu">
+                <div class="rw-info">
+                  <custom-image
+                    :folder-name="imagesFolderName.Users"
+                    :url="userData.pictureUrl"
+                    :size="imagesSize.xs"
+                    :ext="imageExt.jpg"
+                    width="76"
+                    height="76"
+                    radius="50%"
+                  />
+                  <span class="full-name">
+                    <template v-if="userData.firstName || userData.lastName">
+                      {{ userData.firstName + ' ' + userData.lastName }}
+                    </template>
+                  </span>
+                </div>
+
+                <custom-switch
+                  v-model:active="selectedGlobalType"
+                  :right-label="'قدرات'"
+                  :left-label="'تحصيلي'"
+                  :is-sm="true"
+                />
+                <div class="am-actions">
+                  <training-button
+                    :button-style="trainingButtonStyle.withRadius"
+                  />
+                </div>
+                <ul style="cursor: pointer">
+                  <li
+                    v-for="(item, index) in listItemModel"
+                    v-if="allowShowItem(item)"
+                    class="dropdown-item"
+                    :class="[
+                      { active: activeList === item.id },
+                      {
+                        'is-red':
+                          item.id === userPanelItems.teachers ||
+                          item.id === userPanelItems.teacherPanel,
+                      },
+                    ]"
+                    @click="goPanelPart(item.id)"
+                  >
+                    <img
+                      width="20"
+                      :src="`/images/icons/menu/${item.icon}.svg`"
+                      :alt="item.icon"
+                    />
+                    <span class="text">{{ item.label }}</span>
+                    <span
+                      v-if="item.badgeLabel"
+                      class="r-part__badge"
+                    >
+                      {{ item.badgeLabel }}
+                    </span>
+                    <div
+                      v-if="item.id == 7 && notificationCount > 0"
+                      class="c-notification"
+                    >
+                      <span>{{ notificationCount }}</span>
+                    </div>
+                  </li>
+                  <li
+                    class="dropdown-item"
+                    @click="logout()"
+                  >
+                    <img
+                      width="20"
+                      src="/images/icons/menu/signout.svg"
+                      alt="signout"
+                    />
+                    <span class="text logout">تسجيل خروج</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </client-only>
+    </header>
+    <header
+      v-else
+      class="web-header hide-to-tablet"
+    >
+      <div class="logo-items">
+        <img
+          width="190px"
+          height="60px"
+          style="cursor: pointer"
+          src="/images/EkhtibaratLogoColor.webp"
+          alt="اختبارات"
+          @click="toHome"
+        />
+        <ul class="menu-items">
+          <li
+            @click="
+              toPath('/');
+              openSubMenu(null);
+            "
+          >
+            الرئيسية
+          </li>
+          <li @click="openSubMenu(2)">
+            المسارات
+            <div
+              v-if="activeSub == 2"
+              ref="subMenu"
+              class="sub-menu"
+              tabindex="-1"
+              @blur.prevent="hideSubMenu"
+            >
+              <span
+                class="sub-item"
+                @click="goTrackDetail(trackRouters.kudrat)"
+              >
+                القدرات
+              </span>
+              <span
+                class="sub-item"
+                @click="goTrackDetail(trackRouters.tahsel)"
+              >
+                التحصيلي
+              </span>
+              <span class="sub-item not-active">
+                موهبة
+                <span class="note">قريبا</span>
+              </span>
+            </div>
+          </li>
+          <li
+            @click="
+              toPath('/faqs');
+              openSubMenu(null);
+            "
+          >
+            الأسئلة الشائعة
+          </li>
+          <li
+            @click="
+              openSubMenu(null);
+              toPath('/blog');
+            "
+          >
+            المدونة
+          </li>
+          <li
+            @click="
+              toPath('/prices');
+              openSubMenu(null);
+            "
+          >
+            الأسعار
+          </li>
+        </ul>
+      </div>
+      <client-only>
+        <div
+          v-if="!isLoggedIn"
+          class="actions"
+        >
+          <button
+            class="normal-btn"
+            @click="onLoginClick"
+          >
+            الدخول
+          </button>
+        </div>
+        <div
+          v-else
+          class="actions"
+        >
+          <div class="user-part">
+            <button
+              class="normal-btn"
+              @click="goPanelPart(userPanelItems.learningPanel)"
+            >
+              لوحتي التعليمية
+            </button>
+            <div class="drop-menu">
+              <div
+                class="profile"
+                @click="openList('sm')"
+              >
+                <div
+                  v-if="userData && userData"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                >
+                  <custom-image
+                    :folder-name="imagesFolderName.Users"
+                    :url="userData.pictureUrl"
+                    :size="imagesSize.xs"
+                    :ext="imageExt.jpg"
+                    width="40"
+                    height="40"
+                    radius="50%"
+                  />
+                </div>
+                <span
+                  v-if="isLoggedIn"
+                  class="name"
+                >
+                  <template v-if="userData.firstName">
+                    {{ userData.firstName }}
+                  </template>
+                </span>
+                <i class="fa fa-chevron-down" />
+              </div>
+              <div
+                v-if="showList"
+                ref="dropDownSm"
+                class="dropdown"
+                tabindex="-1"
+                @blur.self="hideList"
+              >
+                <div class="dropdown-menu">
+                  <div class="rw-info">
+                    <custom-image
+                      :folder-name="imagesFolderName.Users"
+                      :url="userData.pictureUrl"
+                      :size="imagesSize.xs"
+                      :ext="imageExt.jpg"
+                      width="76"
+                      height="76"
+                      radius="50%"
+                    />
+                    <span class="full-name">
+                      <template v-if="userData.firstName || userData.lastName">
+                        {{ userData.firstName + ' ' + userData.lastName }}
+                      </template>
+                    </span>
+                  </div>
+                  <nuxt-link
+                    v-if="isEmployeeUser"
+                    :to="`/${main_routers.adminRoute}/questions`"
+                  >
+                    <span class="normal-btn">لوحة التحكم</span>
+                  </nuxt-link>
+                  <div class="am-actions">
+                    <training-button
+                      :button-style="trainingButtonStyle.withRadius"
+                    />
+                  </div>
+                  <ul style="cursor: pointer">
+                    <li
+                      v-for="(item, index) in listItemModel"
+                      v-if="allowShowItem(item)"
+                      :key="item.id"
+                      class="dropdown-item"
+                      :class="[
+                        { active: activeList === item.id },
+                        {
+                          'is-red':
+                            item.id === userPanelItems.teachers ||
+                            item.id === userPanelItems.teacherPanel,
+                        },
+                      ]"
+                      @click="goPanelPart(item.id)"
+                    >
+                      <img
+                        width="20"
+                        :src="`/images/icons/menu/${item.icon}.svg`"
+                        :alt="item.icon"
+                      />
+                      <span class="text">{{ item.label }}</span>
+                      <span
+                        v-if="item.badgeLabel"
+                        class="r-part__badge"
+                      >
+                        {{ item.badgeLabel }}
+                      </span>
+                      <div
+                        v-if="item.id == 7 && notificationCount > 0"
+                        class="c-notification"
+                      >
+                        <span>{{ notificationCount }}</span>
+                      </div>
+                    </li>
+                    <li
+                      class="dropdown-item"
+                      @click="logout()"
+                    >
+                      <img
+                        width="20"
+                        src="/images/icons/menu/signout.svg"
+                        alt="signout"
+                      />
+                      <span class="text logout">تسجيل خروج</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </client-only>
+    </header>
+
+    <!--responsive-menu-->
+    <client-only>
+      <div
+        class="rw-responsive-menu"
+        :class="{ 'is-open': openMenu }"
+      >
+        <div
+          ref="responsiveMenu"
+          class="responsive-menu"
+          :class="{ 'is-open': openMenu }"
+          tabindex="-1"
+          @blur="openMenu = false"
+        >
+          <div class="menu-head">
+            <i
+              class="fa fa-close close-button"
+              @click="openMenu = false"
+            />
+            <div class="e-logo">
+              <img
+                width="126px"
+                height="40px"
+                style="cursor: pointer"
+                src="/images/EkhtibaratLogoWhite.webp"
+                alt="اختبارات"
+                @click="toHome"
+              />
+            </div>
+          </div>
+          <div class="menu">
+            <div
+              v-for="(item, index) of menu2"
+              :key="item.href"
+              class="menu-item"
+              :class="[
+                { active: currentRoute == item.href },
+                { 'is-open': activeCollapse.includes(index) },
+              ]"
+              @click="toPath(item.href)"
+            >
+              <div
+                class="menu-main"
+                @click="item.hasChild ? openCollapse(index) : ''"
+              >
+                <div class="r-part">
+                  <i
+                    v-if="item.iconClass"
+                    :class="item.iconClass"
+                  />
+                  <span class="name">{{ item.name }}</span>
+                </div>
+                <div
+                  v-if="item.hasChild"
+                  class="l-part"
+                >
+                  <i
+                    class="fa"
+                    :class="
+                      activeCollapse.includes(index)
+                        ? 'fa-chevron-up'
+                        : 'fa-chevron-down'
+                    "
+                  />
+                </div>
+              </div>
+              <div
+                v-if="item.hasChild && activeCollapse.includes(index)"
+                class="menu-child"
+              >
+                <div
+                  v-for="childItem of item.child"
+                  :key="childItem.href"
+                  class="child-item"
+                  @click="toPath(childItem.href)"
+                >
+                  <span class="name">
+                    {{ childItem.name }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pt-3 d-flex justify-center">
+            <custom-switch
+              v-model:active="selectedGlobalType"
+              :right-label="'قدرات'"
+              :left-label="'تحصيلي'"
+              :is-sm="true"
+            />
+          </div>
+        </div>
+      </div>
+      <web-login-register-modal ref="loginRegisterModalRef" />
+    </client-only>
+  </div>
+</template>
+<script setup lang="ts">
+import { notImplemented } from 'unenv/_internal/utils';
+import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
+import { ImagesFolderName } from '~/shared/constants/images-folder-name';
+import { ImageSize } from '~/shared/constants/image-size';
+import { ImageExt } from '~/shared/constants/image-ext';
+
+//composable
+const { status, data } = useAuth();
+const imagesFolderName = ImagesFolderName;
+const imagesSize = ImageSize;
+const imageExt = ImageExt;
+
+//data
+
+const openMenu = ref(false);
+const isLoggedIn = computed(() => status.value === 'authenticated');
+const userData = computed(() => data.value as UserInfoDataModel);
+
+//methods
+const toggleMenu = () => (openMenu.value = !openMenu.value);
+const onLoginClick = () => {
+  throw notImplemented('show web-login-register-modal');
+};
+const openList = () => {
+  throw notImplemented('open list');
+};
+</script>
+<style lang="scss" scoped>
+@import '@/assets/scss/mixin';
+
+.web-header-container {
+  overflow-x: hidden;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  background: white;
+  box-shadow: 0px 0px 15px #00000033;
+  z-index: 1000;
+  .web-header {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+
+    .logo-items {
+      display: grid;
+      grid-template-columns: 190px auto;
+      column-gap: 30px;
+      align-items: center;
+
+      .menu-items {
+        display: grid;
+        align-items: center;
+        column-gap: 50px;
+        grid-auto-flow: column;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: bold;
+          color: var(--gray-63);
+          margin: 0;
+        }
+      }
+    }
+
+    .actions {
+      @include normal-btn() {
+        width: 145px;
+        height: 40px;
+        border-radius: 20px;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      .user-part {
+        display: grid;
+        align-items: center;
+        column-gap: 25px;
+        grid-template-columns: 145px minmax(30px, 1fr);
+      }
+      .profile {
+        display: grid;
+        align-items: center;
+        grid-column-gap: 10px;
+        column-gap: 10px;
+        grid-template-columns: 40px auto auto;
+        cursor: pointer;
+        .name {
+          font-size: 18px;
+          font-weight: bold;
+          color: var(--purple-c2);
+          text-align: center;
+        }
+        i {
+          font-size: 16px;
+          color: var(--purple-c2);
+        }
+      }
+      .dropdown {
+        outline: none;
+        position: fixed;
+        top: 80px;
+        left: calc((100vw - 1370px) / 2);
+        width: 280px;
+        .dropdown-menu {
+          width: 280px;
+          border-radius: 20px;
+          box-shadow: 0px 0px 15px #00000033;
+          height: auto;
+          padding: 15px 0;
+          display: grid;
+          justify-content: normal;
+          justify-items: center;
+          row-gap: 15px;
+          .normal-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+          }
+          .rw-info {
+            display: grid;
+            row-gap: 5px;
+            justify-items: center;
+            .full-name {
+              font-size: 18px;
+              font-weight: bold;
+              color: var(--purple-8c);
+              text-align: center;
+            }
+            .mail {
+              font-size: 14px;
+              color: var(--gray-63);
+              text-align: center;
+            }
+          }
+          ul {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            li {
+              display: grid;
+              grid-template-columns: 20px auto;
+              grid-auto-flow: column;
+              column-gap: 12px;
+              align-items: center;
+              padding: 10px 15px;
+              border-top: 1px solid #a5a9b1;
+              position: relative;
+              .c-notification {
+                position: absolute;
+                right: 120px;
+                background: var(--red-5e);
+                border-radius: 50%;
+                width: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 20px;
+                span {
+                  font-size: 13px;
+                  color: white;
+                  font-weight: bold;
+                }
+              }
+              &:last-child {
+                border-bottom: 1px solid #a5a9b1;
+              }
+              .text {
+                font-size: 16px;
+                color: var(--purple-8c);
+                line-height: 20px;
+                font-weight: 500;
+              }
+              &.is-red {
+                .text {
+                  color: var(--red-5e);
+                }
+              }
+              &:active {
+                background-color: white;
+              }
+              &.active {
+                background: var(--purple-8c);
+                transform: scale(1.015);
+                .text {
+                  color: white;
+                }
+                img {
+                  filter: brightness(0) invert(1);
+                }
+              }
+            }
+          }
+        }
+      }
+      .login {
+        font-size: 13px;
+        font-weight: bold;
+        color: var(--purple-8c);
+        cursor: pointer;
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 0 0 0 var(--purple-8d);
+          }
+        }
+        &:hover,
+        &:focus,
+        &:active {
+          animation: pulse 1s;
+          box-shadow: 0 0 0 2em transparent;
+        }
+      }
+    }
+
+    .sub-menu {
+      position: fixed;
+      box-shadow: 0px 0px 15px #00000033;
+      width: 170px;
+      border-radius: 20px;
+      padding: 10px 15px;
+      z-index: 10038;
+      top: 78px;
+      background: white;
+      display: grid;
+      row-gap: 20px;
+      cursor: default;
+      .sub-item {
+        font-size: 16px;
+        color: var(--purple-8c);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        &.not-active {
+          pointer-events: none;
+          color: var(--gray-63);
+        }
+        .note {
+          color: var(--red-5e);
+          font-weight: 500;
+          font-size: 13px;
+          margin-inline-start: 5px;
+        }
+      }
+    }
+
+    @include ipad-down {
+      .logo-items {
+        .menu-items {
+          column-gap: 25px;
+        }
+      }
+    }
+
+    @include lg-down() {
+      padding: 20px;
+      .actions {
+        .user-part {
+          column-gap: 5px;
+        }
+        .dropdown {
+          left: 10px;
+        }
+      }
+    }
+
+    @include tablet-down() {
+      padding: 15px 23px 15px 15px;
+      height: 70px;
+      i {
+        font-size: 20px;
+        color: var(--purple-8c);
+        cursor: pointer;
+        font-weight: bold;
+      }
+      img.logo {
+        width: 126px;
+      }
+      .actions {
+        .profile {
+          grid-template-columns: 1fr;
+        }
+        .dropdown {
+          left: 15px;
+          top: 65px;
+        }
+      }
+    }
+  }
+  .responsive-menu {
+    position: fixed;
+    transition: all 0.4s ease-in-out;
+    right: 0;
+    opacity: 1 !important;
+    transform: translateX(100%) !important;
+    z-index: 10;
+    left: unset !important;
+    background-color: white;
+    width: 240px;
+    height: 100%;
+    top: 0;
+    &.is-open {
+      visibility: visible;
+      transform: translateX(0) !important;
+      opacity: 1;
+    }
+    .menu-head {
+      width: 100%;
+      padding: 20px;
+      background: var(--purple-8c);
+      .close-button {
+        position: absolute;
+        left: 15px;
+        top: 15px;
+        color: white;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .e-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          width: 126px;
+        }
+      }
+    }
+    .menu {
+      padding-top: 4px;
+      display: grid;
+      .menu-item {
+        .menu-main {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 12px 15px;
+          cursor: pointer;
+          .r-part {
+            display: grid;
+            align-items: center;
+            grid-template-columns: 14px auto;
+            column-gap: 8px;
+            color: var(--purple-8c);
+            i {
+              font-size: 13px;
+            }
+            .name {
+              font-size: 12px;
+              //font-family: 'DroidArabicKufi' !important;
+            }
+          }
+          .l-part {
+            i {
+              color: var(--purple-8c);
+              font-size: 13px;
+            }
+          }
+        }
+        .menu-child {
+          background: white;
+          padding-top: 3px;
+          .child-item {
+            cursor: pointer;
+            padding: 0 15px 12px;
+            &:last-child {
+              padding-bottom: 0;
+            }
+            .name {
+              font-size: 11px;
+              //font-family: 'DroidArabicKufi' !important;
+              color: black;
+            }
+          }
+        }
+        &.active,
+        &.is-open {
+          .menu-main {
+            background: white;
+            .r-part {
+              i {
+                color: var(--purple-8c);
+              }
+              .name {
+                color: var(--purple-8c);
+              }
+            }
+            .l-part {
+              i {
+                color: var(--purple-8c);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .rw-responsive-menu {
+    &::before {
+      content: '';
+      background: rgba(0, 0, 0, 0.6);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: -1000;
+    }
+    &.is-open::before {
+      right: 0;
+    }
+  }
+
+  .am-actions {
+    display: grid;
+    //grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    justify-content: center;
+    .am-button {
+      height: 40px;
+      width: 120px;
+      border-radius: 20px;
+      justify-content: flex-start;
+      ::v-deep {
+        .app-button-icon {
+          position: relative;
+          right: auto;
+          font-size: 13px;
+          margin-inline-start: 5px;
+        }
+        .app-button-label {
+          margin-inline-start: 15px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .r-part__badge {
+    font-size: 12px;
+    color: var(--green-8c);
+    border: 1px solid var(--green-8c);
+    border-radius: 20px;
+    padding: 2px 6px;
+    text-align: center;
+  }
+}
+</style>

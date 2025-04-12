@@ -1,0 +1,547 @@
+﻿@import 'variable';
+@import './mixin';
+@import 'common';
+@import 'override';
+@import '@/assets/em-icons/style.css';
+
+body {
+  //font-family: var(--web-font);
+  //font-size-adjust: 0.455;
+}
+
+//container class
+.w-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 1400px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  @include web-desktop-up() {
+    padding: 0 10px !important;
+  }
+  @include web-xl-up() {
+    padding: 0 40px !important;
+  }
+}
+
+.w-mobile-only {
+  @include web-desktop-up() {
+    display: none !important;
+  }
+}
+
+.w-web-up-only {
+  @include web-mobile-only() {
+    display: none !important;
+  }
+}
+
+//animate classes
+.num-enter-active {
+  animation: bounceIn 1s;
+}
+.num-leave-active {
+  animation: fadeOut 1s;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes bounceIn {
+  from,
+  20%,
+  40%,
+  60%,
+  80%,
+  to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  0% {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  20% {
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+
+  40% {
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+
+  80% {
+    transform: scale3d(0.97, 0.97, 0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@include xs-down() {
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+@include web-mobile-only() {
+  .hide-to-959 {
+    display: none !important;
+  }
+}
+
+@include tablet-down() {
+  .hide-to-tablet {
+    display: none !important;
+  }
+}
+
+@include ipad-up() {
+  .hide-from-tablet {
+    display: none !important;
+  }
+}
+
+@include lg-up() {
+  .hide-lg {
+    display: none !important;
+  }
+}
+
+@include lg-down() {
+  .hide-to-lg {
+    display: none !important;
+  }
+}
+
+.a-wc-m {
+  .modal-content {
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+    @include web-desktop-up() {
+      max-width: 637px;
+    }
+    .a-input-label {
+      label {
+        font-weight: normal;
+      }
+    }
+
+    .ac-qm {
+      height: 72px;
+      padding: 18px 33px !important;
+      span {
+        font-weight: 500;
+      }
+    }
+    .aqs-w {
+      padding: 30px 15px;
+
+      h5,
+      p,
+      strong,
+      label,
+      span {
+        font-size: 18px;
+      }
+
+      @include web-desktop-up() {
+        padding: 30px 46px;
+      }
+    }
+  }
+}
+
+.wrs_tickContainer {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+::v-deep .wrs_tickContainer {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+::v-deep .wrs_formulaDisplayWrapper {
+  min-height: 100px !important;
+}
+
+.wrs_formulaDisplayWrapper {
+  min-height: 100px !important;
+}
+
+::v-deep .toast .close {
+  margin-left: 0 !important;
+  margin-right: auto;
+}
+.toast .close {
+  margin-left: 0 !important;
+  margin-right: auto;
+}
+
+.math-tex {
+  span {
+    font-family: 'MathJax_Main';
+  }
+}
+
+.mathToo {
+  mn,
+  mi,
+  mo,
+  h3,
+  h1,
+  h2,
+  h4,
+  h5 {
+    font-size: 24px;
+    font-family: var(--abdo-font);
+    font-weight: 500;
+  }
+
+  mrow {
+    mn,
+    mi,
+    mo {
+      font-size: 18px;
+    }
+  }
+
+  msqrt {
+    direction: ltr;
+    transform: rotateY(180deg);
+    font-size: x-large;
+    font-family: 'Cambria Math', 'STIX', serif;
+    //font-size: 26px;
+
+    mn,
+    mi {
+      margin-top: 3px;
+      margin-right: 3px;
+      transform: rotateY(180deg);
+      //font-size: 18px;
+      letter-spacing: 3px;
+    }
+    > mn {
+      padding-left: 12px;
+    }
+    > mi {
+      padding-left: 10px;
+    }
+  }
+
+  mroot {
+    direction: ltr;
+    transform: rotateY(180deg);
+    font-size: x-large;
+    font-family: 'Cambria Math', 'STIX', serif;
+    //font-size: 26px;
+
+    mn,
+    mi {
+      transform: rotateY(180deg);
+      //font-size: 18px;
+      letter-spacing: 3px;
+    }
+    > mn {
+      padding-left: 3px;
+    }
+    > mi {
+      padding-left: 10px;
+    }
+  }
+
+  msqrt > msqrt,
+  mroot > mroot {
+    direction: ltr;
+    transform: unset;
+    font-family: 'Cambria Math', 'STIX', serif;
+    //font-size: x-large;
+    //font-size: 26px;
+
+    mn,
+    mi {
+      margin-top: 3px;
+      margin-right: 3px;
+      transform: rotateY(180deg);
+      //font-size: 18px;
+      letter-spacing: 3px;
+    }
+  }
+
+  mfrac msqrt msqrt mroot {
+    transform: rotate(0deg);
+  }
+
+  msqrt msqrt {
+    transform: rotate(0deg);
+  }
+
+  mroot mroot {
+    transform: rotate(0deg);
+  }
+
+  mroot msqrt {
+    transform: rotate(0deg);
+  }
+  msqrt mroot {
+    transform: rotate(0deg);
+  }
+}
+
+.math-text,
+.s-compare-c {
+  mrow {
+    mo {
+      //direction: ltr;
+    }
+  }
+
+  p,
+  span,
+  strong,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--abdo-font) !important;
+  }
+
+  math {
+    font-family: 'Cambria Math', 'STIX', serif;
+    * {
+      font-family: 'Cambria Math', 'STIX', serif;
+    }
+  }
+
+  math mfrac msqrt msqrt mroot {
+    transform: rotate(0deg);
+  }
+
+  msqrt {
+    direction: ltr;
+    transform: rotateY(180deg);
+
+    mn,
+    mi {
+      margin-top: 3px;
+      margin-right: 3px;
+      transform: rotateY(180deg);
+      letter-spacing: 3px;
+    }
+    > mn {
+      padding-left: 12px;
+    }
+    mo {
+      transform: rotateY(180deg);
+      direction: ltr;
+    }
+  }
+
+  mroot {
+    direction: ltr;
+    transform: rotateY(180deg);
+
+    mn,
+    mi {
+      transform: rotateY(180deg);
+      letter-spacing: 3px;
+    }
+    mo {
+      transform: rotateY(180deg);
+      direction: ltr;
+    }
+  }
+
+  msqrt > msqrt,
+  mroot > mroot {
+    direction: ltr;
+    transform: unset;
+
+    mn,
+    mi {
+      margin-top: 3px;
+      margin-right: 3px;
+      transform: rotateY(180deg);
+      letter-spacing: 3px;
+    }
+  }
+}
+
+.s-title,
+.cc-text,
+.s-compare-c,
+#web-answer-help-modal .math-text {
+  p,
+  span,
+  strong,
+  mn,
+  mi,
+  mo,
+  msqrt,
+  h3,
+  h1,
+  h2,
+  h4,
+  h5,
+  div {
+    @include web-desktop-up() {
+      font-size: 28px !important;
+      font-weight: normal !important;
+    }
+    @include tablet-down() {
+      font-size: 24px !important;
+      font-weight: normal !important;
+    }
+  }
+
+  mroot msup > mn,
+  msup > mfrac ~ mfrac mn,
+  msup mn ~ mrow mi,
+  msup mn ~ mrow mn,
+  msup mn ~ mfrac mi,
+  msup mn ~ mfrac mn,
+  msup > mn ~ mi,
+  msup > mi ~ mi,
+  msup > mi ~ mn,
+  msup > mn ~ mn,
+  msup mrow ~ mrow mi,
+  msup mrow ~ mrow mn,
+  msup > mrow ~ mi,
+  msup > mrow ~ mn,
+  msup > * ~ mrow *,
+  msup > mrow ~ mfrac *,
+  msup mi ~ msup *,
+  mroot > mn,
+  mroot mrow ~ mn,
+  msqrt mmultiscripts mn ~ mn {
+    @include web-desktop-up() {
+      font-size: 20px !important;
+    }
+    @include tablet-down() {
+      font-size: 12px !important;
+    }
+  }
+  msup > mrow ~ mi,
+  msup > mrow ~ mn,
+  msup > mrow ~ mfrac,
+  msup > mn ~ mi,
+  msup > mi ~ mi,
+  msup > mi ~ mn,
+  msup > mn ~ mn,
+  msup mn ~ mrow,
+  msup mi ~ mrow {
+    padding-bottom: 8px;
+  }
+}
+.math-text.is-ios {
+  .mjx-c29,
+  .mjx-c28 {
+    transform: rotate(180deg);
+  }
+
+  p,
+  strong {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .MathJax {
+    transform: scaleX(-1);
+
+    .mjx-n,
+    .mjx-i,
+    .mjx-b {
+      transform: scaleX(-1) scaleY(1);
+      .mjx-c29,
+      .mjx-c28 {
+        transform: rotate(0deg);
+      }
+    }
+    * {
+      font-style: normal !important;
+    }
+  }
+}
+
+.answer-select-wrapper {
+  p,
+  span,
+  strong,
+  mn,
+  mi,
+  mo,
+  h3,
+  h1,
+  h2,
+  h4,
+  h5 {
+    font-size-adjust: none !important;
+    @include web-desktop-up() {
+      font-size: 26px !important;
+      font-weight: normal !important;
+    }
+    @include tablet-down() {
+      font-size: 22px !important;
+      font-weight: normal !important;
+    }
+  }
+  mroot msup > mn,
+  msup > mfrac ~ mfrac mn,
+  msup mn ~ mrow mi,
+  msup mn ~ mrow mn,
+  msup mn ~ mfrac mi,
+  msup mn ~ mfrac mn,
+  msup > mn ~ mi,
+  msup > mi ~ mi,
+  msup > mi ~ mn,
+  msup > mn ~ mn,
+  msup mrow ~ mrow mi,
+  msup mrow ~ mrow mn,
+  msup > mrow ~ mi,
+  msup > mrow ~ mn,
+  msup > * ~ mrow *,
+  msup > mrow ~ mfrac *,
+  msup mi ~ msup *,
+  mroot > mn,
+  mroot mrow ~ mn,
+  msqrt mmultiscripts mn ~ mn {
+    @include web-desktop-up() {
+      font-size: 20px !important;
+    }
+    @include tablet-down() {
+      font-size: 12px !important;
+    }
+  }
+  msup > mrow ~ mi,
+  msup > mrow ~ mn,
+  msup > mrow ~ mfrac,
+  msup > mn ~ mi,
+  msup > mi ~ mi,
+  msup > mi ~ mn,
+  msup > mn ~ mn,
+  msup mn ~ mrow,
+  msup mi ~ mrow {
+    padding-bottom: 8px;
+  }
+}

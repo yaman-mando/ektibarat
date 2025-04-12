@@ -1,20 +1,22 @@
 <template>
-  <div>home</div>
-  <button
-    type="button"
-    v-if="status === 'unauthenticated'"
-    :disabled="isLoadingAuth"
-    @click="login()"
-  >
-    login
-  </button>
-  <button
-    v-if="status === 'authenticated'"
-    :disabled="isLoadingAuth"
-    @click="logout"
-  >
-    logout
-  </button>
+  <div>
+    <div>home</div>
+    <button
+      v-if="status === 'unauthenticated'"
+      type="button"
+      :disabled="isLoadingAuth"
+      @click="login()"
+    >
+      login
+    </button>
+    <button
+      v-if="status === 'authenticated'"
+      :disabled="isLoadingAuth"
+      @click="logout"
+    >
+      logout
+    </button>
+  </div>
 </template>
 <script setup lang="ts">
 definePageMeta({
