@@ -1,7 +1,7 @@
 <template>
   <div class="web-header-container">
     <header
-      v-if="$mq == 'mobile' || $mq == 'ipad'"
+      v-if="isMobileSize"
       class="web-header hide-from-tablet"
     >
       <span @click="toggleMenu">
@@ -92,13 +92,14 @@
                 />
                 <div class="am-actions">
                   <training-button
-                    :button-style="trainingButtonStyle.withRadius"
+                    :button-style="trainingButtonType.withRadius"
                   />
                 </div>
                 <ul style="cursor: pointer">
                   <li
-                    v-for="(item, index) in listItemModel"
+                    v-for="item in listItemModel"
                     v-if="allowShowItem(item)"
+                    :key="item.id"
                     class="dropdown-item"
                     :class="[
                       { active: activeList === item.id },
@@ -152,14 +153,16 @@
       class="web-header hide-to-tablet"
     >
       <div class="logo-items">
-        <img
-          width="190px"
-          height="60px"
-          style="cursor: pointer"
-          src="/images/EkhtibaratLogoColor.webp"
-          alt="اختبارات"
-          @click="toHome"
-        />
+        <nuxt-link to="/">
+          <img
+            width="190px"
+            height="60px"
+            style="cursor: pointer"
+            src="/images/EkhtibaratLogoColor.webp"
+            alt="اختبارات"
+          />
+        </nuxt-link>
+
         <ul class="menu-items">
           <li
             @click="
@@ -180,13 +183,13 @@
             >
               <span
                 class="sub-item"
-                @click="goTrackDetail(trackRouters.kudrat)"
+                @click="goTrackDetail(TrackRouteName.kudrat)"
               >
                 القدرات
               </span>
               <span
                 class="sub-item"
-                @click="goTrackDetail(trackRouters.tahsel)"
+                @click="goTrackDetail(TrackRouteName.tahsel)"
               >
                 التحصيلي
               </span>
@@ -300,14 +303,14 @@
                     </span>
                   </div>
                   <nuxt-link
-                    v-if="isEmployeeUser"
-                    :to="`/${main_routers.adminRoute}/questions`"
+                    v-if="isEmployee"
+                    :to="adminQuestionsListPath()"
                   >
                     <span class="normal-btn">لوحة التحكم</span>
                   </nuxt-link>
                   <div class="am-actions">
                     <training-button
-                      :button-style="trainingButtonStyle.withRadius"
+                      :button-style="trainingButtonType.withRadius"
                     />
                   </div>
                   <ul style="cursor: pointer">
@@ -367,96 +370,96 @@
 
     <!--responsive-menu-->
     <client-only>
-      <div
-        class="rw-responsive-menu"
-        :class="{ 'is-open': openMenu }"
-      >
-        <div
-          ref="responsiveMenu"
-          class="responsive-menu"
-          :class="{ 'is-open': openMenu }"
-          tabindex="-1"
-          @blur="openMenu = false"
-        >
-          <div class="menu-head">
-            <i
-              class="fa fa-close close-button"
-              @click="openMenu = false"
-            />
-            <div class="e-logo">
-              <img
-                width="126px"
-                height="40px"
-                style="cursor: pointer"
-                src="/images/EkhtibaratLogoWhite.webp"
-                alt="اختبارات"
-                @click="toHome"
-              />
-            </div>
-          </div>
-          <div class="menu">
-            <div
-              v-for="(item, index) of menu2"
-              :key="item.href"
-              class="menu-item"
-              :class="[
-                { active: currentRoute == item.href },
-                { 'is-open': activeCollapse.includes(index) },
-              ]"
-              @click="toPath(item.href)"
-            >
-              <div
-                class="menu-main"
-                @click="item.hasChild ? openCollapse(index) : ''"
-              >
-                <div class="r-part">
-                  <i
-                    v-if="item.iconClass"
-                    :class="item.iconClass"
-                  />
-                  <span class="name">{{ item.name }}</span>
-                </div>
-                <div
-                  v-if="item.hasChild"
-                  class="l-part"
-                >
-                  <i
-                    class="fa"
-                    :class="
-                      activeCollapse.includes(index)
-                        ? 'fa-chevron-up'
-                        : 'fa-chevron-down'
-                    "
-                  />
-                </div>
-              </div>
-              <div
-                v-if="item.hasChild && activeCollapse.includes(index)"
-                class="menu-child"
-              >
-                <div
-                  v-for="childItem of item.child"
-                  :key="childItem.href"
-                  class="child-item"
-                  @click="toPath(childItem.href)"
-                >
-                  <span class="name">
-                    {{ childItem.name }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="pt-3 d-flex justify-center">
-            <custom-switch
-              v-model:active="selectedGlobalType"
-              :right-label="'قدرات'"
-              :left-label="'تحصيلي'"
-              :is-sm="true"
-            />
-          </div>
-        </div>
-      </div>
+      <!--      <div-->
+      <!--        class="rw-responsive-menu"-->
+      <!--        :class="{ 'is-open': openMenu }"-->
+      <!--      >-->
+      <!--        <div-->
+      <!--          ref="responsiveMenu"-->
+      <!--          class="responsive-menu"-->
+      <!--          :class="{ 'is-open': openMenu }"-->
+      <!--          tabindex="-1"-->
+      <!--          @blur="openMenu = false"-->
+      <!--        >-->
+      <!--          <div class="menu-head">-->
+      <!--            <i-->
+      <!--              class="fa fa-close close-button"-->
+      <!--              @click="openMenu = false"-->
+      <!--            />-->
+      <!--            <div class="e-logo">-->
+      <!--              <img-->
+      <!--                width="126px"-->
+      <!--                height="40px"-->
+      <!--                style="cursor: pointer"-->
+      <!--                src="/images/EkhtibaratLogoWhite.webp"-->
+      <!--                alt="اختبارات"-->
+      <!--                @click="toHome"-->
+      <!--              />-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--          <div class="menu">-->
+      <!--            <div-->
+      <!--              v-for="(item, index) of menu2"-->
+      <!--              :key="item.href"-->
+      <!--              class="menu-item"-->
+      <!--              :class="[-->
+      <!--                { active: currentRoute == item.href },-->
+      <!--                { 'is-open': activeCollapse.includes(index) },-->
+      <!--              ]"-->
+      <!--              @click="toPath(item.href)"-->
+      <!--            >-->
+      <!--              <div-->
+      <!--                class="menu-main"-->
+      <!--                @click="item.hasChild ? openCollapse(index) : ''"-->
+      <!--              >-->
+      <!--                <div class="r-part">-->
+      <!--                  <i-->
+      <!--                    v-if="item.iconClass"-->
+      <!--                    :class="item.iconClass"-->
+      <!--                  />-->
+      <!--                  <span class="name">{{ item.name }}</span>-->
+      <!--                </div>-->
+      <!--                <div-->
+      <!--                  v-if="item.hasChild"-->
+      <!--                  class="l-part"-->
+      <!--                >-->
+      <!--                  <i-->
+      <!--                    class="fa"-->
+      <!--                    :class="-->
+      <!--                      activeCollapse.includes(index)-->
+      <!--                        ? 'fa-chevron-up'-->
+      <!--                        : 'fa-chevron-down'-->
+      <!--                    "-->
+      <!--                  />-->
+      <!--                </div>-->
+      <!--              </div>-->
+      <!--              <div-->
+      <!--                v-if="item.hasChild && activeCollapse.includes(index)"-->
+      <!--                class="menu-child"-->
+      <!--              >-->
+      <!--                <div-->
+      <!--                  v-for="childItem of item.child"-->
+      <!--                  :key="childItem.href"-->
+      <!--                  class="child-item"-->
+      <!--                  @click="toPath(childItem.href)"-->
+      <!--                >-->
+      <!--                  <span class="name">-->
+      <!--                    {{ childItem.name }}-->
+      <!--                  </span>-->
+      <!--                </div>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--          <div class="pt-3 d-flex justify-center">-->
+      <!--            <custom-switch-->
+      <!--              v-model:active="selectedGlobalType"-->
+      <!--              :right-label="'قدرات'"-->
+      <!--              :left-label="'تحصيلي'"-->
+      <!--              :is-sm="true"-->
+      <!--            />-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
       <web-login-register-modal ref="loginRegisterModalRef" />
     </client-only>
   </div>
@@ -467,26 +470,112 @@ import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.mode
 import { ImagesFolderName } from '~/shared/constants/images-folder-name';
 import { ImageSize } from '~/shared/constants/image-size';
 import { ImageExt } from '~/shared/constants/image-ext';
+import { useWindowSize } from '~/composables/useWindowSize';
+import { GlobalTypes } from '~/shared/constants/global-types';
+import { TrainingButtonType } from '~/shared/constants/training-button-type';
+import { UserPanelItems } from '~/shared/constants/user-panel-items';
+import { UserRoles } from '~/shared/constants/user-roles';
+import { adminQuestionsListPath } from '~/shared/utils/admin-routes.utils';
+import { TrackRouteName } from '~/shared/constants/track-route-name';
 
-//composable
-const { status, data } = useAuth();
 const imagesFolderName = ImagesFolderName;
 const imagesSize = ImageSize;
 const imageExt = ImageExt;
+const trainingButtonType = TrainingButtonType;
+const userPanelItems = UserPanelItems;
+
+//composable
+const { status, data, signOut } = useAuth();
+const { isMobileSize } = useWindowSize();
+const router = useRouter();
+const route = useRoute();
 
 //data
-
+const subMenu = ref<HTMLInputElement | null>(null);
 const openMenu = ref(false);
+const showList = ref(false);
+const activeSub = ref<number | null>(null);
+const selectedGlobalType = ref(GlobalTypes.tahsele);
 const isLoggedIn = computed(() => status.value === 'authenticated');
 const userData = computed(() => data.value as UserInfoDataModel);
+const isEmployee = computed(() => userData.value.role === UserRoles.employee);
+const activeList = ref<string | number | null>(null);
+const notificationCount = computed(() => {
+  return 0;
+  throw notImplemented('notificationCount');
+});
+
+//watch
+watch(
+  () => route.query,
+  (query) => {
+    const page = query['page'];
+    if (page) {
+      activeList.value = UserPanelItems[page as keyof typeof UserPanelItems];
+    }
+  },
+  { immediate: true }
+);
 
 //methods
+const logout = async () => {
+  await signOut();
+  document.getElementById('web-footer')?.classList.remove('is-user-panel');
+};
+const _openCollapse = (index: number) => {
+  throw notImplemented(`${index}`);
+};
 const toggleMenu = () => (openMenu.value = !openMenu.value);
 const onLoginClick = () => {
   throw notImplemented('show web-login-register-modal');
 };
-const openList = () => {
+const openList = (_size: string) => {
   throw notImplemented('open list');
+};
+const hideList = () => {
+  setTimeout(() => {
+    showList.value = false;
+  }, 100);
+};
+
+const toPath = (path: string) => {
+  if (path) {
+    if (path == '/blog') {
+      window.location.href = 'https://ekhtibarat.com/blog';
+    } else {
+      router.push(path);
+    }
+  }
+};
+
+const openSubMenu = (id: number | null) => {
+  if (id) {
+    activeSub.value = id;
+    setTimeout(() => {
+      subMenu.value?.focus();
+    }, 100);
+  }
+};
+
+const hideSubMenu = () => {
+  setTimeout(() => {
+    activeSub.value = null;
+  }, 100);
+};
+
+const goPanelPart = (key: keyof typeof UserPanelItems) => {
+  router.push({
+    path: '/user-panel',
+    query: {
+      page: UserPanelItems[key],
+    },
+  });
+  hideList();
+};
+
+const goTrackDetail = (id: string) => {
+  router.push(`/${id}`);
+  hideSubMenu();
 };
 </script>
 <style lang="scss" scoped>
