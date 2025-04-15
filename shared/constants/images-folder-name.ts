@@ -25,3 +25,10 @@ export const ImagesFolderName = {
   Subscriptions: 'library',
   Messaging: 'Messaging',
 };
+
+export const LIBRARY_TYPE_FOLDER_LIST = [
+  ImagesFolderName.Categories,
+  ImagesFolderName.Subjects,
+  ImagesFolderName.Subscriptions,
+  ImagesFolderName[STATIC_PAGE_TYPE.features],
+];

@@ -336,6 +336,9 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     baseURL: getEnv().websiteUrl,
+    public: {
+      baseImageUrl: getEnv().baseImageUrl,
+    },
   },
   auth: {
     // originEnvKey: 'NUXT_BASE_URL',
