@@ -1,7 +1,11 @@
 import tailwindcss from '@tailwindcss/vite';
 import { process } from 'std-env';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import type { LinkWithoutEvents, ScriptWithoutEvents } from 'unhead/types';
 import PrimeTheme from '@primeuix/themes/aura';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const IS_PRODUCTION_APP = process.env.NODE_ENV === 'production';
 const APP_ENVS = {
@@ -178,6 +182,20 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   vite: {
     plugins: [tailwindcss()],
+    // resolve: {
+    //   alias: {
+    //     '@': resolve(__dirname, '.'),
+    //     '@/assets': resolve(__dirname, 'assets'),
+    //   },
+    // },
+    // css: {
+    //   preprocessorOptions: {
+    //     scss: {
+    //       additionalData: '',
+    //       includePaths: ['.'],
+    //     },
+    //   },
+    // },
   },
   modules: [
     'nuxt-security',
@@ -220,10 +238,10 @@ export default defineNuxtConfig({
           href: prefetch_preConnect_urls.preconnect,
         },
         { rel: 'dns-prefetch', href: prefetch_preConnect_urls.dnsPrefetch },
-        //@ts-ignore
+        //@ts-expect-error because of typing
         ...appFonts,
       ],
-      //@ts-ignore
+      //@ts-expect-error because of typing
       script: [...jsLinks()],
     },
   },

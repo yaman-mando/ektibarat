@@ -5,6 +5,22 @@ export default withNuxt(
   // Your custom configs here
   {
     rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          varsIgnorePattern: '^_',
+          argsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ThisExpression',
+          message:
+            '`this` is not allowed in `<script setup>` or Composition API. Use direct refs/imports instead.',
+        },
+      ],
       'vue/component-name-in-template-casing': [
         'error',
         'kebab-case',
@@ -12,6 +28,7 @@ export default withNuxt(
           registeredComponentsOnly: false,
         },
       ],
+      'vue/require-default-prop': 'off',
     },
   }
 );

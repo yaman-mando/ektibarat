@@ -92,44 +92,45 @@
                 />
                 <div class="am-actions">
                   <training-button
-                    :button-style="trainingButtonType.withRadius"
+                    :button-style="TrainingButtonType.withRadius"
                   />
                 </div>
                 <ul style="cursor: pointer">
-                  <li
-                    v-for="item in listItemModel"
-                    v-if="allowShowItem(item)"
-                    :key="item.id"
-                    class="dropdown-item"
-                    :class="[
-                      { active: activeList === item.id },
-                      {
-                        'is-red':
-                          item.id === userPanelItems.teachers ||
-                          item.id === userPanelItems.teacherPanel,
-                      },
-                    ]"
-                    @click="goPanelPart(item.id)"
-                  >
-                    <img
-                      width="20"
-                      :src="`/images/icons/menu/${item.icon}.svg`"
-                      :alt="item.icon"
-                    />
-                    <span class="text">{{ item.label }}</span>
-                    <span
-                      v-if="item.badgeLabel"
-                      class="r-part__badge"
+                  <template v-for="item in listItemModel">
+                    <li
+                      v-if="allowShowItem(item)"
+                      :key="item.id"
+                      class="dropdown-item"
+                      :class="[
+                        { active: activeList === item.id },
+                        {
+                          'is-red':
+                            item.id === userPanelItems.teachers ||
+                            item.id === userPanelItems.teacherPanel,
+                        },
+                      ]"
+                      @click="goPanelPart(item.id)"
                     >
-                      {{ item.badgeLabel }}
-                    </span>
-                    <div
-                      v-if="item.id == 7 && notificationCount > 0"
-                      class="c-notification"
-                    >
-                      <span>{{ notificationCount }}</span>
-                    </div>
-                  </li>
+                      <img
+                        width="20"
+                        :src="`/images/icons/menu/${item.icon}.svg`"
+                        :alt="item.icon"
+                      />
+                      <span class="text">{{ item.label }}</span>
+                      <span
+                        v-if="item.badgeLabel"
+                        class="r-part__badge"
+                      >
+                        {{ item.badgeLabel }}
+                      </span>
+                      <div
+                        v-if="item.id == 7 && notificationCount > 0"
+                        class="c-notification"
+                      >
+                        <span>{{ notificationCount }}</span>
+                      </div>
+                    </li>
+                  </template>
                   <li
                     class="dropdown-item"
                     @click="logout()"
@@ -310,44 +311,45 @@
                   </nuxt-link>
                   <div class="am-actions">
                     <training-button
-                      :button-style="trainingButtonType.withRadius"
+                      :button-style="TrainingButtonType.withRadius"
                     />
                   </div>
                   <ul style="cursor: pointer">
-                    <li
-                      v-for="(item, index) in listItemModel"
-                      v-if="allowShowItem(item)"
-                      :key="item.id"
-                      class="dropdown-item"
-                      :class="[
-                        { active: activeList === item.id },
-                        {
-                          'is-red':
-                            item.id === userPanelItems.teachers ||
-                            item.id === userPanelItems.teacherPanel,
-                        },
-                      ]"
-                      @click="goPanelPart(item.id)"
-                    >
-                      <img
-                        width="20"
-                        :src="`/images/icons/menu/${item.icon}.svg`"
-                        :alt="item.icon"
-                      />
-                      <span class="text">{{ item.label }}</span>
-                      <span
-                        v-if="item.badgeLabel"
-                        class="r-part__badge"
+                    <template v-for="item in listItemModel">
+                      <li
+                        v-if="allowShowItem(item)"
+                        :key="item.id"
+                        class="dropdown-item"
+                        :class="[
+                          { active: activeList === item.id },
+                          {
+                            'is-red':
+                              item.id === userPanelItems.teachers ||
+                              item.id === userPanelItems.teacherPanel,
+                          },
+                        ]"
+                        @click="goPanelPart(item.id)"
                       >
-                        {{ item.badgeLabel }}
-                      </span>
-                      <div
-                        v-if="item.id == 7 && notificationCount > 0"
-                        class="c-notification"
-                      >
-                        <span>{{ notificationCount }}</span>
-                      </div>
-                    </li>
+                        <img
+                          width="20"
+                          :src="`/images/icons/menu/${item.icon}.svg`"
+                          :alt="item.icon"
+                        />
+                        <span class="text">{{ item.label }}</span>
+                        <span
+                          v-if="item.badgeLabel"
+                          class="r-part__badge"
+                        >
+                          {{ item.badgeLabel }}
+                        </span>
+                        <div
+                          v-if="item.id == 7 && notificationCount > 0"
+                          class="c-notification"
+                        >
+                          <span>{{ notificationCount }}</span>
+                        </div>
+                      </li>
+                    </template>
                     <li
                       class="dropdown-item"
                       @click="logout()"
@@ -473,15 +475,26 @@ import { ImageExt } from '~/shared/constants/image-ext';
 import { useWindowSize } from '~/composables/useWindowSize';
 import { GlobalTypes } from '~/shared/constants/global-types';
 import { TrainingButtonType } from '~/shared/constants/training-button-type';
-import { UserPanelItems } from '~/shared/constants/user-panel-items';
+import {
+  UserPanelItems,
+  UserPanelItemsRecord,
+} from '~/shared/constants/user-panel-items';
 import { UserRoles } from '~/shared/constants/user-roles';
 import { adminQuestionsListPath } from '~/shared/utils/admin-routes.utils';
 import { TrackRouteName } from '~/shared/constants/track-route-name';
 
+type MenuItemUi = {
+  id: number;
+  label: string;
+  icon: string;
+  badgeLabel?: string;
+  roles?: number[];
+};
+
+//enums
 const imagesFolderName = ImagesFolderName;
 const imagesSize = ImageSize;
 const imageExt = ImageExt;
-const trainingButtonType = TrainingButtonType;
 const userPanelItems = UserPanelItems;
 
 //composable
@@ -504,6 +517,31 @@ const notificationCount = computed(() => {
   return 0;
   throw notImplemented('notificationCount');
 });
+const listItemModel = computed<MenuItemUi[]>(() => [
+  { id: 1, label: 'معلوماتي', icon: 'info' },
+  { id: 3, label: 'التحليلات', icon: 'analytics' },
+  { id: 2, label: 'محاكي الاختبار', icon: 'exams' },
+  {
+    id: 5,
+    label: 'الاشتراكات',
+    icon: 'subscribe',
+    //TODO-z
+    // badgeLabel: this.$store.state.userCurrentSub?.title,
+  },
+  { id: 7, label: 'الدعم الفني', icon: 'subscribe' },
+  {
+    id: 9,
+    label: 'المدربون',
+    icon: 'chalkboard-user-red',
+    roles: [UserRoles.student],
+  },
+  {
+    id: 10,
+    label: 'لوحة المدرب',
+    icon: 'chalkboard-user-red',
+    roles: [UserRoles.teacher],
+  },
+]);
 
 //watch
 watch(
@@ -518,6 +556,12 @@ watch(
 );
 
 //methods
+const allowShowItem = (item: MenuItemUi) => {
+  if (item.roles) {
+    return item.roles.some((role) => role == userData.value.role);
+  }
+  return true;
+};
 const logout = async () => {
   await signOut();
   document.getElementById('web-footer')?.classList.remove('is-user-panel');
@@ -529,7 +573,7 @@ const toggleMenu = () => (openMenu.value = !openMenu.value);
 const onLoginClick = () => {
   throw notImplemented('show web-login-register-modal');
 };
-const openList = (_size: string) => {
+const openList = (_size = 'lg') => {
   throw notImplemented('open list');
 };
 const hideList = () => {
@@ -563,11 +607,11 @@ const hideSubMenu = () => {
   }, 100);
 };
 
-const goPanelPart = (key: keyof typeof UserPanelItems) => {
+const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
   router.push({
     path: '/user-panel',
     query: {
-      page: UserPanelItems[key],
+      page: UserPanelItemsRecord[key],
     },
   });
   hideList();
@@ -579,7 +623,7 @@ const goTrackDetail = (id: string) => {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@import 'assets/scss/mixin';
 
 .web-header-container {
   overflow-x: hidden;
@@ -587,7 +631,7 @@ const goTrackDetail = (id: string) => {
   width: 100%;
   top: 0;
   background: white;
-  box-shadow: 0px 0px 15px #00000033;
+  box-shadow: 0 0 15px #00000033;
   z-index: 1000;
   .web-header {
     padding: 20px 40px;
@@ -667,7 +711,7 @@ const goTrackDetail = (id: string) => {
         .dropdown-menu {
           width: 280px;
           border-radius: 20px;
-          box-shadow: 0px 0px 15px #00000033;
+          box-shadow: 0 0 15px #00000033;
           height: auto;
           padding: 15px 0;
           display: grid;
@@ -777,7 +821,7 @@ const goTrackDetail = (id: string) => {
 
     .sub-menu {
       position: fixed;
-      box-shadow: 0px 0px 15px #00000033;
+      box-shadow: 0 0 15px #00000033;
       width: 170px;
       border-radius: 20px;
       padding: 10px 15px;

@@ -6,7 +6,7 @@
     <div class="app-nuxt">
       <div class="wrapper">
         <div class="main-section">
-          <mx-web-menu />
+          <lazy-main-menu />
 
           <div
             id="scroll-page"
@@ -15,7 +15,7 @@
             <div class="page-contents">
               <slot />
             </div>
-            <mx-web-footer :static-data="jsonData" />
+            <!--            <mx-web-footer :static-data="jsonData" />-->
           </div>
         </div>
       </div>
@@ -96,9 +96,9 @@ useHead({
 });
 </script>
 <style lang="scss">
-@import '@/assets/scss/shared/sidebar-filter.scss';
-@import '@/assets/scss/style.scss';
-@import '@/assets/font-icons/ek-icon-v1.0/style.css';
+@import 'assets/scss/shared/sidebar-filter.scss';
+@import 'assets/scss/style.scss';
+@import 'assets/font-icons/ek-icon-v1.0/style.css';
 
 * {
   @include app-scroll-bar();
