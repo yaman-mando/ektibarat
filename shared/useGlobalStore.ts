@@ -2,10 +2,12 @@ import { reactive, toRefs } from 'vue';
 import { GlobalTypes } from '~/shared/constants/global-types';
 
 type StateType = {
+  globalType: GlobalTypes;
   globalTypeUser: GlobalTypes;
 };
 const initialState: StateType = {
-  globalTypeUser: GlobalTypes.tahsele,
+  globalType: GlobalTypes.kudrat,
+  globalTypeUser: GlobalTypes.kudrat,
 };
 const state = reactive({ ...initialState });
 

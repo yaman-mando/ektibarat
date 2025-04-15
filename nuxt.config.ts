@@ -1,7 +1,7 @@
 import tailwindcss from '@tailwindcss/vite';
 import { process } from 'std-env';
 import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import { dirname } from 'path';
 import type { LinkWithoutEvents, ScriptWithoutEvents } from 'unhead/types';
 import PrimeTheme from '@primeuix/themes/aura';
 
@@ -169,9 +169,12 @@ const appFonts: LinkWithoutEvents[] = [
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  alias: {
-    // '~': resolve(__dirname, '.'),
-    // '@': resolve(__dirname, '.'),
+  runtimeConfig: {
+    baseURL: getEnv().websiteUrl,
+    public: {
+      baseUrl: getEnv().baseUrl,
+      baseImageUrl: getEnv().baseImageUrl,
+    },
   },
   typescript: {
     typeCheck: true,
@@ -208,7 +211,11 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/css/app-font.css', '~/assets/css/main.css'],
-  // plugins: ['~/plugins/shared/init-auth.ts'],
+  plugins: [
+    '~/core/auth/fetch-auth.ts',
+    '~/plugins/shared/router-guard.client.ts',
+    '~/plugins/shared/global-error-handler.ts',
+  ],
   app: {
     head: {
       title: 'اختبارات',
@@ -324,12 +331,7 @@ export default defineNuxtConfig({
     },
     sri: true,
   },
-  runtimeConfig: {
-    baseURL: getEnv().websiteUrl,
-    public: {
-      baseImageUrl: getEnv().baseImageUrl,
-    },
-  },
+
   auth: {
     // originEnvKey: 'NUXT_BASE_URL',
     baseURL: getEnv().baseUrl,
