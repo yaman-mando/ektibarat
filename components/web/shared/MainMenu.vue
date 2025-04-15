@@ -22,132 +22,130 @@
         />
       </nuxt-link>
 
-      <client-only>
-        <div
-          v-if="!isLoggedIn"
-          class="actions"
+      <div
+        v-if="!isLoggedIn"
+        class="actions"
+      >
+        <span
+          class="login"
+          @click="onLoginClick"
         >
-          <span
-            class="login"
-            @click="onLoginClick"
+          الدخول
+        </span>
+      </div>
+      <div
+        v-else
+        class="actions"
+      >
+        <div class="drop-menu">
+          <div
+            class="profile"
+            @click="openList()"
           >
-            الدخول
-          </span>
-        </div>
-        <div
-          v-else
-          class="actions"
-        >
-          <div class="drop-menu">
             <div
-              class="profile"
-              @click="openList()"
+              v-if="isLoggedIn"
+              data-toggle="tooltip"
+              data-placement="top"
             >
-              <div
-                v-if="isLoggedIn"
-                data-toggle="tooltip"
-                data-placement="top"
-              >
+              <custom-image
+                :folder-name="imagesFolderName.Users"
+                :url="userData.pictureUrl"
+                :size="imagesSize.xs"
+                :ext="imageExt.jpg"
+                width="40"
+                height="40"
+                radius="50%"
+              />
+            </div>
+          </div>
+          <div
+            v-if="showList"
+            ref="dropDown"
+            class="dropdown"
+            tabindex="-1"
+            @blur.self="hideList"
+          >
+            <div class="dropdown-menu">
+              <div class="rw-info">
                 <custom-image
                   :folder-name="imagesFolderName.Users"
                   :url="userData.pictureUrl"
                   :size="imagesSize.xs"
                   :ext="imageExt.jpg"
-                  width="40"
-                  height="40"
+                  width="76"
+                  height="76"
                   radius="50%"
                 />
-              </div>
-            </div>
-            <div
-              v-if="showList"
-              ref="dropDown"
-              class="dropdown"
-              tabindex="-1"
-              @blur.self="hideList"
-            >
-              <div class="dropdown-menu">
-                <div class="rw-info">
-                  <custom-image
-                    :folder-name="imagesFolderName.Users"
-                    :url="userData.pictureUrl"
-                    :size="imagesSize.xs"
-                    :ext="imageExt.jpg"
-                    width="76"
-                    height="76"
-                    radius="50%"
-                  />
-                  <span class="full-name">
-                    <template v-if="userData.firstName || userData.lastName">
-                      {{ userData.firstName + ' ' + userData.lastName }}
-                    </template>
-                  </span>
-                </div>
-
-                <custom-switch
-                  v-model:active="selectedGlobalType"
-                  :right-label="'قدرات'"
-                  :left-label="'تحصيلي'"
-                  :is-sm="true"
-                />
-                <div class="am-actions">
-                  <training-button
-                    :button-style="TrainingButtonType.withRadius"
-                  />
-                </div>
-                <ul style="cursor: pointer">
-                  <template v-for="item in listItemModel">
-                    <li
-                      v-if="allowShowItem(item)"
-                      :key="item.id"
-                      class="dropdown-item"
-                      :class="[
-                        { active: activeList === item.id },
-                        {
-                          'is-red':
-                            item.id === userPanelItems.teachers ||
-                            item.id === userPanelItems.teacherPanel,
-                        },
-                      ]"
-                      @click="goPanelPart(item.id)"
-                    >
-                      <img
-                        width="20"
-                        :src="`/images/icons/menu/${item.icon}.svg`"
-                        :alt="item.icon"
-                      />
-                      <span class="text">{{ item.label }}</span>
-                      <span
-                        v-if="item.badgeLabel"
-                        class="r-part__badge"
-                      >
-                        {{ item.badgeLabel }}
-                      </span>
-                      <div
-                        v-if="item.id == 7 && notificationCount > 0"
-                        class="c-notification"
-                      >
-                        <span>{{ notificationCount }}</span>
-                      </div>
-                    </li>
+                <span class="full-name">
+                  <template v-if="userData.firstName || userData.lastName">
+                    {{ userData.firstName + ' ' + userData.lastName }}
                   </template>
+                </span>
+              </div>
+
+              <custom-switch
+                v-model:active="selectedGlobalType"
+                :right-label="'قدرات'"
+                :left-label="'تحصيلي'"
+                :is-sm="true"
+              />
+              <div class="am-actions">
+                <training-button
+                  :button-style="TrainingButtonType.withRadius"
+                />
+              </div>
+              <ul style="cursor: pointer">
+                <template v-for="item in listItemModel">
                   <li
+                    v-if="allowShowItem(item)"
+                    :key="item.id"
                     class="dropdown-item"
-                    @click="logout()"
+                    :class="[
+                      { active: activeList === item.id },
+                      {
+                        'is-red':
+                          item.id === userPanelItems.teachers ||
+                          item.id === userPanelItems.teacherPanel,
+                      },
+                    ]"
+                    @click="goPanelPart(item.id)"
                   >
                     <img
                       width="20"
-                      src="/images/icons/menu/signout.svg"
-                      alt="signout"
+                      :src="`/images/icons/menu/${item.icon}.svg`"
+                      :alt="item.icon"
                     />
-                    <span class="text logout">تسجيل خروج</span>
+                    <span class="text">{{ item.label }}</span>
+                    <span
+                      v-if="item.badgeLabel"
+                      class="r-part__badge"
+                    >
+                      {{ item.badgeLabel }}
+                    </span>
+                    <div
+                      v-if="item.id == 7 && notificationCount > 0"
+                      class="c-notification"
+                    >
+                      <span>{{ notificationCount }}</span>
+                    </div>
                   </li>
-                </ul>
-              </div>
+                </template>
+                <li
+                  class="dropdown-item"
+                  @click="logout()"
+                >
+                  <img
+                    width="20"
+                    src="/images/icons/menu/signout.svg"
+                    alt="signout"
+                  />
+                  <span class="text logout">تسجيل خروج</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
-      </client-only>
+      </div>
     </header>
     <header
       v-else
@@ -226,151 +224,149 @@
           </li>
         </ul>
       </div>
-      <client-only>
-        <div
-          v-if="!isLoggedIn"
-          class="actions"
+      <div
+        v-if="!isLoggedIn"
+        class="actions"
+      >
+        <button
+          class="normal-btn"
+          @click="onLoginClick"
         >
+          الدخول
+        </button>
+      </div>
+      <div
+        v-else
+        class="actions"
+      >
+        <div class="user-part">
           <button
             class="normal-btn"
-            @click="onLoginClick"
+            @click="goPanelPart(userPanelItems.learningPanel)"
           >
-            الدخول
+            لوحتي التعليمية
           </button>
-        </div>
-        <div
-          v-else
-          class="actions"
-        >
-          <div class="user-part">
-            <button
-              class="normal-btn"
-              @click="goPanelPart(userPanelItems.learningPanel)"
+          <div class="drop-menu">
+            <div
+              class="profile"
+              @click="openList('sm')"
             >
-              لوحتي التعليمية
-            </button>
-            <div class="drop-menu">
               <div
-                class="profile"
-                @click="openList('sm')"
+                v-if="userData && userData"
+                data-toggle="tooltip"
+                data-placement="top"
               >
-                <div
-                  v-if="userData && userData"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                >
+                <custom-image
+                  :folder-name="imagesFolderName.Users"
+                  :url="userData.pictureUrl"
+                  :size="imagesSize.xs"
+                  :ext="imageExt.jpg"
+                  width="40"
+                  height="40"
+                  radius="50%"
+                />
+              </div>
+              <span
+                v-if="isLoggedIn"
+                class="name"
+              >
+                <template v-if="userData.firstName">
+                  {{ userData.firstName }}
+                </template>
+              </span>
+              <i class="fa fa-chevron-down" />
+            </div>
+            <div
+              v-if="showList"
+              ref="dropDownSm"
+              class="dropdown"
+              tabindex="-1"
+              @blur.self="hideList"
+            >
+              <div class="dropdown-menu">
+                <div class="rw-info">
                   <custom-image
                     :folder-name="imagesFolderName.Users"
                     :url="userData.pictureUrl"
                     :size="imagesSize.xs"
                     :ext="imageExt.jpg"
-                    width="40"
-                    height="40"
+                    width="76"
+                    height="76"
                     radius="50%"
                   />
-                </div>
-                <span
-                  v-if="isLoggedIn"
-                  class="name"
-                >
-                  <template v-if="userData.firstName">
-                    {{ userData.firstName }}
-                  </template>
-                </span>
-                <i class="fa fa-chevron-down" />
-              </div>
-              <div
-                v-if="showList"
-                ref="dropDownSm"
-                class="dropdown"
-                tabindex="-1"
-                @blur.self="hideList"
-              >
-                <div class="dropdown-menu">
-                  <div class="rw-info">
-                    <custom-image
-                      :folder-name="imagesFolderName.Users"
-                      :url="userData.pictureUrl"
-                      :size="imagesSize.xs"
-                      :ext="imageExt.jpg"
-                      width="76"
-                      height="76"
-                      radius="50%"
-                    />
-                    <span class="full-name">
-                      <template v-if="userData.firstName || userData.lastName">
-                        {{ userData.firstName + ' ' + userData.lastName }}
-                      </template>
-                    </span>
-                  </div>
-                  <nuxt-link
-                    v-if="isEmployee"
-                    :to="adminQuestionsListPath()"
-                  >
-                    <span class="normal-btn">لوحة التحكم</span>
-                  </nuxt-link>
-                  <div class="am-actions">
-                    <training-button
-                      :button-style="TrainingButtonType.withRadius"
-                    />
-                  </div>
-                  <ul style="cursor: pointer">
-                    <template v-for="item in listItemModel">
-                      <li
-                        v-if="allowShowItem(item)"
-                        :key="item.id"
-                        class="dropdown-item"
-                        :class="[
-                          { active: activeList === item.id },
-                          {
-                            'is-red':
-                              item.id === userPanelItems.teachers ||
-                              item.id === userPanelItems.teacherPanel,
-                          },
-                        ]"
-                        @click="goPanelPart(item.id)"
-                      >
-                        <img
-                          width="20"
-                          :src="`/images/icons/menu/${item.icon}.svg`"
-                          :alt="item.icon"
-                        />
-                        <span class="text">{{ item.label }}</span>
-                        <span
-                          v-if="item.badgeLabel"
-                          class="r-part__badge"
-                        >
-                          {{ item.badgeLabel }}
-                        </span>
-                        <div
-                          v-if="item.id == 7 && notificationCount > 0"
-                          class="c-notification"
-                        >
-                          <span>{{ notificationCount }}</span>
-                        </div>
-                      </li>
+                  <span class="full-name">
+                    <template v-if="userData.firstName || userData.lastName">
+                      {{ userData.firstName + ' ' + userData.lastName }}
                     </template>
+                  </span>
+                </div>
+                <nuxt-link
+                  v-if="isEmployee"
+                  :to="adminQuestionsListPath()"
+                >
+                  <span class="normal-btn">لوحة التحكم</span>
+                </nuxt-link>
+                <div class="am-actions">
+                  <training-button
+                    :button-style="TrainingButtonType.withRadius"
+                  />
+                </div>
+                <ul style="cursor: pointer">
+                  <template v-for="item in listItemModel">
                     <li
+                      v-if="allowShowItem(item)"
+                      :key="item.id"
                       class="dropdown-item"
-                      @click="logout()"
+                      :class="[
+                        { active: activeList === item.id },
+                        {
+                          'is-red':
+                            item.id === userPanelItems.teachers ||
+                            item.id === userPanelItems.teacherPanel,
+                        },
+                      ]"
+                      @click="goPanelPart(item.id)"
                     >
                       <img
                         width="20"
-                        src="/images/icons/menu/signout.svg"
-                        alt="signout"
+                        :src="`/images/icons/menu/${item.icon}.svg`"
+                        :alt="item.icon"
                       />
-                      <span class="text logout">تسجيل خروج</span>
+                      <span class="text">{{ item.label }}</span>
+                      <span
+                        v-if="item.badgeLabel"
+                        class="r-part__badge"
+                      >
+                        {{ item.badgeLabel }}
+                      </span>
+                      <div
+                        v-if="item.id == 7 && notificationCount > 0"
+                        class="c-notification"
+                      >
+                        <span>{{ notificationCount }}</span>
+                      </div>
                     </li>
-                  </ul>
-                </div>
+                  </template>
+                  <li
+                    class="dropdown-item"
+                    @click="logout()"
+                  >
+                    <img
+                      width="20"
+                      src="/images/icons/menu/signout.svg"
+                      alt="signout"
+                    />
+                    <span class="text logout">تسجيل خروج</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
-      </client-only>
+      </div>
     </header>
 
-    <!--responsive-menu-->
+    <!--TODO-z responsive-menu-->
     <client-only>
       <!--      <div-->
       <!--        class="rw-responsive-menu"-->
@@ -473,7 +469,6 @@ import { ImagesFolderName } from '~/shared/constants/images-folder-name';
 import { ImageSize } from '~/shared/constants/image-size';
 import { ImageExt } from '~/shared/constants/image-ext';
 import { useWindowSize } from '~/composables/useWindowSize';
-import { GlobalTypes } from '~/shared/constants/global-types';
 import { TrainingButtonType } from '~/shared/constants/training-button-type';
 import {
   UserPanelItems,
@@ -482,6 +477,9 @@ import {
 import { UserRoles } from '~/shared/constants/user-roles';
 import { adminQuestionsListPath } from '~/shared/utils/admin-routes.utils';
 import { TrackRouteName } from '~/shared/constants/track-route-name';
+import { useGlobalStore } from '~/shared/useGlobalStore';
+import { GlobalTypes } from '~/shared/constants/global-types';
+import { sleepUtil } from '~/shared/utils/utils';
 
 type MenuItemUi = {
   id: number;
@@ -502,13 +500,14 @@ const { status, data, signOut } = useAuth();
 const { isMobileSize } = useWindowSize();
 const router = useRouter();
 const route = useRoute();
+const { globalTypeUser, patchState: pathGlobalStore } = useGlobalStore();
 
 //data
 const subMenu = ref<HTMLInputElement | null>(null);
 const openMenu = ref(false);
 const showList = ref(false);
 const activeSub = ref<number | null>(null);
-const selectedGlobalType = ref(GlobalTypes.tahsele);
+const selectedGlobalType = ref(globalTypeUser.value == GlobalTypes.tahsele);
 const isLoggedIn = computed(() => status.value === 'authenticated');
 const userData = computed(() => data.value as UserInfoDataModel);
 const isEmployee = computed(() => userData.value.role === UserRoles.employee);
@@ -553,6 +552,42 @@ watch(
     }
   },
   { immediate: true }
+);
+
+watch(selectedGlobalType, async (newVal, _oldVal) => {
+  const currentType = globalTypeUser.value;
+
+  const shouldSwitch =
+    (newVal && currentType === GlobalTypes.kudrat) ||
+    (!newVal && currentType === GlobalTypes.tahsele);
+
+  if (shouldSwitch) {
+    const newType = newVal ? GlobalTypes.tahsele : GlobalTypes.kudrat;
+    pathGlobalStore({ globalTypeUser: newType });
+
+    await sleepUtil(1000);
+
+    router.push({
+      name: route.name!,
+      query: {
+        ...route.query,
+        globalTypeUser: newType,
+      },
+    });
+  }
+});
+
+watch(
+  () => globalTypeUser.value,
+  (newVal) => {
+    if (
+      (newVal == GlobalTypes.tahsele && !selectedGlobalType.value) ||
+      (newVal == GlobalTypes.kudrat && selectedGlobalType.value)
+    ) {
+      selectedGlobalType.value = newVal == GlobalTypes.tahsele;
+    }
+  },
+  { deep: true }
 );
 
 //methods
@@ -623,7 +658,7 @@ const goTrackDetail = (id: string) => {
 };
 </script>
 <style lang="scss" scoped>
-@import 'assets/scss/mixin';
+@import '../../../assets/scss/mixin';
 
 .web-header-container {
   overflow-x: hidden;

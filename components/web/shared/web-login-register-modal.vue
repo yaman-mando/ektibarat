@@ -85,7 +85,7 @@ const hideModal = () => {
 };
 </script>
 <style lang="scss" scoped>
-@import 'assets/scss/mixin';
+@import '../../../assets/scss/mixin';
 .web-login-register-modal {
   .modal-content {
     width: 340px;

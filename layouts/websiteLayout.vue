@@ -23,7 +23,12 @@
   </div>
 </template>
 <script setup lang="ts">
+import { useGlobalStore } from '#shared/useGlobalStore';
+
+//composable
 const { status } = useAuth();
+const route = useRoute();
+const { globalTypeUser, patchState } = useGlobalStore();
 const headers = {
   __dangerouslyDisableSanitizersByTagID: {
     'custom-inline-script': ['innerHTML'],
@@ -94,11 +99,26 @@ useHead({
   ],
   script: extraScript.value,
 });
+
+//data
+const isLoggedIn = computed(() => status.value === 'authenticated');
+
+//watch
+watch(
+  () => route.query.globalTypeUser,
+  (newVal) => {
+    if (isLoggedIn.value && newVal && globalTypeUser.value !== Number(newVal)) {
+      patchState({ globalTypeUser: Number(newVal) });
+    }
+  },
+  { immediate: true }
+);
 </script>
 <style lang="scss">
-@import 'assets/scss/shared/sidebar-filter.scss';
-@import 'assets/scss/style.scss';
-@import 'assets/font-icons/ek-icon-v1.0/style.css';
+@import '@/assets/scss/shared/sidebar-filter';
+@import '@/assets/scss/style';
+@import '@/assets/font-icons/ek-icon-v1.0/style';
+@import '@/assets/scss/main';
 
 * {
   @include app-scroll-bar();

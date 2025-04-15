@@ -1,7 +1,7 @@
 import tailwindcss from '@tailwindcss/vite';
 import { process } from 'std-env';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { dirname, resolve } from 'path';
 import type { LinkWithoutEvents, ScriptWithoutEvents } from 'unhead/types';
 import PrimeTheme from '@primeuix/themes/aura';
 
@@ -169,6 +169,10 @@ const appFonts: LinkWithoutEvents[] = [
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  alias: {
+    // '~': resolve(__dirname, '.'),
+    // '@': resolve(__dirname, '.'),
+  },
   typescript: {
     typeCheck: true,
   },
@@ -182,20 +186,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   vite: {
     plugins: [tailwindcss()],
-    // resolve: {
-    //   alias: {
-    //     '@': resolve(__dirname, '.'),
-    //     '@/assets': resolve(__dirname, 'assets'),
-    //   },
-    // },
-    // css: {
-    //   preprocessorOptions: {
-    //     scss: {
-    //       additionalData: '',
-    //       includePaths: ['.'],
-    //     },
-    //   },
-    // },
   },
   modules: [
     'nuxt-security',
