@@ -1,3 +1,5 @@
+import type { ServiceTypesEnum } from '#shared/constants/service-types.enum';
+
 export type CurrentSubscriptionDataModel = {
   id: number;
   color: string;
@@ -13,4 +15,11 @@ export type CurrentSubscriptionDataModel = {
     serviceName: string;
     serviceDisplayName: string;
   }[];
+};
+
+//ui model
+export type UserServicesStateUi = {
+  [key in ServiceTypesEnum]: {
+    isActive: boolean;
+  };
 };

@@ -21,9 +21,10 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'website-layout',
+  middleware: ['user-services-middleware'],
 });
 
-const { signIn, data, status, signOut } = useAuth();
+const { signIn, status, signOut } = useAuth();
 const isLoadingAuth = computed(() => status.value === 'loading');
 
 const login = async () => {
@@ -31,7 +32,6 @@ const login = async () => {
     { username: 'admin_ekhts', password: 'dsaewq321' },
     { callbackUrl: '/', redirect: false }
   );
-  console.log(data.value);
 };
 
 const logout = async () => {

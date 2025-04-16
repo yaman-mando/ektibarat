@@ -1,15 +1,34 @@
 import { reactive, toRefs } from 'vue';
-import type { CurrentSubscriptionDataModel } from '~/modules/web/subscriptions/data-access/subscriptions.model';
-import { useSubscriptionsRepo } from '~/modules/web/subscriptions/composables/useSubscriptionsRepo';
+import type {
+  CurrentSubscriptionDataModel,
+  UserServicesStateUi,
+} from '#shared/modules/subscriptions/data-access/subscriptions.model';
+import { useSubscriptionsRepo } from '#shared/modules/subscriptions/composables/useSubscriptionsRepo';
 import { useGlobalStore } from '#shared/useGlobalStore';
 
 type StateType = {
   lastUserSubUpdate: number;
   userCurrentSub: CurrentSubscriptionDataModel | null;
+  userServicesState: UserServicesStateUi;
 };
+
 const initialState: StateType = {
   lastUserSubUpdate: 0,
   userCurrentSub: null,
+  userServicesState: {
+    TRAININGBYCATEGORY: { isActive: false },
+    TAKFELATUSAGE: { isActive: false },
+    SHOWSOLVESOLUATION: { isActive: false },
+    ROWNQUESTIONPRACTICE: { isActive: false },
+    LEVELQUESTIONPRACTICE: { isActive: false },
+    HELPINPRACTICE: { isActive: false },
+    FULLEXAM: { isActive: false },
+    FAVORITEUSAGE: { isActive: false },
+    EXAMBYCATEGORY: { isActive: false },
+    BANKUSAGE: { isActive: false },
+    ANALAZENUMBERCATEGORY: { isActive: false },
+    ANALAZEDEGRE: { isActive: false },
+  },
 };
 const state = reactive({ ...initialState });
 
@@ -27,7 +46,7 @@ export const useSubscriptionsStore = () => {
 
   const getCurrentSub = async () => {
     const res = await repo.getCurrentSubs({
-      grade: globalStore.globalTypeUser.value,
+      grade: globalStore.state.globalTypeUser.value,
     });
     patchState({ userCurrentSub: res });
     return res;

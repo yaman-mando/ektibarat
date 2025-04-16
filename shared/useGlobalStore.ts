@@ -4,10 +4,14 @@ import { GlobalTypes } from '~/shared/constants/global-types';
 type StateType = {
   globalType: GlobalTypes;
   globalTypeUser: GlobalTypes;
+  isSchool: boolean;
+  defaultActiveExam: number;
 };
 const initialState: StateType = {
   globalType: GlobalTypes.kudrat,
   globalTypeUser: GlobalTypes.kudrat,
+  isSchool: false,
+  defaultActiveExam: 1,
 };
 const state = reactive({ ...initialState });
 
@@ -20,7 +24,9 @@ export const useGlobalStore = () => {
     Object.assign(state, { ...initialState });
   };
   return {
-    ...toRefs(state),
+    state: {
+      ...toRefs(state),
+    },
     patchState,
     clearState,
   };

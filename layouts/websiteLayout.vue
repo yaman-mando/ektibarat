@@ -28,7 +28,7 @@ import { useGlobalStore } from '#shared/useGlobalStore';
 //composable
 const { status } = useAuth();
 const route = useRoute();
-const { globalTypeUser, patchState } = useGlobalStore();
+const globalStore = useGlobalStore();
 const headers = {
   __dangerouslyDisableSanitizersByTagID: {
     'custom-inline-script': ['innerHTML'],
@@ -107,8 +107,12 @@ const isLoggedIn = computed(() => status.value === 'authenticated');
 watch(
   () => route.query.globalTypeUser,
   (newVal) => {
-    if (isLoggedIn.value && newVal && globalTypeUser.value !== Number(newVal)) {
-      patchState({ globalTypeUser: Number(newVal) });
+    if (
+      isLoggedIn.value &&
+      newVal &&
+      globalStore.state.globalTypeUser.value !== Number(newVal)
+    ) {
+      globalStore.patchState({ globalTypeUser: Number(newVal) });
     }
   },
   { immediate: true }

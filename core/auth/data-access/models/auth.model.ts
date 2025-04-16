@@ -1,4 +1,6 @@
 //login
+import type { UserRoles } from '~/core/auth/constants/user-roles';
+
 export type LoginDTODataModel = {
   userName: string;
   password: string;
@@ -56,7 +58,7 @@ export type UserInfoDataModel = {
   phoneNumberConfirmed: boolean;
   whatsAppConfirm: boolean;
   whatsAppNumber: string | null;
-  role: number;
+  role: UserRoles;
   subscriptionDate: string;
   unreadChatMessagesCount: number;
   isMediaManager: boolean;

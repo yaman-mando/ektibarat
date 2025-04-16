@@ -2,9 +2,9 @@ import { defineNuxtPlugin } from '#app';
 import { useGlobalStore } from '#shared/useGlobalStore';
 import { EXAM_QUESTIONS_ROUTES } from '#shared/constants/routes';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
-import { UserRoles } from '#shared/constants/user-roles';
+import { UserRoles } from '~/core/auth/constants/user-roles';
 import type { GlobalTypes } from '#shared/constants/global-types';
-import { useSubscriptionsStore } from '~/modules/web/subscriptions/composables/useSubscriptionsStore';
+import { useSubscriptionsStore } from '#shared/modules/subscriptions/composables/useSubscriptionsStore';
 
 export default defineNuxtPlugin((_nuxtApp) => {
   const router = useRouter();
@@ -43,7 +43,7 @@ export default defineNuxtPlugin((_nuxtApp) => {
       if (status.value === 'authenticated') {
         if (to.path.includes('/ekht-admin')) {
           if (!query.globalType) {
-            query.globalType = globalStore.globalType.value.toString();
+            query.globalType = globalStore.state.globalType.value.toString();
             return {
               path: to.path,
               query,
@@ -61,7 +61,8 @@ export default defineNuxtPlugin((_nuxtApp) => {
           !to.path.includes('/ekht-admin')
         ) {
           if (!query.globalTypeUser) {
-            query.globalTypeUser = globalStore.globalTypeUser.value.toString();
+            query.globalTypeUser =
+              globalStore.state.globalTypeUser.value.toString();
             return {
               path: to.path,
               query,

@@ -474,7 +474,7 @@ import {
   UserPanelItems,
   UserPanelItemsRecord,
 } from '~/shared/constants/user-panel-items';
-import { UserRoles } from '~/shared/constants/user-roles';
+import { UserRoles } from '~/core/auth/constants/user-roles';
 import { adminQuestionsListPath } from '~/shared/utils/admin-routes.utils';
 import { TrackRouteName } from '~/shared/constants/track-route-name';
 import { useGlobalStore } from '~/shared/useGlobalStore';
@@ -500,14 +500,16 @@ const { status, data, signOut } = useAuth();
 const { isMobileSize } = useWindowSize();
 const router = useRouter();
 const route = useRoute();
-const { globalTypeUser, patchState: pathGlobalStore } = useGlobalStore();
+const { state, patchState: pathGlobalStore } = useGlobalStore();
 
 //data
 const subMenu = ref<HTMLInputElement | null>(null);
 const openMenu = ref(false);
 const showList = ref(false);
 const activeSub = ref<number | null>(null);
-const selectedGlobalType = ref(globalTypeUser.value == GlobalTypes.tahsele);
+const selectedGlobalType = ref(
+  state.globalTypeUser.value == GlobalTypes.tahsele
+);
 const isLoggedIn = computed(() => status.value === 'authenticated');
 const userData = computed(() => data.value as UserInfoDataModel);
 const isEmployee = computed(() => userData.value.role === UserRoles.employee);
@@ -555,11 +557,11 @@ watch(
 );
 
 watch(selectedGlobalType, async (newVal, _oldVal) => {
-  const currentType = globalTypeUser.value;
+  const currentType = state.globalTypeUser;
 
   const shouldSwitch =
-    (newVal && currentType === GlobalTypes.kudrat) ||
-    (!newVal && currentType === GlobalTypes.tahsele);
+    (newVal && currentType.value === GlobalTypes.kudrat) ||
+    (!newVal && currentType.value === GlobalTypes.tahsele);
 
   if (shouldSwitch) {
     const newType = newVal ? GlobalTypes.tahsele : GlobalTypes.kudrat;
@@ -578,7 +580,7 @@ watch(selectedGlobalType, async (newVal, _oldVal) => {
 });
 
 watch(
-  () => globalTypeUser.value,
+  () => state.globalTypeUser.value,
   (newVal) => {
     if (
       (newVal == GlobalTypes.tahsele && !selectedGlobalType.value) ||
