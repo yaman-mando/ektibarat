@@ -213,8 +213,10 @@ export default defineNuxtConfig({
   css: ['~/assets/css/app-font.css', '~/assets/css/main.css'],
   plugins: [
     '~/core/auth/fetch-auth.ts',
-    '~/plugins/shared/router-guard.client.ts',
     '~/plugins/shared/global-error-handler.ts',
+    '~/plugins/shared/detect-device-plugin.ts',
+    '~/plugins/shared/gtag-plugin.client.ts',
+    '~/plugins/shared/router-guard.client.ts',
   ],
   app: {
     head: {
@@ -235,6 +237,10 @@ export default defineNuxtConfig({
           href: prefetch_preConnect_urls.preconnect,
         },
         { rel: 'dns-prefetch', href: prefetch_preConnect_urls.dnsPrefetch },
+        {
+          rel: 'stylesheet',
+          href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css',
+        },
         //@ts-expect-error because of typing
         ...appFonts,
       ],

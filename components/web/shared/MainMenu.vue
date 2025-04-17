@@ -366,98 +366,97 @@
       </div>
     </header>
 
-    <!--TODO-z responsive-menu-->
     <client-only>
-      <!--      <div-->
-      <!--        class="rw-responsive-menu"-->
-      <!--        :class="{ 'is-open': openMenu }"-->
-      <!--      >-->
-      <!--        <div-->
-      <!--          ref="responsiveMenu"-->
-      <!--          class="responsive-menu"-->
-      <!--          :class="{ 'is-open': openMenu }"-->
-      <!--          tabindex="-1"-->
-      <!--          @blur="openMenu = false"-->
-      <!--        >-->
-      <!--          <div class="menu-head">-->
-      <!--            <i-->
-      <!--              class="fa fa-close close-button"-->
-      <!--              @click="openMenu = false"-->
-      <!--            />-->
-      <!--            <div class="e-logo">-->
-      <!--              <img-->
-      <!--                width="126px"-->
-      <!--                height="40px"-->
-      <!--                style="cursor: pointer"-->
-      <!--                src="/images/EkhtibaratLogoWhite.webp"-->
-      <!--                alt="اختبارات"-->
-      <!--                @click="toHome"-->
-      <!--              />-->
-      <!--            </div>-->
-      <!--          </div>-->
-      <!--          <div class="menu">-->
-      <!--            <div-->
-      <!--              v-for="(item, index) of menu2"-->
-      <!--              :key="item.href"-->
-      <!--              class="menu-item"-->
-      <!--              :class="[-->
-      <!--                { active: currentRoute == item.href },-->
-      <!--                { 'is-open': activeCollapse.includes(index) },-->
-      <!--              ]"-->
-      <!--              @click="toPath(item.href)"-->
-      <!--            >-->
-      <!--              <div-->
-      <!--                class="menu-main"-->
-      <!--                @click="item.hasChild ? openCollapse(index) : ''"-->
-      <!--              >-->
-      <!--                <div class="r-part">-->
-      <!--                  <i-->
-      <!--                    v-if="item.iconClass"-->
-      <!--                    :class="item.iconClass"-->
-      <!--                  />-->
-      <!--                  <span class="name">{{ item.name }}</span>-->
-      <!--                </div>-->
-      <!--                <div-->
-      <!--                  v-if="item.hasChild"-->
-      <!--                  class="l-part"-->
-      <!--                >-->
-      <!--                  <i-->
-      <!--                    class="fa"-->
-      <!--                    :class="-->
-      <!--                      activeCollapse.includes(index)-->
-      <!--                        ? 'fa-chevron-up'-->
-      <!--                        : 'fa-chevron-down'-->
-      <!--                    "-->
-      <!--                  />-->
-      <!--                </div>-->
-      <!--              </div>-->
-      <!--              <div-->
-      <!--                v-if="item.hasChild && activeCollapse.includes(index)"-->
-      <!--                class="menu-child"-->
-      <!--              >-->
-      <!--                <div-->
-      <!--                  v-for="childItem of item.child"-->
-      <!--                  :key="childItem.href"-->
-      <!--                  class="child-item"-->
-      <!--                  @click="toPath(childItem.href)"-->
-      <!--                >-->
-      <!--                  <span class="name">-->
-      <!--                    {{ childItem.name }}-->
-      <!--                  </span>-->
-      <!--                </div>-->
-      <!--              </div>-->
-      <!--            </div>-->
-      <!--          </div>-->
-      <!--          <div class="pt-3 d-flex justify-center">-->
-      <!--            <custom-switch-->
-      <!--              v-model:active="selectedGlobalType"-->
-      <!--              :right-label="'قدرات'"-->
-      <!--              :left-label="'تحصيلي'"-->
-      <!--              :is-sm="true"-->
-      <!--            />-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--      </div>-->
+      <div
+        class="rw-responsive-menu"
+        :class="{ 'is-open': openMenu }"
+      >
+        <div
+          ref="responsiveMenu"
+          class="responsive-menu"
+          :class="{ 'is-open': openMenu }"
+          tabindex="-1"
+          @blur="openMenu = false"
+        >
+          <div class="menu-head">
+            <i
+              class="fa fa-close close-button"
+              @click="openMenu = false"
+            />
+            <div class="e-logo">
+              <nuxt-link to="/">
+                <img
+                  width="126px"
+                  height="40px"
+                  src="/images/EkhtibaratLogoWhite.webp"
+                  alt="اختبارات"
+                />
+              </nuxt-link>
+            </div>
+          </div>
+          <div class="menu">
+            <div
+              v-for="(item, index) of menu2"
+              :key="item.name"
+              class="menu-item"
+              :class="[
+                { active: currentRoute == item.href },
+                { 'is-open': activeCollapse.includes(index) },
+              ]"
+              @click="toPath(item.href)"
+            >
+              <div
+                class="menu-main"
+                @click="item.hasChild ? openCollapse(index) : ''"
+              >
+                <div class="r-part">
+                  <i
+                    v-if="item.iconClass"
+                    :class="item.iconClass"
+                  />
+                  <span class="name">{{ item.name }}</span>
+                </div>
+                <div
+                  v-if="item.hasChild"
+                  class="l-part"
+                >
+                  <i
+                    class="fa"
+                    :class="
+                      activeCollapse.includes(index)
+                        ? 'fa-chevron-up'
+                        : 'fa-chevron-down'
+                    "
+                  />
+                </div>
+              </div>
+              <div
+                v-if="item.hasChild && activeCollapse.includes(index)"
+                class="menu-child"
+              >
+                <div
+                  v-for="childItem of item.child"
+                  :key="childItem.href"
+                  class="child-item"
+                  @click="toPath(childItem.href)"
+                >
+                  <span class="name">
+                    {{ childItem.name }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pt-3 d-flex justify-center">
+            <custom-switch
+              v-model:active="selectedGlobalType"
+              :right-label="'قدرات'"
+              :left-label="'تحصيلي'"
+              :is-sm="true"
+            />
+          </div>
+        </div>
+      </div>
       <web-login-register-modal ref="loginRegisterModalRef" />
     </client-only>
   </div>
@@ -480,6 +479,8 @@ import { TrackRouteName } from '~/shared/constants/track-route-name';
 import { useGlobalStore } from '~/shared/useGlobalStore';
 import { GlobalTypes } from '~/shared/constants/global-types';
 import { sleepUtil } from '~/shared/utils/utils';
+import { useSubscriptionsStore } from '#shared/modules/subscriptions/composables/useSubscriptionsStore';
+import { StaticTracksRoutersEnum } from '#shared/constants/static-tracks-routers.enum';
 
 type MenuItemUi = {
   id: number;
@@ -488,6 +489,53 @@ type MenuItemUi = {
   badgeLabel?: string;
   roles?: number[];
 };
+
+const menu2 = [
+  {
+    name: 'الرئيسية',
+    href: '/',
+    iconClass: 'fa fa-home',
+    hasChild: false,
+  },
+  {
+    name: 'المسارات',
+    iconClass: 'fa fa-road',
+    href: null,
+    hasChild: true,
+    child: [
+      {
+        name: 'القدرات',
+        href: `/${StaticTracksRoutersEnum.kudrat}`,
+      },
+      {
+        name: 'التحصيلي',
+        href: `/${StaticTracksRoutersEnum.tahsel}`,
+      },
+      {
+        name: 'موهبة (قريبا)',
+        href: '#',
+      },
+    ],
+  },
+  {
+    name: 'الأسئلة الشائعة',
+    href: '/faqs',
+    iconClass: 'fa fa-circle-question',
+    hasChild: false,
+  },
+  {
+    name: 'المدونة',
+    href: '/blog',
+    iconClass: 'fa fa-book',
+    hasChild: false,
+  },
+  {
+    name: 'الأسعار',
+    href: '/prices',
+    iconClass: 'fa fa-shopping-cart',
+    hasChild: false,
+  },
+];
 
 //enums
 const imagesFolderName = ImagesFolderName;
@@ -501,8 +549,11 @@ const { isMobileSize } = useWindowSize();
 const router = useRouter();
 const route = useRoute();
 const { state, patchState: pathGlobalStore } = useGlobalStore();
+const subscriptionsStore = useSubscriptionsStore();
+const currentRoute = computed(() => route.path);
 
 //data
+const activeCollapse = ref<number[]>([]);
 const subMenu = ref<HTMLInputElement | null>(null);
 const openMenu = ref(false);
 const showList = ref(false);
@@ -526,8 +577,7 @@ const listItemModel = computed<MenuItemUi[]>(() => [
     id: 5,
     label: 'الاشتراكات',
     icon: 'subscribe',
-    //TODO-z
-    // badgeLabel: this.$store.state.userCurrentSub?.title,
+    badgeLabel: subscriptionsStore.userCurrentSub.value?.title,
   },
   { id: 7, label: 'الدعم الفني', icon: 'subscribe' },
   {
@@ -600,18 +650,36 @@ const allowShowItem = (item: MenuItemUi) => {
   return true;
 };
 const logout = async () => {
-  await signOut();
+  await signOut({ callbackUrl: '/' });
   document.getElementById('web-footer')?.classList.remove('is-user-panel');
 };
-const _openCollapse = (index: number) => {
-  throw notImplemented(`${index}`);
+const openCollapse = (index: number) => {
+  if (activeCollapse.value.includes(index)) {
+    activeCollapse.value.splice(
+      activeCollapse.value.findIndex((r) => r == index),
+      1
+    );
+  } else {
+    activeCollapse.value.push(index);
+  }
 };
 const toggleMenu = () => (openMenu.value = !openMenu.value);
 const onLoginClick = () => {
   throw notImplemented('show web-login-register-modal');
 };
-const openList = (_size = 'lg') => {
-  throw notImplemented('open list');
+const dropDownSm = ref<HTMLElement | null>(null);
+const dropDown = ref<HTMLElement | null>(null);
+const openList = (size = 'lg') => {
+  showList.value = !showList.value;
+  if (showList.value) {
+    setTimeout(() => {
+      if (size == 'sm') {
+        dropDownSm.value?.focus();
+      } else {
+        dropDown.value?.focus();
+      }
+    }, 100);
+  }
 };
 const hideList = () => {
   setTimeout(() => {
@@ -619,7 +687,7 @@ const hideList = () => {
   }, 100);
 };
 
-const toPath = (path: string) => {
+const toPath = (path: string | null) => {
   if (path) {
     if (path == '/blog') {
       window.location.href = 'https://ekhtibarat.com/blog';

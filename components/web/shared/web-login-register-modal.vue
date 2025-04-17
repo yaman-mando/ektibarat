@@ -65,6 +65,10 @@ const isOpen = ref(false);
 const isLocked = ref(false);
 
 //methods
+const hideModal = () => {
+  document.body.classList.remove('modal-blur');
+  isOpen.value = false;
+};
 const _toLogin = () => {
   hideModal();
   router.push('/auth/signup');
@@ -78,10 +82,6 @@ const _toRegister = () => {
 };
 const _showModal = () => {
   isOpen.value = true;
-};
-const hideModal = () => {
-  document.body.classList.remove('modal-blur');
-  isOpen.value = false;
 };
 </script>
 <style lang="scss" scoped>
