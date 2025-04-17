@@ -5,6 +5,7 @@ import type {
 } from '#shared/modules/subscriptions/data-access/subscriptions.model';
 import { useSubscriptionsRepo } from '#shared/modules/subscriptions/composables/useSubscriptionsRepo';
 import { useGlobalStore } from '#shared/useGlobalStore';
+import type { GlobalTypes } from '#shared/constants/global-types';
 
 type StateType = {
   lastUserSubUpdate: number;
@@ -35,7 +36,6 @@ const state = reactive({ ...initialState });
 //store
 export const useSubscriptionsStore = () => {
   const repo = useSubscriptionsRepo();
-  const globalStore = useGlobalStore();
 
   const patchState = (newState: Partial<StateType>) => {
     Object.assign(state, newState);
@@ -44,9 +44,9 @@ export const useSubscriptionsStore = () => {
     Object.assign(state, { ...initialState });
   };
 
-  const getCurrentSub = async () => {
+  const getCurrentSub = async (grade: GlobalTypes) => {
     const res = await repo.getCurrentSubs({
-      grade: globalStore.state.globalTypeUser.value,
+      grade,
     });
     patchState({ userCurrentSub: res });
     return res;

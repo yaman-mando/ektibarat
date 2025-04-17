@@ -1177,11 +1177,11 @@ export const all_routers = [
   },
 ];
 
-export const needAuth = (route: RouteLocationNormalizedGeneric) => {
+export const needAuth = (route: RouteLocationNormalizedGeneric): boolean => {
   const currentRouter = all_routers.filter(
-    (r) => r.path == route.matched[0]?.path || route.fullPath
+    (r) => r.path == route.matched[0]?.path
   )[0];
-  return currentRouter.isAuth;
+  return currentRouter?.isAuth ?? false;
 };
 
 export const isAllowRouter = (

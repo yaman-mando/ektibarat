@@ -32,8 +32,11 @@ export default defineNuxtPlugin((_nuxtApp) => {
           !subscriptionStore.userCurrentSub ||
           now - lastUpdate > UPDATE_INTERVAL
         ) {
-          await subscriptionStore.getCurrentSub();
-          subscriptionStore.patchState({ lastUserSubUpdate: now });
+          const grade = globalStore.state.globalTypeUser.value;
+          if (grade) {
+            await subscriptionStore.getCurrentSub(grade);
+            subscriptionStore.patchState({ lastUserSubUpdate: now });
+          }
         }
       }
 
@@ -60,7 +63,7 @@ export default defineNuxtPlugin((_nuxtApp) => {
           to.path.includes('/user-panel') &&
           !to.path.includes('/ekht-admin')
         ) {
-          if (!query.globalTypeUser) {
+          if (!query.globalTypeUser && globalStore.state.globalTypeUser.value) {
             query.globalTypeUser =
               globalStore.state.globalTypeUser.value.toString();
             return {

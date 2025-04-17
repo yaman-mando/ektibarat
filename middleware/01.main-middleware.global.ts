@@ -15,8 +15,12 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
   const globalStore = useGlobalStore();
   const isLoggedIn = status.value === 'authenticated';
   const userData = data.value as UserInfoDataModel;
+  const currentPath = decodeURIComponent(_to.path);
 
   try {
+    if (!isLoggedIn) {
+      globalStore.clearState();
+    }
     if (import.meta.server) {
       if (!globalStore.state.isSchool.value) {
         globalStore.patchState({
@@ -26,14 +30,11 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
       }
     }
 
-    const currentPath = decodeURIComponent(_to.path);
-
     if (
-      import.meta.client &&
       isLoggedIn &&
       !routersWithoutTypeSelect.some((route) => currentPath.includes(route))
     ) {
-      if (!sessionStorage.getItem('global_type_user')) {
+      if (!globalStore.state.globalTypeUser.value) {
         return navigateTo(webGeneralSelectionPathUtil());
       }
     }
