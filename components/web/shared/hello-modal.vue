@@ -21,7 +21,7 @@
     <div class="sbm-wrapper">
       <img
         class="sbm-wrapper__pic"
-        src="~assets/images/free-image.png"
+        src="/images/free-image.png"
       />
       <span class="sbm-wrapper__la">تم تسجيلك بنجاح</span>
       <div class="sbm-sf">
