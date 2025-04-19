@@ -20,14 +20,76 @@
         </div>
       </div>
     </div>
+    <div
+      id="floatingMenu"
+      class="contact-group"
+      tabindex="0"
+      @blur="handleBlurMenu"
+    >
+      <div
+        :class="{ open: isOpenContactMenu }"
+        class="floating-menu"
+      >
+        <div class="contact-menu-content">
+          <button
+            class="menu-item"
+            @click.stop="navToSocial('whatsapp')"
+          >
+            <i class="fab fa-whatsapp" />
+            التواصل عبر واتساب
+          </button>
+          <button
+            class="menu-item"
+            @click.stop="navToSocial('telegram')"
+          >
+            <i class="fab fa-telegram-plane" />
+            التواصل عبر تليغرام
+          </button>
+          <button
+            class="menu-item"
+            @click.stop="navToSocial('chat')"
+          >
+            <i class="fa fa-comment" />
+            الدعم الفني
+            <span
+              v-if="unreadMessages && isLoggedIn"
+              class="unreadMsg"
+            >
+              {{ unreadMessages }}
+            </span>
+          </button>
+        </div>
+      </div>
+      <div
+        id="toggle-btn"
+        class="toggle-btn-group"
+        @click.stop="toggleContactMenu"
+      >
+        <div class="toggle-btn">
+          <span
+            v-if="unreadMessages && isLoggedIn"
+            class="unreadMsg"
+          >
+            {{ unreadMessages }}
+          </span>
+          <i class="fa fa-comment" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { useGlobalStore } from '#shared/useGlobalStore';
-import { removeScript } from '#shared/utils/shared-utils';
+import { removeScript, sleepUtil } from '#shared/utils/shared-utils';
+import {
+  UserPanelItems,
+  UserPanelItemsRecord,
+} from '#shared/constants/user-panel-items';
+import { webAuthPathUtil } from '#shared/utils/web-routes.utils';
 
 //composable
 const { status } = useAuth();
+const router = useRouter();
 const route = useRoute();
 const globalStore = useGlobalStore();
 const headers = {
@@ -86,6 +148,10 @@ useHead({
 
 //data
 const isLoggedIn = computed(() => status.value === 'authenticated');
+//TODO-z
+const unreadMessages = ref<number>(0);
+const isOpenContactMenu = ref(false);
+const isInternalbtn = ref(false);
 
 //hook
 onBeforeMount(() => {
@@ -94,9 +160,53 @@ onBeforeMount(() => {
 });
 
 //method
+const toggleContactMenu = async () => {
+  isOpenContactMenu.value = !isOpenContactMenu.value;
+  await sleepUtil(100);
+  document?.getElementById('floatingMenu')?.focus();
+};
 
-//TODO-z
-const _handleBlurMenu = async () => {};
+const handleBlurMenu = async () => {
+  await sleepUtil(200);
+  if (isInternalbtn.value) {
+    return;
+  }
+  isOpenContactMenu.value = false;
+};
+
+const navToSocial = async (type: 'chat' | 'whatsapp' | 'telegram') => {
+  isInternalbtn.value = true;
+  switch (type) {
+    case 'chat':
+      {
+        if (isLoggedIn.value) {
+          await router.push({
+            path: '/user-panel',
+            query: {
+              page: UserPanelItemsRecord[UserPanelItems.chat],
+            },
+          });
+        } else {
+          await router.push(webAuthPathUtil());
+        }
+      }
+      break;
+    case 'whatsapp':
+      window.open(
+        'https://api.whatsapp.com/send?phone=966570380975&text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D8%A7%D9%86%D8%A7%20%D9%82%D8%A7%D8%AF%D9%85%20%D8%A7%D9%84%D9%8A%D9%83%D9%85%20%D9%85%D9%86%20%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D8%AE%D8%AA%D8%A8%D8%A7%D8%B1%D8%A7%D8%AA',
+        '_blank'
+      );
+      break;
+    case 'telegram':
+      window.open('https://t.me/+966570380975', '_blank');
+      break;
+  }
+  await sleepUtil(1100);
+  document?.getElementById('floatingMenu')?.focus();
+  document?.getElementById('floatingMenu')?.click();
+  await sleepUtil(800);
+  isInternalbtn.value = false;
+};
 
 //watch
 watch(
