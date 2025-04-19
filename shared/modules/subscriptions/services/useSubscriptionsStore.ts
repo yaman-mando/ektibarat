@@ -3,7 +3,7 @@ import type {
   CurrentSubscriptionDataModel,
   UserServicesStateUi,
 } from '#shared/modules/subscriptions/data-access/subscriptions.model';
-import { useSubscriptionsRepo } from '#shared/modules/subscriptions/composables/useSubscriptionsRepo';
+import { useSubscriptionsRepo } from '#shared/modules/subscriptions/services/useSubscriptionsRepo';
 import { useGlobalStore } from '#shared/useGlobalStore';
 import type { GlobalTypes } from '#shared/constants/global-types';
 
@@ -53,7 +53,7 @@ export const useSubscriptionsStore = () => {
   };
 
   return {
-    ...toRefs(state),
+    ...toRefs(readonly(state)),
     patchState,
     clearState,
     getCurrentSub,

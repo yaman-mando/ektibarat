@@ -65,3 +65,15 @@ export type UserInfoDataModel = {
   joinedWhatsappGroup: boolean;
   joinedTelegramGroup: boolean;
 };
+
+//identity
+export type AuthLoginGoogleDTODataModel = {
+  idToken: string;
+};
+export type AuthLoginGoogleDataModel = {
+  id: number;
+  email: string;
+  token: string;
+  refreshToken: string | null;
+  tokenExpireDate: string;
+};

@@ -1,13 +1,18 @@
 import tailwindcss from '@tailwindcss/vite';
-import { process } from 'std-env';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import type { LinkWithoutEvents, ScriptWithoutEvents } from 'unhead/types';
 import PrimeTheme from '@primeuix/themes/aura';
+import { process } from 'std-env';
+
+const IS_PRODUCTION_APP = process.env.NODE_ENV === 'production';
+enum AuthCookiesEnum {
+  token = 'auth.token',
+  refreshToken = 'auth.refresh-token',
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const IS_PRODUCTION_APP = process.env.NODE_ENV === 'production';
 const APP_ENVS = {
   prod: 'prod',
   local_prod: 'local_prod',
@@ -196,6 +201,7 @@ export default defineNuxtConfig({
     '@primevue/nuxt-module',
     '@nuxt/image',
     '@nuxt/eslint',
+    '@vueuse/nuxt',
   ],
   primevue: {
     usePrimeVue: true,
@@ -352,7 +358,7 @@ export default defineNuxtConfig({
       token: {
         signInResponseTokenPointer: '/token',
         type: 'Bearer',
-        cookieName: 'auth.token',
+        cookieName: AuthCookiesEnum.token,
         headerName: 'Authorization',
         maxAgeInSeconds: 60 * 60 * 5,
         // sameSiteAttribute: 'lax',
@@ -370,7 +376,7 @@ export default defineNuxtConfig({
           signInResponseRefreshTokenPointer: '/refreshToken',
           refreshResponseTokenPointer: '/token',
           refreshRequestTokenPointer: '/refreshToken',
-          cookieName: 'auth.refresh-token',
+          cookieName: AuthCookiesEnum.refreshToken,
           maxAgeInSeconds: 60 * 60 * 5,
           // sameSiteAttribute: 'lax',
           cookieDomain: IS_PRODUCTION_APP

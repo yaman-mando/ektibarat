@@ -462,7 +462,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { notImplemented } from 'unenv/_internal/utils';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { ImagesFolderName } from '~/shared/constants/images-folder-name';
 import { ImageSize } from '~/shared/constants/image-size';
@@ -478,8 +477,8 @@ import { adminQuestionsListPath } from '~/shared/utils/admin-routes.utils';
 import { TrackRouteName } from '~/shared/constants/track-route-name';
 import { useGlobalStore } from '~/shared/useGlobalStore';
 import { GlobalTypes } from '~/shared/constants/global-types';
-import { sleepUtil } from '~/shared/utils/utils';
-import { useSubscriptionsStore } from '#shared/modules/subscriptions/composables/useSubscriptionsStore';
+import { sleepUtil } from '#shared/utils/shared-utils';
+import { useSubscriptionsStore } from '#shared/modules/subscriptions/services/useSubscriptionsStore';
 import { StaticTracksRoutersEnum } from '#shared/constants/static-tracks-routers.enum';
 
 type MenuItemUi = {
@@ -565,9 +564,9 @@ const isLoggedIn = computed(() => status.value === 'authenticated');
 const userData = computed(() => data.value as UserInfoDataModel);
 const isEmployee = computed(() => userData.value.role === UserRoles.employee);
 const activeList = ref<string | number | null>(null);
+//TODO-z
 const notificationCount = computed(() => {
   return 0;
-  throw notImplemented('notificationCount');
 });
 const listItemModel = computed<MenuItemUi[]>(() => [
   { id: 1, label: 'معلوماتي', icon: 'info' },
@@ -664,9 +663,8 @@ const openCollapse = (index: number) => {
   }
 };
 const toggleMenu = () => (openMenu.value = !openMenu.value);
-const onLoginClick = () => {
-  throw notImplemented('show web-login-register-modal');
-};
+//TODO_z
+const onLoginClick = () => {};
 const dropDownSm = ref<HTMLElement | null>(null);
 const dropDown = ref<HTMLElement | null>(null);
 const openList = (size = 'lg') => {

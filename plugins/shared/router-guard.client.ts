@@ -4,7 +4,7 @@ import { EXAM_QUESTIONS_ROUTES } from '#shared/constants/routes';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { UserRoles } from '~/core/auth/constants/user-roles';
 import type { GlobalTypes } from '#shared/constants/global-types';
-import { useSubscriptionsStore } from '#shared/modules/subscriptions/composables/useSubscriptionsStore';
+import { useSubscriptionsStore } from '#shared/modules/subscriptions/services/useSubscriptionsStore';
 
 export default defineNuxtPlugin((_nuxtApp) => {
   const router = useRouter();

@@ -15,7 +15,7 @@
             <div class="page-contents">
               <slot />
             </div>
-            <!--            <mx-web-footer :static-data="jsonData" />-->
+            <lazy-main-footer />
           </div>
         </div>
       </div>
@@ -24,6 +24,7 @@
 </template>
 <script setup lang="ts">
 import { useGlobalStore } from '#shared/useGlobalStore';
+import { removeScript } from '#shared/utils/shared-utils';
 
 //composable
 const { status } = useAuth();
@@ -62,23 +63,6 @@ const extraScript = computed(() => {
     type: 'application/ld+json',
   });
 
-  if (status.value === 'unauthenticated') {
-    scripts.push({
-      src: 'https://accounts.google.com/gsi/client',
-      type: 'text/javascript',
-      async: true,
-      defer: true,
-    });
-
-    scripts.push({
-      src: 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js',
-      type: 'text/javascript',
-      id: 'appleId',
-      async: true,
-      defer: true,
-    });
-  }
-
   return scripts;
 });
 useHead({
@@ -102,6 +86,17 @@ useHead({
 
 //data
 const isLoggedIn = computed(() => status.value === 'authenticated');
+
+//hook
+onBeforeMount(() => {
+  document?.getElementById('web-footer')?.classList.remove('is-user-panel');
+  removeScript('appleId');
+});
+
+//method
+
+//TODO-z
+const _handleBlurMenu = async () => {};
 
 //watch
 watch(

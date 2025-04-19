@@ -1,20 +1,24 @@
 import { reactive, toRefs } from 'vue';
 import { GlobalTypes } from '~/shared/constants/global-types';
+import type { LayoutStaticDataModel } from '~/dev-types-helper';
 
 type StateType = {
   globalType: GlobalTypes;
   globalTypeUser: GlobalTypes | null;
   isSchool: boolean;
   defaultActiveExam: number;
+  showBlockModal: boolean;
+  staticData: LayoutStaticDataModel | null;
 };
 const initialState: StateType = {
   globalType: GlobalTypes.kudrat,
   globalTypeUser: null,
   isSchool: false,
   defaultActiveExam: 1,
+  showBlockModal: false,
+  staticData: null,
 };
 const state = reactive({ ...initialState });
-
 //store
 export const useGlobalStore = () => {
   const globalTypeUserCookie = useCookie('global_type_user');
@@ -33,11 +37,17 @@ export const useGlobalStore = () => {
     globalTypeUser: globalTypeUserCookie.value as unknown as GlobalTypes,
   });
 
+  const getLayoutStatic = async () => {
+    const res = (await import('@/shared/constants/json/layout.json')).default;
+    patchState({
+      staticData: res,
+    });
+  };
+
   return {
-    state: {
-      ...toRefs(state),
-    },
+    state: toRefs(readonly(state)),
     patchState,
     clearState,
+    getLayoutStatic,
   };
 };

@@ -5,10 +5,10 @@ export default withNuxt(
   // Your custom configs here
   {
     rules: {
-      '@typescript-eslint/no-use-before-define': [
-        'error',
-        { functions: true, classes: true, variables: true },
-      ],
+      // '@typescript-eslint/no-use-before-define': [
+      //   'error',
+      //   { functions: true, classes: true, variables: true },
+      // ],
       'no-use-before-define': 'off', // disable base rule if using TS version
       '@typescript-eslint/no-unused-vars': [
         'error',
