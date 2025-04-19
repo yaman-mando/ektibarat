@@ -4,6 +4,7 @@
     <nuxt-layout>
       <nuxt-page />
     </nuxt-layout>
+    <prime-toast position="bottom-right" />
   </div>
 </template>
 <script setup lang="ts">
@@ -24,9 +25,6 @@ import { useGlobalStore } from '#shared/useGlobalStore';
 import { GlobalTypes } from '#shared/constants/global-types';
 import { UAParser } from 'ua-parser-js';
 import { useClarityStore } from '#shared/modules/clarity/services/useClarityStore';
-import type { HttpError } from 'http-errors';
-import { ErrorsRecord } from '#shared/constants/errors.enum';
-import { useToastMessage } from '~/composables/useToastMessage';
 //eslint-disable-next-line
 declare const google: any;
 //eslint-disable-next-line
@@ -41,7 +39,6 @@ const localStorageStore = useLocalStorageStore();
 const authStore = useAuthStore();
 const globalStore = useGlobalStore();
 const clarityStore = useClarityStore();
-const toastMessage = useToastMessage();
 
 //data
 const isLoggedIn = computed(() => auth.status.value === 'authenticated');
@@ -71,11 +68,11 @@ useHead({
 
 //hooks
 onMounted(() => {
-  mainLayoutLoads();
+  initApp();
 });
 
 //method
-const mainLayoutLoads = async () => {
+const initApp = async () => {
   try {
     if (deviceStore.state.isMobileDevice.value) {
       document.body.classList.add('is-mobile');
@@ -88,6 +85,7 @@ const mainLayoutLoads = async () => {
     }
   } catch (e) {
     console.log('mainLayoutLoads: ' + e);
+    throw e;
   }
 };
 
@@ -102,6 +100,7 @@ const initAuth = async () => {
     }
   } catch (e) {
     console.error('initAuth:' + e);
+    throw e;
   }
 };
 
@@ -127,6 +126,7 @@ const loadGoogle = async () => {
     }, 1000);
   } catch (e) {
     console.error('loadGoogle:' + e);
+    throw e;
   }
 };
 
@@ -145,6 +145,7 @@ const loadApple = async () => {
     });
   } catch (e) {
     console.error('loadApple:' + e);
+    throw e;
   }
 };
 
@@ -158,6 +159,7 @@ const infoRegister = () => {
     }
   } catch (e) {
     console.log('infoRegister:' + e);
+    throw e;
   }
 };
 
@@ -165,18 +167,14 @@ const infoRegister = () => {
 const handleFcm = (_userId: number) => {};
 
 const handleCredentialResponse = async (response: { credential: string }) => {
-  try {
-    const res = await authStore.loginGoogle({ idToken: response.credential });
-    if (res.refreshToken) {
-      signinPopupGoogle(res);
-    } else {
-      router.push({
-        path: webAuthPathUtil(),
-        query: { email: res.email, token: res.token },
-      });
-    }
-  } catch (e: unknown) {
-    processErrors(e as HttpError);
+  const res = await authStore.loginGoogle({ idToken: response.credential });
+  if (res.refreshToken) {
+    signinPopupGoogle(res);
+  } else {
+    router.push({
+      path: webAuthPathUtil(),
+      query: { email: res.email, token: res.token },
+    });
   }
 };
 
@@ -194,6 +192,7 @@ const signinPopupGoogle = async (res: AuthLoginGoogleDataModel) => {
     await router.push(authStore.redirectUrlAfterLogin());
   } catch (e) {
     console.log('err-signinPopupByGoogle: ' + e);
+    throw e;
   }
 };
 
@@ -218,28 +217,6 @@ const handleClarityUser = async (model: {
   } catch (e) {
     console.log('An error occurred C01:' + e);
     throw e;
-  }
-};
-
-const processErrors = async (error: HttpError) => {
-  try {
-    if (error.response?.status == 400) {
-      if (error.response.data.errorType == 6) {
-        globalStore.patchState({
-          showBlockModal: true,
-        });
-      } else {
-        const errorType = error.response.data.errorType as unknown as number;
-        toastMessage.showError({
-          summary: ErrorsRecord[errorType],
-          life: 5000,
-        });
-      }
-    } else {
-      toastMessage.showError();
-    }
-  } catch (e) {
-    console.log('err-signByAppleProcessErr: ' + e);
   }
 };
 

@@ -480,6 +480,7 @@ import { GlobalTypes } from '~/shared/constants/global-types';
 import { sleepUtil } from '#shared/utils/shared-utils';
 import { useSubscriptionsStore } from '#shared/modules/subscriptions/services/useSubscriptionsStore';
 import { StaticTracksRoutersEnum } from '#shared/constants/static-tracks-routers.enum';
+import type WebLoginRegisterModal from '~/components/web/shared/web-login-register-modal.vue';
 
 type MenuItemUi = {
   id: number;
@@ -552,6 +553,9 @@ const subscriptionsStore = useSubscriptionsStore();
 const currentRoute = computed(() => route.path);
 
 //data
+const loginRegisterModalRef = ref<InstanceType<
+  typeof WebLoginRegisterModal
+> | null>(null);
 const activeCollapse = ref<number[]>([]);
 const subMenu = ref<HTMLInputElement | null>(null);
 const openMenu = ref(false);
@@ -663,8 +667,9 @@ const openCollapse = (index: number) => {
   }
 };
 const toggleMenu = () => (openMenu.value = !openMenu.value);
-//TODO_z
-const onLoginClick = () => {};
+const onLoginClick = async () => {
+  loginRegisterModalRef.value?._showModal();
+};
 const dropDownSm = ref<HTMLElement | null>(null);
 const dropDown = ref<HTMLElement | null>(null);
 const openList = (size = 'lg') => {

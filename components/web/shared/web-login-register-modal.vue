@@ -1,20 +1,14 @@
 <template>
   <prime-dialog
+    :id="modalId"
     v-model:visible="isOpen"
     :modal="true"
-    :closable="!isLocked"
+    :closable="false"
     :dismissable-mask="!isLocked"
     :close-on-escape="!isLocked"
     :draggable="false"
+    :show-header="false"
     :style="{ width: '50rem', borderRadius: '15px', overflow: 'hidden' }"
-    :pt="{
-      content: 'rounded-[15px] overflow-hidden',
-      root: `mx-auto w-container ${modalId}`,
-      header: 'hidden',
-      closeButton: 'hidden',
-      footer: 'hidden',
-      mask: isLocked ? 'pointer-events-none' : '',
-    }"
   >
     <div class="wl-t">
       <i
@@ -53,7 +47,7 @@
 </template>
 <script setup lang="ts">
 //constant
-import AppButton from '~/components/shared/app-button.vue';
+import { webAuthPathUtil } from '#shared/utils/web-routes.utils';
 
 const modalId = 'web-login-register-modal';
 
@@ -71,27 +65,29 @@ const hideModal = () => {
 };
 const _toLogin = () => {
   hideModal();
-  router.push('/auth/signup');
+  router.push(webAuthPathUtil());
 };
 const _toRegister = () => {
   hideModal();
   router.push({
-    path: '/auth/signup',
+    path: webAuthPathUtil(),
     query: { isSignup: 'true' },
   });
 };
 const _showModal = () => {
   isOpen.value = true;
 };
+
+defineExpose({
+  _showModal,
+});
 </script>
-<style lang="scss" scoped>
-@import '../../../assets/scss/mixin';
-.web-login-register-modal {
-  .modal-content {
-    width: 340px;
-    margin: 0 auto;
-    max-width: 90vw;
-  }
+<style lang="scss">
+@import '@/assets/scss/mixin';
+#web-login-register-modal {
+  --p-dialog-content-padding: 0;
+  max-width: 340px;
+  margin: 0 auto;
 
   .wl-t {
     width: 100%;

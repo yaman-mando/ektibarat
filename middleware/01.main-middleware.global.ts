@@ -5,6 +5,7 @@ import {
   routersWithoutTypeSelect,
 } from '#shared/constants/routes';
 import {
+  webAuthPathUtil,
   webGeneralSelectionPathUtil,
   webUserPanelTraining,
 } from '#shared/utils/web-routes.utils';
@@ -58,9 +59,9 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
       if (needAuth(_to)) {
         if (currentPath.includes('competition')) {
           const redirectUrl = encodeURIComponent(currentPath);
-          return navigateTo(`/auth/signup?redirectUrl=${redirectUrl}`);
+          return navigateTo(`${webAuthPathUtil()}?redirectUrl=${redirectUrl}`);
         }
-        return navigateTo('/auth/signup');
+        return navigateTo(webAuthPathUtil());
       }
     }
     if (isLoggedIn) {

@@ -218,11 +218,12 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/app-font.css', '~/assets/css/main.css'],
   plugins: [
-    '~/core/auth/fetch-auth.ts',
-    '~/plugins/shared/global-error-handler.ts',
+    '~/core/auth/auth-interceptor-plugin.ts',
+    '~/core/auth/http-error-interceptor-plugin.client.ts',
+    '~/plugins/shared/global-error-handler.client.ts',
     '~/plugins/shared/detect-device-plugin.ts',
     '~/plugins/shared/gtag-plugin.client.ts',
-    '~/plugins/shared/router-guard.client.ts',
+    '~/plugins/shared/router-guard-plugin.client.ts',
   ],
   app: {
     head: {

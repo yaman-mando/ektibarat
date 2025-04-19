@@ -1,13 +1,11 @@
 <template>
   <prime-dialog
+    id="permission-modal"
     :visible="globalStore.state.showBlockModal.value"
     :modal="true"
     :closable="false"
     :dismissable-mask="false"
     :show-header="false"
-    :pt="{
-      root: { id: 'permission-modal', class: 'mx-auto rounded' },
-    }"
     @hide="closeModal"
   >
     <div class="modal-contents">
@@ -57,75 +55,70 @@ const goToContact = () => {
 </script>
 <style lang="scss">
 #permission-modal {
-  .modal-dialog {
-    max-width: 402px;
-    @media (max-width: 640px) {
-      max-width: 95%;
-    }
+  background: var(--bg-modal);
+  max-width: 402px;
+  @media (max-width: 640px) {
+    max-width: 95%;
   }
 
-  .modal-content {
+  .p-dialog-content {
+    padding: 15px 30px;
     background: var(--bg-modal);
+    border-radius: 13px;
 
-    .modal-body {
-      padding: 15px 30px;
-      background: var(--bg-modal);
-      border-radius: 13px;
+    .modal-contents {
+      .e-1 {
+        display: flex;
+        justify-content: center;
 
-      .modal-contents {
-        .e-1 {
-          display: flex;
-          justify-content: center;
-
-          i {
-            font-size: 26px;
-            color: var(--red-63);
-          }
+        i {
+          font-size: 26px;
+          color: var(--red-63);
         }
+      }
 
-        .e-2 {
-          margin-top: 10px;
-          display: flex;
-          justify-content: center;
+      .e-2 {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
 
-          span {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--red-63);
-          }
+        span {
+          font-size: 18px;
+          font-weight: bold;
+          color: var(--red-63);
         }
+      }
 
-        .e-3 {
-          margin: 20px 0;
-          display: flex;
-          justify-content: center;
+      .e-3 {
+        margin: 20px 0;
+        display: flex;
+        justify-content: center;
 
-          span {
-            text-align: center;
-            font-size: 16px;
-            color: var(--text2-modal);
-          }
+        span {
+          text-align: center;
+          font-size: 16px;
+          color: var(--text2-modal);
         }
+      }
 
-        .e-4 {
-          display: grid;
-          grid-auto-flow: column;
-          //grid-template-columns: 1fr 1fr;
-          align-items: center;
-          grid-column-gap: 10px;
-          margin-top: 10px;
-          .a-confirm {
-            font-size: 18px;
-            background-color: var(--red-63);
-            border: none !important;
-            box-shadow: none !important;
-          }
-          .a-cancel {
-            font-size: 18px;
-            //background-color: transparent !important;
-            color: white;
-            background-color: var(--red-63);
-          }
+      .e-4 {
+        display: grid;
+        grid-auto-flow: column;
+        //grid-template-columns: 1fr 1fr;
+        align-items: center;
+        grid-column-gap: 10px;
+        margin-top: 10px;
+        .a-confirm {
+          font-size: 18px;
+          background-color: var(--red-63);
+          border: none !important;
+          box-shadow: none !important;
+        }
+        .a-cancel {
+          font-size: 18px;
+          //background-color: transparent !important;
+          color: white;
+          background-color: var(--red-63);
         }
       }
     }
