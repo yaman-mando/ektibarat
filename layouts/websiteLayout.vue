@@ -20,62 +20,66 @@
         </div>
       </div>
     </div>
-    <div
-      id="floatingMenu"
-      class="contact-group"
-      tabindex="0"
-      @blur="handleBlurMenu"
-    >
+    <client-only>
       <div
-        :class="{ open: isOpenContactMenu }"
-        class="floating-menu"
+        id="floatingMenu"
+        class="contact-group"
+        tabindex="0"
+        @blur="handleBlurMenu"
       >
-        <div class="contact-menu-content">
-          <button
-            class="menu-item"
-            @click.stop="navToSocial('whatsapp')"
-          >
-            <i class="fab fa-whatsapp" />
-            التواصل عبر واتساب
-          </button>
-          <button
-            class="menu-item"
-            @click.stop="navToSocial('telegram')"
-          >
-            <i class="fab fa-telegram-plane" />
-            التواصل عبر تليغرام
-          </button>
-          <button
-            class="menu-item"
-            @click.stop="navToSocial('chat')"
-          >
-            <i class="fa fa-comment" />
-            الدعم الفني
+        <div
+          :class="{ open: isOpenContactMenu }"
+          class="floating-menu"
+        >
+          <div class="contact-menu-content">
+            <button
+              class="menu-item"
+              @click.stop="navToSocial('whatsapp')"
+            >
+              <i class="fab fa-whatsapp" />
+              التواصل عبر واتساب
+            </button>
+            <button
+              class="menu-item"
+              @click.stop="navToSocial('telegram')"
+            >
+              <i class="fab fa-telegram-plane" />
+              التواصل عبر تليغرام
+            </button>
+            <button
+              class="menu-item"
+              @click.stop="navToSocial('chat')"
+            >
+              <i class="fa fa-comment" />
+              الدعم الفني
+              <span
+                v-if="unreadMessages && isLoggedIn"
+                class="unreadMsg"
+              >
+                {{ unreadMessages }}
+              </span>
+            </button>
+          </div>
+        </div>
+        <div
+          id="toggle-btn"
+          class="toggle-btn-group"
+          @click.stop="toggleContactMenu"
+        >
+          <div class="toggle-btn">
             <span
               v-if="unreadMessages && isLoggedIn"
               class="unreadMsg"
             >
               {{ unreadMessages }}
             </span>
-          </button>
+            <i class="fa fa-comment" />
+          </div>
         </div>
       </div>
-      <div
-        id="toggle-btn"
-        class="toggle-btn-group"
-        @click.stop="toggleContactMenu"
-      >
-        <div class="toggle-btn">
-          <span
-            v-if="unreadMessages && isLoggedIn"
-            class="unreadMsg"
-          >
-            {{ unreadMessages }}
-          </span>
-          <i class="fa fa-comment" />
-        </div>
-      </div>
-    </div>
+      <lazy-hello-modal ref="modalHelloRef" />
+      <lazy-block-modal />
+    </client-only>
   </div>
 </template>
 <script setup lang="ts">
@@ -152,6 +156,7 @@ const isLoggedIn = computed(() => status.value === 'authenticated');
 const unreadMessages = ref<number>(0);
 const isOpenContactMenu = ref(false);
 const isInternalbtn = ref(false);
+const modalHelloRef = ref(null);
 
 //hook
 onBeforeMount(() => {
