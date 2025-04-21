@@ -1,40 +1,25 @@
 <template>
-  <div>
-    <div>home</div>
-    <button
-      v-if="status === 'unauthenticated'"
-      type="button"
-      :disabled="isLoadingAuth"
-      @click="login()"
-    >
-      login
-    </button>
-    <button
-      v-if="status === 'authenticated'"
-      :disabled="isLoadingAuth"
-      @click="logout"
-    >
-      logout
-    </button>
+  <div class="home-page">
+    <lazy-home-slide />
   </div>
 </template>
 <script setup lang="ts">
+import { useGlobalStore } from '#shared/useGlobalStore';
+
+//composable
+const globalStore = useGlobalStore();
+
+await globalStore.getHomeStatic();
+
+//meta
 definePageMeta({
   layout: 'website-layout',
   middleware: ['user-services-middleware'],
 });
-
-const { signIn, status, signOut } = useAuth();
-const isLoadingAuth = computed(() => status.value === 'loading');
-
-const login = async () => {
-  await signIn(
-    { username: 'admin_ekhts', password: 'dsaewq321' },
-    { callbackUrl: '/', redirect: false }
-  );
-};
-
-const logout = async () => {
-  await signOut({ redirect: false });
-};
 </script>
+<style lang="scss" scoped>
+@import '@/assets/scss/mixin';
+
+.home-page {
+}
+</style>

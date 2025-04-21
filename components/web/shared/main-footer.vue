@@ -43,21 +43,21 @@
                 :href="staticData.snapchat"
                 target="_blank"
               >
-                <i class="fab fa-snapchat" />
+                <i class="fab fa-snapchat"></i>
               </a>
               <a
                 :href="staticData.youtube"
                 aria-label="youtube"
                 target="_blank"
               >
-                <i class="fab fa-youtube" />
+                <i class="fab fa-youtube"></i>
               </a>
               <a
                 :href="staticData.instagram"
                 aria-label="instagram"
                 target="_blank"
               >
-                <i class="fab fa-instagram" />
+                <i class="fab fa-instagram"></i>
               </a>
               <a
                 :href="staticData.twitter"
@@ -80,14 +80,14 @@
                 aria-label="facebook"
                 target="_blank"
               >
-                <i class="fab fa-facebook" />
+                <i class="fab fa-facebook"></i>
               </a>
               <a
                 :href="staticData.tiktok"
                 aria-label="tiktok"
                 target="_blank"
               >
-                <i class="fab fa-tiktok" />
+                <i class="fab fa-tiktok"></i>
               </a>
             </div>
             <span class="copy-right">{{ staticData?.copyRight }}</span>
@@ -122,20 +122,20 @@
                 :href="staticData.snapchat"
                 target="_blank"
               >
-                <i class="fab fa-snapchat" />
+                <i class="fab fa-snapchat"></i>
               </a>
               <a
                 aria-label="youtube"
                 :href="staticData.youtube"
                 target="_blank"
               >
-                <i class="fab fa-youtube" />
+                <i class="fab fa-youtube"></i>
               </a>
               <a
                 aria-label="instagram"
                 :href="staticData.instagram"
               >
-                <i class="fab fa-instagram" />
+                <i class="fab fa-instagram"></i>
               </a>
               <a
                 aria-label="x-twitter"
@@ -157,14 +157,14 @@
                 :href="staticData.facebook"
                 target="_blank"
               >
-                <i class="fab fa-facebook" />
+                <i class="fab fa-facebook"></i>
               </a>
               <a
                 :href="staticData.tiktok"
                 target="_blank"
                 aria-label="tiktok"
               >
-                <i class="fab fa-tiktok" />
+                <i class="fab fa-tiktok"></i>
               </a>
             </div>
             <ul class="footer-menu-items">

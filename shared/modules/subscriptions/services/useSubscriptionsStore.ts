@@ -4,7 +4,6 @@ import type {
   UserServicesStateUi,
 } from '#shared/modules/subscriptions/data-access/subscriptions.model';
 import { useSubscriptionsRepo } from '#shared/modules/subscriptions/services/useSubscriptionsRepo';
-import { useGlobalStore } from '#shared/useGlobalStore';
 import type { GlobalTypes } from '#shared/constants/global-types';
 
 type StateType = {

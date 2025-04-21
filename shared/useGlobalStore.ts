@@ -1,6 +1,9 @@
 import { reactive, toRefs } from 'vue';
 import { GlobalTypes } from '~/shared/constants/global-types';
-import type { LayoutStaticDataModel } from '~/dev-types-helper';
+import type {
+  HomeJsonDataModel,
+  LayoutStaticDataModel,
+} from '~/dev-types-helper';
 
 type StateType = {
   globalType: GlobalTypes;
@@ -9,6 +12,7 @@ type StateType = {
   defaultActiveExam: number;
   showBlockModal: boolean;
   staticData: LayoutStaticDataModel | null;
+  homeJson: HomeJsonDataModel | null;
 };
 const initialState: StateType = {
   globalType: GlobalTypes.kudrat,
@@ -17,6 +21,7 @@ const initialState: StateType = {
   defaultActiveExam: 1,
   showBlockModal: false,
   staticData: null,
+  homeJson: null,
 };
 const state = reactive({ ...initialState });
 //store
@@ -44,10 +49,18 @@ export const useGlobalStore = () => {
     });
   };
 
+  const getHomeStatic = async () => {
+    const res = (await import('@/shared/constants/json/home.json')).default;
+    patchState({
+      homeJson: res,
+    });
+  };
+
   return {
     state: toRefs(readonly(state)),
     patchState,
     clearState,
     getLayoutStatic,
+    getHomeStatic,
   };
 };

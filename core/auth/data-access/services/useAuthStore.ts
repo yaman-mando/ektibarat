@@ -1,5 +1,8 @@
 import { useAuthRepo } from '~/core/auth/data-access/services/useAuthRepo';
-import type { AuthLoginGoogleDTODataModel } from '~/core/auth/data-access/models/auth.model';
+import type {
+  AuthLoginGoogleDTODataModel,
+  UserInfoDataModel,
+} from '~/core/auth/data-access/models/auth.model';
 import { webUserPanelTraining } from '#shared/utils/web-routes.utils';
 
 //store
@@ -7,6 +10,10 @@ export const useAuthStore = () => {
   const repo = useAuthRepo();
   const authState = useAuthState();
   const redirectUrlCookie = useCookie('redirectUrl');
+  const isLoggedIn = computed(() => authState.status.value === 'authenticated');
+  const userData = computed(
+    () => authState.data.value as UserInfoDataModel | null
+  );
 
   const loginGoogle = async (model: AuthLoginGoogleDTODataModel) => {
     return await repo.loginGoogle(model);
@@ -30,5 +37,7 @@ export const useAuthStore = () => {
     setAuthCookie,
     loginGoogle,
     redirectUrlAfterLogin,
+    isLoggedIn,
+    userData,
   };
 };

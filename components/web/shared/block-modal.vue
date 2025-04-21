@@ -4,13 +4,13 @@
     :visible="globalStore.state.showBlockModal.value"
     :modal="true"
     :closable="false"
-    :dismissable-mask="false"
-    :show-header="false"
+    :dismissableMask="false"
+    :showHeader="false"
     @hide="closeModal"
   >
     <div class="modal-contents">
       <div class="e-1">
-        <i class="fa fa-warning" />
+        <i class="fa fa-warning"></i>
       </div>
       <div class="e-2">
         <span>رسالة تنبيه</span>

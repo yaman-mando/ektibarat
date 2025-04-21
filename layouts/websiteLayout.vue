@@ -13,7 +13,7 @@
             class="scroll-page"
           >
             <div class="page-contents">
-              <slot />
+              <slot></slot>
             </div>
             <lazy-main-footer />
           </div>
@@ -36,21 +36,21 @@
               class="menu-item"
               @click.stop="navToSocial('whatsapp')"
             >
-              <i class="fab fa-whatsapp" />
+              <i class="fab fa-whatsapp"></i>
               التواصل عبر واتساب
             </button>
             <button
               class="menu-item"
               @click.stop="navToSocial('telegram')"
             >
-              <i class="fab fa-telegram-plane" />
+              <i class="fab fa-telegram-plane"></i>
               التواصل عبر تليغرام
             </button>
             <button
               class="menu-item"
               @click.stop="navToSocial('chat')"
             >
-              <i class="fa fa-comment" />
+              <i class="fa fa-comment"></i>
               الدعم الفني
               <span
                 v-if="unreadMessages && isLoggedIn"
@@ -73,7 +73,7 @@
             >
               {{ unreadMessages }}
             </span>
-            <i class="fa fa-comment" />
+            <i class="fa fa-comment"></i>
           </div>
         </div>
       </div>
@@ -242,7 +242,6 @@ watch(
   display: none;
 }
 
-#__layout,
 #__nuxt,
 body,
 html {

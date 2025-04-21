@@ -5,7 +5,7 @@
       class="web-header hide-from-tablet"
     >
       <span @click="toggleMenu">
-        <i class="em-icon-Group-3396" />
+        <i class="em-icon-Group-3396"></i>
       </span>
       <nuxt-link to="/">
         <nuxt-img
@@ -22,17 +22,14 @@
         />
       </nuxt-link>
 
-      <div
+      <app-button
         v-if="!isLoggedIn"
-        class="actions"
-      >
-        <span
-          class="login"
-          @click="onLoginClick"
-        >
-          الدخول
-        </span>
-      </div>
+        type="clear"
+        label="الدخول"
+        size="sm"
+        :isDisabled="authState.loading.value"
+        @click="onLoginClick"
+      />
       <div
         v-else
         class="actions"
@@ -48,7 +45,7 @@
               data-placement="top"
             >
               <custom-image
-                :folder-name="imagesFolderName.Users"
+                :folderName="imagesFolderName.Users"
                 :url="userData.pictureUrl"
                 :size="imagesSize.xs"
                 :ext="imageExt.jpg"
@@ -68,7 +65,7 @@
             <div class="dropdown-menu">
               <div class="rw-info">
                 <custom-image
-                  :folder-name="imagesFolderName.Users"
+                  :folderName="imagesFolderName.Users"
                   :url="userData.pictureUrl"
                   :size="imagesSize.xs"
                   :ext="imageExt.jpg"
@@ -85,14 +82,12 @@
 
               <custom-switch
                 v-model:active="selectedGlobalType"
-                :right-label="'قدرات'"
-                :left-label="'تحصيلي'"
-                :is-sm="true"
+                :rightLabel="'قدرات'"
+                :leftLabel="'تحصيلي'"
+                :isSm="true"
               />
               <div class="am-actions">
-                <training-button
-                  :button-style="TrainingButtonType.withRadius"
-                />
+                <training-button :buttonStyle="TrainingButtonType.withRadius" />
               </div>
               <ul style="cursor: pointer">
                 <template v-for="item in listItemModel">
@@ -257,7 +252,7 @@
                 data-placement="top"
               >
                 <custom-image
-                  :folder-name="imagesFolderName.Users"
+                  :folderName="imagesFolderName.Users"
                   :url="userData.pictureUrl"
                   :size="imagesSize.xs"
                   :ext="imageExt.jpg"
@@ -274,7 +269,7 @@
                   {{ userData.firstName }}
                 </template>
               </span>
-              <i class="fa fa-chevron-down" />
+              <i class="fa fa-chevron-down"></i>
             </div>
             <div
               v-if="showList"
@@ -286,7 +281,7 @@
               <div class="dropdown-menu">
                 <div class="rw-info">
                   <custom-image
-                    :folder-name="imagesFolderName.Users"
+                    :folderName="imagesFolderName.Users"
                     :url="userData.pictureUrl"
                     :size="imagesSize.xs"
                     :ext="imageExt.jpg"
@@ -308,7 +303,7 @@
                 </nuxt-link>
                 <div class="am-actions">
                   <training-button
-                    :button-style="TrainingButtonType.withRadius"
+                    :buttonStyle="TrainingButtonType.withRadius"
                   />
                 </div>
                 <ul style="cursor: pointer">
@@ -382,7 +377,7 @@
             <i
               class="fa fa-close close-button"
               @click="openMenu = false"
-            />
+            ></i>
             <div class="e-logo">
               <nuxt-link to="/">
                 <img
@@ -413,7 +408,7 @@
                   <i
                     v-if="item.iconClass"
                     :class="item.iconClass"
-                  />
+                  ></i>
                   <span class="name">{{ item.name }}</span>
                 </div>
                 <div
@@ -427,7 +422,7 @@
                         ? 'fa-chevron-up'
                         : 'fa-chevron-down'
                     "
-                  />
+                  ></i>
                 </div>
               </div>
               <div
@@ -450,9 +445,9 @@
           <div class="pt-3 d-flex justify-center">
             <custom-switch
               v-model:active="selectedGlobalType"
-              :right-label="'قدرات'"
-              :left-label="'تحصيلي'"
-              :is-sm="true"
+              :rightLabel="'قدرات'"
+              :leftLabel="'تحصيلي'"
+              :isSm="true"
             />
           </div>
         </div>
@@ -545,6 +540,7 @@ const userPanelItems = UserPanelItems;
 
 //composable
 const { status, data, signOut } = useAuth();
+const authState = useAuthState();
 const { isMobileSize } = useWindowSize();
 const router = useRouter();
 const route = useRoute();

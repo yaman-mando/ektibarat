@@ -22,7 +22,12 @@ export const useImageUrl = () => {
     }
   };
 
+  const staticImageUrl = (fileName: string) => {
+    return `${config.public.baseImageUrl}/staticContent/image/${fileName}`;
+  };
+
   return {
     getUrl,
+    staticImageUrl,
   };
 };

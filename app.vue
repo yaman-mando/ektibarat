@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <nuxt-route-announcer />
-    <nuxt-layout>
-      <nuxt-page />
-    </nuxt-layout>
-    <prime-toast position="bottom-right" />
-  </div>
+  <nuxt-route-announcer />
+  <nuxt-layout>
+    <nuxt-page />
+  </nuxt-layout>
+  <prime-toast position="bottom-right" />
 </template>
 <script setup lang="ts">
 //composable

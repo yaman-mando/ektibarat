@@ -3,7 +3,7 @@
     type="button"
     :class="`app-button ${colorType} ${type} size-${size} ${
       isAnalytics ? 'is-analytics' : ''
-    }`"
+    } ${rounded ? 'rounded' : ''}`"
     :disabled="isDisabled || isLoading"
     :loading="isLoading"
   >
@@ -44,11 +44,14 @@ withDefaults(
     type?: 'flat' | 'outline' | 'clear';
     size?: 'sm' | string;
     isAnalytics?: boolean;
+    rounded?: boolean;
   }>(),
   {
     colorType: 'primary',
     type: 'flat',
     size: '',
+    rounded: false,
+    labelClass: '',
   }
 );
 </script>
@@ -66,11 +69,15 @@ withDefaults(
   border-radius: 10px;
   border: 2px solid var(--color);
 
+  &.rounded {
+    border-radius: 30px;
+  }
+
   &.success {
     --color: var(--green-8c);
   }
   &.warn {
-    --color: var(--red-63);
+    --color: var(--red-5e);
   }
   &.blue {
     --color: var(--blue-d6);

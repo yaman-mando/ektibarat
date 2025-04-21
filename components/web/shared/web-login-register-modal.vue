@@ -4,10 +4,10 @@
     v-model:visible="isOpen"
     :modal="true"
     :closable="false"
-    :dismissable-mask="!isLocked"
-    :close-on-escape="!isLocked"
+    :dismissableMask="!isLocked"
+    :closeOnEscape="!isLocked"
     :draggable="false"
-    :show-header="false"
+    :showHeader="false"
     :style="{ width: '50rem', borderRadius: '15px', overflow: 'hidden' }"
   >
     <div class="wl-t">
@@ -15,32 +15,33 @@
         v-if="!isLocked"
         class="fa fa-close"
         @click="hideModal"
-      />
+      ></i>
     </div>
     <div class="wl-b">
       <div class="wl-b__co">
-        <div class="wl-b__co__line" />
+        <div class="wl-b__co__line"></div>
         <div class="wl-b__co__label">ليس لديك حساب في اختبارات؟</div>
-        <div class="wl-b__co__line" />
+        <div class="wl-b__co__line"></div>
       </div>
       <app-button
         class="re-b"
-        color-type="primary"
+        colorType="primary"
         type="flat"
         label="إنشاء حساب جديد"
         @click="_toRegister"
       />
       <div class="wl-b__co">
-        <div class="wl-b__co__line" />
+        <div class="wl-b__co__line"></div>
         <div class="wl-b__co__label">لديك حساب سابق؟</div>
-        <div class="wl-b__co__line" />
+        <div class="wl-b__co__line"></div>
       </div>
       <app-button
         class="re-b lo"
-        color-type="primary"
+        colorType="primary"
         type="outline"
         label="تسجيل الدخول"
-        @click="_toLogin"
+        :isDisabled="authState.loading.value"
+        @click="toLogin"
       />
     </div>
   </prime-dialog>
@@ -48,11 +49,14 @@
 <script setup lang="ts">
 //constant
 import { webAuthPathUtil } from '#shared/utils/web-routes.utils';
+import { useAuthState } from '#imports';
 
 const modalId = 'web-login-register-modal';
 
 //composable
 const router = useRouter();
+const auth = useAuth();
+const authState = useAuthState();
 
 //data
 const isOpen = ref(false);
@@ -63,9 +67,15 @@ const hideModal = () => {
   document.body.classList.remove('modal-blur');
   isOpen.value = false;
 };
-const _toLogin = () => {
+
+//todo-z
+const toLogin = async () => {
   hideModal();
-  router.push(webAuthPathUtil());
+  await auth.signIn(
+    { username: 'admin_ekhts', password: 'dsaewq321' },
+    { callbackUrl: '/', redirect: false }
+  );
+  // router.push(webAuthPathUtil());
 };
 const _toRegister = () => {
   hideModal();

@@ -3,12 +3,9 @@ import withNuxt from './.nuxt/eslint.config.mjs';
 
 export default withNuxt(
   // Your custom configs here
+  // @ts-ignore
   {
     rules: {
-      // '@typescript-eslint/no-use-before-define': [
-      //   'error',
-      //   { functions: true, classes: true, variables: true },
-      // ],
       'no-use-before-define': 'off', // disable base rule if using TS version
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -34,6 +31,25 @@ export default withNuxt(
         },
       ],
       'vue/require-default-prop': 'off',
+      'vue/attribute-hyphenation': [
+        'error',
+        'never',
+        {
+          ignore: ['hydrate-after', 'hydrate-on-interaction'],
+        },
+      ],
+      'vue/html-self-closing': [
+        'error',
+        {
+          html: {
+            void: 'always',
+            normal: 'never',
+            component: 'always',
+          },
+          svg: 'always',
+          math: 'always',
+        },
+      ],
     },
   }
 );

@@ -3,9 +3,9 @@
     :id="modalId"
     v-model:visible="isOpen"
     :modal="true"
-    :dismissable-mask="true"
+    :dismissableMask="true"
     :closable="false"
-    :show-header="false"
+    :showHeader="false"
     :style="{ width: '100%', maxWidth: '720px' }"
     :pt="{
       root: { class: 'rounded-[15px] overflow-hidden hello-modal-c mx-auto' },
@@ -16,7 +16,7 @@
       <i
         class="fa fa-close sbm-close-icon"
         @click="hideModal"
-      />
+      ></i>
     </div>
     <div class="sbm-wrapper">
       <img
@@ -36,11 +36,11 @@
               <i
                 v-if="item.check"
                 class="fa fa-check"
-              />
+              ></i>
               <i
                 v-else
                 class="fa fa-times c-red"
-              />
+              ></i>
               <span>{{ item.label }}</span>
             </div>
           </div>
