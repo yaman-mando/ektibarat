@@ -4,7 +4,7 @@
     :class="{ right: !active, left: active, 'is-sm': isSm }"
     @click="onSelect"
   >
-    <div class="fixable-part" />
+    <div class="fixable-part"></div>
     <span :class="{ active: !active }">{{ rightLabel }}</span>
     <span :class="{ active: active }">{{ leftLabel }}</span>
   </div>

@@ -7,11 +7,11 @@
     :disabled="isDisabled || isLoading"
     :loading="isLoading"
   >
-    <slot name="iconStart" />
+    <slot name="iconStart"></slot>
     <i
       v-if="iconStartClass"
       :class="`app-button-icon  ${iconStartClass}`"
-    />
+    ></i>
     <span class="app-button-label-w">
       <span :class="`app-button-label text-lg  ${labelClass}`">
         {{ label }}
@@ -26,7 +26,7 @@
     <i
       v-if="iconEndClass"
       :class="`app-button-icon   ${iconEndClass}`"
-    />
+    ></i>
   </prime-button>
 </template>
 <script setup lang="ts">
