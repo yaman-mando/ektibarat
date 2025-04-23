@@ -1,7 +1,7 @@
-import { useDeviceStore } from '#shared/useDeviceStore';
+import { useDeviceService } from '#shared/useDeviceService';
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const deviceStore = useDeviceStore();
+  const deviceService = useDeviceService();
   let isMobileDevice = false;
   if (import.meta.server) {
     const ua = nuxtApp.ssrContext?.event?.req?.headers['user-agent'] || '';
@@ -13,7 +13,5 @@ export default defineNuxtPlugin((nuxtApp) => {
     isMobileDevice = /mobile|android|iphone|ipad|phone/i.test(ua);
   }
 
-  deviceStore.patchState({
-    isMobileDevice,
-  });
+  deviceService.setIsMobileDevice(isMobileDevice);
 });

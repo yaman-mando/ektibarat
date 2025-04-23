@@ -9,11 +9,11 @@
       :width="width"
       :height="height"
       :src="imageUrlModel!"
-      @error="hasError = true"
+      @error="onError"
       @click.self="withModal ? openModal() : ''"
     />
     <img
-      v-else
+      v-if="hasError"
       v-bind="$attrs"
       loading="lazy"
       src="/images/place-holder.webp"
@@ -94,6 +94,9 @@ const imageUrlModel = computed(() => {
 });
 
 //method
+const onError = () => {
+  hasError.value = true;
+};
 const openModal = () => {
   isOpenModel.value = true;
 };

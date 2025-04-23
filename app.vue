@@ -7,7 +7,7 @@
 </template>
 <script setup lang="ts">
 //composable
-import { useDeviceStore } from '#shared/useDeviceStore';
+import { useDeviceService } from '#shared/useDeviceService';
 import { useLocalStorageStore } from '#shared/useLocalStorageStore';
 import type {
   AuthLoginGoogleDataModel,
@@ -32,7 +32,7 @@ declare const AppleID: any;
 const auth = useAuth();
 const router = useRouter();
 const route = useRoute();
-const deviceStore = useDeviceStore();
+const deviceService = useDeviceService();
 const localStorageStore = useLocalStorageStore();
 const authStore = useAuthStore();
 const globalStore = useGlobalStore();
@@ -72,7 +72,7 @@ onMounted(() => {
 //method
 const initApp = async () => {
   try {
-    if (deviceStore.state.isMobileDevice.value) {
+    if (deviceService.isMobileDevice.value) {
       document.body.classList.add('is-mobile');
     }
     if (!isLoggedIn.value) {

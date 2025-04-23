@@ -35,7 +35,11 @@ export default withNuxt(
         'error',
         'never',
         {
-          ignore: ['hydrate-after', 'hydrate-on-interaction'],
+          ignore: [
+            'hydrate-after',
+            'hydrate-on-interaction',
+            'hydrate-on-visible',
+          ],
         },
       ],
       'vue/html-self-closing': [

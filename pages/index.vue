@@ -1,6 +1,13 @@
 <template>
   <div class="home-page">
-    <lazy-home-slide />
+    <home-slide />
+    <lazy-home-tasks hydrate-on-visible />
+    <lazy-home-join-us hydrate-on-visible />
+    <lazy-home-exam-part hydrate-on-visible />
+    <lazy-home-stats-part hydrate-on-visible />
+    <defer-view>
+      <lazy-home-partners />
+    </defer-view>
   </div>
 </template>
 <script setup lang="ts">

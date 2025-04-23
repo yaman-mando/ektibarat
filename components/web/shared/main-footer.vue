@@ -6,7 +6,7 @@
     >
       <template v-if="staticData">
         <div
-          v-if="!isMobile"
+          v-if="deviceService.isDesktopDevice.value"
           class="footer-container hide-to-tablet"
         >
           <div class="r-part">
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div
-          v-if="isMobile"
+          v-if="deviceService.isMobileDevice.value"
           class="footer-container hide-from-tablet"
         >
           <div class="m-footer">
@@ -183,12 +183,11 @@
 </template>
 <script setup lang="ts">
 import { useGlobalStore } from '#shared/useGlobalStore';
-import { useDeviceStore } from '#shared/useDeviceStore';
+import { useDeviceService } from '#shared/useDeviceService';
 
 //composable
 const globalStore = useGlobalStore();
-const deviceStore = useDeviceStore();
-const isMobile = deviceStore.state.isMobileDevice;
+const deviceService = useDeviceService();
 const router = useRouter();
 
 //data

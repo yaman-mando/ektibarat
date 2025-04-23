@@ -6,7 +6,7 @@
     <div class="app-nuxt">
       <div class="wrapper">
         <div class="main-section">
-          <lazy-main-menu />
+          <main-menu />
 
           <div
             id="scroll-page"

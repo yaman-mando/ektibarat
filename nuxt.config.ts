@@ -205,10 +205,10 @@ export default defineNuxtConfig({
   ],
   primevue: {
     usePrimeVue: true,
-    autoImport: true,
+    autoImport: false,
     components: {
       prefix: 'Prime',
-      exclude: ['Editor', 'FormField', 'Form', 'Chart'],
+      include: ['Dialog', 'Toast', 'Button'],
     },
     options: {
       theme: {
