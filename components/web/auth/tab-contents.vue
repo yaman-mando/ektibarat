@@ -25,6 +25,7 @@
             <prime-button
               v-if="(isRegister && applePermission) || !isRegister"
               class="outline-btn by-ios"
+              @click="loginByApple"
             >
               <i class="fab fa-apple"></i>
               <span>{{ texts.SignApple }}</span>
@@ -86,7 +87,13 @@
 <script setup lang="ts">
 import { useProjectSettingsStore } from '#shared/modules/project-settings/services/useProjectSettingsStore';
 import { sleepUtil } from '#shared/utils/shared-utils';
-import { webAuthGoogleSignIn } from '#shared/utils/web-routes.utils';
+import {
+  webAuthAppleSignIn,
+  webAuthGoogleSignIn,
+} from '#shared/utils/web-routes.utils';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+
+declare const AppleID: any | null;
 
 const signInTexts = {
   title: 'أهلا بعودتك',
@@ -121,6 +128,8 @@ const props = defineProps({
 });
 
 //composable
+const runtimeConfig = useRuntimeConfig();
+const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
 const projectSettingsStore = useProjectSettingsStore();
@@ -154,6 +163,41 @@ const registerPermissionsLoading = computed(
 );
 
 // Methods
+const loginByApple = async () => {
+  try {
+    appleLoading.value = true;
+    await AppleID.auth.init({
+      clientId: runtimeConfig.public.appleClientId,
+      scope: 'email',
+      redirectURI: `${window.location.origin}${webAuthAppleSignIn()}`,
+      usePopup: true,
+    });
+    const data = await AppleID.auth.signIn();
+    if (data) {
+      const res = await authStore.loginApple({
+        idToken: data.authorization.id_token,
+      });
+      if (res.refreshToken) {
+        authStore.notifyProviderSignIn(res);
+      } else {
+        //TODO-z
+        // this.handleClarityUser({ email: res.email, id: res.id });
+        // this.$router.push({
+        //   path: this.$route.path,
+        //   query: {
+        //     ...this.$route.query,
+        //     email: res.email,
+        //     token: res.token,
+        //     id: res.id,
+        //   },
+        // });
+      }
+    }
+  } catch (e) {
+    appleLoading.value = false;
+    throw e;
+  }
+};
 async function loginByGoogle() {
   const clientId = useRuntimeConfig().public.googleClientId;
   const redirectUri = `${window.location.origin}${webAuthGoogleSignIn()}`;

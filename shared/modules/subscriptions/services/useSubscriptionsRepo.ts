@@ -4,7 +4,7 @@ import type { GlobalTypes } from '#shared/constants/global-types';
 export const useSubscriptionsRepo = () => {
   const config = useRuntimeConfig();
 
-  const baseUrl = `${config.public.baseUrl}/subscriptions`;
+  const baseUrl = `${config.public.apiUrl}/subscriptions`;
 
   const getCurrentSubs = async (model: { grade: GlobalTypes }) => {
     const data = await $fetch(`${baseUrl}/current`, {

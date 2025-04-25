@@ -3,7 +3,7 @@ import type { ProjectSettingsRegistrationMethodDataModel } from '#shared/modules
 export const useProjectSettingsRepo = () => {
   const config = useRuntimeConfig();
 
-  const baseUrl = `${config.public.baseUrl}/projectSettings`;
+  const baseUrl = `${config.public.apiUrl}/projectSettings`;
 
   const getRegistrationMethod = async () => {
     const data = await $fetch(`${baseUrl}/registrationMethod`, {

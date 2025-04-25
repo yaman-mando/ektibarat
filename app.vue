@@ -10,7 +10,7 @@
 import { useDeviceService } from '#shared/useDeviceService';
 import { useLocalStorageStore } from '#shared/useLocalStorageStore';
 import type {
-  AuthLoginGoogleDataModel,
+  AuthLoginProviderDataModel,
   UserInfoDataModel,
 } from '~/core/auth/data-access/models/auth.model';
 import { IS_PRODUCTION_APP } from '#shared/utils/shared-utils';
@@ -26,8 +26,6 @@ import { useClarityStore } from '#shared/modules/clarity/services/useClarityStor
 import { ScriptsIdEnum } from '#shared/scripts-id.enum';
 
 declare const google: any;
-
-declare const AppleID: any;
 
 //composable
 const auth = useAuth();
@@ -91,7 +89,6 @@ const initAuth = async () => {
   try {
     if (import.meta.client) {
       await loadGoogle();
-      await loadApple();
     }
   } catch (e) {
     console.error('initAuth:' + e);
@@ -125,25 +122,6 @@ const loadGoogle = async () => {
   }
 };
 
-const loadApple = async () => {
-  try {
-    const interval = setInterval(async () => {
-      const el = document.getElementById(ScriptsIdEnum.appleId);
-      if (!el) return;
-      clearInterval(interval);
-      await AppleID.auth.init({
-        clientId: 'ekhtibarat.com',
-        scope: 'email',
-        redirectURI: 'https://ekhtibarat.com/auth/signin-apple',
-        usePopup: true,
-      });
-    });
-  } catch (e) {
-    console.error('loadApple:' + e);
-    throw e;
-  }
-};
-
 const infoRegister = () => {
   try {
     const userId = userData.value.id;
@@ -164,7 +142,7 @@ const handleFcm = (_userId: number) => {};
 const handleCredentialResponse = async (response: { credential: string }) => {
   const res = await authStore.loginGoogle({ idToken: response.credential });
   if (res.refreshToken) {
-    authStore.notifyGoogleSignIn(res);
+    authStore.notifyProviderSignIn(res);
   } else {
     router.push({
       path: webAuthPathUtil(),
@@ -173,22 +151,17 @@ const handleCredentialResponse = async (response: { credential: string }) => {
   }
 };
 
-const signinPopupGoogle = async (res: AuthLoginGoogleDataModel) => {
-  try {
-    authStore.setAuthCookie({
-      token: res.token,
-      refreshToken: res.refreshToken!,
-    });
-    await auth.getSession();
-    globalStore.patchState({ globalTypeUser: GlobalTypes.kudrat });
-    localStorageStore.setRegisterInfo(userData.value.id, true);
-    handleClarityUser({ email: res.email, id: res.id });
-    handleFcm(res.id);
-    await router.push(authStore.redirectUrlAfterLogin());
-  } catch (e) {
-    console.log('err-signinPopupByGoogle: ' + e);
-    throw e;
-  }
+const signWithProvider = async (res: AuthLoginProviderDataModel) => {
+  authStore.setAuthCookie({
+    token: res.token,
+    refreshToken: res.refreshToken!,
+  });
+  await auth.getSession();
+  globalStore.patchState({ globalTypeUser: GlobalTypes.kudrat });
+  localStorageStore.setRegisterInfo(userData.value.id, true);
+  handleClarityUser({ email: res.email, id: res.id });
+  handleFcm(res.id);
+  await router.push(authStore.redirectUrlAfterLogin());
 };
 
 const handleClarityUser = async (model: {
@@ -231,14 +204,15 @@ watch(
 );
 
 watch(
-  authStore.googleSignInData,
+  authStore.providerSignInData,
   (val) => {
     if (val) {
-      signinPopupGoogle(val);
+      signWithProvider(val);
     }
   },
   { immediate: true, deep: true }
 );
+
 watch(isLoggedIn, (newVal) => {
   if (newVal && !globalStore.state.globalTypeUser.value) {
     router.push(webGeneralSelectionPathUtil());

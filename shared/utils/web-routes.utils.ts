@@ -13,6 +13,7 @@ export const webAuthSignup = (): RouteLocationRaw => ({
   },
 });
 export const webAuthGoogleSignIn = () => '/auth/signin-google';
+export const webAuthAppleSignIn = () => '/auth/signin-apple';
 export const webPricesPathUtil = () => '/prices';
 export const webGeneralSelectionPathUtil = () => '/general-selection';
 export const webUserPanelTraining = () => `/user-panel?page=trainings`;

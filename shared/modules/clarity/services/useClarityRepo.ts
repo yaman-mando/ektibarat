@@ -4,7 +4,7 @@ import type { UserClarityDTODataModel } from '#shared/modules/clarity/data-acces
 export const useClarityRepo = () => {
   const config = useRuntimeConfig();
 
-  const baseUrl = `${config.public.baseUrl}/userClarityInfo`;
+  const baseUrl = `${config.public.apiUrl}/userClarityInfo`;
 
   const sendClarity = async (model: UserClarityDTODataModel) => {
     const data = await $fetch(`${baseUrl}`, {

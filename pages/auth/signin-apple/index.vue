@@ -17,34 +17,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
-
 definePageMeta({
   layout: 'auth-layout',
 });
 
 const currentYear = new Date().getFullYear();
 
-//composable
-const authStore = useAuthStore();
-const route = useRoute();
-
-onMounted(() => {
-  init();
-});
-
 //data
 const isLoading = ref(false);
-
-//method
-const init = async () => {
-  isLoading.value = true;
-  const { code } = route.query;
-  const res = await authStore.loginGoogle({
-    idToken: code as string,
-  });
-  authStore.notifyProviderSignIn(res);
-};
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/mixin';

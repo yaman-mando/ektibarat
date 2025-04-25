@@ -3,7 +3,7 @@ import type { SuccessPartnerItemDataModel } from '#shared/modules/success-partne
 export const useSuccessPartnerRepo = () => {
   const config = useRuntimeConfig();
 
-  const baseUrl = `${config.public.baseUrl}/successPartners`;
+  const baseUrl = `${config.public.apiUrl}/successPartners`;
 
   const getAll = async () => {
     const data = await $fetch(`${baseUrl}/all`, {

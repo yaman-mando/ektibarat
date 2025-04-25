@@ -1,12 +1,12 @@
 import { useAuthRepo } from '~/core/auth/data-access/services/useAuthRepo';
 import type {
-  AuthLoginGoogleDataModel,
-  AuthLoginGoogleDTODataModel,
+  AuthLoginProviderDataModel,
+  AuthLoginProviderDTODataModel,
   UserInfoDataModel,
 } from '~/core/auth/data-access/models/auth.model';
 import { webUserPanelTraining } from '#shared/utils/web-routes.utils';
 
-const googleSignInData = ref<AuthLoginGoogleDataModel | null>(null);
+const providerSignInData = ref<AuthLoginProviderDataModel | null>(null);
 
 //store
 export const useAuthStore = () => {
@@ -18,8 +18,12 @@ export const useAuthStore = () => {
     () => authState.data.value as UserInfoDataModel | null
   );
 
-  const loginGoogle = (model: AuthLoginGoogleDTODataModel) => {
+  const loginGoogle = (model: AuthLoginProviderDTODataModel) => {
     return repo.loginGoogle(model);
+  };
+
+  const loginApple = (model: AuthLoginProviderDTODataModel) => {
+    return repo.loginApple(model);
   };
 
   const setAuthCookie = (model: { token: string; refreshToken: string }) => {
@@ -36,19 +40,20 @@ export const useAuthStore = () => {
     return webUserPanelTraining();
   };
 
-  const notifyGoogleSignIn = (data: AuthLoginGoogleDataModel) => {
-    googleSignInData.value = data;
+  const notifyProviderSignIn = (data: AuthLoginProviderDataModel) => {
+    providerSignInData.value = data;
     //reset after trigger
-    googleSignInData.value = null;
+    providerSignInData.value = null;
   };
 
   return {
-    googleSignInData: readonly(googleSignInData),
-    notifyGoogleSignIn,
+    providerSignInData: readonly(providerSignInData),
+    notifyProviderSignIn,
     setAuthCookie,
     loginGoogle,
     redirectUrlAfterLogin,
     isLoggedIn,
     userData,
+    loginApple,
   };
 };

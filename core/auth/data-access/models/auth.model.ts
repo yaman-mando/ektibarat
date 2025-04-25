@@ -67,10 +67,10 @@ export type UserInfoDataModel = {
 };
 
 //identity
-export type AuthLoginGoogleDTODataModel = {
+export type AuthLoginProviderDTODataModel = {
   idToken: string;
 };
-export type AuthLoginGoogleDataModel = {
+export type AuthLoginProviderDataModel = {
   id: number;
   email: string;
   token: string;
