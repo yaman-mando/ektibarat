@@ -6,11 +6,11 @@ export const useSuccessPartnerRepo = () => {
   const baseUrl = `${config.public.baseUrl}/successPartners`;
 
   const getAll = async () => {
-    const { data } = await useFetch(`${baseUrl}/all`, {
+    const data = await $fetch(`${baseUrl}/all`, {
       method: 'GET',
     });
 
-    return data.value as SuccessPartnerItemDataModel[];
+    return data as SuccessPartnerItemDataModel[];
   };
 
   return {

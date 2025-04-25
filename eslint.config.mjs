@@ -6,6 +6,7 @@ export default withNuxt(
   // @ts-ignore
   {
     rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
       'no-use-before-define': 'off', // disable base rule if using TS version
       '@typescript-eslint/no-unused-vars': [
         'error',

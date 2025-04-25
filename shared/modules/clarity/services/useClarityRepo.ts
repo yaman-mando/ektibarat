@@ -7,12 +7,12 @@ export const useClarityRepo = () => {
   const baseUrl = `${config.public.baseUrl}/userClarityInfo`;
 
   const sendClarity = async (model: UserClarityDTODataModel) => {
-    const { data } = await useFetch(`${baseUrl}`, {
+    const data = await $fetch(`${baseUrl}`, {
       method: 'POST',
       body: model,
     });
 
-    return data.value as CurrentSubscriptionDataModel;
+    return data as CurrentSubscriptionDataModel;
   };
 
   return {

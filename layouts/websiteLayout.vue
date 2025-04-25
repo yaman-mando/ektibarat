@@ -90,6 +90,7 @@ import {
   UserPanelItemsRecord,
 } from '#shared/constants/user-panel-items';
 import { webAuthPathUtil } from '#shared/utils/web-routes.utils';
+import { ScriptsIdEnum } from '#shared/scripts-id.enum';
 
 //composable
 const { status } = useAuth();
@@ -161,7 +162,7 @@ const modalHelloRef = ref(null);
 //hook
 onBeforeMount(() => {
   document?.getElementById('web-footer')?.classList.remove('is-user-panel');
-  removeScript('appleId');
+  removeScript(ScriptsIdEnum.appleId);
 });
 
 //method

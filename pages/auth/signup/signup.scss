@@ -1,0 +1,67 @@
+﻿@import '@/assets/scss/mixin';
+
+.registration-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 50px auto;
+
+  ::v-deep .loading-group {
+    width: 360px;
+    height: 540px;
+
+    .card-body {
+      display: grid;
+      row-gap: 20px;
+      align-items: baseline;
+    }
+  }
+
+  ::v-deep .registration-square {
+    width: 360px;
+    max-width: 100vw;
+
+    .r-nav-header {
+      height: 56px;
+
+      .nav-item {
+        .nav-link {
+          height: 56px;
+          border-bottom: 1px solid #c7c7c7;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #bcccdb33;
+          width: 180px;
+          max-width: 49.75vw;
+
+          span {
+            font-size: 18px;
+            color: var(--dark-2b);
+            font-weight: bold;
+          }
+
+          &.active {
+            border-width: 1px 1px 0;
+            border-color: #c7c7c7 #c7c7c7 #fff;
+            background: white;
+
+            span {
+              color: var(--purple-8c);
+            }
+          }
+        }
+      }
+    }
+
+    .p-tabpanel {
+      min-height: 565px;
+      border: 1px solid #c7c7c7;
+      border-radius: 0 0 10px 10px;
+      border-top: none;
+      padding: 20px 15px;
+      position: relative;
+    }
+  }
+}

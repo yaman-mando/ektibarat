@@ -7,14 +7,14 @@ export const useSubscriptionsRepo = () => {
   const baseUrl = `${config.public.baseUrl}/subscriptions`;
 
   const getCurrentSubs = async (model: { grade: GlobalTypes }) => {
-    const { data } = await useFetch(`${baseUrl}/current`, {
+    const data = await $fetch(`${baseUrl}/current`, {
       method: 'GET',
       params: {
         grade: model.grade,
       },
     });
 
-    return data.value as CurrentSubscriptionDataModel;
+    return data as CurrentSubscriptionDataModel;
   };
 
   return {

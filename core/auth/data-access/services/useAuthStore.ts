@@ -1,9 +1,12 @@
 import { useAuthRepo } from '~/core/auth/data-access/services/useAuthRepo';
 import type {
+  AuthLoginGoogleDataModel,
   AuthLoginGoogleDTODataModel,
   UserInfoDataModel,
 } from '~/core/auth/data-access/models/auth.model';
 import { webUserPanelTraining } from '#shared/utils/web-routes.utils';
+
+const googleSignInData = ref<AuthLoginGoogleDataModel | null>(null);
 
 //store
 export const useAuthStore = () => {
@@ -15,8 +18,8 @@ export const useAuthStore = () => {
     () => authState.data.value as UserInfoDataModel | null
   );
 
-  const loginGoogle = async (model: AuthLoginGoogleDTODataModel) => {
-    return await repo.loginGoogle(model);
+  const loginGoogle = (model: AuthLoginGoogleDTODataModel) => {
+    return repo.loginGoogle(model);
   };
 
   const setAuthCookie = (model: { token: string; refreshToken: string }) => {
@@ -33,7 +36,15 @@ export const useAuthStore = () => {
     return webUserPanelTraining();
   };
 
+  const notifyGoogleSignIn = (data: AuthLoginGoogleDataModel) => {
+    googleSignInData.value = data;
+    //reset after trigger
+    googleSignInData.value = null;
+  };
+
   return {
+    googleSignInData: readonly(googleSignInData),
+    notifyGoogleSignIn,
     setAuthCookie,
     loginGoogle,
     redirectUrlAfterLogin,

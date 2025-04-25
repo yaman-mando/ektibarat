@@ -9,12 +9,12 @@ export const useAuthRepo = () => {
   const baseUrl = `${config.public.baseUrl}`;
 
   const loginGoogle = async (model: AuthLoginGoogleDTODataModel) => {
-    const { data } = await useFetch(`${baseUrl}/identity/loginGoogle`, {
+    const data = await $fetch(`${baseUrl}/identity/loginGoogle`, {
       method: 'POST',
       body: model,
     });
 
-    return data.value as AuthLoginGoogleDataModel;
+    return data as AuthLoginGoogleDataModel;
   };
 
   return {

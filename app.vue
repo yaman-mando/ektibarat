@@ -23,9 +23,10 @@ import { useGlobalStore } from '#shared/useGlobalStore';
 import { GlobalTypes } from '#shared/constants/global-types';
 import { UAParser } from 'ua-parser-js';
 import { useClarityStore } from '#shared/modules/clarity/services/useClarityStore';
-//eslint-disable-next-line
+import { ScriptsIdEnum } from '#shared/scripts-id.enum';
+
 declare const google: any;
-//eslint-disable-next-line
+
 declare const AppleID: any;
 
 //composable
@@ -37,6 +38,7 @@ const localStorageStore = useLocalStorageStore();
 const authStore = useAuthStore();
 const globalStore = useGlobalStore();
 const clarityStore = useClarityStore();
+const runtimeConfig = useRuntimeConfig();
 
 //data
 const isLoggedIn = computed(() => auth.status.value === 'authenticated');
@@ -50,32 +52,27 @@ useHead({
         {
           src: 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js',
           type: 'text/javascript',
-          id: 'appleId',
+          id: ScriptsIdEnum.appleId,
           async: true,
           defer: true,
         },
         {
           src: 'https://accounts.google.com/gsi/client',
           type: 'text/javascript',
-          id: 'googleId',
+          id: ScriptsIdEnum.googleId,
           async: true,
           defer: true,
         },
       ],
 });
 
-//hooks
-onMounted(() => {
-  initApp();
-});
-
 //method
-const initApp = async () => {
+const initApp = async (isLoggedIn: boolean) => {
   try {
     if (deviceService.isMobileDevice.value) {
       document.body.classList.add('is-mobile');
     }
-    if (!isLoggedIn.value) {
+    if (!isLoggedIn) {
       initAuth();
     } else {
       infoRegister();
@@ -105,23 +102,23 @@ const initAuth = async () => {
 const loadGoogle = async () => {
   try {
     const interval = setInterval(async () => {
-      if (document.getElementById('googleId')) {
-        clearInterval(interval);
-        await google.accounts.id.initialize({
-          client_id:
-            '699802488472-274u4ektcj1aqcmbojj99s3auf8bep14.apps.googleusercontent.com',
-          context: 'signin',
-          callback: handleCredentialResponse,
-        });
+      const el = document.getElementById(ScriptsIdEnum.googleId);
+      if (!el) return;
 
-        if (
-          router.currentRoute.value.path != webAuthPathUtil() &&
-          !router.currentRoute.value.query?.token
-        ) {
-          await google.accounts.id.prompt();
-        }
+      clearInterval(interval);
+      await google.accounts.id.initialize({
+        client_id: runtimeConfig.public.googleClientId,
+        context: 'signin',
+        callback: handleCredentialResponse,
+      });
+
+      if (
+        router.currentRoute.value.path != webAuthPathUtil() &&
+        !router.currentRoute.value.query?.token
+      ) {
+        google.accounts.id.prompt();
       }
-    }, 1000);
+    }, 300);
   } catch (e) {
     console.error('loadGoogle:' + e);
     throw e;
@@ -131,15 +128,15 @@ const loadGoogle = async () => {
 const loadApple = async () => {
   try {
     const interval = setInterval(async () => {
-      if (document.getElementById('appleId')) {
-        clearInterval(interval);
-        await AppleID.auth.init({
-          clientId: 'ekhtibarat.com',
-          scope: 'email',
-          redirectURI: 'https://ekhtibarat.com/auth/signin-apple',
-          usePopup: true,
-        });
-      }
+      const el = document.getElementById(ScriptsIdEnum.appleId);
+      if (!el) return;
+      clearInterval(interval);
+      await AppleID.auth.init({
+        clientId: 'ekhtibarat.com',
+        scope: 'email',
+        redirectURI: 'https://ekhtibarat.com/auth/signin-apple',
+        usePopup: true,
+      });
     });
   } catch (e) {
     console.error('loadApple:' + e);
@@ -167,7 +164,7 @@ const handleFcm = (_userId: number) => {};
 const handleCredentialResponse = async (response: { credential: string }) => {
   const res = await authStore.loginGoogle({ idToken: response.credential });
   if (res.refreshToken) {
-    signinPopupGoogle(res);
+    authStore.notifyGoogleSignIn(res);
   } else {
     router.push({
       path: webAuthPathUtil(),
@@ -224,6 +221,30 @@ const handleLayoutExit = (name: string) => {
 
 //watch
 watch(
+  isLoggedIn,
+  (val) => {
+    if (import.meta.client) {
+      initApp(val);
+    }
+  },
+  { immediate: true }
+);
+
+watch(
+  authStore.googleSignInData,
+  (val) => {
+    if (val) {
+      signinPopupGoogle(val);
+    }
+  },
+  { immediate: true, deep: true }
+);
+watch(isLoggedIn, (newVal) => {
+  if (newVal && !globalStore.state.globalTypeUser.value) {
+    router.push(webGeneralSelectionPathUtil());
+  }
+});
+watch(
   () => route.meta.layout,
   (newVal, oldVal) => {
     if (oldVal && newVal !== oldVal) {
@@ -232,9 +253,4 @@ watch(
   },
   { immediate: true }
 );
-watch(isLoggedIn, (newVal) => {
-  if (newVal && !globalStore.state.globalTypeUser.value) {
-    router.push(webGeneralSelectionPathUtil());
-  }
-});
 </script>

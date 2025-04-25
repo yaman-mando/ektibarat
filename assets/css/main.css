@@ -1,2 +1,6 @@
 @import "tailwindcss";
 @plugin "tailwindcss-logical";
+
+:root {
+    --p-primary-color: var(--purple-8c);
+}

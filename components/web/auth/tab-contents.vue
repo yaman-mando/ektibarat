@@ -1,0 +1,282 @@
+﻿<template>
+  <div class="registration-tab-content">
+    <div class="rw-1">
+      <span>{{ texts.title }}</span>
+    </div>
+    <prime-block-u-i :blocked="registerPermissionsLoading">
+      <template v-if="!registerPermissionsLoading">
+        <div
+          v-if="activeStep !== steps.userInfo"
+          class="rw-2 actions"
+        >
+          <prime-button
+            v-if="(isRegister && googlePermission) || !isRegister"
+            class="outline-btn by-google"
+            @click="loginByGoogle()"
+          >
+            <img
+              src="/images/svg/googleLogo.svg"
+              alt=""
+            />
+
+            <span>{{ texts.signGoogle }}</span>
+          </prime-button>
+          <prime-block-u-i :blocked="appleLoading">
+            <prime-button
+              v-if="(isRegister && applePermission) || !isRegister"
+              class="outline-btn by-ios"
+            >
+              <i class="fab fa-apple"></i>
+              <span>{{ texts.SignApple }}</span>
+            </prime-button>
+          </prime-block-u-i>
+          <prime-button
+            v-if="
+              ((isRegister && emailPermission) || !isRegister) &&
+              activeTab !== signTypes.email
+            "
+            class="outline-btn by-email"
+            @click="loginByEmail()"
+          >
+            <i
+              class="fa"
+              :class="isRegister ? 'fa-envelope' : 'fa-lock'"
+            ></i>
+            <span>{{ texts.signEmail }}</span>
+          </prime-button>
+          <prime-button
+            v-if="
+              ((isRegister && phonePermission) || !isRegister) &&
+              activeTab !== signTypes.whatsapp
+            "
+            class="outline-btn by-watsapp"
+            @click="loginByWatsApp()"
+          >
+            <i class="fab fa-whatsapp"></i>
+            <span>{{ texts.signWatsApp }}</span>
+          </prime-button>
+        </div>
+        <div
+          v-if="activeTab"
+          class="rw-3 info"
+        >
+          <!--          <login-form-->
+          <!--            v-if="!isRegister"-->
+          <!--            ref="login-form"-->
+          <!--            :isWatsApp="activeTab === signTypes.whatsapp"-->
+          <!--          />-->
+          <!--          <signup-form-->
+          <!--            v-else-->
+          <!--            ref="signup-form"-->
+          <!--            :isWatsApp="activeTab === signTypes.whatsapp"-->
+          <!--            @change-step="(step) => (activeStep = step)"-->
+          <!--          />-->
+        </div>
+        <h3
+          v-if="isRegister"
+          class="conditions"
+        >
+          توافق بتسجيلك على
+          <nuxt-link to="/conditions">الشروط والأحكام</nuxt-link>
+        </h3>
+      </template>
+    </prime-block-u-i>
+  </div>
+</template>
+<script setup lang="ts">
+import { useProjectSettingsStore } from '#shared/modules/project-settings/services/useProjectSettingsStore';
+import { sleepUtil } from '#shared/utils/shared-utils';
+import { webAuthGoogleSignIn } from '#shared/utils/web-routes.utils';
+
+const signInTexts = {
+  title: 'أهلا بعودتك',
+  signGoogle: 'الدخول باستخدام جوجل',
+  SignApple: 'الدخول باستخدام أبل',
+  signEmail: 'الدخول باستخدام البريد الإلكتروني',
+  signWatsApp: 'الدخول باستخدام واتساب',
+};
+
+const signUpTexts = {
+  title: 'أهلا بك في اختبارات',
+  signGoogle: 'التسجيل باستخدام جوجل',
+  SignApple: 'التسجيل باستخدام أبل',
+  signEmail: 'التسجيل بالبريد الإلكتروني',
+  signWatsApp: 'التسجيل باستخدام واتساب',
+};
+
+const signTypes = {
+  email: 1,
+  whatsapp: 2,
+};
+
+const steps = {
+  email: 1,
+  code: 2,
+  userInfo: 3,
+};
+
+const props = defineProps({
+  isRegister: Boolean,
+  hideActions: Boolean,
+});
+
+//composable
+const router = useRouter();
+const route = useRoute();
+const projectSettingsStore = useProjectSettingsStore();
+
+// data
+const appleLoading = ref(false);
+const activeTab = ref<number | null>(null);
+const activeStep = ref(steps.email);
+
+const texts = computed(() => (props.isRegister ? signUpTexts : signInTexts));
+
+const registerPermissions = computed(() => {
+  return projectSettingsStore.state.registerMethods.value;
+});
+
+const emailPermission = computed(
+  () => registerPermissions.value?.email ?? true
+);
+const phonePermission = computed(
+  () => registerPermissions.value?.phone ?? true
+);
+const googlePermission = computed(
+  () => registerPermissions.value?.google ?? true
+);
+const applePermission = computed(
+  () => registerPermissions.value?.apple ?? true
+);
+
+const registerPermissionsLoading = computed(
+  () => projectSettingsStore.state.fetchingRegisterMethod.value
+);
+
+// Methods
+async function loginByGoogle() {
+  const clientId = useRuntimeConfig().public.googleClientId;
+  const redirectUri = `${window.location.origin}${webAuthGoogleSignIn()}`;
+  const scope = encodeURIComponent('openid profile email');
+
+  const url =
+    `https://accounts.google.com/o/oauth2/v2/auth?` +
+    `client_id=${clientId}&` +
+    `redirect_uri=${encodeURIComponent(redirectUri)}&` +
+    `response_type=code&` +
+    `scope=${scope}`;
+  console.log(url);
+  window.location.href = url;
+}
+
+async function loginByEmail() {
+  await removeParams();
+  activeTab.value = null;
+  await sleepUtil(100);
+  activeTab.value = signTypes.email;
+}
+
+async function loginByWatsApp() {
+  await removeParams();
+  activeTab.value = null;
+  await sleepUtil(100);
+  activeTab.value = signTypes.whatsapp;
+}
+
+async function removeParams() {
+  const query = { ...route.query };
+  delete query.email;
+  delete query.token;
+  await sleepUtil(100);
+  router.push({ query });
+}
+
+// Watch route query
+watch(
+  () => route.query,
+  (newQuery) => {
+    if (newQuery.email) {
+      activeTab.value = signTypes.email;
+    }
+  },
+  { immediate: true, deep: true }
+);
+</script>
+<style lang="scss" scoped>
+@import '@/assets/scss/mixin';
+
+.registration-tab-content {
+  padding: 15px;
+
+  .rw-1 {
+    display: flex;
+    justify-content: center;
+
+    span {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      color: var(--purple-8c);
+    }
+  }
+
+  .rw-2 {
+    display: grid;
+    row-gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+    @include outline-btn() {
+      width: 100%;
+      height: 45px;
+      font-size: 16px;
+      border-radius: 8px;
+      color: var(--blue-f4);
+      border: 0.75px solid #4285f4;
+      display: grid;
+      grid-template-columns: 16px auto;
+      align-items: center;
+      i {
+        font-size: 23px;
+      }
+      span {
+        text-align: center;
+      }
+      &.by-ios {
+        color: black;
+        border-color: #000000bf;
+      }
+      &.by-email {
+        color: var(--purple-8c);
+        border-color: var(--purple-8c);
+
+        i {
+          font-size: 16px;
+        }
+      }
+      &.by-watsapp {
+        color: #128c7e;
+        border-color: #128c7e;
+
+        i {
+          color: #128c7e;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+  .conditions {
+    position: absolute;
+    bottom: 30px;
+    left: 57px;
+    font-size: 16px;
+    color: var(--gray-63);
+    line-height: 22px;
+
+    a {
+      color: var(--purple-8c);
+      text-decoration-line: underline;
+    }
+  }
+}
+</style>
