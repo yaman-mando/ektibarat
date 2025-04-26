@@ -11,6 +11,7 @@
     </div>
     <div class="c-part flex items-center justify-center">
       <div
+        v-if="detail"
         class="c-content"
         v-html="detail.text"
       ></div>
@@ -22,6 +23,7 @@ import { usePrivacyStore } from '#shared/modules/privacy/services/usePrivacyStor
 import { useGlobalStore } from '#shared/useGlobalStore';
 import { formatContentDate } from '#shared/utils/date-utils';
 import { defaultMeta } from '#shared/constants/default-meta';
+import { useLazyAsyncData } from '#app';
 
 definePageMeta({
   layout: 'website-layout',
@@ -34,64 +36,75 @@ const globalStore = useGlobalStore();
 
 const pageTitle = 'الشروط والأحكام';
 
-const [metaData, detail] = await Promise.all([
-  globalStore.getConditionStatic(),
-  privacyStore.getCondition(),
-]);
+const { data } = useLazyAsyncData(async () => {
+  const [metaData, detail] = await Promise.all([
+    globalStore.getConditionStatic(),
+    privacyStore.getCondition(),
+  ]);
+
+  return { metaData, detail };
+});
+
+const metaData = computed(() => data.value?.metaData);
+const detail = computed(() => data.value?.detail);
 
 useHead({
-  title: metaData.metaTitle,
+  title: metaData.value?.metaTitle,
   meta: [
     {
       id: 'og:title',
       property: 'og:title',
-      content: `${metaData?.metaTitle ?? defaultMeta.title}`,
+      content: `${metaData.value?.metaTitle ?? defaultMeta.title}`,
     },
     {
       id: 'keywords',
       name: 'keywords',
-      content: metaData?.keywords ?? defaultMeta.keywords,
+      content: metaData.value?.keywords ?? defaultMeta.keywords,
     },
     {
       id: 'og:description',
       name: 'description',
-      content: metaData?.metaDescription ?? defaultMeta.description,
+      content: metaData.value?.metaDescription ?? defaultMeta.description,
     },
     {
       id: 'description',
       name: 'description',
-      content: metaData?.metaDescription ?? defaultMeta.description,
+      content: metaData.value?.metaDescription ?? defaultMeta.description,
     },
     {
       id: 'og:image',
       property: 'og:image',
-      content: metaData
-        ? `${imageUrl.staticImageUrl(metaData.metaImage)}`
+      content: metaData.value
+        ? `${imageUrl.staticImageUrl(metaData.value.metaImage)}`
         : defaultMeta.img,
     },
     {
       property: 'twitter:image',
-      content: metaData
-        ? `${imageUrl.staticImageUrl(metaData.metaImage)}`
+      content: metaData.value
+        ? `${imageUrl.staticImageUrl(metaData.value.metaImage)}`
         : defaultMeta.img,
       id: 'twitter:image',
     },
     {
       property: 'twitter:title',
-      content: metaData ? `${metaData.metaTitle}` : defaultMeta.title,
+      content: metaData.value
+        ? `${metaData.value.metaTitle}`
+        : defaultMeta.title,
       id: 'twitter:title',
     },
     {
       property: 'twitter:description',
-      content: metaData
-        ? `${metaData.metaDescription}`
+      content: metaData.value
+        ? `${metaData.value.metaDescription}`
         : defaultMeta.description,
       id: 'twitter:description',
     },
   ],
 });
 
-const updateDate = formatContentDate(detail.lastUpdateDate);
+const updateDate = computed(() =>
+  formatContentDate(detail.value?.lastUpdateDate ?? null)
+);
 </script>
 <style
   lang="scss"
