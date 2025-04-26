@@ -9,16 +9,16 @@
 //composable
 import { useDeviceService } from '#shared/useDeviceService';
 import { useLocalStorageStore } from '#shared/useLocalStorageStore';
-import type {
-  AuthLoginProviderDataModel,
-  UserInfoDataModel,
-} from '~/core/auth/data-access/models/auth.model';
+import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { IS_PRODUCTION_APP } from '#shared/utils/shared-utils';
 import {
   webAuthPathUtil,
   webGeneralSelectionPathUtil,
 } from '#shared/utils/web-routes.utils';
-import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+import {
+  type SignInActionDataUiModel,
+  useAuthStore,
+} from '~/core/auth/data-access/services/useAuthStore';
 import { useGlobalStore } from '#shared/useGlobalStore';
 import { GlobalTypes } from '#shared/constants/global-types';
 import { UAParser } from 'ua-parser-js';
@@ -142,7 +142,13 @@ const handleFcm = (_userId: number) => {};
 const handleCredentialResponse = async (response: { credential: string }) => {
   const res = await authStore.loginGoogle({ idToken: response.credential });
   if (res.refreshToken) {
-    authStore.notifyProviderSignIn(res);
+    authStore.notifySignInAction({
+      id: res.id,
+      token: res.token,
+      refreshToken: res.refreshToken,
+      email: res.email,
+      showWelcomeModal: false,
+    });
   } else {
     router.push({
       path: webAuthPathUtil(),
@@ -151,16 +157,21 @@ const handleCredentialResponse = async (response: { credential: string }) => {
   }
 };
 
-const signWithProvider = async (res: AuthLoginProviderDataModel) => {
+const signInAction = async (data: SignInActionDataUiModel) => {
   authStore.setAuthCookie({
-    token: res.token,
-    refreshToken: res.refreshToken!,
+    token: data.token,
+    refreshToken: data.refreshToken!,
   });
   await auth.getSession();
   globalStore.patchState({ globalTypeUser: GlobalTypes.kudrat });
   localStorageStore.setRegisterInfo(userData.value.id, true);
-  handleClarityUser({ email: res.email, id: res.id });
-  handleFcm(res.id);
+  if (IS_PRODUCTION_APP) {
+    handleClarityUser({ email: data.email, id: data.id });
+    handleFcm(data.id);
+  }
+  if (data.showWelcomeModal) {
+    localStorageStore.setFirstRegister(data.id, true);
+  }
   await router.push(authStore.redirectUrlAfterLogin());
 };
 
@@ -204,10 +215,10 @@ watch(
 );
 
 watch(
-  authStore.providerSignInData,
+  authStore.signInActioData,
   (val) => {
     if (val) {
-      signWithProvider(val);
+      signInAction(val);
     }
   },
   { immediate: true, deep: true }

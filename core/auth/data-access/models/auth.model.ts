@@ -14,21 +14,6 @@ export type LoginDataModel = {
   tokenExpireDate: string;
 };
 
-//login otp
-export type LoginOTPDataModel = {
-  id: number;
-  input: string;
-  token: string;
-  refreshToken: string;
-  tokenExpireDate: string;
-  success: boolean;
-  errors: string[];
-  errorType: number;
-  countRegisterTries: number;
-  showWelcomeModal: boolean;
-  studentId: number;
-};
-
 //refresh token
 export type RefreshTokenDTODataModel = {
   refreshToken: string;
@@ -76,4 +61,24 @@ export type AuthLoginProviderDataModel = {
   token: string;
   refreshToken: string | null;
   tokenExpireDate: string;
+};
+
+//loginOTP
+export type AuthLoginOtpDTODataModel = {
+  input: string;
+  code: string | null;
+};
+
+export type AuthLoginOtpDataModel = {
+  id: number;
+  input: string;
+  token: string | null;
+  refreshToken: string | null;
+  tokenExpireDate: string | null;
+  success: boolean;
+  errors: string[];
+  errorType: number;
+  countRegisterTries: number;
+  showWelcomeModal: boolean;
+  studentId: number | null;
 };

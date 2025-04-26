@@ -1,12 +1,19 @@
 import { useAuthRepo } from '~/core/auth/data-access/services/useAuthRepo';
 import type {
-  AuthLoginProviderDataModel,
+  AuthLoginOtpDTODataModel,
   AuthLoginProviderDTODataModel,
   UserInfoDataModel,
 } from '~/core/auth/data-access/models/auth.model';
 import { webUserPanelTraining } from '#shared/utils/web-routes.utils';
 
-const providerSignInData = ref<AuthLoginProviderDataModel | null>(null);
+export type SignInActionDataUiModel = {
+  id: number;
+  email: string | null;
+  token: string;
+  refreshToken: string | null;
+  showWelcomeModal: boolean;
+};
+const signInActioData = ref<SignInActionDataUiModel | null>(null);
 
 //store
 export const useAuthStore = () => {
@@ -26,6 +33,10 @@ export const useAuthStore = () => {
     return repo.loginApple(model);
   };
 
+  const loginOTP = (model: AuthLoginOtpDTODataModel) => {
+    return repo.loginOTP(model);
+  };
+
   const setAuthCookie = (model: { token: string; refreshToken: string }) => {
     authState.rawToken.value = model.token;
     authState.rawRefreshToken.value = model.refreshToken;
@@ -40,20 +51,27 @@ export const useAuthStore = () => {
     return webUserPanelTraining();
   };
 
-  const notifyProviderSignIn = (data: AuthLoginProviderDataModel) => {
-    providerSignInData.value = data;
+  const notifySignInAction = (data: SignInActionDataUiModel) => {
+    signInActioData.value = {
+      id: data.id,
+      email: data.email,
+      token: data.token,
+      refreshToken: data.refreshToken,
+      showWelcomeModal: false,
+    };
     //reset after trigger
-    providerSignInData.value = null;
+    signInActioData.value = null;
   };
 
   return {
-    providerSignInData: readonly(providerSignInData),
-    notifyProviderSignIn,
+    signInActioData: readonly(signInActioData),
+    notifySignInAction,
     setAuthCookie,
     loginGoogle,
     redirectUrlAfterLogin,
     isLoggedIn,
     userData,
     loginApple,
+    loginOTP,
   };
 };

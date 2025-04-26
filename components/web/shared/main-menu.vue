@@ -24,7 +24,7 @@
 
       <app-button
         v-if="!isLoggedIn"
-        type="clear"
+        variant="clear"
         label="الدخول"
         size="sm"
         :isDisabled="authState.loading.value"

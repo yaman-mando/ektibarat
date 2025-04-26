@@ -64,7 +64,7 @@ import { StaticTracksRoutersEnum } from '#shared/constants/static-tracks-routers
 const globalStore = useGlobalStore();
 
 //data
-const staticData = globalStore.state.homeJson.value;
+const staticData = globalStore.staticState.homeJson.value;
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/mixin';

@@ -50,7 +50,7 @@
     <div class="sbm-actions">
       <app-button
         :label="'ترقية الاشتراك'"
-        :type="'flat'"
+        :variant="'flat'"
         @click="upgradeClicked"
       />
     </div>

@@ -35,7 +35,7 @@ successPartnerStore.getAll();
 const list = computed(() => successPartnerStore.state.successPartnersAll.value);
 
 //data
-const staticData = globalStore.state.homeJson.value;
+const staticData = globalStore.staticState.homeJson.value;
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/mixin';

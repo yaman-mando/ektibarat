@@ -110,7 +110,7 @@ const redirectService = useRedirectService();
 const deviceService = useDeviceService();
 
 //data
-const staticData = globalStore.state.homeJson.value;
+const staticData = globalStore.staticState.homeJson.value;
 
 //method
 const navTo = (type: GlobalTypes | null = null) => {

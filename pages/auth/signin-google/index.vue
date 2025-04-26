@@ -43,7 +43,13 @@ const init = async () => {
   const res = await authStore.loginGoogle({
     idToken: code as string,
   });
-  authStore.notifyProviderSignIn(res);
+  authStore.notifySignInAction({
+    id: res.id,
+    token: res.token,
+    refreshToken: res.refreshToken,
+    email: res.email,
+    showWelcomeModal: false,
+  });
 };
 </script>
 <style lang="scss" scoped>

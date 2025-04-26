@@ -1,7 +1,7 @@
 <template>
   <prime-button
     type="button"
-    :class="`app-button ${colorType} ${type} size-${size} ${
+    :class="`app-button ${colorType} ${variant} size-${size} ${
       isAnalytics ? 'is-analytics' : ''
     } ${rounded ? 'rounded' : ''}`"
     :disabled="isDisabled || isLoading"
@@ -41,14 +41,14 @@ withDefaults(
     labelClass?: string;
     suffixLabel?: string;
     colorType?: 'primary' | 'success' | 'warn' | 'blue';
-    type?: 'flat' | 'outline' | 'clear';
+    variant?: 'flat' | 'outline' | 'clear';
     size?: 'sm' | string;
     isAnalytics?: boolean;
     rounded?: boolean;
   }>(),
   {
     colorType: 'primary',
-    type: 'flat',
+    variant: 'flat',
     size: '',
     rounded: false,
     labelClass: '',

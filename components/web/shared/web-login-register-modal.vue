@@ -26,7 +26,7 @@
       <app-button
         class="re-b"
         colorType="primary"
-        type="flat"
+        variant="flat"
         label="إنشاء حساب جديد"
         @click="_toRegister"
       />
@@ -38,7 +38,7 @@
       <app-button
         class="re-b lo"
         colorType="primary"
-        type="outline"
+        variant="outline"
         label="تسجيل الدخول"
         :isDisabled="authState.loading.value"
         @click="toLogin"

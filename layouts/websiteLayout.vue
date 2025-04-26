@@ -15,7 +15,9 @@
             <div class="page-contents">
               <slot></slot>
             </div>
-            <lazy-main-footer />
+            <defer-view>
+              <lazy-main-footer />
+            </defer-view>
           </div>
         </div>
       </div>

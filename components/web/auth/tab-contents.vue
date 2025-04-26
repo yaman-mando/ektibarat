@@ -37,7 +37,7 @@
               activeTab !== signTypes.email
             "
             class="outline-btn by-email"
-            @click="loginByEmail()"
+            @click="loginByEmail"
           >
             <i
               class="fa"
@@ -61,6 +61,10 @@
           v-if="activeTab"
           class="rw-3 info"
         >
+          <lazy-login-email
+            v-if="activeStep === signTypes.email"
+            class="!mt-6"
+          />
           <!--          <login-form-->
           <!--            v-if="!isRegister"-->
           <!--            ref="login-form"-->
@@ -178,7 +182,13 @@ const loginByApple = async () => {
         idToken: data.authorization.id_token,
       });
       if (res.refreshToken) {
-        authStore.notifyProviderSignIn(res);
+        authStore.notifySignInAction({
+          id: res.id,
+          token: res.token,
+          refreshToken: res.refreshToken,
+          email: res.email,
+          showWelcomeModal: false,
+        });
       } else {
         //TODO-z
         // this.handleClarityUser({ email: res.email, id: res.id });

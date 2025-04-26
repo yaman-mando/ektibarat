@@ -3,4 +3,5 @@
 
 :root {
     --p-primary-color: var(--purple-8c);
+    --p-primary-hover-color: var(--purple-8d);
 }
