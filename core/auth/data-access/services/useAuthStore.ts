@@ -4,19 +4,15 @@ import type {
   AuthLoginProviderDTODataModel,
   UserInfoDataModel,
 } from '~/core/auth/data-access/models/auth.model';
-import { webUserPanelTraining } from '#shared/utils/web-routes.utils';
-
-export type SignInActionDataUiModel = {
-  id: number;
-  email: string | null;
-  token: string;
-  refreshToken: string | null;
-  showWelcomeModal: boolean;
-};
-const signInActioData = ref<SignInActionDataUiModel | null>(null);
+import {
+  webGeneralSelectionPathUtil,
+  webUserPanelTraining,
+} from '#shared/utils/web-routes.utils';
+import { useGlobalStore } from '#shared/useGlobalStore';
 
 //store
 export const useAuthStore = () => {
+  const globalStore = useGlobalStore();
   const repo = useAuthRepo();
   const authState = useAuthState();
   const redirectUrlCookie = useCookie('redirectUrl');
@@ -48,24 +44,12 @@ export const useAuthStore = () => {
       redirectUrlCookie.value = null;
       return url;
     }
-    return webUserPanelTraining();
-  };
-
-  const notifySignInAction = (data: SignInActionDataUiModel) => {
-    signInActioData.value = {
-      id: data.id,
-      email: data.email,
-      token: data.token,
-      refreshToken: data.refreshToken,
-      showWelcomeModal: false,
-    };
-    //reset after trigger
-    signInActioData.value = null;
+    return globalStore.state.globalTypeUser
+      ? webUserPanelTraining()
+      : webGeneralSelectionPathUtil();
   };
 
   return {
-    signInActioData: readonly(signInActioData),
-    notifySignInAction,
     setAuthCookie,
     loginGoogle,
     redirectUrlAfterLogin,

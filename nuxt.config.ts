@@ -87,6 +87,7 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   modules: [
+    '@pinia/nuxt',
     'nuxt-security',
     '@sidebase/nuxt-auth',
     '@primevue/nuxt-module',

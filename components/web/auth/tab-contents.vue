@@ -96,6 +96,7 @@ import {
   webAuthGoogleSignIn,
 } from '#shared/utils/web-routes.utils';
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+import { authEvents } from '~/core/auth/data-access/services/useAuthEvents';
 
 declare const AppleID: any | null;
 
@@ -182,7 +183,7 @@ const loginByApple = async () => {
         idToken: data.authorization.id_token,
       });
       if (res.refreshToken) {
-        authStore.notifySignInAction({
+        authEvents.emitSignIn({
           id: res.id,
           token: res.token,
           refreshToken: res.refreshToken,

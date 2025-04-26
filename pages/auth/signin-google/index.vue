@@ -18,6 +18,7 @@
 </template>
 <script setup lang="ts">
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+import { authEvents } from '~/core/auth/data-access/services/useAuthEvents';
 
 definePageMeta({
   layout: 'auth-layout',
@@ -43,7 +44,7 @@ const init = async () => {
   const res = await authStore.loginGoogle({
     idToken: code as string,
   });
-  authStore.notifySignInAction({
+  authEvents.emitSignIn({
     id: res.id,
     token: res.token,
     refreshToken: res.refreshToken,

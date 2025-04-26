@@ -22,7 +22,7 @@ const globalStore = useGlobalStore();
 const redirectService = useRedirectService();
 
 //data
-const staticData = globalStore.staticState.homeJson.value;
+const staticData = globalStore.staticState.homeJson;
 
 //method
 const navTo = (type: GlobalTypes | null = null) => {

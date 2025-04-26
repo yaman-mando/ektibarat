@@ -64,6 +64,7 @@ import type {
   AuthLoginOtpDTODataModel,
 } from '~/core/auth/data-access/models/auth.model';
 import type { FetchError } from 'ofetch';
+import { authEvents } from '~/core/auth/data-access/services/useAuthEvents';
 
 const authStore = useAuthStore();
 const toastMessage = useToastMessage();
@@ -90,7 +91,7 @@ const onSuccess = (res: AuthLoginOtpDataModel) => {
     if (!res.token) {
       isCodeStep.value = true;
     } else {
-      authStore.notifySignInAction({
+      authEvents.emitSignIn({
         id: res.id,
         token: res.token,
         email: null,

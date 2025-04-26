@@ -29,7 +29,7 @@ import { useGlobalStore } from '#shared/useGlobalStore';
 const globalStore = useGlobalStore();
 
 //data
-const staticData = globalStore.staticState.homeJson.value;
+const staticData = globalStore.staticState.homeJson;
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/mixin';

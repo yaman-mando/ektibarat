@@ -557,9 +557,7 @@ const subMenu = ref<HTMLInputElement | null>(null);
 const openMenu = ref(false);
 const showList = ref(false);
 const activeSub = ref<number | null>(null);
-const selectedGlobalType = ref(
-  state.globalTypeUser.value == GlobalTypes.tahsele
-);
+const selectedGlobalType = ref(state.globalTypeUser == GlobalTypes.tahsele);
 const isLoggedIn = computed(() => status.value === 'authenticated');
 const userData = computed(() => data.value as UserInfoDataModel);
 const isEmployee = computed(() => userData.value.role === UserRoles.employee);
@@ -609,8 +607,8 @@ watch(selectedGlobalType, async (newVal, _oldVal) => {
   const currentType = state.globalTypeUser;
 
   const shouldSwitch =
-    (newVal && currentType.value === GlobalTypes.kudrat) ||
-    (!newVal && currentType.value === GlobalTypes.tahsele);
+    (newVal && currentType === GlobalTypes.kudrat) ||
+    (!newVal && currentType === GlobalTypes.tahsele);
 
   if (shouldSwitch) {
     const newType = newVal ? GlobalTypes.tahsele : GlobalTypes.kudrat;
@@ -629,7 +627,7 @@ watch(selectedGlobalType, async (newVal, _oldVal) => {
 });
 
 watch(
-  () => state.globalTypeUser.value,
+  () => state.globalTypeUser,
   (newVal) => {
     if (
       (newVal == GlobalTypes.tahsele && !selectedGlobalType.value) ||

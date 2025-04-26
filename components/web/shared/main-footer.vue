@@ -191,7 +191,7 @@ const deviceService = useDeviceService();
 const router = useRouter();
 
 //data
-const staticData = computed(() => globalStore.staticState.staticData.value);
+const staticData = computed(() => globalStore.staticState.staticData);
 
 //hooke
 onMounted(() => {

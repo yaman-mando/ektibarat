@@ -1,7 +1,7 @@
 <template>
   <prime-dialog
     id="permission-modal"
-    :visible="globalStore.state.showBlockModal.value"
+    :visible="globalStore.state.showBlockModal"
     :modal="true"
     :closable="false"
     :dismissableMask="false"

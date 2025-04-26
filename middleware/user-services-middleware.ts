@@ -14,9 +14,9 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
 
   try {
     if (!!user && user.role !== UserRoles.mediaManager) {
-      if (globalStore.state.globalTypeUser.value) {
+      if (globalStore.state.globalTypeUser) {
         const res = await subscriptionsStore.getCurrentSub(
-          globalStore.state.globalTypeUser.value
+          globalStore.state.globalTypeUser
         );
         // Optional mock:
         // const res = {

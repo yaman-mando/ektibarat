@@ -11,19 +11,16 @@ import { useDeviceService } from '#shared/useDeviceService';
 import { useLocalStorageStore } from '#shared/useLocalStorageStore';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { IS_PRODUCTION_APP } from '#shared/utils/shared-utils';
-import {
-  webAuthPathUtil,
-  webGeneralSelectionPathUtil,
-} from '#shared/utils/web-routes.utils';
-import {
-  type SignInActionDataUiModel,
-  useAuthStore,
-} from '~/core/auth/data-access/services/useAuthStore';
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { GlobalTypes } from '#shared/constants/global-types';
+import { webAuthPathUtil } from '#shared/utils/web-routes.utils';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import { UAParser } from 'ua-parser-js';
 import { useClarityStore } from '#shared/modules/clarity/services/useClarityStore';
 import { ScriptsIdEnum } from '#shared/scripts-id.enum';
+import {
+  authEvents,
+  type SignInActionDataUiModel,
+} from '~/core/auth/data-access/services/useAuthEvents';
+import { filter } from 'rxjs';
 
 declare const google: any;
 
@@ -34,7 +31,7 @@ const route = useRoute();
 const deviceService = useDeviceService();
 const localStorageStore = useLocalStorageStore();
 const authStore = useAuthStore();
-const globalStore = useGlobalStore();
+// const globalStore = useGlobalStore();
 const clarityStore = useClarityStore();
 const runtimeConfig = useRuntimeConfig();
 
@@ -142,7 +139,7 @@ const handleFcm = (_userId: number) => {};
 const handleCredentialResponse = async (response: { credential: string }) => {
   const res = await authStore.loginGoogle({ idToken: response.credential });
   if (res.refreshToken) {
-    authStore.notifySignInAction({
+    authEvents.emitSignIn({
       id: res.id,
       token: res.token,
       refreshToken: res.refreshToken,
@@ -163,7 +160,6 @@ const signInAction = async (data: SignInActionDataUiModel) => {
     refreshToken: data.refreshToken!,
   });
   await auth.getSession();
-  globalStore.patchState({ globalTypeUser: GlobalTypes.kudrat });
   localStorageStore.setRegisterInfo(userData.value.id, true);
   if (IS_PRODUCTION_APP) {
     handleClarityUser({ email: data.email, id: data.id });
@@ -204,6 +200,12 @@ const handleLayoutExit = (name: string) => {
 };
 
 //watch
+authEvents.events$.pipe(filter(Boolean)).subscribe((val) => {
+  if (val) {
+    signInAction(val);
+  }
+});
+
 watch(
   isLoggedIn,
   (val) => {
@@ -214,21 +216,6 @@ watch(
   { immediate: true }
 );
 
-watch(
-  authStore.signInActioData,
-  (val) => {
-    if (val) {
-      signInAction(val);
-    }
-  },
-  { immediate: true, deep: true }
-);
-
-watch(isLoggedIn, (newVal) => {
-  if (newVal && !globalStore.state.globalTypeUser.value) {
-    router.push(webGeneralSelectionPathUtil());
-  }
-});
 watch(
   () => route.meta.layout,
   (newVal, oldVal) => {

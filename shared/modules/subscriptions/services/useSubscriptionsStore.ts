@@ -47,7 +47,7 @@ export const useSubscriptionsStore = () => {
     const res = await repo.getCurrentSubs({
       grade,
     });
-    patchState({ userCurrentSub: res });
+    patchState({ userCurrentSub: res, lastUserSubUpdate: Date.now() });
     return res;
   };
 
