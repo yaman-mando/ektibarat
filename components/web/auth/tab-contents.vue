@@ -65,18 +65,10 @@
             v-if="activeTab === signTypes.email"
             class="!mt-6"
           />
-          <lazy-whatsapp-form v-if="activeTab === signTypes.whatsapp" />
-          <!--          <login-form-->
-          <!--            v-if="!isRegister"-->
-          <!--            ref="login-form"-->
-          <!--            :isWatsApp="activeTab === signTypes.whatsapp"-->
-          <!--          />-->
-          <!--          <signup-form-->
-          <!--            v-else-->
-          <!--            ref="signup-form"-->
-          <!--            :isWatsApp="activeTab === signTypes.whatsapp"-->
-          <!--            @change-step="(step) => (activeStep = step)"-->
-          <!--          />-->
+          <lazy-whatsapp-form
+            v-if="activeTab === signTypes.whatsapp"
+            class="!mt-6"
+          />
         </div>
         <h3
           v-if="isRegister"
