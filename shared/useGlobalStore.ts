@@ -5,6 +5,7 @@ import type {
   HomeJsonDataModel,
   LayoutStaticDataModel,
 } from '~/dev-types-helper';
+import { CountryPhoneCodes } from '#shared/constants/country-phone-list';
 
 type StateType = {
   globalType: GlobalTypes;
@@ -12,6 +13,7 @@ type StateType = {
   isSchool: boolean;
   defaultActiveExam: number;
   showBlockModal: boolean;
+  countryCode: string | null;
 };
 
 type StaticStateType = {
@@ -27,6 +29,10 @@ export const useGlobalStore = defineStore('global', () => {
       maxAge: undefined, //clear on close tab
     }
   );
+  const userCountryCodeCookie = useCookie('user_country_code');
+  const userCountryTimestampCookie = useCookie<number>(
+    'user_country_timestamp'
+  );
 
   const state = reactive<StateType>({
     globalType: GlobalTypes.kudrat,
@@ -34,6 +40,7 @@ export const useGlobalStore = defineStore('global', () => {
     isSchool: false,
     defaultActiveExam: 1,
     showBlockModal: false,
+    countryCode: userCountryCodeCookie.value ?? null,
   });
 
   const staticState = reactive<StaticStateType>({
@@ -81,10 +88,42 @@ export const useGlobalStore = defineStore('global', () => {
     return res;
   };
 
+  const getUserCountry = async () => {
+    const CACHE_DURATION = 60 * 60 * 1000;
+
+    const storedCode = userCountryCodeCookie.value;
+    const lastUpdate = userCountryTimestampCookie.value;
+
+    if (storedCode && lastUpdate && Date.now() - lastUpdate < CACHE_DURATION) {
+      return storedCode;
+    }
+
+    try {
+      const response = await fetch('https://get.geojs.io/v1/ip/geo.json');
+      const data = (await response.json()) as {
+        country_code: keyof typeof CountryPhoneCodes;
+      };
+
+      userCountryCodeCookie.value =
+        CountryPhoneCodes[data.country_code] ?? CountryPhoneCodes.SA;
+      userCountryTimestampCookie.value = Date.now();
+
+      patchState({
+        countryCode: userCountryCodeCookie.value,
+      });
+    } catch (error) {
+      console.error('Error fetching country code:', error);
+      patchState({
+        countryCode: storedCode ?? CountryPhoneCodes.SA,
+      });
+    }
+  };
+
   return {
     state,
     staticState,
     //actions,
+    getUserCountry,
     patchState,
     clearState,
     patchStaticState,

@@ -51,7 +51,7 @@
               activeTab !== signTypes.whatsapp
             "
             class="outline-btn by-watsapp"
-            @click="loginByWatsApp()"
+            @click="registerByWhatsapp()"
           >
             <i class="fab fa-whatsapp"></i>
             <span>{{ texts.signWatsApp }}</span>
@@ -62,9 +62,10 @@
           class="rw-3 info"
         >
           <lazy-login-email
-            v-if="activeStep === signTypes.email"
+            v-if="activeTab === signTypes.email"
             class="!mt-6"
           />
+          <lazy-whatsapp-form v-if="activeTab === signTypes.whatsapp" />
           <!--          <login-form-->
           <!--            v-if="!isRegister"-->
           <!--            ref="login-form"-->
@@ -220,7 +221,6 @@ async function loginByGoogle() {
     `redirect_uri=${encodeURIComponent(redirectUri)}&` +
     `response_type=code&` +
     `scope=${scope}`;
-  console.log(url);
   window.location.href = url;
 }
 
@@ -231,7 +231,14 @@ async function loginByEmail() {
   activeTab.value = signTypes.email;
 }
 
-async function loginByWatsApp() {
+const registerByWhatsapp = async () => {
+  await removeParams();
+  activeTab.value = null;
+  await sleepUtil(100);
+  activeTab.value = signTypes.whatsapp;
+};
+
+async function _loginByWatsApp() {
   await removeParams();
   activeTab.value = null;
   await sleepUtil(100);
@@ -321,12 +328,11 @@ watch(
   }
 
   .conditions {
-    position: absolute;
-    bottom: 30px;
-    left: 57px;
+    margin-top: 100px;
     font-size: 16px;
     color: var(--gray-63);
     line-height: 22px;
+    text-align: center;
 
     a {
       color: var(--purple-8c);

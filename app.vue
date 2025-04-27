@@ -1,5 +1,9 @@
 <template>
   <nuxt-route-announcer />
+  <prime-block-u-i
+    :blocked="isLoadingProfile"
+    fullScreen
+  />
   <nuxt-layout>
     <nuxt-page />
   </nuxt-layout>
@@ -21,6 +25,7 @@ import {
   type SignInActionDataUiModel,
 } from '~/core/auth/data-access/services/useAuthEvents';
 import { filter } from 'rxjs';
+import { useGlobalStore } from '#shared/useGlobalStore';
 
 declare const google: any;
 
@@ -31,11 +36,12 @@ const route = useRoute();
 const deviceService = useDeviceService();
 const localStorageStore = useLocalStorageStore();
 const authStore = useAuthStore();
-// const globalStore = useGlobalStore();
+const globalStore = useGlobalStore();
 const clarityStore = useClarityStore();
 const runtimeConfig = useRuntimeConfig();
 
 //data
+const isLoadingProfile = authStore.isLoadingProfile;
 const isLoggedIn = computed(() => auth.status.value === 'authenticated');
 const userData = computed(() => auth.data.value as UserInfoDataModel);
 
@@ -61,6 +67,11 @@ useHead({
       ],
 });
 
+//hook
+onMounted(() => {
+  globalStore.getUserCountry();
+});
+
 //method
 const initApp = async (isLoggedIn: boolean) => {
   try {
@@ -74,7 +85,7 @@ const initApp = async (isLoggedIn: boolean) => {
       listToNotification();
     }
   } catch (e) {
-    console.log('mainLayoutLoads: ' + e);
+    console.error('mainLayoutLoads: ' + e);
     throw e;
   }
 };
@@ -128,7 +139,7 @@ const infoRegister = () => {
       handleFcm(userId);
     }
   } catch (e) {
-    console.log('infoRegister:' + e);
+    console.error('infoRegister:' + e);
     throw e;
   }
 };
@@ -190,7 +201,7 @@ const handleClarityUser = async (model: {
       });
     }
   } catch (e) {
-    console.log('An error occurred C01:' + e);
+    console.error('An error occurred C01:' + e);
     throw e;
   }
 };

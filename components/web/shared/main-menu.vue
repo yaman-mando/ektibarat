@@ -811,6 +811,7 @@ const goTrackDetail = (id: string) => {
         left: calc((100vw - 1370px) / 2);
         width: 280px;
         .dropdown-menu {
+          background-color: #fff;
           width: 280px;
           border-radius: 20px;
           box-shadow: 0 0 15px #00000033;

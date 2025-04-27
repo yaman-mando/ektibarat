@@ -32,6 +32,7 @@ export default withNuxt(
         },
       ],
       'vue/require-default-prop': 'off',
+      'vue/v-on-event-hyphenation': ['error', 'never'],
       'vue/attribute-hyphenation': [
         'error',
         'never',

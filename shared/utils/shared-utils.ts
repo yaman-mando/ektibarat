@@ -11,3 +11,9 @@ export const removeScript = (id: string) => {
     el.remove();
   }
 };
+
+export const getKeyByValue = (object: any, value: any) => {
+  return (
+    Object.entries(object).find(([key, val]) => val === value)?.[0] || null
+  );
+};

@@ -17,6 +17,7 @@ export const useAuthStore = () => {
   const authState = useAuthState();
   const redirectUrlCookie = useCookie('redirectUrl');
   const isLoggedIn = computed(() => authState.status.value === 'authenticated');
+  const isLoadingProfile = computed(() => authState.loading.value);
   const userData = computed(
     () => authState.data.value as UserInfoDataModel | null
   );
@@ -57,5 +58,6 @@ export const useAuthStore = () => {
     userData,
     loginApple,
     loginOTP,
+    isLoadingProfile,
   };
 };
