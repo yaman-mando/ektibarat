@@ -211,7 +211,7 @@ const handleLayoutExit = (name: string) => {
 };
 
 //watch
-authEvents.events$.pipe(filter(Boolean)).subscribe((val) => {
+authEvents.signInData$.pipe(filter(Boolean)).subscribe((val) => {
   if (val) {
     signInAction(val);
   }

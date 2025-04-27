@@ -9,22 +9,21 @@ export type SignInActionDataUiModel = {
 };
 
 const useAuthEvents = () => {
-  const eventSubject = new Subject<SignInActionDataUiModel>();
-
-  const events$ = eventSubject.asObservable();
+  const signInDataSub = new Subject<SignInActionDataUiModel>();
+  const signInData$ = signInDataSub.asObservable();
 
   const emitSignIn = (data: SignInActionDataUiModel) => {
-    eventSubject.next(data);
+    signInDataSub.next(data);
   };
 
   const destroy = () => {
-    eventSubject.complete();
+    signInDataSub.complete();
   };
 
   return {
     destroy,
     emitSignIn,
-    events$,
+    signInData$,
   };
 };
 
