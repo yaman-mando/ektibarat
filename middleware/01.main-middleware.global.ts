@@ -1,14 +1,14 @@
-import { useGlobalStore } from '#shared/useGlobalStore';
+import { useGlobalStore } from '~/main/useGlobalStore';
 import {
   isAllowRouter,
   needAuth,
   routersWithoutTypeSelect,
-} from '#shared/constants/routes';
+} from '~/main/constants/routes';
 import {
   webAuthPathUtil,
   webGeneralSelectionPathUtil,
   webUserPanelTraining,
-} from '#shared/utils/web-routes.utils';
+} from '~/main/utils/web-routes.utils';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 
 export default defineNuxtRouteMiddleware(async (_to, _from) => {

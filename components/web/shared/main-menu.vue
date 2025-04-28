@@ -458,23 +458,23 @@
 </template>
 <script setup lang="ts">
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
-import { ImagesFolderName } from '~/shared/constants/images-folder-name';
-import { ImageSize } from '~/shared/constants/image-size';
-import { ImageExt } from '~/shared/constants/image-ext';
+import { ImagesFolderName } from '~/main/constants/images-folder-name';
+import { ImageSize } from '~/main/constants/image-size';
+import { ImageExt } from '~/main/constants/image-ext';
 import { useWindowSize } from '~/composables/useWindowSize';
-import { TrainingButtonType } from '~/shared/constants/training-button-type';
+import { TrainingButtonType } from '~/main/constants/training-button-type';
 import {
   UserPanelItems,
   UserPanelItemsRecord,
-} from '~/shared/constants/user-panel-items';
+} from '~/main/constants/user-panel-items';
 import { UserRoles } from '~/core/auth/constants/user-roles';
-import { adminQuestionsListPath } from '~/shared/utils/admin-routes.utils';
-import { TrackRouteName } from '~/shared/constants/track-route-name';
-import { useGlobalStore } from '~/shared/useGlobalStore';
-import { GlobalTypes } from '~/shared/constants/global-types';
-import { sleepUtil } from '#shared/utils/shared-utils';
-import { useSubscriptionsStore } from '#shared/modules/subscriptions/services/useSubscriptionsStore';
-import { StaticTracksRoutersEnum } from '#shared/constants/static-tracks-routers.enum';
+import { adminQuestionsListPath } from '~/main/utils/admin-routes.utils';
+import { TrackRouteName } from '~/main/constants/track-route-name';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { GlobalTypes } from '~/main/constants/global-types';
+import { sleepUtil } from '~/main/utils/shared-utils';
+import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
+import { StaticTracksRoutersEnum } from '~/main/constants/static-tracks-routers.enum';
 import type WebLoginRegisterModal from '~/components/web/shared/web-login-register-modal.vue';
 
 type MenuItemUi = {

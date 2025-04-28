@@ -1,4 +1,4 @@
-import { useDeviceService } from '#shared/useDeviceService';
+import { useDeviceService } from '~/main/useDeviceService';
 
 export default defineNuxtPlugin((nuxtApp) => {
   const deviceService = useDeviceService();

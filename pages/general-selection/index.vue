@@ -32,9 +32,9 @@
   </client-only>
 </template>
 <script lang="ts" setup>
-import { GlobalTypes } from '#shared/constants/global-types';
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { webUserPanelTraining } from '#shared/utils/web-routes.utils';
+import { GlobalTypes } from '~/main/constants/global-types';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { webUserPanelTraining } from '~/main/utils/web-routes.utils';
 
 //meta
 definePageMeta({

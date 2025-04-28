@@ -8,7 +8,7 @@
       :blocked="loginOtpReq.status.value === 'pending'"
     >
       <template v-if="!isCodeStep">
-        <phone-input @onInputPhone="onChange($event)" />
+        <lazy-phone-input @onInputPhone="onChange($event)" />
         <span
           v-if="errorMessage"
           class="err-msg"

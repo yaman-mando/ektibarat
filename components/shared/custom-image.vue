@@ -54,7 +54,7 @@
 <script setup lang="ts">
 //prop
 import { useImageUrl } from '~/composables/useImageUrl';
-import { LIBRARY_TYPE_FOLDER_LIST } from '~/shared/constants/images-folder-name';
+import { LIBRARY_TYPE_FOLDER_LIST } from '~/main/constants/images-folder-name';
 
 const props = withDefaults(
   defineProps<{

@@ -48,14 +48,13 @@
 </template>
 <script setup lang="ts">
 //constant
-import { webAuthPathUtil } from '#shared/utils/web-routes.utils';
+import { webAuthPathUtil } from '~/main/utils/web-routes.utils';
 import { useAuthState } from '#imports';
 
 const modalId = 'web-login-register-modal';
 
 //composable
 const router = useRouter();
-const auth = useAuth();
 const authState = useAuthState();
 
 //data

@@ -7,8 +7,8 @@ import type {
 import {
   webGeneralSelectionPathUtil,
   webUserPanelTraining,
-} from '#shared/utils/web-routes.utils';
-import { useGlobalStore } from '#shared/useGlobalStore';
+} from '~/main/utils/web-routes.utils';
+import { useGlobalStore } from '~/main/useGlobalStore';
 
 //store
 export const useAuthStore = () => {

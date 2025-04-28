@@ -42,10 +42,10 @@
             </prime-tab-list>
             <prime-tab-panels>
               <prime-tab-panel :value="logicType.login">
-                <tab-contents />
+                <lazy-tab-contents />
               </prime-tab-panel>
               <prime-tab-panel :value="logicType.signup">
-                <tab-contents :isRegister="true" />
+                <lazy-tab-contents :isRegister="true" />
               </prime-tab-panel>
             </prime-tab-panels>
           </prime-tabs>
@@ -55,7 +55,7 @@
   </client-only>
 </template>
 <script setup lang="ts">
-import { useProjectSettingsStore } from '#shared/modules/project-settings/services/useProjectSettingsStore';
+import { useProjectSettingsStore } from '~/main/modules/project-settings/services/useProjectSettingsStore';
 
 definePageMeta({
   layout: 'website-layout',

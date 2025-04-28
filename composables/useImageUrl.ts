@@ -1,4 +1,4 @@
-import { ImagesFolderName } from '~/shared/constants/images-folder-name';
+import { ImagesFolderName } from '~/main/constants/images-folder-name';
 
 export const useImageUrl = () => {
   const config = useRuntimeConfig();

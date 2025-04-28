@@ -19,10 +19,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { usePrivacyStore } from '#shared/modules/privacy/services/usePrivacyStore';
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { formatContentDate } from '#shared/utils/date-utils';
-import { defaultMeta } from '#shared/constants/default-meta';
+import { usePrivacyStore } from '~/main/modules/privacy/services/usePrivacyStore';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { formatContentDate } from '~/main/utils/date-utils';
+import { defaultMeta } from '~/main/constants/default-meta';
 import { useLazyAsyncData } from '#app';
 
 definePageMeta({

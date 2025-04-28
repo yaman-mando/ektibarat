@@ -24,7 +24,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useGlobalStore } from '#shared/useGlobalStore';
+import { useGlobalStore } from '~/main/useGlobalStore';
 
 const globalStore = useGlobalStore();
 

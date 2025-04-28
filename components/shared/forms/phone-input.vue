@@ -55,13 +55,13 @@
 </template>
 <script setup lang="ts">
 import { defineRule, Field as VeeField } from 'vee-validate';
-import { useGlobalStore } from '#shared/useGlobalStore';
+import { useGlobalStore } from '~/main/useGlobalStore';
 import {
   getKeyByValue,
   IS_PRODUCTION_APP,
   sleepUtil,
-} from '#shared/utils/shared-utils';
-import { CountryPhoneCodes } from '#shared/constants/country-phone-list';
+} from '~/main/utils/shared-utils';
+import { CountryPhoneCodes } from '~/main/constants/country-phone-codes';
 
 /**
  * @typedef {Object} TextConfig

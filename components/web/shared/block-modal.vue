@@ -37,8 +37,8 @@
 </template>
 <script setup lang="ts">
 //props
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { webContactUsPathUtil } from '#shared/utils/web-routes.utils';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { webContactUsPathUtil } from '~/main/utils/web-routes.utils';
 
 //composable
 const globalStore = useGlobalStore();

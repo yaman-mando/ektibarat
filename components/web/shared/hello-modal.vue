@@ -57,7 +57,7 @@
   </prime-dialog>
 </template>
 <script setup lang="ts">
-import { webUserPanelSubscriptions } from '#shared/utils/web-routes.utils';
+import { webUserPanelSubscriptions } from '~/main/utils/web-routes.utils';
 
 //emits
 defineEmits(['hello-modal-hidden']);

@@ -58,8 +58,8 @@
 </template>
 <script setup lang="ts">
 //composable
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { StaticTracksRoutersEnum } from '#shared/constants/static-tracks-routers.enum';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { StaticTracksRoutersEnum } from '~/main/constants/static-tracks-routers.enum';
 
 const globalStore = useGlobalStore();
 

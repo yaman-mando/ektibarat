@@ -82,12 +82,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useProjectSettingsStore } from '#shared/modules/project-settings/services/useProjectSettingsStore';
-import { sleepUtil } from '#shared/utils/shared-utils';
+import { useProjectSettingsStore } from '~/main/modules/project-settings/services/useProjectSettingsStore';
+import { sleepUtil } from '~/main/utils/shared-utils';
 import {
   webAuthAppleSignIn,
   webAuthGoogleSignIn,
-} from '#shared/utils/web-routes.utils';
+} from '~/main/utils/web-routes.utils';
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import { authEvents } from '~/core/auth/data-access/services/useAuthEvents';
 

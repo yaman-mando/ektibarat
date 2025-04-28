@@ -17,11 +17,11 @@
   </prime-button>
 </template>
 <script setup lang="ts">
-import { TrainingButtonType } from '~/shared/constants/training-button-type';
+import { TrainingButtonType } from '~/main/constants/training-button-type';
 import {
   UserPanelItems,
   UserPanelItemsRecord,
-} from '~/shared/constants/user-panel-items';
+} from '~/main/constants/user-panel-items';
 
 //props
 withDefaults(

@@ -182,8 +182,8 @@
   </client-only>
 </template>
 <script setup lang="ts">
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { useDeviceService } from '#shared/useDeviceService';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { useDeviceService } from '~/main/useDeviceService';
 
 //composable
 const globalStore = useGlobalStore();

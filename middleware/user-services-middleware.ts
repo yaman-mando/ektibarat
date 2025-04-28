@@ -1,10 +1,10 @@
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { UserRoles } from '~/core/auth/constants/user-roles';
-import { useSubscriptionsStore } from '#shared/modules/subscriptions/services/useSubscriptionsStore';
-import { ServiceTypesEnum } from '#shared/constants/service-types.enum';
-import { webPricesPathUtil } from '#shared/utils/web-routes.utils';
-import type { UserServicesStateUi } from '#shared/modules/subscriptions/data-access/subscriptions.model';
-import { useGlobalStore } from '#shared/useGlobalStore';
+import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
+import { ServiceTypesEnum } from '~/main/constants/service-types.enum';
+import { webPricesPathUtil } from '~/main/utils/web-routes.utils';
+import type { UserServicesStateUi } from '~/main/modules/subscriptions/data-access/subscriptions.model';
+import { useGlobalStore } from '~/main/useGlobalStore';
 
 export default defineNuxtRouteMiddleware(async (_to, _from) => {
   const auth = useAuth();

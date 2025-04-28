@@ -1,10 +1,10 @@
 import { defineNuxtPlugin } from '#app';
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { EXAM_QUESTIONS_ROUTES } from '#shared/constants/routes';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { EXAM_QUESTIONS_ROUTES } from '~/main/constants/routes';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { UserRoles } from '~/core/auth/constants/user-roles';
-import type { GlobalTypes } from '#shared/constants/global-types';
-import { useSubscriptionsStore } from '#shared/modules/subscriptions/services/useSubscriptionsStore';
+import type { GlobalTypes } from '~/main/constants/global-types';
+import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 
 export default defineNuxtPlugin((_nuxtApp) => {
   const router = useRouter();

@@ -19,14 +19,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { useSuccessPartnerStore } from '#shared/modules/success-partners/services/useSuccessPartnerStore';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { useSuccessPartnerStore } from '~/main/modules/success-partners/services/useSuccessPartnerStore';
 import {
   ImagesFolderName,
   STATIC_PAGE_TYPE,
-} from '#shared/constants/images-folder-name';
-import { ImageSize } from '#shared/constants/image-size';
-import { ImageExt } from '#shared/constants/image-ext';
+} from '~/main/constants/images-folder-name';
+import { ImageSize } from '~/main/constants/image-size';
+import { ImageExt } from '~/main/constants/image-ext';
 
 const globalStore = useGlobalStore();
 const successPartnerStore = useSuccessPartnerStore();

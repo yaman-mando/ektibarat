@@ -11,21 +11,21 @@
 </template>
 <script setup lang="ts">
 //composable
-import { useDeviceService } from '#shared/useDeviceService';
-import { useLocalStorageStore } from '#shared/useLocalStorageStore';
+import { useDeviceService } from '~/main/useDeviceService';
+import { useLocalStorageStore } from '~/main/useLocalStorageStore';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
-import { IS_PRODUCTION_APP } from '#shared/utils/shared-utils';
-import { webAuthPathUtil } from '#shared/utils/web-routes.utils';
+import { IS_PRODUCTION_APP } from '~/main/utils/shared-utils';
+import { webAuthPathUtil } from '~/main/utils/web-routes.utils';
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import { UAParser } from 'ua-parser-js';
-import { useClarityStore } from '#shared/modules/clarity/services/useClarityStore';
-import { ScriptsIdEnum } from '#shared/scripts-id.enum';
+import { useClarityStore } from '~/main/modules/clarity/services/useClarityStore';
+import { ScriptsIdEnum } from '~/main/scripts-id.enum';
 import {
   authEvents,
   type SignInActionDataUiModel,
 } from '~/core/auth/data-access/services/useAuthEvents';
 import { filter } from 'rxjs';
-import { useGlobalStore } from '#shared/useGlobalStore';
+import { useGlobalStore } from '~/main/useGlobalStore';
 
 declare const google: any;
 

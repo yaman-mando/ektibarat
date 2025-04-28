@@ -42,11 +42,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { CountryPhoneList } from '#shared/constants/country-phone-list';
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { sleepUtil } from '#shared/utils/shared-utils';
-
-type ItemType = (typeof CountryPhoneList)[0];
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { sleepUtil } from '~/main/utils/shared-utils';
+import {
+  CountryPhoneList,
+  type CountryPhoneListItemModel,
+} from '~/main/constants/country-phone-list';
 
 //emit
 const emit = defineEmits<{
@@ -69,7 +70,7 @@ const globalStore = useGlobalStore();
 
 //data
 const isOpenSelect = ref(false);
-const selectedCountry = ref<ItemType | null>(null);
+const selectedCountry = ref<CountryPhoneListItemModel | null>(null);
 
 //hook
 onBeforeMount(() => {
@@ -85,7 +86,7 @@ const hideList = async () => {
 const toggleSelect = () => {
   isOpenSelect.value = !isOpenSelect.value;
 };
-const selectItem = (item: ItemType) => {
+const selectItem = (item: CountryPhoneListItemModel) => {
   selectedCountry.value = CountryPhoneList.filter(
     (k) => k.code == item.code
   )[0];

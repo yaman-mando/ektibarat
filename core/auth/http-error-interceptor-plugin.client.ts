@@ -1,5 +1,5 @@
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { ErrorsRecord } from '#shared/constants/errors.enum';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { ErrorsRecord } from '~/main/constants/errors.enum';
 
 export default defineNuxtPlugin(() => {
   const router = useRouter();

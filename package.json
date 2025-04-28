@@ -7,7 +7,8 @@
     "dev": "nuxt dev --port 4000",
     "prepare:dev": "nuxt prepare && nuxt dev --port 4000",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
+    "preview": "nuxt preview --port 4000",
+    "analyze": "nuxt analyze",
     "postinstall": "nuxt prepare",
     "lint:fix": "eslint . --ext .js,.ts,.vue --fix"
   },

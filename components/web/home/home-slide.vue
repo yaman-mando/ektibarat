@@ -42,9 +42,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { GlobalTypes } from '#shared/constants/global-types';
-import { useRedirectService } from '#shared/useRedirectService';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { GlobalTypes } from '~/main/constants/global-types';
+import { useRedirectService } from '~/main/useRedirectService';
 
 //composable
 const globalStore = useGlobalStore();

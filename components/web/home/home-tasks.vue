@@ -98,11 +98,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { StaticTracksRoutersEnum } from '#shared/constants/static-tracks-routers.enum';
-import type { GlobalTypes } from '#shared/constants/global-types';
-import { useRedirectService } from '#shared/useRedirectService';
-import { useDeviceService } from '#shared/useDeviceService';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { StaticTracksRoutersEnum } from '~/main/constants/static-tracks-routers.enum';
+import type { GlobalTypes } from '~/main/constants/global-types';
+import { useRedirectService } from '~/main/useRedirectService';
+import { useDeviceService } from '~/main/useDeviceService';
 
 //composable
 const globalStore = useGlobalStore();

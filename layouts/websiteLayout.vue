@@ -85,14 +85,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { removeScript, sleepUtil } from '#shared/utils/shared-utils';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { removeScript, sleepUtil } from '~/main/utils/shared-utils';
 import {
   UserPanelItems,
   UserPanelItemsRecord,
-} from '#shared/constants/user-panel-items';
-import { webAuthPathUtil } from '#shared/utils/web-routes.utils';
-import { ScriptsIdEnum } from '#shared/scripts-id.enum';
+} from '~/main/constants/user-panel-items';
+import { webAuthPathUtil } from '~/main/utils/web-routes.utils';
+import { ScriptsIdEnum } from '~/main/scripts-id.enum';
 
 //composable
 const { status } = useAuth();

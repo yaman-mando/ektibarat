@@ -13,9 +13,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useGlobalStore } from '#shared/useGlobalStore';
-import { useRedirectService } from '#shared/useRedirectService';
-import type { GlobalTypes } from '#shared/constants/global-types';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { useRedirectService } from '~/main/useRedirectService';
+import type { GlobalTypes } from '~/main/constants/global-types';
 
 //composable
 const globalStore = useGlobalStore();

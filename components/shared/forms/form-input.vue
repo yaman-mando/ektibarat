@@ -1,7 +1,7 @@
 <template>
   <field
     ref="fieldRef"
-    v-slot="{ errors, handleChange, handleBlur, meta }"
+    v-slot="{ errors, handleChange, handleBlur }"
     v-model="valueModel"
     :name="inputId"
     :rules="rules"
