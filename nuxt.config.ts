@@ -128,6 +128,7 @@ export default defineNuxtConfig({
     '~/plugins/shared/detect-device-plugin.ts',
     '~/plugins/shared/gtag-plugin.client.ts',
     '~/plugins/shared/router-guard-plugin.client.ts',
+    '~/plugins/shared/font-awesome-plugin.client.ts',
   ],
   app: {
     head: {
@@ -148,10 +149,6 @@ export default defineNuxtConfig({
           href: prefetch_preConnect_urls.preconnect,
         },
         { rel: 'dns-prefetch', href: prefetch_preConnect_urls.dnsPrefetch },
-        {
-          rel: 'stylesheet',
-          href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css',
-        },
         //@ts-expect-error because of typing
         ...appFonts,
       ],
