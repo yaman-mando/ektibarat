@@ -1,60 +1,63 @@
 <template>
-  <vee-form
-    ref="pageForm"
-    class="w-full flex flex-col items-start justify-start"
-  >
-    <template v-if="!isCodeStep">
-      <form-input
-        v-model:inputValue="email"
-        label="البريد الالكتروني"
-        :rules="{ required: true, email: true }"
-        inputId="email"
-      />
-      <span class="note">سيتم إرسال رمز الدخول إلى بريدك الإلكتروني</span>
-    </template>
-
-    <template v-if="isCodeStep">
-      <div class="rw-user-info">
-        <span class="code-label">
-          يرجى إدخال الكود الواصل إليكم عبر البريد الإلكتروني
-        </span>
-        <span class="user-data">
-          {{ email }}
-          <button
-            class="change-method"
-            @click="backToEmail"
-          >
-            تغيير
-          </button>
-        </span>
-      </div>
-      <code-input
-        :fields="4"
-        :fieldWidth="50"
-        :fieldHeight="45"
-        :radius="8"
-        :required="true"
-        style="direction: ltr"
-        @complete="onCompleteCode"
-      />
-    </template>
-    <span
-      v-if="fullTries"
-      class="__triesNote"
+  <lazy-vee-validate-provider>
+    <vee-form
+      v-bind="attrs"
+      ref="pageForm"
+      class="w-full flex flex-col items-start justify-start"
     >
-      لقد استنفذت عدد المحاولات المسموح بها لإرسال الكود يرجى إعادة المحاولة بعد
-      مرور 8 ساعات
-    </span>
-    <app-button
-      type="submit"
-      :isLoading="isLoading"
-      :isDisabled="fullTries"
-      class="!w-full !mt-6"
-      :label="isCodeStep ? 'إعادة إرسال الكود' : 'إرسال'"
-      size="sm"
-      @click="submit"
-    />
-  </vee-form>
+      <template v-if="!isCodeStep">
+        <form-input
+          v-model:inputValue="email"
+          label="البريد الالكتروني"
+          :rules="{ required: true, email: true }"
+          inputId="email"
+        />
+        <span class="note">سيتم إرسال رمز الدخول إلى بريدك الإلكتروني</span>
+      </template>
+
+      <template v-if="isCodeStep">
+        <div class="rw-user-info">
+          <span class="code-label">
+            يرجى إدخال الكود الواصل إليكم عبر البريد الإلكتروني
+          </span>
+          <span class="user-data">
+            {{ email }}
+            <button
+              class="change-method"
+              @click="backToEmail"
+            >
+              تغيير
+            </button>
+          </span>
+        </div>
+        <code-input
+          :fields="4"
+          :fieldWidth="50"
+          :fieldHeight="45"
+          :radius="8"
+          :required="true"
+          style="direction: ltr"
+          @complete="onCompleteCode"
+        />
+      </template>
+      <span
+        v-if="fullTries"
+        class="__triesNote"
+      >
+        لقد استنفذت عدد المحاولات المسموح بها لإرسال الكود يرجى إعادة المحاولة
+        بعد مرور 8 ساعات
+      </span>
+      <app-button
+        type="submit"
+        :isLoading="isLoading"
+        :isDisabled="fullTries"
+        class="!w-full !mt-6"
+        :label="isCodeStep ? 'إعادة إرسال الكود' : 'إرسال'"
+        size="sm"
+        @click="submit"
+      />
+    </vee-form>
+  </lazy-vee-validate-provider>
 </template>
 <script setup lang="ts">
 import { Form as VeeForm } from 'vee-validate';
@@ -66,6 +69,7 @@ import type {
 import type { FetchError } from 'ofetch';
 import { authEvents } from '~/core/auth/data-access/services/useAuthEvents';
 
+const attrs = useAttrs();
 const authStore = useAuthStore();
 const toastMessage = useToastMessage();
 const isLoading = ref(false);

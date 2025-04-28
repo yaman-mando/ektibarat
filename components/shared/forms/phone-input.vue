@@ -1,57 +1,60 @@
 <template>
-  <div
-    class="phone-input"
-    :class="{ isEdit: isEdit }"
-  >
-    <label
-      v-if="!isEdit || showLabel"
-      class="b-title"
+  <lazy-vee-validate-provider>
+    <div
+      v-bind="attrs"
+      class="phone-input"
+      :class="{ isEdit: isEdit }"
     >
-      رقم واتساب
-    </label>
-    <div class="input-select-container">
-      <vee-field
-        ref="phoneInputRef"
-        v-slot="{ handleBlur, handleChange }"
-        v-model="phone"
-        slim
-        :rules="{
-          required: true,
-          phoneValidation: {
-            length: selectedRules.length,
-            startsWith: selectedRules.startsWith,
-          },
-        }"
-        :name="'phone-input'"
+      <label
+        v-if="!isEdit || showLabel"
+        class="b-title"
       >
-        <input
-          id="phone-input"
-          :value="phone"
-          type="tel"
-          :placeholder="selectedRules.placeholder"
-          inputmode="numeric"
-          dir="rtl"
-          @input="
-            validatePhone();
-            handleChange($event);
-          "
-          @blur="handleBlur"
-        />
-      </vee-field>
-      <div>
-        <lazy-phone-code-select
-          v-model:selectedItem="selectedCountry"
-          :isEdit="isEdit"
-        />
+        رقم واتساب
+      </label>
+      <div class="input-select-container">
+        <vee-field
+          ref="phoneInputRef"
+          v-slot="{ handleBlur, handleChange }"
+          v-model="phone"
+          slim
+          :rules="{
+            required: true,
+            phoneValidation: {
+              length: selectedRules.length,
+              startsWith: selectedRules.startsWith,
+            },
+          }"
+          :name="'phone-input'"
+        >
+          <input
+            id="phone-input"
+            :value="phone"
+            type="tel"
+            :placeholder="selectedRules.placeholder"
+            inputmode="numeric"
+            dir="rtl"
+            @input="
+              validatePhone();
+              handleChange($event);
+            "
+            @blur="handleBlur"
+          />
+        </vee-field>
+        <div>
+          <lazy-phone-code-select
+            v-model:selectedItem="selectedCountry"
+            :isEdit="isEdit"
+          />
+        </div>
+        <span
+          v-if="error"
+          class="error-message"
+        >
+          {{ error }}
+        </span>
       </div>
-      <span
-        v-if="error"
-        class="error-message"
-      >
-        {{ error }}
-      </span>
     </div>
-  </div>
+  </lazy-vee-validate-provider>
 </template>
 <script setup lang="ts">
 import { defineRule, Field as VeeField } from 'vee-validate';
@@ -63,6 +66,7 @@ import {
 } from '~/main/utils/shared-utils';
 import { CountryPhoneCodes } from '~/main/constants/country-phone-codes';
 
+const attrs = useAttrs();
 /**
  * @typedef {Object} TextConfig
  * @property {string} placeHolder

@@ -19,7 +19,7 @@ import { webAuthPathUtil } from '~/main/utils/web-routes.utils';
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import { UAParser } from 'ua-parser-js';
 import { useClarityStore } from '~/main/modules/clarity/services/useClarityStore';
-import { ScriptsIdEnum } from '~/main/scripts-id.enum';
+import { ScriptsIdEnum } from '~/main/constants/scripts-id.enum';
 import {
   authEvents,
   type SignInActionDataUiModel,

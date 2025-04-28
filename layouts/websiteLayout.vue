@@ -92,7 +92,7 @@ import {
   UserPanelItemsRecord,
 } from '~/main/constants/user-panel-items';
 import { webAuthPathUtil } from '~/main/utils/web-routes.utils';
-import { ScriptsIdEnum } from '~/main/scripts-id.enum';
+import { ScriptsIdEnum } from '~/main/constants/scripts-id.enum';
 
 //composable
 const { status } = useAuth();

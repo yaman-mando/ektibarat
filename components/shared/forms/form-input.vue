@@ -1,83 +1,88 @@
 <template>
-  <field
-    ref="fieldRef"
-    v-slot="{ errors, handleChange, handleBlur }"
-    v-model="valueModel"
-    :name="inputId"
-    :rules="rules"
-  >
-    <div class="custom-input">
-      <div class="a-input-label">
-        <label :for="inputId">
-          {{ label }}
-        </label>
-        <span
-          v-if="isRequired"
-          class="a-req"
-        >
-          *
-        </span>
-      </div>
-      <div class="relative am-w">
-        <!-- Regular input -->
-        <input
-          v-if="!isTextArea"
-          :id="inputId"
-          ref="inputRef"
-          :dir="direction"
-          :placeholder="inputPlaceholder"
-          :disabled="isDisabled"
-          :tabindex="inputTabIndex"
-          :type="inputTypeModel"
-          :value="valueModel"
-          class="ac-ii"
-          @blur="handleBlur"
-          @input="handleChange"
-        />
-        <!-- Textarea input -->
-        <textarea
-          v-if="isTextArea"
-          :id="inputId"
-          ref="inputRef"
-          :rows="textAreaRows"
-          :dir="direction"
-          :placeholder="inputPlaceholder"
-          :disabled="isDisabled"
-          :tabindex="inputTabIndex"
-          :value="valueModel"
-          class="ac-ii"
-          @blur="handleBlur"
-          @input="handleChange"
-        ></textarea>
-
-        <!-- Password toggle -->
-        <template v-if="inputType === 'password'">
-          <div
-            class="flex absolute left-[20px] top-1/2 -translate-x-1/2 -translate-y-1/2"
-            @click="togglePassword"
+  <lazy-vee-validate-provider>
+    <field
+      v-bind="attrs"
+      ref="fieldRef"
+      v-slot="{ errors, handleChange, handleBlur }"
+      v-model="valueModel"
+      :name="inputId"
+      :rules="rules"
+    >
+      <div class="custom-input">
+        <div class="a-input-label">
+          <label :for="inputId">
+            {{ label }}
+          </label>
+          <span
+            v-if="isRequired"
+            class="a-req"
           >
-            <i
-              v-if="!visiblePassword"
-              class="fa-solid fa-eye"
-            ></i>
-            <i
-              v-if="visiblePassword"
-              class="fa-solid fa-eye-slash"
-            ></i>
-          </div>
-        </template>
+            *
+          </span>
+        </div>
+        <div class="relative am-w">
+          <!-- Regular input -->
+          <input
+            v-if="!isTextArea"
+            :id="inputId"
+            ref="inputRef"
+            :dir="direction"
+            :placeholder="inputPlaceholder"
+            :disabled="isDisabled"
+            :tabindex="inputTabIndex"
+            :type="inputTypeModel"
+            :value="valueModel"
+            class="ac-ii"
+            @blur="handleBlur"
+            @input="handleChange"
+          />
+          <!-- Textarea input -->
+          <textarea
+            v-if="isTextArea"
+            :id="inputId"
+            ref="inputRef"
+            :rows="textAreaRows"
+            :dir="direction"
+            :placeholder="inputPlaceholder"
+            :disabled="isDisabled"
+            :tabindex="inputTabIndex"
+            :value="valueModel"
+            class="ac-ii"
+            @blur="handleBlur"
+            @input="handleChange"
+          ></textarea>
+
+          <!-- Password toggle -->
+          <template v-if="inputType === 'password'">
+            <div
+              class="flex absolute left-[20px] top-1/2 -translate-x-1/2 -translate-y-1/2"
+              @click="togglePassword"
+            >
+              <i
+                v-if="!visiblePassword"
+                class="fa-solid fa-eye"
+              ></i>
+              <i
+                v-if="visiblePassword"
+                class="fa-solid fa-eye-slash"
+              ></i>
+            </div>
+          </template>
+        </div>
+        <form-error
+          v-if="!hideErrorLabel"
+          class="!mt-1"
+          :errors="errors"
+        />
       </div>
-      <form-error
-        v-if="!hideErrorLabel"
-        class="!mt-1"
-        :errors="errors"
-      />
-    </div>
-  </field>
+    </field>
+  </lazy-vee-validate-provider>
 </template>
 
 <script setup lang="ts">
 import { Field } from 'vee-validate';
+
+const attrs = useAttrs();
 
 // Define props
 const props = withDefaults(

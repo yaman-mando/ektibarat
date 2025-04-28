@@ -128,7 +128,6 @@ export default defineNuxtConfig({
     '~/plugins/shared/detect-device-plugin.ts',
     '~/plugins/shared/gtag-plugin.client.ts',
     '~/plugins/shared/router-guard-plugin.client.ts',
-    '~/plugins/shared/vee-validate-plugin.client.ts',
   ],
   app: {
     head: {
