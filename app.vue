@@ -1,13 +1,13 @@
 <template>
   <nuxt-route-announcer />
-  <prime-block-u-i
+  <lazy-prime-block-u-i
     :blocked="isLoadingProfile"
     fullScreen
   />
   <nuxt-layout>
     <nuxt-page />
   </nuxt-layout>
-  <prime-toast position="bottom-right" />
+  <lazy-prime-toast position="bottom-right" />
 </template>
 <script setup lang="ts">
 //composable

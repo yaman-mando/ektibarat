@@ -1,5 +1,5 @@
 <template>
-  <prime-dialog
+  <lazy-prime-dialog
     :id="modalId"
     v-model:visible="isOpen"
     :modal="true"
@@ -44,7 +44,7 @@
         @click="toLogin"
       />
     </div>
-  </prime-dialog>
+  </lazy-prime-dialog>
 </template>
 <script setup lang="ts">
 //constant

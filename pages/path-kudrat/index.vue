@@ -3,20 +3,20 @@
     v-if="jsonData"
     class="track-details"
   >
-    <lazy-paths-part1 />
-    <lazy-paths-part2 />
-    <lazy-paths-kudrat-part :listForSubject="listForSubject" />
+    <paths-part1 />
+    <lazy-paths-part2 hydrate-on-visible />
+    <defer-view>
+      <lazy-paths-kudrat-part />
+      <lazy-paths-part3 />
+    </defer-view>
   </div>
 </template>
 <script lang="ts" setup>
 import { useLazyAsyncData } from '#app';
 import { useGlobalStore } from '~/main/useGlobalStore';
-import { useCategoriesStore } from '~/main/modules/categories/services/useCategoriesStore';
 
 //composable
 const globalStore = useGlobalStore();
-const categoriesStore = useCategoriesStore();
-const runtimeConfig = useRuntimeConfig();
 
 //meta
 definePageMeta({
@@ -27,13 +27,6 @@ definePageMeta({
 const kudratJsonRequest = useLazyAsyncData(async () => {
   return globalStore.getKudratJsonStatic();
 });
-const listForSubjectRequest = useLazyAsyncData(async () => {
-  return categoriesStore.getListForSubject({
-    shownForBlog: true,
-    subjects: [runtimeConfig.public.defaultSubjectId],
-  });
-});
 
 const jsonData = computed(() => kudratJsonRequest.data.value);
-const listForSubject = computed(() => listForSubjectRequest.data.value);
 </script>

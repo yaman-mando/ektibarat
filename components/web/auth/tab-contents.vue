@@ -3,13 +3,13 @@
     <div class="rw-1">
       <span>{{ texts.title }}</span>
     </div>
-    <prime-block-u-i :blocked="registerPermissionsLoading">
+    <lazy-prime-block-u-i :blocked="registerPermissionsLoading">
       <template v-if="!registerPermissionsLoading">
         <div
           v-if="activeStep !== steps.userInfo"
           class="rw-2 actions"
         >
-          <prime-button
+          <lazy-prime-button
             v-if="(isRegister && googlePermission) || !isRegister"
             class="outline-btn by-google"
             @click="loginByGoogle()"
@@ -20,18 +20,18 @@
             />
 
             <span>{{ texts.signGoogle }}</span>
-          </prime-button>
-          <prime-block-u-i :blocked="appleLoading">
-            <prime-button
+          </lazy-prime-button>
+          <lazy-prime-block-u-i :blocked="appleLoading">
+            <lazy-prime-button
               v-if="(isRegister && applePermission) || !isRegister"
               class="outline-btn by-ios"
               @click="loginByApple"
             >
               <i class="fab fa-apple"></i>
               <span>{{ texts.SignApple }}</span>
-            </prime-button>
-          </prime-block-u-i>
-          <prime-button
+            </lazy-prime-button>
+          </lazy-prime-block-u-i>
+          <lazy-prime-button
             v-if="
               ((isRegister && emailPermission) || !isRegister) &&
               activeTab !== signTypes.email
@@ -44,8 +44,8 @@
               :class="isRegister ? 'fa-envelope' : 'fa-lock'"
             ></i>
             <span>{{ texts.signEmail }}</span>
-          </prime-button>
-          <prime-button
+          </lazy-prime-button>
+          <lazy-prime-button
             v-if="
               ((isRegister && phonePermission) || !isRegister) &&
               activeTab !== signTypes.whatsapp
@@ -55,7 +55,7 @@
           >
             <i class="fab fa-whatsapp"></i>
             <span>{{ texts.signWatsApp }}</span>
-          </prime-button>
+          </lazy-prime-button>
         </div>
         <div
           v-if="activeTab"
@@ -78,7 +78,7 @@
           <nuxt-link to="/conditions">الشروط والأحكام</nuxt-link>
         </h3>
       </template>
-    </prime-block-u-i>
+    </lazy-prime-block-u-i>
   </div>
 </template>
 <script setup lang="ts">

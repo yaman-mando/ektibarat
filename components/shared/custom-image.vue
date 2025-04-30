@@ -23,7 +23,7 @@
       alt="no-img"
     />
     <template v-if="withModal && !hasError">
-      <prime-dialog
+      <lazy-prime-dialog
         v-model:visible="isOpenModel"
         :modal="true"
         :closable="false"
@@ -47,7 +47,7 @@
           :src="imageUrlModel!"
           alt=""
         />
-      </prime-dialog>
+      </lazy-prime-dialog>
     </template>
   </div>
 </template>

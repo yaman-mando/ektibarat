@@ -23,7 +23,7 @@
         </a>
       </div>
     </div>
-    <prime-dialog
+    <lazy-prime-dialog
       id="seo-video-modal"
       v-model:visible="isOpenModal"
       modal
@@ -46,7 +46,7 @@
         referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen
       ></iframe>
-    </prime-dialog>
+    </lazy-prime-dialog>
   </div>
 </template>
 <script setup lang="ts">

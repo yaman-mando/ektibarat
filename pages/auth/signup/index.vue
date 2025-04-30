@@ -7,22 +7,22 @@
       >
         <template #content>
           <div class="w-full flex flex-col gap-3">
-            <prime-skeleton
+            <lazy-prime-skeleton
               animation="wave"
               width="85%"
               height="2rem"
             />
-            <prime-skeleton
+            <lazy-prime-skeleton
               animation="wave"
               width="70%"
               height="2rem"
             />
-            <prime-skeleton
+            <lazy-prime-skeleton
               animation="throb"
               width="55%"
               height="2rem"
             />
-            <prime-skeleton
+            <lazy-prime-skeleton
               animation="throb"
               width="55%"
               height="2rem"

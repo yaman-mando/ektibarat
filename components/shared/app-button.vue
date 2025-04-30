@@ -1,5 +1,5 @@
 <template>
-  <prime-button
+  <lazy-prime-button
     type="button"
     :class="`app-button ${colorType} ${variant} size-${size} ${
       isAnalytics ? 'is-analytics' : ''
@@ -27,7 +27,7 @@
       v-if="iconEndClass"
       :class="`app-button-icon   ${iconEndClass}`"
     ></i>
-  </prime-button>
+  </lazy-prime-button>
 </template>
 <script setup lang="ts">
 //props

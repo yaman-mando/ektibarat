@@ -4,7 +4,7 @@ export const APP_ENVS = {
   dev: 'dev',
   local_dev: 'local_dev',
 };
-export const currentEnv = APP_ENVS.local_dev;
+export const currentEnv = APP_ENVS.local_prod;
 
 export const getEnv = () => {
   const buildEnvOptions = {

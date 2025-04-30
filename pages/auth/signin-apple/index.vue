@@ -1,6 +1,6 @@
 <template>
   <div class="google-page-redirect">
-    <prime-block-u-i :blocked="isLoading">
+    <lazy-prime-block-u-i :blocked="isLoading">
       <div class="logo-part">
         <p class="title-1">مرحبا بكم في</p>
         <p class="title-2">اختبارات</p>
@@ -13,7 +13,7 @@
         </div>
         <p class="copyRight">© Copyright {{ currentYear }}. By اختبارات</p>
       </div>
-    </prime-block-u-i>
+    </lazy-prime-block-u-i>
   </div>
 </template>
 <script setup lang="ts">

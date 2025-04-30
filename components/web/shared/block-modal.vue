@@ -1,5 +1,5 @@
 <template>
-  <prime-dialog
+  <lazy-prime-dialog
     id="permission-modal"
     :visible="globalStore.state.showBlockModal"
     :modal="true"
@@ -33,7 +33,7 @@
         />
       </div>
     </div>
-  </prime-dialog>
+  </lazy-prime-dialog>
 </template>
 <script setup lang="ts">
 //props

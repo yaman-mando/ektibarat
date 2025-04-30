@@ -5,7 +5,7 @@
       ref="pageForm"
       class="w-full block"
     >
-      <prime-block-u-i
+      <lazy-prime-block-u-i
         class="w-full flex flex-col justify-start gap-6"
         :blocked="loginOtpReq.status.value === 'pending'"
       >
@@ -50,8 +50,8 @@
           :label="isCodeStep ? 'إعادة إرسال الكود' : 'إرسال'"
           @click="onSubmitClick"
         />
-      </prime-block-u-i>
-    </vee-form>
+      </lazy-prime-block-u-i>
+    </lazy-prime-block-u-i></vee-form>
   </lazy-vee-validate-provider>
 </template>
 <script setup lang="ts">

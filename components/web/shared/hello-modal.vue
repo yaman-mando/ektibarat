@@ -1,5 +1,5 @@
 <template>
-  <prime-dialog
+  <lazy-prime-dialog
     :id="modalId"
     v-model:visible="isOpen"
     :modal="true"
@@ -54,10 +54,10 @@
         @click="upgradeClicked"
       />
     </div>
-  </prime-dialog>
+  </lazy-prime-dialog>
 </template>
 <script setup lang="ts">
-import { webUserPanelSubscriptions } from '~/main/utils/web-routes.utils';
+import { webUserPanelSubscriptions } from '~/main/utils/web-routes.utils'; //emits
 
 //emits
 defineEmits(['hello-modal-hidden']);

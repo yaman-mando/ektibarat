@@ -1,5 +1,5 @@
 <template>
-  <prime-button
+  <lazy-prime-button
     class="training-button"
     :class="[
       { normal: buttonStyle === TrainingButtonType.normal },
@@ -14,7 +14,7 @@
       alt="اختبارات"
     />
     <span>تدرب بذكاء</span>
-  </prime-button>
+  </lazy-prime-button>
 </template>
 <script setup lang="ts">
 import { TrainingButtonType } from '~/main/constants/training-button-type';
