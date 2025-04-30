@@ -7,7 +7,7 @@
     <div class="tasks-items">
       <nuxt-link
         class="task-item item-1"
-        :to="`/${StaticTracksRoutersEnum.kudrat}`"
+        :to="webPathKudratPathUtil()"
       >
         <nuxt-img
           src="/images/home/strength.webp"
@@ -28,7 +28,7 @@
 
       <nuxt-link
         class="task-item item-2"
-        :to="`/${StaticTracksRoutersEnum.kudrat}`"
+        :to="webPathKudratPathUtil()"
       >
         <nuxt-img
           src="/images/home/exam.png"
@@ -49,7 +49,7 @@
 
       <nuxt-link
         class="task-item item-3"
-        :to="`/${StaticTracksRoutersEnum.kudrat}`"
+        :to="webPathKudratPathUtil()"
       >
         <nuxt-img
           src="/images/home/networking.png"
@@ -69,7 +69,7 @@
 
       <nuxt-link
         class="task-item item-4"
-        :to="`/${StaticTracksRoutersEnum.kudrat}`"
+        :to="webPathKudratPathUtil()"
       >
         <nuxt-img
           src="/images/home/analyzing.webp"
@@ -99,10 +99,10 @@
 </template>
 <script setup lang="ts">
 import { useGlobalStore } from '~/main/useGlobalStore';
-import { StaticTracksRoutersEnum } from '~/main/constants/static-tracks-routers.enum';
 import type { GlobalTypes } from '~/main/constants/global-types';
 import { useRedirectService } from '~/main/useRedirectService';
 import { useDeviceService } from '~/main/useDeviceService';
+import { webPathKudratPathUtil } from '~/main/utils/web-routes.utils';
 
 //composable
 const globalStore = useGlobalStore();

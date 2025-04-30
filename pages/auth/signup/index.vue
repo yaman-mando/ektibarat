@@ -1,7 +1,7 @@
 <template>
   <client-only>
     <div class="registration-page">
-      <prime-card
+      <lazy-prime-card
         v-if="registerMethodRequest.status.value === 'pending'"
         class="loading-group"
       >
@@ -29,28 +29,32 @@
             />
           </div>
         </template>
-      </prime-card>
-      <prime-card
+      </lazy-prime-card>
+      <lazy-prime-card
         v-else
         class="registration-square"
       >
         <template #content>
-          <prime-tabs v-model:value="activeTab">
-            <prime-tab-list>
-              <prime-tab :value="logicType.login">تسجيل الدخول</prime-tab>
-              <prime-tab :value="logicType.signup">حساب جديد</prime-tab>
-            </prime-tab-list>
-            <prime-tab-panels>
-              <prime-tab-panel :value="logicType.login">
+          <lazy-prime-tabs v-model:value="activeTab">
+            <lazy-prime-tab-list>
+              <lazy-prime-tab :value="logicType.login">
+                تسجيل الدخول
+              </lazy-prime-tab>
+              <lazy-prime-tab :value="logicType.signup">
+                حساب جديد
+              </lazy-prime-tab>
+            </lazy-prime-tab-list>
+            <lazy-prime-tab-panels>
+              <lazy-prime-tab-panel :value="logicType.login">
                 <lazy-tab-contents />
-              </prime-tab-panel>
-              <prime-tab-panel :value="logicType.signup">
+              </lazy-prime-tab-panel>
+              <lazy-prime-tab-panel :value="logicType.signup">
                 <lazy-tab-contents :isRegister="true" />
-              </prime-tab-panel>
-            </prime-tab-panels>
-          </prime-tabs>
+              </lazy-prime-tab-panel>
+            </lazy-prime-tab-panels>
+          </lazy-prime-tabs>
         </template>
-      </prime-card>
+      </lazy-prime-card>
     </div>
   </client-only>
 </template>

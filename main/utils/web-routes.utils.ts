@@ -4,6 +4,7 @@ import {
   UserPanelItemsRecord,
 } from '~/main/constants/user-panel-items';
 import type { GlobalTypes } from '~/main/constants/global-types';
+import { StaticTracksRoutersEnum } from '~/main/constants/static-tracks-routers.enum';
 
 export const webAuthPathUtil = () => '/auth/signup';
 export const webAuthSignup = (): RouteLocationRaw => ({
@@ -28,5 +29,6 @@ export const webUserPanelTrainingWithGlobalType = (
     globalTypeUser: globalType,
   },
 });
-
+export const webPathKudratPathUtil = () =>
+  `/${encodeURIComponent(StaticTracksRoutersEnum.kudrat)}`;
 export const webContactUsPathUtil = () => '/contact-us';

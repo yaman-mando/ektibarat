@@ -3,7 +3,9 @@ import { GlobalTypes } from '~/main/constants/global-types';
 import type {
   ConditionJsonDataModel,
   HomeJsonDataModel,
+  KudratJsonDataModel,
   LayoutStaticDataModel,
+  TahselJsonDataModel,
 } from '~/dev-types-helper';
 import { CountryPhoneCodes } from '~/main/constants/country-phone-codes';
 
@@ -20,6 +22,8 @@ type StaticStateType = {
   staticData: LayoutStaticDataModel | null;
   homeJson: HomeJsonDataModel | null;
   conditionJson: ConditionJsonDataModel | null;
+  kudratJson: KudratJsonDataModel | null;
+  tahselJson: TahselJsonDataModel | null;
 };
 
 export const useGlobalStore = defineStore('global', () => {
@@ -47,6 +51,8 @@ export const useGlobalStore = defineStore('global', () => {
     staticData: null,
     homeJson: null,
     conditionJson: null,
+    kudratJson: null,
+    tahselJson: null,
   });
 
   const patchState = (newState: Partial<StateType>) => {
@@ -87,6 +93,18 @@ export const useGlobalStore = defineStore('global', () => {
     return res;
   };
 
+  const getKudratJsonStatic = async () => {
+    const res = (await import('~/main/constants/json/kudrat.json')).default;
+    patchStaticState({ kudratJson: res });
+    return res;
+  };
+
+  const getTahselJsonStatic = async () => {
+    const res = (await import('~/main/constants/json/tahsel.json')).default;
+    patchStaticState({ tahselJson: res });
+    return res;
+  };
+
   const getUserCountry = async () => {
     const CACHE_DURATION = 60 * 60 * 1000;
 
@@ -122,6 +140,8 @@ export const useGlobalStore = defineStore('global', () => {
     state,
     staticState,
     //actions,
+    getKudratJsonStatic,
+    getTahselJsonStatic,
     getUserCountry,
     patchState,
     clearState,

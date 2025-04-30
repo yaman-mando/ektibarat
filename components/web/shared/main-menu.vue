@@ -175,12 +175,9 @@
               tabindex="-1"
               @blur.prevent="hideSubMenu"
             >
-              <span
-                class="sub-item"
-                @click="goTrackDetail(TrackRouteName.kudrat)"
-              >
-                القدرات
-              </span>
+              <nuxt-link :to="webPathKudratPathUtil()">
+                <span class="sub-item">القدرات</span>
+              </nuxt-link>
               <span
                 class="sub-item"
                 @click="goTrackDetail(TrackRouteName.tahsel)"
@@ -476,6 +473,7 @@ import { sleepUtil } from '~/main/utils/shared-utils';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import { StaticTracksRoutersEnum } from '~/main/constants/static-tracks-routers.enum';
 import type WebLoginRegisterModal from '~/components/web/shared/web-login-register-modal.vue';
+import { webPathKudratPathUtil } from '~/main/utils/web-routes.utils';
 
 type MenuItemUi = {
   id: number;
@@ -500,7 +498,7 @@ const menu2 = [
     child: [
       {
         name: 'القدرات',
-        href: `/${StaticTracksRoutersEnum.kudrat}`,
+        href: webPathKudratPathUtil(),
       },
       {
         name: 'التحصيلي',

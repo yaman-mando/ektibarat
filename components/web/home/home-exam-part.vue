@@ -8,7 +8,7 @@
     <div class="exams-items">
       <nuxt-link
         class="exam-item item-1"
-        :to="`/${StaticTracksRoutersEnum.kudrat}`"
+        :to="webPathKudratPathUtil()"
       >
         <nuxt-img
           src="/images/home/test-logo-1.webp"
@@ -60,6 +60,7 @@
 //composable
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { StaticTracksRoutersEnum } from '~/main/constants/static-tracks-routers.enum';
+import { webPathKudratPathUtil } from '~/main/utils/web-routes.utils';
 
 const globalStore = useGlobalStore();
 

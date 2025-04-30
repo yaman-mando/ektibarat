@@ -19,20 +19,24 @@ export const useRedirectService = () => {
     }
   };
 
-  const studentRedirect = () => {
-    if (authStore.isLoggedIn) {
+  const getStudentRedirectUrl = () => {
+    if (authStore.isLoggedIn.value) {
       if (authStore.userData.value?.subscriptionDate) {
-        router.push(webUserPanelTraining());
+        return webUserPanelTraining();
       } else {
-        router.push(webUserPanelSubscriptions());
+        return webUserPanelSubscriptions();
       }
     } else {
-      router.push(webAuthSignup());
+      return webAuthSignup();
     }
+  };
+  const studentRedirect = () => {
+    router.push(getStudentRedirectUrl());
   };
 
   return {
     trainingRedirectWithGlobalType,
     studentRedirect,
+    getStudentRedirectUrl,
   };
 };

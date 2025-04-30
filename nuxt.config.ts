@@ -66,6 +66,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     baseURL: getEnv().websiteUrl,
     public: {
+      defaultSubjectId: getEnv().defaultSubjectId,
+      websiteUrl: getEnv().websiteUrl,
       apiUrl: getEnv().baseUrl,
       baseImageUrl: getEnv().baseImageUrl,
       googleClientId: process.env.GOOGLE_CLIENT_ID,
