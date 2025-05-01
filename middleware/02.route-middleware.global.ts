@@ -76,6 +76,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
       }
     }
   } catch (_error) {
-    return navigateTo(webErrorPathUtil());
+    return navigateTo(webErrorPathUtil(), { replace: true });
   }
 });
