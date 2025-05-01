@@ -21,7 +21,7 @@ export const useCommonQuestionsStore = defineStore('common-questions', () => {
 
   const getAll = async () => {
     const res = await repo.getAll();
-    patchState({ all: [...res, ...res, ...res] });
+    patchState({ all: res });
     return res;
   };
 
