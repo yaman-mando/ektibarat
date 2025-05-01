@@ -1,43 +1,48 @@
 <template>
-  <template v-if="loadingList">
-    <spinner />
+  <template v-if="listForSubjectRequest.error">
+    <lazy-error-block />
   </template>
   <template v-else>
-    <div
-      v-if="listForSubject"
-      class="rw-3"
-    >
-      <span class="text-1">أقسام اختبار القدرات</span>
+    <template v-if="loadingList">
+      <spinner />
+    </template>
+    <template v-else>
+      <div
+        v-if="listForSubject.length"
+        class="rw-3"
+      >
+        <span class="text-1">أقسام اختبار القدرات</span>
 
-      <div class="cat-lists">
-        <div
-          v-for="cat of listForSubject[0].children"
-          :key="cat.id"
-          class="cat-list-group"
-        >
-          <span class="label">{{ cat.label }}</span>
+        <div class="cat-lists">
           <div
-            v-if="cat.children && cat.children.length > 0"
-            class="list"
+            v-for="cat of listForSubject[0].children"
+            :key="cat.id"
+            class="cat-list-group"
           >
-            <a
-              v-for="child of cat.children"
-              :key="child.id"
-              class="item"
-              :href="child.wordPressUrl!"
-              target="_blank"
+            <span class="label">{{ cat.label }}</span>
+            <div
+              v-if="cat.children && cat.children.length > 0"
+              class="list"
             >
-              {{ child.label }}
-              <!-- todo-z            -->
-              <!--            <mx-g-text-slice-->
-              <!--              :length="28"-->
-              <!--              :text="child.label"-->
-              <!--            />-->
-            </a>
+              <a
+                v-for="child of cat.children"
+                :key="child.id"
+                class="item"
+                :href="child.wordPressUrl!"
+                target="_blank"
+              >
+                {{ child.label }}
+                <!-- todo-z            -->
+                <!--            <mx-g-text-slice-->
+                <!--              :length="28"-->
+                <!--              :text="child.label"-->
+                <!--            />-->
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </template>
   </template>
 </template>
 <script lang="ts" setup>
@@ -53,7 +58,7 @@ const listForSubjectRequest = useLazyAsyncData(
   'categories-list-for-subject',
   async () => {
     return categoriesStore.getListForSubject({
-      shownForBlog: true,
+      shownForBlog: 'asd' as any,
       subjects: [runtimeConfig.public.defaultSubjectId],
     });
   }

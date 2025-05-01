@@ -495,7 +495,7 @@
         </g>
       </svg>
 
-      <p id="errorText">حدث خطأ ما ...</p>
+      <p id="errorText">تعذر الوصول الى الصفحة ...</p>
       <nuxt-link
         id="errorLink"
         to="/"
@@ -512,8 +512,6 @@ definePageMeta({
 useHead({
   title: '404',
 });
-
-throw createError({ statusCode: 404, statusMessage: 'Page Not Found' });
 </script>
 <style lang="scss" scoped>
 main {

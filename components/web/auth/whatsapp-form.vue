@@ -51,7 +51,7 @@
           @click="onSubmitClick"
         />
       </lazy-prime-block-u-i>
-    </lazy-prime-block-u-i></vee-form>
+    </vee-form>
   </lazy-vee-validate-provider>
 </template>
 <script setup lang="ts">

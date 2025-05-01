@@ -11,12 +11,13 @@ export const useRedirectService = () => {
   const authStore = useAuthStore();
   const router = useRouter();
 
+  const getTrainingRedirectWithGlobalTypeUrl = (globalType: GlobalTypes) => {
+    return authStore.isLoggedIn.value
+      ? webUserPanelTrainingWithGlobalType(globalType)
+      : webAuthSignup();
+  };
   const trainingRedirectWithGlobalType = (globalType: GlobalTypes) => {
-    if (authStore.isLoggedIn.value) {
-      router.push(webUserPanelTrainingWithGlobalType(globalType));
-    } else {
-      router.push(webAuthSignup());
-    }
+    router.push(getTrainingRedirectWithGlobalTypeUrl(globalType));
   };
 
   const getStudentRedirectUrl = () => {
@@ -35,6 +36,7 @@ export const useRedirectService = () => {
   };
 
   return {
+    getTrainingRedirectWithGlobalTypeUrl,
     trainingRedirectWithGlobalType,
     studentRedirect,
     getStudentRedirectUrl,

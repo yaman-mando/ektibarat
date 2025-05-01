@@ -6,6 +6,7 @@ import {
 import type { GlobalTypes } from '~/main/constants/global-types';
 import { StaticTracksRoutersEnum } from '~/main/constants/static-tracks-routers.enum';
 
+export const webErrorPathUtil = () => '/404';
 export const webAuthPathUtil = () => '/auth/signup';
 export const webAuthSignup = (): RouteLocationRaw => ({
   path: webAuthPathUtil(),
@@ -31,4 +32,8 @@ export const webUserPanelTrainingWithGlobalType = (
 });
 export const webPathKudratPathUtil = () =>
   `/${encodeURIComponent(StaticTracksRoutersEnum.kudrat)}`;
+
+export const webPathTahselPathUtil = () =>
+  `/${encodeURIComponent(StaticTracksRoutersEnum.tahsel)}`;
+
 export const webContactUsPathUtil = () => '/contact-us';

@@ -14,7 +14,7 @@
 import { useDeviceService } from '~/main/useDeviceService';
 import { useLocalStorageStore } from '~/main/useLocalStorageStore';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
-import { IS_PRODUCTION_APP } from '~/main/utils/shared-utils';
+import { IS_PRODUCTION_APP, scrollToTopUtil } from '~/main/utils/shared-utils';
 import { webAuthPathUtil } from '~/main/utils/web-routes.utils';
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import { UAParser } from 'ua-parser-js';
@@ -235,5 +235,13 @@ watch(
     }
   },
   { immediate: true }
+);
+
+watch(
+  () => route.path,
+  () => {
+    scrollToTopUtil('scroll-page');
+    scrollToTopUtil('website-layout');
+  }
 );
 </script>

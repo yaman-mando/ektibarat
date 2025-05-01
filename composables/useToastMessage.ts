@@ -2,7 +2,7 @@ import { useToast } from 'primevue/usetoast';
 import type { ToastMessageOptions } from 'primevue';
 
 const defaultOptions: Pick<ToastMessageOptions, 'summary' | 'life'> = {
-  summary: 'عذراً، حدث خطأ غير متوقع.',
+  summary: 'عذراً، حدث خطأ في الطلب.',
   life: 3000,
 };
 

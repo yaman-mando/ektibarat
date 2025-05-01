@@ -8,4 +8,6 @@ export type LayoutStaticDataModel = typeof layoutJson;
 export type HomeJsonDataModel = typeof homeJson;
 export type ConditionJsonDataModel = typeof conditionJson;
 export type KudratJsonDataModel = typeof kudratJson;
-export type TahselJsonDataModel = typeof tahselJson;
+export type TahselJsonDataModel = typeof tahselJson & {
+  [key: string]: string;
+};

@@ -178,12 +178,10 @@
               <nuxt-link :to="webPathKudratPathUtil()">
                 <span class="sub-item">القدرات</span>
               </nuxt-link>
-              <span
-                class="sub-item"
-                @click="goTrackDetail(TrackRouteName.tahsel)"
-              >
-                التحصيلي
-              </span>
+              <nuxt-link :to="webPathTahselPathUtil()">
+                <span class="sub-item">التحصيلي</span>
+              </nuxt-link>
+
               <span class="sub-item not-active">
                 موهبة
                 <span class="note">قريبا</span>
@@ -466,14 +464,15 @@ import {
 } from '~/main/constants/user-panel-items';
 import { UserRoles } from '~/core/auth/constants/user-roles';
 import { adminQuestionsListPath } from '~/main/utils/admin-routes.utils';
-import { TrackRouteName } from '~/main/constants/track-route-name';
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { GlobalTypes } from '~/main/constants/global-types';
 import { sleepUtil } from '~/main/utils/shared-utils';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
-import { StaticTracksRoutersEnum } from '~/main/constants/static-tracks-routers.enum';
 import type WebLoginRegisterModal from '~/components/web/shared/web-login-register-modal.vue';
-import { webPathKudratPathUtil } from '~/main/utils/web-routes.utils';
+import {
+  webPathKudratPathUtil,
+  webPathTahselPathUtil,
+} from '~/main/utils/web-routes.utils';
 
 type MenuItemUi = {
   id: number;
@@ -502,7 +501,7 @@ const menu2 = [
       },
       {
         name: 'التحصيلي',
-        href: `/${StaticTracksRoutersEnum.tahsel}`,
+        href: webPathTahselPathUtil(),
       },
       {
         name: 'موهبة (قريبا)',
@@ -716,14 +715,9 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
   });
   hideList();
 };
-
-const goTrackDetail = (id: string) => {
-  router.push(`/${id}`);
-  hideSubMenu();
-};
 </script>
 <style lang="scss" scoped>
-@import '../../../assets/scss/mixin';
+@import '@/assets/scss/mixin';
 
 .web-header-container {
   overflow-x: hidden;

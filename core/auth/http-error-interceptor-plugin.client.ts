@@ -1,17 +1,23 @@
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { ErrorsRecord } from '~/main/constants/errors.enum';
+import {
+  webAuthPathUtil,
+  webErrorPathUtil,
+} from '~/main/utils/web-routes.utils';
 
 export default defineNuxtPlugin(() => {
-  const router = useRouter();
   const globalStore = useGlobalStore();
   const toastMessage = useToastMessage();
-
   globalThis.$fetch = $fetch.create({
     async onResponseError({ response }) {
       console.error(response);
       switch (response.status) {
         case 401: {
-          await router.push('/login');
+          await navigateTo(webAuthPathUtil(), { replace: true });
+          break;
+        }
+        case 403: {
+          await navigateTo(webErrorPathUtil(), { replace: true });
           break;
         }
         case 400: {
@@ -24,7 +30,7 @@ export default defineNuxtPlugin(() => {
               life: 5000,
             });
           }
-          break;
+          return;
         }
         default: {
           toastMessage.showError();

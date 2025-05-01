@@ -42,6 +42,6 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
       }
     }
   } catch (_e: unknown) {
-    return navigateTo(webPricesPathUtil());
+    return navigateTo(webPricesPathUtil(), { replace: true });
   }
 });

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const router = useRouter();
+import { webErrorPathUtil } from '~/main/utils/web-routes.utils';
 
-router.replace('/404');
+//catch any unmatched route - server and client
+navigateTo(webErrorPathUtil(), { replace: true });
 </script>

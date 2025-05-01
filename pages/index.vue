@@ -21,7 +21,6 @@ await globalStore.getHomeStatic();
 //meta
 definePageMeta({
   layout: 'website-layout',
-  middleware: ['user-services-middleware'],
 });
 </script>
 <style lang="scss" scoped>

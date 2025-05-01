@@ -17,3 +17,19 @@ export const getKeyByValue = (object: any, value: any) => {
     Object.entries(object).find(([_key, val]) => val === value)?.[0] || null
   );
 };
+
+export const scrollToTopUtil = (elId: string) => {
+  if (import.meta.server) return;
+
+  setTimeout(() => {
+    try {
+      document.getElementById(elId)?.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    } catch (e) {
+      console.error('scroll issue');
+    }
+  }, 250);
+};

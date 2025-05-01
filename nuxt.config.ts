@@ -67,6 +67,7 @@ export default defineNuxtConfig({
     baseURL: getEnv().websiteUrl,
     public: {
       defaultSubjectId: getEnv().defaultSubjectId,
+      defaultSubjectIdTahsele: getEnv().defaultSubjectIdTahsele,
       websiteUrl: getEnv().websiteUrl,
       apiUrl: getEnv().baseUrl,
       baseImageUrl: getEnv().baseImageUrl,
@@ -126,10 +127,9 @@ export default defineNuxtConfig({
   plugins: [
     '~/core/auth/auth-interceptor-plugin.ts',
     '~/core/auth/http-error-interceptor-plugin.client.ts',
-    '~/plugins/shared/global-error-handler.client.ts',
+    '~/plugins/shared/global-error-handler-plugin.client.ts',
     '~/plugins/shared/detect-device-plugin.ts',
     '~/plugins/shared/gtag-plugin.client.ts',
-    '~/plugins/shared/router-guard-plugin.client.ts',
     '~/plugins/shared/font-awesome-plugin.client.ts',
   ],
   app: {
