@@ -58,7 +58,7 @@ const listForSubjectRequest = useLazyAsyncData(
   'categories-list-for-subject',
   async () => {
     return categoriesStore.getListForSubject({
-      shownForBlog: 'asd' as any,
+      shownForBlog: true,
       subjects: [runtimeConfig.public.defaultSubjectId],
     });
   }
