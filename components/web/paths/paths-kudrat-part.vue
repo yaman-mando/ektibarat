@@ -1,5 +1,5 @@
 <template>
-  <template v-if="listForSubjectRequest.error">
+  <template v-if="listForSubjectRequest.error.value">
     <lazy-error-block />
   </template>
   <template v-else>
