@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { GlobalTypes } from '~/main/constants/global-types';
 import type {
+  AboutUsJsonDataModel,
   ConditionJsonDataModel,
   HomeJsonDataModel,
   KudratJsonDataModel,
@@ -24,6 +25,7 @@ type StaticStateType = {
   conditionJson: ConditionJsonDataModel | null;
   kudratJson: KudratJsonDataModel | null;
   tahselJson: TahselJsonDataModel | null;
+  aboutUs: AboutUsJsonDataModel | null;
 };
 
 export const useGlobalStore = defineStore('global', () => {
@@ -53,6 +55,7 @@ export const useGlobalStore = defineStore('global', () => {
     conditionJson: null,
     kudratJson: null,
     tahselJson: null,
+    aboutUs: null,
   });
 
   const patchState = (newState: Partial<StateType>) => {
@@ -90,6 +93,12 @@ export const useGlobalStore = defineStore('global', () => {
   const getConditionStatic = async () => {
     const res = (await import('~/main/constants/json/conditions.json')).default;
     patchStaticState({ conditionJson: res });
+    return res;
+  };
+
+  const getAboutUsStatic = async () => {
+    const res = (await import('~/main/constants/json/aboutus.json')).default;
+    patchStaticState({ aboutUs: res });
     return res;
   };
 
@@ -149,5 +158,6 @@ export const useGlobalStore = defineStore('global', () => {
     getLayoutStatic,
     getHomeStatic,
     getConditionStatic,
+    getAboutUsStatic,
   };
 });

@@ -8,7 +8,12 @@ export const usePrivacyStore = () => {
     return await repo.getCondition();
   };
 
+  const getWhoWeAre = async () => {
+    return await repo.getWhoWeAre();
+  };
+
   return {
     getCondition,
+    getWhoWeAre,
   };
 };

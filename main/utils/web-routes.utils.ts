@@ -37,3 +37,5 @@ export const webPathTahselPathUtil = () =>
   `/${encodeURIComponent(StaticTracksRoutersEnum.tahsel)}`;
 
 export const webContactUsPathUtil = () => '/contact-us';
+export const webFaqsPathUtil = () => '/faqs';
+export const webAboutUsPathUtil = () => '/about-us';

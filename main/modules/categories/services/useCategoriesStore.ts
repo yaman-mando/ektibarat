@@ -10,7 +10,6 @@ type StateType = {
   listForSubject: CategoriesListForSubjectItemDataModel[];
 };
 
-//store todo-z ex-store
 export const useCategoriesStore = defineStore('categories', () => {
   const repo = useCategoriesRepo();
 

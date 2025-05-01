@@ -8,12 +8,20 @@ export {};
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    //accordion
+    PrimeAccordionContent: (typeof import('primevue/accordioncontent'))['default'];
+    PrimeAccordionHeader: (typeof import('primevue/accordionheader'))['default'];
+    PrimeAccordionPanel: (typeof import('primevue/accordionpanel'))['default'];
+    PrimeAccordion: (typeof import('primevue/accordion'))['default'];
+    //end accordion
     PrimeBlockUI: (typeof import('primevue/blockui'))['default'];
+    //tabs
     PrimeTabPanel: (typeof import('primevue/tabpanel'))['default'];
     PrimeTabPanels: (typeof import('primevue/tabpanels'))['default'];
     PrimeTabList: (typeof import('primevue/tablist'))['default'];
     PrimeTabs: (typeof import('primevue/tabs'))['default'];
     PrimeTab: (typeof import('primevue/tab'))['default'];
+    //end tabs
     PrimeSkeleton: (typeof import('primevue/skeleton'))['default'];
     PrimeCard: (typeof import('primevue/card'))['default'];
     PrimeButton: (typeof import('primevue/button'))['default'];

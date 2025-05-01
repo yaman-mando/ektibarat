@@ -47,7 +47,7 @@ const goTraining = () => {
 };
 </script>
 <style lang="scss" scoped>
-@import '../../../assets/scss/mixin';
+@import '@/assets/scss/mixin';
 
 .training-button {
   @include normal-btn();

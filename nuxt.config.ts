@@ -104,12 +104,20 @@ export default defineNuxtConfig({
     components: {
       prefix: 'Prime',
       include: [
+        //todo-z handle provider as vee-validate
+        'Accordion',
+        'AccordionPanel',
+        'AccordionHeader',
+        'AccordionContent',
+        //end accordion
         'BlockUI',
+        //tabs
         'Tabs',
         'Tab',
         'TabList',
         'TabPanel',
         'TabPanels',
+        //end tabs
         'Skeleton',
         'Card',
         'Dialog',

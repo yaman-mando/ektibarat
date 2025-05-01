@@ -188,14 +188,10 @@
               </span>
             </div>
           </li>
-          <li
-            @click="
-              toPath('/faqs');
-              openSubMenu(null);
-            "
-          >
-            الأسئلة الشائعة
-          </li>
+          <nuxt-link :to="webFaqsPathUtil()">
+            <li @click="openSubMenu(null)">الأسئلة الشائعة</li>
+          </nuxt-link>
+
           <li
             @click="
               openSubMenu(null);
@@ -470,6 +466,7 @@ import { sleepUtil } from '~/main/utils/shared-utils';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import type WebLoginRegisterModal from '~/components/web/shared/web-login-register-modal.vue';
 import {
+  webFaqsPathUtil,
   webPathKudratPathUtil,
   webPathTahselPathUtil,
 } from '~/main/utils/web-routes.utils';
@@ -511,7 +508,7 @@ const menu2 = [
   },
   {
     name: 'الأسئلة الشائعة',
-    href: '/faqs',
+    href: webFaqsPathUtil(),
     iconClass: 'fa fa-circle-question',
     hasChild: false,
   },

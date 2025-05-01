@@ -13,7 +13,14 @@ export const usePrivacyRepo = () => {
     return data as PrivacyDataModel;
   };
 
+  const getWhoWeAre = async () => {
+    return (await $fetch(`${baseUrl}/whoWeAre`, {
+      method: 'GET',
+    })) as PrivacyDataModel;
+  };
+
   return {
     getCondition,
+    getWhoWeAre,
   };
 };
