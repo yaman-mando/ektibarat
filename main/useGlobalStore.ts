@@ -3,11 +3,12 @@ import { GlobalTypes } from '~/main/constants/global-types';
 import type {
   AboutUsJsonDataModel,
   ConditionJsonDataModel,
+  ContactUsJsonDataModel,
   HomeJsonDataModel,
   KudratJsonDataModel,
   LayoutStaticDataModel,
   TahselJsonDataModel,
-} from '~/dev-types-helper';
+} from '~/main/modules/shared/models/static-json-files.model';
 import { CountryPhoneCodes } from '~/main/constants/country-phone-codes';
 
 type StateType = {
@@ -26,6 +27,7 @@ type StaticStateType = {
   kudratJson: KudratJsonDataModel | null;
   tahselJson: TahselJsonDataModel | null;
   aboutUs: AboutUsJsonDataModel | null;
+  contactUs: ContactUsJsonDataModel | null;
 };
 
 export const useGlobalStore = defineStore('global', () => {
@@ -56,6 +58,7 @@ export const useGlobalStore = defineStore('global', () => {
     kudratJson: null,
     tahselJson: null,
     aboutUs: null,
+    contactUs: null,
   });
 
   const patchState = (newState: Partial<StateType>) => {
@@ -100,6 +103,12 @@ export const useGlobalStore = defineStore('global', () => {
     const res = (await import('~/main/constants/json/aboutus.json')).default;
     patchStaticState({ aboutUs: res });
     return res;
+  };
+
+  const getContactUsStatic = async () => {
+    const res = (await import('~/main/constants/json/contact-us.json')).default;
+    patchStaticState({ contactUs: res });
+    return res as ContactUsJsonDataModel;
   };
 
   const getKudratJsonStatic = async () => {
@@ -159,5 +168,6 @@ export const useGlobalStore = defineStore('global', () => {
     getHomeStatic,
     getConditionStatic,
     getAboutUsStatic,
+    getContactUsStatic,
   };
 });

@@ -39,3 +39,4 @@ export const webPathTahselPathUtil = () =>
 export const webContactUsPathUtil = () => '/contact-us';
 export const webFaqsPathUtil = () => '/faqs';
 export const webAboutUsPathUtil = () => '/about-us';
+export const webConditionsPathUtil = () => '/conditions';

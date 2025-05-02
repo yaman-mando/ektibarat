@@ -173,10 +173,11 @@ const togglePassword = () => {
 
     input,
     textarea {
+      background-color: #fff;
       width: 100%;
       padding: 0.5rem 1rem;
       //border-radius: 10px;
-      //border: 1px solid var(--gray-c7);
+      border: 1px solid var(--gray-c7);
       //font-size: 12px;
       &::placeholder {
         font-size: 12px;

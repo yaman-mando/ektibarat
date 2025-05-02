@@ -29,10 +29,16 @@
               />
             </picture>
             <ul class="footer-menu-items">
-              <li @click="toPath('/about-us')">من نحن</li>
-              <li @click="toPath('/conditions')">الشروط والأحكام</li>
+              <nuxt-link :to="webAboutUsPathUtil()">
+                <li>من نحن</li>
+              </nuxt-link>
+              <nuxt-link :to="webConditionsPathUtil()">
+                <li @click="toPath('/conditions')">الشروط والأحكام</li>
+              </nuxt-link>
               <li @click="toPath('/blog')">المدونة</li>
-              <li @click="toPath('/contact-us')">اتصل بنا</li>
+              <nuxt-link :to="webContactUsPathUtil()">
+                <li>اتصل بنا</li>
+              </nuxt-link>
               <li @click="toPath('/partnerships')">كن شريكاً</li>
             </ul>
           </div>
@@ -171,7 +177,9 @@
               <li @click="toPath('/about-us')">من نحن</li>
               <li @click="toPath('/conditions')">الشروط والأحكام</li>
               <li @click="toPath('/blog')">المدونة</li>
-              <li @click="toPath('/contact-us')">اتصل بنا</li>
+              <nuxt-link :to="webContactUsPathUtil()">
+                <li>اتصل بنا</li>
+              </nuxt-link>
               <li @click="toPath('/partnerships')">كن شريكاً</li>
             </ul>
             <span class="copy-right">{{ staticData.copyRight }}</span>
@@ -184,6 +192,11 @@
 <script setup lang="ts">
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { useDeviceService } from '~/main/useDeviceService';
+import {
+  webAboutUsPathUtil,
+  webConditionsPathUtil,
+  webContactUsPathUtil,
+} from '~/main/utils/web-routes.utils'; //composable
 
 //composable
 const globalStore = useGlobalStore();
