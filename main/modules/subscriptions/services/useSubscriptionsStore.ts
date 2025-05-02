@@ -5,6 +5,7 @@ import type {
 } from '~/main/modules/subscriptions/data-access/subscriptions.model';
 import { useSubscriptionsRepo } from '~/main/modules/subscriptions/services/useSubscriptionsRepo';
 import type { GlobalTypes } from '~/main/constants/global-types';
+import { createPatchState } from '~/main/utils/patch-state.util';
 
 type StateType = {
   lastUserSubUpdate: number;
@@ -12,36 +13,31 @@ type StateType = {
   userServicesState: UserServicesStateUi;
 };
 
-const initialState: StateType = {
-  lastUserSubUpdate: 0,
-  userCurrentSub: null,
-  userServicesState: {
-    TRAININGBYCATEGORY: { isActive: false },
-    TAKFELATUSAGE: { isActive: false },
-    SHOWSOLVESOLUATION: { isActive: false },
-    ROWNQUESTIONPRACTICE: { isActive: false },
-    LEVELQUESTIONPRACTICE: { isActive: false },
-    HELPINPRACTICE: { isActive: false },
-    FULLEXAM: { isActive: false },
-    FAVORITEUSAGE: { isActive: false },
-    EXAMBYCATEGORY: { isActive: false },
-    BANKUSAGE: { isActive: false },
-    ANALAZENUMBERCATEGORY: { isActive: false },
-    ANALAZEDEGRE: { isActive: false },
-  },
-};
-const state = reactive({ ...initialState });
-
 //store
-export const useSubscriptionsStore = () => {
+export const useSubscriptionsStore = defineStore('subscriptions-store', () => {
   const repo = useSubscriptionsRepo();
 
-  const patchState = (newState: Partial<StateType>) => {
-    Object.assign(state, newState);
+  const initialState: StateType = {
+    lastUserSubUpdate: 0,
+    userCurrentSub: null,
+    userServicesState: {
+      TRAININGBYCATEGORY: { isActive: false },
+      TAKFELATUSAGE: { isActive: false },
+      SHOWSOLVESOLUATION: { isActive: false },
+      ROWNQUESTIONPRACTICE: { isActive: false },
+      LEVELQUESTIONPRACTICE: { isActive: false },
+      HELPINPRACTICE: { isActive: false },
+      FULLEXAM: { isActive: false },
+      FAVORITEUSAGE: { isActive: false },
+      EXAMBYCATEGORY: { isActive: false },
+      BANKUSAGE: { isActive: false },
+      ANALAZENUMBERCATEGORY: { isActive: false },
+      ANALAZEDEGRE: { isActive: false },
+    },
   };
-  const clearState = () => {
-    Object.assign(state, { ...initialState });
-  };
+  const state = reactive({ ...initialState });
+
+  const patchState = createPatchState(state);
 
   const getCurrentSub = async (grade: GlobalTypes) => {
     const res = await repo.getCurrentSubs({
@@ -51,10 +47,15 @@ export const useSubscriptionsStore = () => {
     return res;
   };
 
-  return {
-    ...toRefs(readonly(state)),
-    patchState,
-    clearState,
-    getCurrentSub,
+  const getAll = async (model: { grade: GlobalTypes }) => {
+    return await repo.getAll(model);
   };
-};
+
+  return {
+    patchState,
+    state: toRefs(readonly(state)),
+    //actions
+    getCurrentSub,
+    getAll,
+  };
+});

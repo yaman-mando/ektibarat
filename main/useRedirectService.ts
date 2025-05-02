@@ -3,7 +3,7 @@ import {
   webAuthSignup,
   webUserPanelSubscriptions,
   webUserPanelTraining,
-  webUserPanelTrainingWithGlobalType,
+  webUserPanelTrainingWithQuery,
 } from '~/main/utils/web-routes.utils';
 import type { GlobalTypes } from '~/main/constants/global-types';
 
@@ -13,7 +13,7 @@ export const useRedirectService = () => {
 
   const getTrainingRedirectWithGlobalTypeUrl = (globalType: GlobalTypes) => {
     return authStore.isLoggedIn.value
-      ? webUserPanelTrainingWithGlobalType(globalType)
+      ? webUserPanelTrainingWithQuery({ globalType })
       : webAuthSignup();
   };
   const trainingRedirectWithGlobalType = (globalType: GlobalTypes) => {

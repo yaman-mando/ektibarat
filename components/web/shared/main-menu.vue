@@ -200,14 +200,9 @@
           >
             المدونة
           </li>
-          <li
-            @click="
-              toPath('/prices');
-              openSubMenu(null);
-            "
-          >
-            الأسعار
-          </li>
+          <nuxt-link :to="webPricesPathUtil()">
+            <li @click="openSubMenu(null)">الأسعار</li>
+          </nuxt-link>
         </ul>
       </div>
       <div
@@ -469,6 +464,7 @@ import {
   webFaqsPathUtil,
   webPathKudratPathUtil,
   webPathTahselPathUtil,
+  webPricesPathUtil,
 } from '~/main/utils/web-routes.utils';
 
 type MenuItemUi = {
@@ -520,7 +516,7 @@ const menu2 = [
   },
   {
     name: 'الأسعار',
-    href: '/prices',
+    href: webPricesPathUtil(),
     iconClass: 'fa fa-shopping-cart',
     hasChild: false,
   },
@@ -568,7 +564,7 @@ const listItemModel = computed<MenuItemUi[]>(() => [
     id: 5,
     label: 'الاشتراكات',
     icon: 'subscribe',
-    badgeLabel: subscriptionsStore.userCurrentSub.value?.title,
+    badgeLabel: subscriptionsStore.state.userCurrentSub?.title,
   },
   { id: 7, label: 'الدعم الفني', icon: 'subscribe' },
   {

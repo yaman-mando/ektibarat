@@ -1,4 +1,7 @@
-import type { CurrentSubscriptionDataModel } from '~/main/modules/subscriptions/data-access/subscriptions.model';
+import type {
+  CurrentSubscriptionDataModel,
+  SubscriptionsItemDataModel,
+} from '~/main/modules/subscriptions/data-access/subscriptions.model';
 import type { GlobalTypes } from '~/main/constants/global-types';
 
 export const useSubscriptionsRepo = () => {
@@ -17,7 +20,19 @@ export const useSubscriptionsRepo = () => {
     return data as CurrentSubscriptionDataModel;
   };
 
+  const getAll = async (model: { grade: GlobalTypes }) => {
+    const data = await $fetch(`${baseUrl}/all`, {
+      method: 'GET',
+      params: {
+        grades: model.grade,
+      },
+    });
+
+    return data as SubscriptionsItemDataModel[];
+  };
+
   return {
     getCurrentSubs,
+    getAll,
   };
 };

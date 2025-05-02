@@ -23,3 +23,40 @@ export type UserServicesStateUi = {
     isActive: boolean;
   };
 };
+
+//subscription item
+type SubscriptionsItemServiceDataModel = {
+  serviceId: number;
+  serviceName: string;
+  serviceDisplayName: string;
+  subscriptionId: number;
+  serviceValue: string;
+  isHasValue: boolean;
+};
+type SubscriptionsItemFeatureDataModel = {
+  id: number;
+  title: string;
+  description: string | null;
+  isExist: boolean;
+};
+
+export type SubscriptionsItemDataModel = {
+  id: number;
+  createdDate: string;
+  title: string;
+  description: string;
+  pictureUrl: string;
+  grades: number[];
+  period: number;
+  isRecommended: boolean;
+  oldPrice: number;
+  currentPrice: number;
+  freeType: number;
+  sort: number;
+  isDailyPeriod: boolean;
+  color: string | null;
+  discountReason: string | null;
+  status: boolean;
+  features: SubscriptionsItemFeatureDataModel[];
+  subscriptionsServices: SubscriptionsItemServiceDataModel[];
+};

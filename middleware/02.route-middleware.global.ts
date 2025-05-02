@@ -28,9 +28,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
         status.value === 'authenticated' &&
         userData.value?.role !== UserRoles.mediaManager
       ) {
-        const lastUpdate = subscriptionStore.lastUserSubUpdate.value ?? 0;
+        const lastUpdate = subscriptionStore.state.lastUserSubUpdate ?? 0;
         if (
-          !subscriptionStore.userCurrentSub ||
+          !subscriptionStore.state.userCurrentSub ||
           now - lastUpdate > UPDATE_INTERVAL
         ) {
           const grade = globalStore.state.globalTypeUser;

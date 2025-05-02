@@ -21,15 +21,26 @@ export const webGeneralSelectionPathUtil = () => '/general-selection';
 export const webUserPanelTraining = () => `/user-panel?page=trainings`;
 export const webUserPanelSubscriptions = () =>
   '/user-panel?page=subscriptionList';
-export const webUserPanelTrainingWithGlobalType = (
-  globalType: GlobalTypes
-): RouteLocationRaw => ({
-  path: '/user-panel',
-  query: {
+export const webUserPanelTrainingWithQuery = (
+  args: Partial<{
+    globalType?: GlobalTypes;
+    id?: number;
+  }>
+): RouteLocationRaw => {
+  const query: { page: string; globalTypeUser?: GlobalTypes; id?: number } = {
     page: UserPanelItemsRecord[UserPanelItems.trainings],
-    globalTypeUser: globalType,
-  },
-});
+  };
+  if (args.globalType) {
+    query.globalTypeUser = args.globalType;
+  }
+  if (args.id) {
+    query.id = args.id;
+  }
+  return {
+    path: '/user-panel',
+    query,
+  };
+};
 export const webPathKudratPathUtil = () =>
   `/${encodeURIComponent(StaticTracksRoutersEnum.kudrat)}`;
 
