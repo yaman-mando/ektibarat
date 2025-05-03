@@ -28,8 +28,39 @@ export const scrollToTopUtil = (elId: string) => {
         left: 0,
         behavior: 'smooth',
       });
-    } catch (e) {
+    } catch (_e) {
       console.error('scroll issue');
     }
   }, 250);
 };
+
+export const getMetaTitle = (label: string) => {
+  return `اختبارات - ${label}`;
+};
+
+export const checkElementIsOverFlowParent = (
+  parentId: string,
+  elementId: string
+) => {
+  if (import.meta.client) {
+    const parent = document.getElementById(parentId);
+    const element = document.getElementById(elementId);
+    if (element && parent) {
+      const parentEndPoint =
+        window.innerWidth - parent.getBoundingClientRect().x;
+      const parentStartPoint =
+        window.innerWidth - parent.getBoundingClientRect().right;
+      const elEndPoint = window.innerWidth - element.getBoundingClientRect().x;
+      const elStartPoint =
+        window.innerWidth - element.getBoundingClientRect().right;
+      if (elEndPoint > parentEndPoint || elStartPoint < parentStartPoint) {
+        return element;
+      }
+    }
+  }
+};
+
+export const storageKeys = Object.freeze({
+  trainingState: (examId: string) => `training_${examId}`,
+  tourState: (userId: number | string) => `tourState_${userId}`,
+});

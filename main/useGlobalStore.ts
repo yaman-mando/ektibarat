@@ -7,6 +7,7 @@ import type {
   HomeJsonDataModel,
   KudratJsonDataModel,
   LayoutStaticDataModel,
+  LocalesJsonDataModel,
   TahselJsonDataModel,
 } from '~/main/modules/shared/models/static-json-files.model';
 import { CountryPhoneCodes } from '~/main/constants/country-phone-codes';
@@ -28,6 +29,7 @@ type StaticStateType = {
   tahselJson: TahselJsonDataModel | null;
   aboutUs: AboutUsJsonDataModel | null;
   contactUs: ContactUsJsonDataModel | null;
+  locales: LocalesJsonDataModel | null;
 };
 
 export const useGlobalStore = defineStore('global', () => {
@@ -59,6 +61,7 @@ export const useGlobalStore = defineStore('global', () => {
     tahselJson: null,
     aboutUs: null,
     contactUs: null,
+    locales: null,
   });
 
   const patchState = (newState: Partial<StateType>) => {
@@ -121,6 +124,12 @@ export const useGlobalStore = defineStore('global', () => {
     const res = (await import('~/main/constants/json/tahsel.json')).default;
     patchStaticState({ tahselJson: res });
     return res;
+  };
+
+  const getLocalesJsonStatic = async () => {
+    const res = (await import('~/main/constants/json/locales.json')).default;
+    patchStaticState({ locales: res });
+    return res as LocalesJsonDataModel;
   };
 
   const getUserCountry = async () => {

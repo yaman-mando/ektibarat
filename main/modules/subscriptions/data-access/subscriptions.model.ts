@@ -9,6 +9,7 @@ export type CurrentSubscriptionDataModel = {
   lastUpdateDate: string;
   remainExamsCount: number;
   remainTrainingCount: number;
+  remainTrainingCountPerDay: number;
   subjectId: number;
   subscriptionsServices: {
     serviceId: number;
