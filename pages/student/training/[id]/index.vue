@@ -8,15 +8,21 @@ import {
 } from '~/main/utils/shared-utils';
 import { useStudentsExamStore } from '~/main/modules/students-exam/services/useStudentsExamStore';
 import type {
+  StudentsExamAnalyzeDataModel,
+  StudentsExamCustomFromTagsDTODataModel,
   StudentsExamDataModel,
   StudentsExamPartQuestionDataModel,
+  StudentsExamRemoveAnswerDTODataModel,
 } from '~/main/modules/students-exam/data-access/models/students-exam.model';
 import { useTimeSpanService } from '~/main/services/useTimeSpanService';
 import { useStudentsExamStorageService } from '~/main/modules/students-exam/services/useStudentsExamStorageService';
-import type { StudentsExamQuestionDataModel } from '~/main/modules/students-exam/data-access/models/students-exam-question.model';
+import type {
+  StudentsExamQuestionDataModel,
+  StudentsExamQuestionParamsDataModel,
+} from '~/main/modules/students-exam/data-access/models/students-exam-question.model';
 import { useTrainPointService } from '~/main/services/useTrainPointService';
 import { deepCloneUtil } from '~/main/utils/lodash.utils';
-import type { StudentsExamAnswerDataModel } from '~/main/modules/students-exam/data-access/models/students-exam-answer.model';
+import type { StudentsExamAnswerDTODataModel } from '~/main/modules/students-exam/data-access/models/students-exam-answer.model';
 import { AnswerStateTypeEnum } from '~/main/modules/students-exam/data-access/constats/answer-state-type.enum';
 import {
   webErrorPathUtil,
@@ -30,6 +36,7 @@ import { useGlobalStore } from '~/main/useGlobalStore';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import { APP_CONFIG } from 'public/constants/app-config';
 import { TRAIN_MODAL_WARN_CASE } from '~/main/constants/train-modal-warn-case.enum';
+import { useTypedLazyRequest } from '~/composables/useTypedLazyRequest';
 
 type TimeSpanModel = ReturnType<typeof useTimeSpanService>;
 
@@ -85,6 +92,65 @@ const examPartsPointsSettingsRecord = reactive<
 const answerUnderMinTimeCount = ref<number>(0);
 const confirmExitRef = useTemplateRef('confirm_exit_ref');
 
+//fetch
+const answerData = ref<StudentsExamAnswerDTODataModel | null>(null);
+const answerRequest = useLazyAsyncData(
+  'answer-request',
+  () => {
+    return studentsExamStore.applyAnswer(answerData.value!);
+  },
+  {
+    immediate: false,
+  }
+);
+
+const callAnswerApi = async (data: StudentsExamAnswerDTODataModel) => {
+  answerData.value = data;
+  await answerRequest.execute();
+  return answerRequest.data.value;
+};
+
+const questionDetailParams = ref<StudentsExamQuestionParamsDataModel | null>(
+  null
+);
+const questionDetailRequest = useLazyAsyncData(
+  'exam-question-detail-request',
+  () => {
+    return studentsExamStore.getQuestionDetailByExamIdAndQuestionId(
+      questionDetailParams.value!
+    );
+  },
+  {
+    immediate: false,
+  }
+);
+
+const getExamQuestionApi = async (
+  data: StudentsExamQuestionParamsDataModel
+) => {
+  questionDetailParams.value = data;
+  await answerRequest.execute();
+  return questionDetailRequest.data.value;
+};
+
+const { callApi: analyzeApi } = useTypedLazyRequest<
+  string,
+  StudentsExamAnalyzeDataModel
+>('analyze-request', (param) =>
+  studentsExamStore.getAvailableExamCategoryForAnalyzeDetails(param)
+);
+
+const { callApi: customFromTagsApi } = useTypedLazyRequest<
+  StudentsExamCustomFromTagsDTODataModel,
+  StudentsExamDataModel
+>('custom-from-tags', (param) => studentsExamStore.getCustomFromTags(param));
+
+const { request: removeAnswerRequest, callApi: removeAnswerApi } =
+  useTypedLazyRequest<StudentsExamRemoveAnswerDTODataModel, number>(
+    'remove-answer-request',
+    (param) => studentsExamStore.removeAnswer(param)
+  );
+
 //computed
 const userServicesState = computed(
   () => subscriptionsStore.state.userServicesState
@@ -123,7 +189,7 @@ const wrongAnswerCount = computed(() => {
 });
 
 const isLoadingConfirm = computed(
-  () => store.state.student.fetching.answer || isApplyAnswerLoading.value
+  () => answerRequest.status.value === 'pending' || isApplyAnswerLoading.value
 );
 
 const isDisabledAnswer = computed(
@@ -174,7 +240,7 @@ const canRemoveAnswerModel = computed(
 );
 
 const isLoadingRemoverAnswer = computed(
-  () => store.state.student.fetching.removeAnswerHelp
+  () => removeAnswerRequest.status.value === 'pending'
 );
 
 const canShowAnswerHelpModel = computed(
@@ -336,13 +402,12 @@ const getCurrentQuestionStorageState = () => {
 const initPage = async () => {
   try {
     isLoadingPage.value = true;
-    let currentExam = $store.state.student.currentExamTrainPageData;
+    let currentExam = studentsExamStore.state.detail;
     if (!currentExam) {
-      const examDetailRes = await $store.dispatch(
-        'student/getStudentExamDetail',
-        { id: route.params.id }
+      const examDetailRes = await studentsExamStore.getById(
+        route.params.id as string
       );
-      currentExam = examDetailRes.data;
+      currentExam = examDetailRes;
     }
 
     const detail = mapExamDetailModelToUi(currentExam);
@@ -367,7 +432,7 @@ const initPage = async () => {
     ) {
       counterVal = detail.duration;
     }
-    //on page initial if exam if in process set active part and question from api
+    //on page initial if exam is in process set active part and question from api
     let activePartIndexVal = 0;
     let activeQuestionIndexVal = 0;
 
@@ -421,13 +486,11 @@ const initPage = async () => {
     }
 
     //get current question detail by part id and question id
-    const currentQuestionDetailRes = await $store.dispatch(
-      'student/getQuestionDetailByExamIdAndQuestionId',
-      {
-        examId: detail.id,
-        questionId,
-      }
-    );
+    const currentQuestionDetailRes = await getExamQuestionApi({
+      examId: detail.id,
+      questionId,
+    });
+    if (!currentQuestionDetailRes) return;
 
     //init part points settings record
     detail.examParts.forEach((part) => {
@@ -440,7 +503,7 @@ const initPage = async () => {
     counter.value = counterVal ?? null;
     activePartIndex.value = activePartIndexVal;
     activeQuestionIndex.value = activeQuestionIndexVal;
-    updateQuestionsDetailRecordState(questionId, currentQuestionDetailRes.data);
+    updateQuestionsDetailRecordState(questionId, currentQuestionDetailRes);
     totalPointsCount.value = examDetail.value.totalPoints;
 
     startCounter();
@@ -488,9 +551,7 @@ const setActiveQuestionIndex = (index: number) => {
 
 const checkAvailableAnalytics = async () => {
   try {
-    const availableAnalyzeDetails = await $axios.$get(
-      `/studentsExam/${examDetail.value!.id}/availableExamCategoryForAnalyzeDetails`
-    );
+    const availableAnalyzeDetails = await analyzeApi(examDetail.value!.id);
 
     return availableAnalyzeDetails?.isAllowed &&
       availableAnalyzeDetails?.categoryId
@@ -506,11 +567,8 @@ const beforePageUnload = async () => {
   try {
     loadingPage.value = true;
     stopTimers();
-    // if (!$isDev) {
-    await $store.dispatch('student/callStudentExamDone', {
-      id: examDetail.value!.id,
-    });
-    $store.commit('student/SET_CURRENT_EXAM_TRAIN_PAGE_DATA', null);
+    await studentsExamStore.submitExam({ id: examDetail.value!.id });
+    studentsExamStore.patchState({ detail: null });
   } catch (e) {
     loadingPage.value = false;
     toastMessage.showError();
@@ -519,10 +577,8 @@ const beforePageUnload = async () => {
 
 const startCounter = () => {
   if (counterModel.value) {
-    //TODO to be replaced with --
     counterModel.value++;
     counterInterval.value = setInterval(() => {
-      //TODO to be replaced with --
       counterModel.value++;
     }, 1000);
   }
@@ -589,7 +645,7 @@ const beforeAnswerHook = async () => {
       }
 
       showWarnModalAnsweredBeforeMinTime();
-      $refs.questionWarnModalRef.$once('onAction', async (confirm) => {
+      $refs.questionWarnModalRef.$once('onAction', async (confirm: boolean) => {
         return resolve(!!confirm);
       });
       return;
@@ -604,7 +660,7 @@ const beforeAnswerHook = async () => {
       $refs.questionWarnModalRef.showModalWarn(
         TRAIN_MODAL_WARN_CASE.afterMaxTime
       );
-      $refs.questionWarnModalRef.$once('onAction', async (confirm) => {
+      $refs.questionWarnModalRef.$once('onAction', async (confirm: boolean) => {
         return resolve(!!confirm);
       });
       return;
@@ -641,7 +697,7 @@ const updateExamPartQuestion = (
   examDetail.value = detail;
 };
 
-const applyAnswer = async (answerId: number) => {
+const applyAnswer = async (answerId: string) => {
   try {
     const result = await beforeAnswerHook();
     if (!result) return false;
@@ -666,10 +722,18 @@ const applyAnswer = async (answerId: number) => {
 
     isApplyAnswerLoading.value = true;
     stopCurrentQuestionTimer();
-    callAnswerApi(answerId, answerStateType);
+    callAnswerApi({
+      answerId,
+      answerType: answerStateType,
+      studentQuestionId: activeQuestionModel.value.id,
+      nextStudentQuestionId: nextQuestionModel.value?.id ?? null,
+      studentExamTimeSpan: examInterval.currentTime.value,
+      studentExamPartTimeSpan: activeExamPartInterval.value.currentTime.value,
+      questionTimeSpan: activeExamQuestionInterval.value.currentTime.value,
+    });
 
     const isCorrectAnswer =
-      correctAnswerIds.value.includes(answerId) &&
+      correctAnswerIds.value.includes(answerId as any) &&
       !getCurrentQuestionStorageState()?.isHelpAnswer;
     //get points and assign on correct
     if (isCorrectAnswer) {
@@ -739,19 +803,17 @@ const onContinueTrain = async () => {
   isLoadingContinue.value = true;
   loadingPage.value = true;
   stopTimers();
-  await $store.dispatch('student/callStudentExamDone', {
+  await studentsExamStore.submitExam({
     id: examDetail.value!.id,
     wantProceed: true,
   });
-  const url = 'studentsExam/customFromTags';
-  const customTrainRes = await $axios.$post(url, {
+  const customTrainRes = await customFromTagsApi({
     studentExamId: examDetail.value!.id,
   });
-  router.replace(webStudentTrainingPathUtil(customTrainRes.id)).then(() => {
-    $store.commit('student/SET_CURRENT_EXAM_TRAIN_PAGE_DATA', customTrainRes);
-    initPage();
-    isLoadingContinue.value = false;
-  });
+  await router.replace(webStudentTrainingPathUtil(customTrainRes!.id));
+  studentsExamStore.patchState({ detail: customTrainRes });
+  initPage();
+  isLoadingContinue.value = false;
 };
 
 const exitPage = async () => {
@@ -770,31 +832,6 @@ const onAnswerChange = async (answerId: number) => {
   }
   questionsAnswersMap.value[activeQuestionModel.value.id] = answerId;
   questionsAnswersMap.value = { ...questionsAnswersMap.value };
-};
-
-const callAnswerApi = async (
-  answerId: number,
-  answerStateType = AnswerStateTypeEnum.None
-) => {
-  try {
-    const res: StudentsExamAnswerDataModel = await $store.dispatch(
-      'student/callStudentExamAnswer',
-      {
-        studentQuestionId: activeQuestionModel.value.id,
-        nextStudentQuestionId: nextQuestionModel.value?.id,
-        answerId,
-        timeSpan: currentQuestionPassedSecond,
-        answerType: answerStateType,
-        studentExamTimeSpan: examInterval.currentTime,
-        studentExamPartTimeSpan: activeExamPartInterval.value.currentTime,
-        questionTimeSpan: activeExamQuestionInterval.value.currentTime,
-      }
-    );
-    return res;
-  } catch (e) {
-    console.error(e);
-    toastMessage.showError();
-  }
 };
 
 const onCorrectAnswer = () => {
@@ -826,14 +863,13 @@ const stopCurrentQuestionTimer = () => {
 const getQuestionApiAndUpdateRecord = async (questionId: string) => {
   try {
     isLoadingQuestionDetail.value = true;
-    const questionDetailResponse = await $store.dispatch(
-      'student/getQuestionDetailByExamIdAndQuestionId',
-      {
-        examId: examDetail.value!.id,
-        questionId,
-      }
-    );
-    updateQuestionsDetailRecordState(questionId, questionDetailResponse.data);
+    const questionDetailResponse = await getExamQuestionApi({
+      examId: examDetail.value!.id,
+      questionId,
+    });
+    if (!questionDetailResponse) return;
+
+    updateQuestionsDetailRecordState(questionId, questionDetailResponse);
     isLoadingQuestionDetail.value = false;
   } catch (e) {
     console.error(e);
@@ -895,7 +931,7 @@ const onAnswerHelpAction = async () => {
     TRAIN_MODAL_WARN_CASE.showAnswerHelp
   );
 
-  $refs.questionWarnModalRef.$once('onAction', async (confirm) => {
+  $refs.questionWarnModalRef.$once('onAction', async (confirm: boolean) => {
     if (!confirm) return;
 
     setQuestionStorageStateToHelpAnswer();
@@ -920,9 +956,10 @@ const setQuestionStorageStateToHelpAnswer = () => {
 };
 
 const removeAnswerApiAndUpdateStorageState = async () => {
-  const removedAnswerId = await $store.dispatch('student/removeAnswersTry', {
+  const removedAnswerId = await removeAnswerApi({
     studentQuestionId: activeQuestionModel.value.id,
   });
+  if (!removedAnswerId) return;
   trainingStorageState.value.countOfTryRemoveAnswer++;
   trainingStorageState.value.removedAnswerIdList = Array.from(
     new Set([
@@ -961,7 +998,7 @@ const removeAnswersTry = async () => {
     TRAIN_MODAL_WARN_CASE.deleteAnswerHelp
   );
 
-  $refs.questionWarnModalRef.$once('onAction', async (confirm) => {
+  $refs.questionWarnModalRef.$once('onAction', async (confirm: boolean) => {
     if (!confirm) return;
     removeAnswerApiAndUpdateStorageState();
   });

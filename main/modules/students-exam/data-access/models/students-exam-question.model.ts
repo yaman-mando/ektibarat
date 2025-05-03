@@ -1,3 +1,9 @@
+export type StudentsExamQuestionParamsDataModel = {
+  examId: string;
+  questionId: string;
+};
+
+//detail
 export type StudentsExamQuestionDataModel = {
   id: string;
   answerId: number;

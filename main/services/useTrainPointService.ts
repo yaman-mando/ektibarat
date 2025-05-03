@@ -5,7 +5,7 @@ import { minByUtil, orderByUtil } from '~/main/utils/lodash.utils';
 export function useTrainPointService(
   pointSettings: StudentsExamPartSettingsDataModel[]
 ) {
-  const pointsSettingsFiltered = ref(
+  const pointsSettingsFiltered = ref<StudentsExamPartSettingsDataModel[]>(
     orderByUtil(
       pointSettings.filter((s) => s.questionLevel === 0),
       'period'
@@ -71,7 +71,7 @@ export function useTrainPointService(
 
     if (hasUsedDeleteHelp) {
       return (
-        minByUtil(pointsSettingsFiltered.value, 'pointsCount').pointsCount ??
+        minByUtil(pointsSettingsFiltered.value, 'pointsCount')?.pointsCount ??
         null
       );
     }

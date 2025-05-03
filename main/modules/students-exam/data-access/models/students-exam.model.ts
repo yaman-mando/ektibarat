@@ -43,3 +43,25 @@ export type StudentsExamPartSettingsDataModel = {
   period: number;
   pointsCount: number;
 };
+
+//submit exam params
+export type StudentsExamSubmitParamsModel = {
+  id: string;
+  wantProceed?: boolean;
+};
+
+//analyze
+export type StudentsExamAnalyzeDataModel = {
+  isAllowed?: boolean;
+  categoryId?: number;
+};
+
+//custom from tags
+export type StudentsExamCustomFromTagsDTODataModel = {
+  studentExamId: string;
+};
+
+//remove answer
+export type StudentsExamRemoveAnswerDTODataModel = {
+  studentQuestionId: string;
+};

@@ -13,6 +13,7 @@ export type TrainingStorageQuestionState = {
   isHelpAnswer?: boolean;
   isRemoveAnswerUsed?: boolean;
   showLawsUsed?: boolean;
+  isShowLaws?: boolean;
 };
 
 export const useStudentsExamStorageService = () => {
