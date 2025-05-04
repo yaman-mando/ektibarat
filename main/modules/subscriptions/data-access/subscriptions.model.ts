@@ -11,6 +11,7 @@ export type CurrentSubscriptionDataModel = {
   remainTrainingCount: number;
   remainTrainingCountPerDay: number;
   subjectId: number;
+  trainingLawWatchingCount: number;
   subscriptionsServices: {
     serviceId: number;
     serviceName: string;

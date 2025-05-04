@@ -178,5 +178,6 @@ export const useGlobalStore = defineStore('global', () => {
     getConditionStatic,
     getAboutUsStatic,
     getContactUsStatic,
+    getLocalesJsonStatic,
   };
 });

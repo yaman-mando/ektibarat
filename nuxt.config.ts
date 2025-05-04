@@ -105,6 +105,8 @@ export default defineNuxtConfig({
       prefix: 'Prime',
       include: [
         //todo-z handle provider as vee-validate
+        'Popover',
+        //end popover
         'Accordion',
         'AccordionPanel',
         'AccordionHeader',
