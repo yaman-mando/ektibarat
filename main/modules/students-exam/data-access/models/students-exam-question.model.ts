@@ -41,7 +41,7 @@ export type StudentsExamQuestionDataModel = {
   categoryId: number;
 };
 
-interface StudentsExamQuestionAnswerDataModel {
+export interface StudentsExamQuestionAnswerDataModel {
   id: number;
   title: string;
   shortDescription: string;

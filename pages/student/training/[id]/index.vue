@@ -85,7 +85,7 @@
               />
             </exam-part-question>
             <div class="tpa-w w-mobile-only">
-              <train-part-actions
+              <lazy-app-train-part-actions
                 ref="trainPartMobileRef"
                 class="w-container"
                 :isActiveNext="canSelectNextQuestion"
@@ -152,7 +152,7 @@
           />
         </div>
         <div class="tpa-w w-web-up-only">
-          <train-part-actions
+          <lazy-app-train-part-actions
             ref="trainPartWebRef"
             class="w-container"
             :isActiveNext="canSelectNextQuestion"
@@ -395,7 +395,7 @@ const currentQuestionAnswerId = computed(() => {
 
 const canConfirmAnswerModel = computed(
   () =>
-    currentQuestionAnswerId.value &&
+    !!currentQuestionAnswerId.value &&
     activeQuestionModel.value.questionState === QuestionStateEnum.initial
 );
 
@@ -528,7 +528,7 @@ const hasNextQuestion = computed(
 const hasPrevPart = computed(() => activePartIndex.value > 0);
 
 const hasNextPart = computed(
-  () => examDetail.value?.examParts?.length ?? 0 > activePartIndex.value + 1
+  () => examDetail.value!.examParts.length > activePartIndex.value + 1
 );
 
 const isEndQuestion = computed(

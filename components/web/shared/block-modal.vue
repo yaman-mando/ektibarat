@@ -22,12 +22,12 @@
       </div>
       <div class="e-4">
         <app-button
-          type="outline"
+          variant="outline"
           label="إغلاق"
           @click="closeModal"
         />
         <app-button
-          type="outline"
+          variant="outline"
           label="الذهاب لصفحة التواصل"
           @click="goToContact"
         />
