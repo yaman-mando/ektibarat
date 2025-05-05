@@ -68,7 +68,7 @@
               :question="currentQuestionDetailModel"
               :showFeature="true"
             >
-              <answer-select
+              <lazy-app-answer-select
                 :correctAnswerIdsList="viewCorrectAnswerIds"
                 :disableImgModal="true"
                 :selectedValue="currentQuestionAnswerId"

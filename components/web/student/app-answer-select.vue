@@ -148,7 +148,7 @@ const props = withDefaults(
   defineProps<{
     answers: StudentsExamQuestionAnswerDataModel[];
     isExam?: boolean;
-    selectedValue?: number;
+    selectedValue: number | null;
     questionState?: number;
     fetchingApi?: boolean;
     isSeo?: boolean;
@@ -160,7 +160,9 @@ const props = withDefaults(
     correctAnswerIdsList?: number[];
     disableImgModal?: boolean;
   }>(),
-  {}
+  {
+    selectedValue: null,
+  }
 );
 
 //refs
