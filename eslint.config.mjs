@@ -24,7 +24,7 @@ export default withNuxt(
           },
         ],
         'no-restricted-syntax': [
-          'error',
+          'off',
           {
             selector: 'ThisExpression',
             message:

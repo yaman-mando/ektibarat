@@ -139,6 +139,8 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/app-font.css', '~/assets/css/main.css'],
   plugins: [
+    '~/plugins/shared/axios-plugin.ts',
+    '~/plugins/shared/vuex-plugin.ts',
     '~/core/auth/auth-interceptor-plugin.ts',
     '~/core/auth/http-error-interceptor-plugin.client.ts',
     '~/plugins/shared/global-error-handler-plugin.client.ts',
