@@ -1,5 +1,6 @@
 import { APP_ROUTES } from '~/main/constants/routes';
 
+export const adminRootPathUtil = () => `/${APP_ROUTES.admin.root}`;
 export const adminQuestionsListPath = () =>
   `/${APP_ROUTES.admin.root}/questions`;
 

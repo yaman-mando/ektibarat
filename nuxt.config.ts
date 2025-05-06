@@ -83,6 +83,10 @@ export default defineNuxtConfig({
       path: '~/components',
       pathPrefix: false,
     },
+    {
+      path: '~/main/shared/math-jax/components',
+      pathPrefix: false,
+    },
   ],
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },

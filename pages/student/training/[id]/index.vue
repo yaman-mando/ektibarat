@@ -344,10 +344,6 @@ const { request: removeAnswerRequest, callApi: removeAnswerApi } =
   );
 
 //computed
-const userServicesState = computed(
-  () => subscriptionsStore.state.userServicesState
-);
-
 const passedAllowedUnderMinAnswerMsg = computed(
   () => 'لقد تم الإجابة بشكل متسرع على عدة اسئلة، سوف يتم انهاء الامتحان'
 );
@@ -833,13 +829,13 @@ const beforeAnswerHook = async () => {
       ) {
         $refs.warnModal.showModal();
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        exitWithoutConfirm();
+        await exitWithoutConfirm();
         return resolve(false);
       }
 
       showWarnModalAnsweredBeforeMinTime();
       $refs.questionWarnModalRef.$once('onAction', async (confirm: boolean) => {
-        return resolve(!!confirm);
+        return resolve(confirm);
       });
       return;
     }
@@ -854,7 +850,7 @@ const beforeAnswerHook = async () => {
         TRAIN_MODAL_WARN_CASE.afterMaxTime
       );
       $refs.questionWarnModalRef.$once('onAction', async (confirm: boolean) => {
-        return resolve(!!confirm);
+        return resolve(confirm);
       });
       return;
     }
@@ -975,10 +971,10 @@ const applyAnswer = async (answerId: any) => {
           userCurrentSub.value!.remainTrainingCount - 1 > 0 &&
           userCurrentSub.value!.remainTrainingCountPerDay - 1 > 0
         ) {
-          confirmContinueOrExitTrain();
+          await confirmContinueOrExitTrain();
           return;
         }
-        exitWithoutConfirm();
+        await exitWithoutConfirm();
       }
     }
     isApplyAnswerLoading.value = false;
@@ -1005,21 +1001,23 @@ const onContinueTrain = async () => {
   });
   await router.replace(webStudentTrainingPathUtil(customTrainRes!.id));
   studentsExamStore.patchState({ detail: customTrainRes });
-  initPage();
+  await initPage();
   isLoadingContinue.value = false;
 };
 
 const exitPage = async () => {
   if (confirmNavigate.value) return;
-  router.replace(webUserPanelTraining());
+  await router.replace(webUserPanelTraining());
 };
 
 const exitWithoutConfirm = async () => {
   skipRouteLeave.value = true;
-  exitPage();
+  await exitPage();
 };
 
-const onAnswerChange = async (answerId: number) => {
+const onAnswerChange = async (answerId: number | null) => {
+  if (!answerId) return;
+
   if (!questionsAnswersMap.value) {
     questionsAnswersMap.value = {};
   }
@@ -1193,7 +1191,7 @@ const removeAnswersTry = async () => {
 
   $refs.questionWarnModalRef.$once('onAction', async (confirm: boolean) => {
     if (!confirm) return;
-    removeAnswerApiAndUpdateStorageState();
+    await removeAnswerApiAndUpdateStorageState();
   });
 };
 

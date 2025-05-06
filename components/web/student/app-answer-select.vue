@@ -28,7 +28,7 @@
         >
           <!--      text-->
           <template v-if="item.answerType == questionTypes.text">
-            <mx-admin-math-text-html
+            <lazy-app-math-text-html
               :noPopover="true"
               :text="item.title"
             />
@@ -37,7 +37,7 @@
           <!--      photo video audio-->
           <template v-else>
             <div class="media-wrapper">
-              <mx-admin-view-media-files
+              <lazy-app-view-media-files
                 v-if="item.answerType == questionTypes.photo"
                 :key="`media-${item.id}`"
                 :url="item.contentUrl"
@@ -51,7 +51,7 @@
                 :withModal="!disableImgModal"
                 style="width: 120px; height: 120px; aspect-ratio: 1/1"
               />
-              <mx-admin-view-media-files
+              <lazy-app-view-media-files
                 v-if="item.answerType == questionTypes.video"
                 :key="`media-video-${item.id}`"
                 :url="item.contentUrl"
@@ -63,7 +63,7 @@
                 maxWidth="120px"
                 radius="5"
               />
-              <mx-admin-view-media-files
+              <lazy-app-view-media-files
                 v-if="item.answerType == questionTypes.audio"
                 :key="`media-audio-${item.id}`"
                 :url="item.contentUrl"
@@ -148,7 +148,7 @@ const props = withDefaults(
   defineProps<{
     answers: StudentsExamQuestionAnswerDataModel[];
     isExam?: boolean;
-    selectedValue: number | null;
+    selectedValue?: number | null;
     questionState?: number;
     fetchingApi?: boolean;
     isSeo?: boolean;
