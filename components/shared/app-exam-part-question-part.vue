@@ -7,9 +7,6 @@ export default defineComponent({
   data() {
     return {};
   },
-  mounted() {
-    this.$axios.get('/');
-    this.$store.commit('');
-  },
+  mounted() {},
 });
 </script>

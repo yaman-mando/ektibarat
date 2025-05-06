@@ -21,12 +21,10 @@
 <script setup lang="ts">
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { useSuccessPartnerStore } from '~/main/modules/success-partners/services/useSuccessPartnerStore';
-import {
-  ImagesFolderName,
-  STATIC_PAGE_TYPE,
-} from '~/main/constants/images-folder-name';
+import { ImagesFolderName } from '~/main/constants/images-folder-name';
 import { ImageSize } from '~/main/constants/image-size';
 import { ImageExt } from '~/main/constants/image-ext';
+import { STATIC_PAGE_TYPE } from '~/main/constants/static-page-type';
 
 const globalStore = useGlobalStore();
 const successPartnerStore = useSuccessPartnerStore();

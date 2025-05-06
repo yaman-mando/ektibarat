@@ -7,6 +7,9 @@ import type {
 } from '~/main/modules/subscriptions/data-access/subscriptions.model';
 import { deepCloneUtil } from '~/main/utils/lodash.utils';
 import { QUESTION_ANIMATE_DEFAULT_CONFIG } from '~/main/utils/question-animate.utils';
+import { subsVuexStore } from '~/store/subs-vuex.store';
+import { StudentVuexStore } from '~/store/student-vuex.store';
+import { adminVuexStore } from '~/store/admin/admin-vuex.store';
 
 const userServicesState = {} as UserServicesStateUi;
 Object.keys(ServiceTypesEnum).forEach((key) => {
@@ -520,6 +523,8 @@ export const vuexStore = createStore({
     },
   },
   modules: {
-    subs: {},
+    subs: subsVuexStore,
+    student: StudentVuexStore,
+    admin: adminVuexStore,
   },
 });
