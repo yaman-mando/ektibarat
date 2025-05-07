@@ -259,11 +259,10 @@ export const StudentVuexStore: Module = {
       try {
         const { $axios } = useNuxtApp();
 
-        const response = await $axios.post(
-          `studentsQuestionsFlags`,
-          { ...payload, type: 0 },
-          { progress: false }
-        );
+        const response = await $axios.post(`studentsQuestionsFlags`, {
+          ...payload,
+          type: 0,
+        });
         return response;
       } catch (e) {
         console.error(e);
@@ -274,11 +273,10 @@ export const StudentVuexStore: Module = {
       try {
         const { $axios } = useNuxtApp();
 
-        const response = await $axios.post(
-          `studentsQuestionsFlags`,
-          { ...payload, type: 1 },
-          { progress: false }
-        );
+        const response = await $axios.post(`studentsQuestionsFlags`, {
+          ...payload,
+          type: 1,
+        });
         return response;
       } catch (e) {
         console.error(e);
@@ -295,8 +293,7 @@ export const StudentVuexStore: Module = {
         });
         const response = await $axios.post(
           `/studentsExam/updateRemainTime`,
-          payload,
-          { progress: false }
+          payload
         );
         commit('SET_FETCHING_STUDENT', {
           [fetchingKeysStudent.studentExamRemainTime]: false,

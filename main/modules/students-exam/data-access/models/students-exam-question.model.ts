@@ -39,6 +39,9 @@ export type StudentsExamQuestionDataModel = {
   _correctAnswerId: string | null;
   grade: null;
   categoryId: number;
+  questionGuid: string;
+  answerType: number;
+  tagsIds: number[];
 };
 
 export interface StudentsExamQuestionAnswerDataModel {

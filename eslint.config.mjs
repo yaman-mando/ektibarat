@@ -6,6 +6,7 @@ export default withNuxt(
   [
     {
       rules: {
+        'no-useless-catch': 'off',
         'no-restricted-imports': [
           'error',
           {

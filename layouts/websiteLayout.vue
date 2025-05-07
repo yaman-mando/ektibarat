@@ -105,7 +105,7 @@ const headers = {
   },
 };
 const extraScript = computed(() => {
-  const scripts = [];
+  const scripts: any[] = [];
 
   scripts.push({
     innerHTML: JSON.stringify({

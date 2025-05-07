@@ -1,4 +1,10 @@
-import { format, parseISO } from 'date-fns';
+import {
+  addSeconds,
+  format,
+  intervalToDuration,
+  parseISO,
+  startOfDay,
+} from 'date-fns';
 import { arSA as arLocale, enGB as enLocale } from 'date-fns/locale';
 
 export const appDateFormat = {
@@ -42,4 +48,55 @@ export const dateUi = (date: string | null) => {
 export const formatContentDate = (value: string | null) => {
   if (!value) return null;
   return dateUi(value);
+};
+
+export const timeUiTypeA = (date) => {
+  if (!date) return '';
+
+  return format(date, appDateFormat.time.mm_ss);
+};
+
+export const timeUi = (date) => {
+  if (!date) return '';
+
+  return format(date, appDateFormat.time.hh_mm_ss);
+};
+
+export const DateHelper = () => {
+  const convertSecondsToLabel_mm_ss = (val) => {
+    if (!val || isNaN(val)) return '00:00';
+    let date = startOfDay(new Date());
+    date = addSeconds(date, val);
+    return timeUiTypeA(date);
+  };
+  const convertSecondTo_hh_mm_ss = (val) => {
+    if (!val) return '0';
+    const { hours } = intervalToDuration({
+      start: 0,
+      end: val * 1000,
+    });
+
+    let date = startOfDay(new Date());
+    date = addSeconds(date, val);
+    return hours ? timeUi(date) : timeUiTypeA(date);
+  };
+
+  const convertSecondToSecondMinuteFormat = (val) => {
+    if (!val) return '0';
+    const { minutes, seconds } = intervalToDuration({
+      start: 0,
+      end: val * 1000,
+    });
+
+    const minuteLabel = minutes ? `${minutes} دقيقة ` : '';
+    const secondLabel = seconds ? `${seconds} ثانية ` : '';
+    const labelListFiltered = [minuteLabel, secondLabel].filter((val) => !!val);
+    return labelListFiltered.join(' ');
+  };
+
+  return {
+    convertSecondToSecondMinuteFormat,
+    convertSecondsToLabel_mm_ss,
+    convertSecondTo_hh_mm_ss,
+  };
 };

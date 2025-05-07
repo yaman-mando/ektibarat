@@ -9,6 +9,8 @@ export const QUESTION_ANIMATE_DEFAULT_CONFIG = {
   disableLazyImage: true,
 };
 
+export type QuestionAnimateConfigModel = typeof QUESTION_ANIMATE_DEFAULT_CONFIG;
+
 export const getAnimationDuration = (duration: number) => duration;
 
 /**

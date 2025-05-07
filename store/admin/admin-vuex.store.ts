@@ -1,6 +1,8 @@
 import type { Module } from 'vuex';
 import { STATIC_PAGE_TYPE } from '~/main/constants/static-page-type';
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+import { servicesVuexStore } from '~/store/admin/services/services-vuex.store';
+import { socialMediaVuexStore } from '~/store/admin/social-media/social-media-vuex.store';
 
 export const fetchingKeysAdmin = {
   login: 'login',
@@ -465,6 +467,7 @@ export const adminVuexStore: Module = {
   },
   actions: {
     async callEmployeeList({ commit }, payload) {
+      const { $axios } = useNuxtApp();
       try {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.listEmployee]: true,
@@ -484,6 +487,8 @@ export const adminVuexStore: Module = {
       }
     },
     async callEmployeeAdd({ commit }, payload) {
+      const { $axios } = useNuxtApp();
+
       try {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.employeeForm]: true,
@@ -506,6 +511,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.employeeForm]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.put(
           `/employee/${payload.id}`,
           payload.data
@@ -527,6 +534,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.employeeDelete]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.delete(`/employee/${payload.id}`);
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.employeeDelete]: false,
@@ -545,6 +554,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.employeeDetail]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.get(`/employee/${payload}`);
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.employeeDetail]: false,
@@ -564,6 +575,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.listCategory]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post('/categories/filter', payload);
         commit('SET_CATEGORY_LIST', response.data);
         commit('SET_FETCHING_ADMIN', {
@@ -583,6 +596,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.categoryForm]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post('/categories', payload);
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.categoryForm]: false,
@@ -601,6 +616,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.categoryForm]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.put(
           `/categories/${payload.id}`,
           payload.data
@@ -622,6 +639,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.categoryDelete]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.delete(`/categories/${payload.id}`);
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.categoryDelete]: false,
@@ -640,6 +659,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.categoryDetail]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.get(`/categories/${payload}`);
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.categoryDetail]: false,
@@ -657,6 +678,8 @@ export const adminVuexStore: Module = {
     async callExamList({ commit }, payload) {
       try {
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examList]: true });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post(`/exam/filter`, {
           ...payload.form,
         });
@@ -673,6 +696,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.examListDetail]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post(
           `/exam/examWithDetailFilter/${payload.id}`,
           { ...payload.form }
@@ -694,6 +719,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.examListDetailQuestions]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post(
           `/exam/examDetails/${payload.id}/examQuestions`,
           { ...payload.form }
@@ -712,6 +739,8 @@ export const adminVuexStore: Module = {
     },
     async callExamDelete({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examDelete]: true });
         const response = await $axios.delete(`/exam/${payload.id}`);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examDelete]: false });
@@ -724,6 +753,8 @@ export const adminVuexStore: Module = {
     },
     async callExamAdd({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examForm]: true });
         const response = await $axios.post('/exam', payload.form);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examForm]: false });
@@ -736,6 +767,8 @@ export const adminVuexStore: Module = {
     },
     async callExamAddPart({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examForm]: true });
         const response = await $axios.post('/exam/examDetails', payload.form);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examForm]: false });
@@ -748,6 +781,8 @@ export const adminVuexStore: Module = {
     },
     async callExamDetail({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examDetail]: true });
         const response = await $axios.get(`/exam/${payload.id}`);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examDetail]: false });
@@ -760,6 +795,8 @@ export const adminVuexStore: Module = {
     },
     async callExamUpdate({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examUpdate]: true });
         const response = await $axios.put(`/exam/${payload.id}`, payload.form);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examUpdate]: false });
@@ -772,6 +809,8 @@ export const adminVuexStore: Module = {
     },
     async callExamUpdatePart({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examUpdate]: true });
         const response = await $axios.put(
           `/exam/examDetails/${payload.form.id}`,
@@ -787,6 +826,8 @@ export const adminVuexStore: Module = {
     },
     async callExamUpdatePartQuestionsManual({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.examUpdate]: true });
         const response = await $axios.put(`/exam/examDetails/examQuestions`, {
           ...payload.form,
@@ -804,6 +845,8 @@ export const adminVuexStore: Module = {
      * */
     async callExamDeletePartQuestionsManual({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.delete(
           `/exam/examDetails/${payload.examDetailId}/examQuestions/${payload.questionId}`
         );
@@ -818,6 +861,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.examPartDelete]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.delete(`/exam/examDetails/${payload.id}`);
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.examPartDelete]: false,
@@ -836,6 +881,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.questionsByCategoryAndLevel]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post('/questions/questionsForExam', {
           ...payload.form,
         });
@@ -854,6 +901,8 @@ export const adminVuexStore: Module = {
 
     async callSubjectList({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.listSubject]: true });
         const response = await $axios.post('/subject/filter', payload);
         commit('SET_SUBJECT_LIST', response.data);
@@ -872,6 +921,8 @@ export const adminVuexStore: Module = {
 
     async callSubjectAdd({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.subjectAdd]: true });
         const res = await $axios.post('subject', payload);
         commit('SET_SUBJECT_ADD', res.data);
@@ -887,6 +938,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.employeeForGrades]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const list = await $axios.post('employee/listForSubjects', {
           grades: grade,
         });
@@ -908,6 +961,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.subjectsForGrades]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post('/subject/listForGrades', {
           grades: payload,
         });
@@ -947,6 +1002,8 @@ export const adminVuexStore: Module = {
             currentCategoryId: payload.currentCategoryId,
           };
         }
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post(
           '/categories/listForSubjects',
           reqBody
@@ -966,6 +1023,8 @@ export const adminVuexStore: Module = {
 
     async getSubjectCatListBySearch({ commit }, searchVal) {
       try {
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(`/categories/list?predicate=${searchVal}`);
         return res.data;
       } catch (e) {
@@ -978,6 +1037,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.subjectDetails]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(`/subject/${id}`);
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.subjectDetails]: false,
@@ -993,7 +1054,9 @@ export const adminVuexStore: Module = {
 
     async callSubjectDelete({ commit }, id) {
       try {
-        const res = await $axios.$delete(`/subject/${id}`);
+        const { $axios } = useNuxtApp();
+
+        const { data: res } = await $axios.delete(`/subject/${id}`);
         if (res.isDeleted) {
           commit('DELETE_SUBJECT', id);
           return true;
@@ -1010,6 +1073,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.listQuestion]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post(
           `/questions/filter?pageSize=${payload.pageSize}&pageNumber=${payload.pageNumber}`,
           payload.form
@@ -1030,6 +1095,8 @@ export const adminVuexStore: Module = {
 
     async callQuestionIds({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post(
           `/questions/filterReturnIds?pageSize=${payload.pageSize}&pageNumber=${payload.pageNumber}`,
           payload.form
@@ -1053,6 +1120,8 @@ export const adminVuexStore: Module = {
         } else {
           requestUrl = `/categories/listCategoriesFirstClass`;
         }
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.get(requestUrl);
         commit('SET_LIST_CATEGORIES_FIRST', response.data);
         return response.data;
@@ -1073,6 +1142,8 @@ export const adminVuexStore: Module = {
         } else {
           requestUrl = `/tagsForQuestions/listForAddingQuestions?isBanks=false`;
         }
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.get(requestUrl);
         commit('SET_LIST_TAGS', response.data);
         return response.data;
@@ -1087,6 +1158,8 @@ export const adminVuexStore: Module = {
 
     async callListBanks({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.get(
           `/tagsForQuestions/listForAddingQuestions?isBanks=true`
         );
@@ -1103,6 +1176,8 @@ export const adminVuexStore: Module = {
 
     async callLawsParentList({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get('/categories/laws/filterTree');
         const parentList = res.data.map((item) => ({
           id: item.id,
@@ -1126,6 +1201,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.listChildLaws]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(
           `/categories/laws/filterTree?id=${id}&showQuestionsCount=true`
         );
@@ -1149,6 +1226,8 @@ export const adminVuexStore: Module = {
 
     async callListLaws({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.get(`/categories/laws/list?type=1`);
         commit('SET_LIST_LAWS', response.data);
         return response.data;
@@ -1163,6 +1242,8 @@ export const adminVuexStore: Module = {
 
     async callListExperiences({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.get(`/categories/laws/list?type=2`);
         commit('SET_LIST_EXPERIENCES', response.data);
         return response.data;
@@ -1180,6 +1261,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.questionComplain]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post(
           `/questions/${payload.id}/complaints`,
           { text: payload.text }
@@ -1199,7 +1282,9 @@ export const adminVuexStore: Module = {
 
     async callQuestionDelete({ commit }, id) {
       try {
-        const res = await $axios.$delete(`/questions/${id}`);
+        const { $axios } = useNuxtApp();
+
+        const { data: res } = await $axios.delete(`/questions/${id}`);
         if (res.isDeleted) {
           commit('DELETE_QUESTION', id);
           return true;
@@ -1221,7 +1306,9 @@ export const adminVuexStore: Module = {
 
     async callQuestionDetails({ commit }, id) {
       try {
-        const res = await $axios.$get(`questions/${id}/details`);
+        const { $axios } = useNuxtApp();
+
+        const { data: res } = await $axios.get(`questions/${id}/details`);
         commit('SET_QUESTIONS_DETAILS', res);
         return true;
       } catch (e) {
@@ -1230,9 +1317,13 @@ export const adminVuexStore: Module = {
     },
     async callQuestionCheck({ commit }, { id, isChecked }) {
       try {
-        return await $axios.$put(`questions/${id}/check`, {
-          isChecked,
-        });
+        const { $axios } = useNuxtApp();
+
+        return (
+          await $axios.put(`questions/${id}/check`, {
+            isChecked,
+          })
+        ).data;
       } catch (e) {
         throw e;
       }
@@ -1240,8 +1331,10 @@ export const adminVuexStore: Module = {
 
     async callFaqs({ commit }) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.faqs]: true });
-        const res = await $axios.$get('commonQuestions/all');
+        const { data: res } = await $axios.get('commonQuestions/all');
         commit('SET_FAQS', res);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.faqs]: false });
         return res;
@@ -1252,8 +1345,10 @@ export const adminVuexStore: Module = {
 
     async callVideos({ commit }) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.videos]: true });
-        const res = await $axios.$get('videosLibrary/all');
+        const { data: res } = await $axios.get('videosLibrary/all');
         commit('SET_VIDEOS', res);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.videos]: false });
         return res;
@@ -1263,6 +1358,8 @@ export const adminVuexStore: Module = {
     },
     async callContentDetail({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.contentPage]: true });
         const res = await $axios.get(`/${payload.type}`);
         commit('SET_FETCHING_ADMIN', {
@@ -1278,6 +1375,8 @@ export const adminVuexStore: Module = {
     },
     async callContentDetailUpdate({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.contentPage]: true });
         const res = await $axios.put(`/${payload.type}/update`, {
           text: payload.text,
@@ -1299,6 +1398,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin[payload.type]]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(`/${payload.type}/all`, {
           params: payload.params ? { ...payload.params } : null,
         });
@@ -1318,6 +1419,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin[payload.type]]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.delete(`/${payload.type}/${payload.id}`);
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin[payload.type]]: false,
@@ -1332,6 +1435,8 @@ export const adminVuexStore: Module = {
     },
     async callGeneralInfoAddByType({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.infoForm]: true });
         const res = await $axios.post(`/${payload.type}`, payload.form);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.infoForm]: false });
@@ -1343,6 +1448,8 @@ export const adminVuexStore: Module = {
     },
     async callGeneralInfoUpdateByType({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.infoForm]: true });
         const res = await $axios.put(
           `/${payload.type}/${payload.id}`,
@@ -1358,6 +1465,8 @@ export const adminVuexStore: Module = {
 
     async callContactUs({ commit }) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.contactUs]: true });
         const res = await $axios.get(`/contactForm/all`);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.contactUs]: false });
@@ -1369,6 +1478,8 @@ export const adminVuexStore: Module = {
     },
     async callContactUsDelete({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         // commit("SET_FETCHING_ADMIN", {[fetchingKeysAdmin.contactUs]: true});
         const res = await $axios.delete(`/contactForm/${payload.id}`);
         // commit("SET_FETCHING_ADMIN", {[fetchingKeysAdmin.contactUs]: false});
@@ -1380,6 +1491,8 @@ export const adminVuexStore: Module = {
     },
     async callComplainsList({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.complains]: true });
         const res = await $axios.get(
           `/complaints/all?PageNumber=${payload.pageNum}&PageSize=${payload.pageSize}`,
@@ -1398,6 +1511,8 @@ export const adminVuexStore: Module = {
     },
     async callComplainsDelete({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         // commit("SET_FETCHING_ADMIN", {[fetchingKeysAdmin.contactUs]: true});
         const res = await $axios.delete(`/complaints/${payload.id}`);
         // commit("SET_FETCHING_ADMIN", {[fetchingKeysAdmin.contactUs]: false});
@@ -1409,6 +1524,8 @@ export const adminVuexStore: Module = {
     },
     async callContactForm({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.contactForm]: true });
         const response = await $axios.post('/contactForm', payload);
         commit('SET_FETCHING_ADMIN', {
@@ -1429,6 +1546,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.complaintsForm]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const response = await $axios.post('/complaints', payload);
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.complaintsForm]: false,
@@ -1447,6 +1566,8 @@ export const adminVuexStore: Module = {
 
     async callBlogs({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogs]: true });
         const res = await $axios.get(`/blogs/all`);
         commit('SET_BLOGS', res.data);
@@ -1460,6 +1581,8 @@ export const adminVuexStore: Module = {
 
     async callBlog({ commit }, id) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogs]: true });
         const res = await $axios.get(`/blogs/${id}`);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogs]: false });
@@ -1472,8 +1595,10 @@ export const adminVuexStore: Module = {
 
     async callBlogDelete({ commit }, id) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogs]: true });
-        const res = await $axios.$delete(`/blogs/${id}`);
+        const { data: res } = await $axios.delete(`/blogs/${id}`);
         if (res) {
           commit('DELETE_BLOG', id);
         }
@@ -1487,8 +1612,10 @@ export const adminVuexStore: Module = {
 
     async callBlogEdit({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogs]: true });
-        const res = await $axios.$put(`/blogs/${payload.id}`, payload);
+        const { data: res } = await $axios.put(`/blogs/${payload.id}`, payload);
         if (res) {
           commit('UPDATE_BLOG', res);
         }
@@ -1502,8 +1629,10 @@ export const adminVuexStore: Module = {
 
     async callBlogAdd({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogs]: true });
-        const res = await $axios.$post(`/blogs`, payload);
+        const { data: res } = await $axios.post(`/blogs`, payload);
         if (res) {
           commit('ADD_BLOG', res);
         }
@@ -1517,6 +1646,8 @@ export const adminVuexStore: Module = {
 
     async callBlogsCategory({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsCat]: true });
         const res = await $axios.get(`/categoriesBlogs/all`);
         commit('SET_BLOGS_CAT', res.data);
@@ -1530,6 +1661,8 @@ export const adminVuexStore: Module = {
 
     async callBlogCategory({ commit }, id) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsCat]: true });
         const res = await $axios.get(`/categoriesBlogs/${id}`);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsCat]: false });
@@ -1542,8 +1675,10 @@ export const adminVuexStore: Module = {
 
     async callBlogCatDelete({ commit }, id) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsCat]: true });
-        const res = await $axios.$delete(`/categoriesBlogs/${id}`);
+        const { data: res } = await $axios.delete(`/categoriesBlogs/${id}`);
         if (res) {
           commit('DELETE_BLOG_CAT', id);
         }
@@ -1557,8 +1692,10 @@ export const adminVuexStore: Module = {
 
     async callBlogCatEdit({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsCat]: true });
-        const res = await $axios.$put(
+        const { data: res } = await $axios.put(
           `/categoriesBlogs/${payload.id}`,
           payload
         );
@@ -1575,8 +1712,10 @@ export const adminVuexStore: Module = {
 
     async callBlogCatAdd({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsCat]: true });
-        const res = await $axios.$post(`/categoriesBlogs`, payload);
+        const { data: res } = await $axios.post(`/categoriesBlogs`, payload);
         if (res) {
           commit('ADD_BLOG_CAT', res);
         }
@@ -1590,6 +1729,8 @@ export const adminVuexStore: Module = {
 
     async callListOfBankNumbers({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsTag]: true });
         const res = await $axios.get(`/tagsForQuestions/listOfBankNumbers`);
         commit('SET_LIST_OF_BANK_NUMBERS', res.data);
@@ -1603,6 +1744,8 @@ export const adminVuexStore: Module = {
 
     async callBlogsTags({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsTag]: true });
         const res = await $axios.get(`/tags/all`);
         commit('SET_BLOGS_TAG', res.data);
@@ -1616,6 +1759,8 @@ export const adminVuexStore: Module = {
 
     async callBlogTag({ commit }, id) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsTag]: true });
         const res = await $axios.get(`/tags/${id}`);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsTag]: false });
@@ -1628,11 +1773,12 @@ export const adminVuexStore: Module = {
 
     async callBlogTagDelete({ commit }, id) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsTag]: true });
-        const res = await $axios.$delete(`/tags/${id}`);
+        const { data: res } = await $axios.delete(`/tags/${id}`);
         if (res) {
           commit('DELETE_BLOG_TAG', id);
-        } else {
         }
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsTag]: false });
         return res;
@@ -1644,8 +1790,10 @@ export const adminVuexStore: Module = {
 
     async callBlogTagEdit({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsTag]: true });
-        const res = await $axios.$put(`/tags/${payload.id}`, payload);
+        const { data: res } = await $axios.put(`/tags/${payload.id}`, payload);
         if (res) {
           commit('UPDATE_BLOG_TAG', res);
         }
@@ -1659,8 +1807,10 @@ export const adminVuexStore: Module = {
 
     async callBlogTagAdd({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.blogsTag]: true });
-        const res = await $axios.$post(`/tags`, payload);
+        const { data: res } = await $axios.post(`/tags`, payload);
         if (res) {
           commit('ADD_BLOG_TAG', res);
         }
@@ -1677,6 +1827,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.subscriptions]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(
           `/subscriptions/all?grades=${payload.globalType}`
         );
@@ -1699,6 +1851,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.subscriptions]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(
           `/subscriptions/all?grades=${payload.globalType}`
         );
@@ -1729,6 +1883,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.subscriptionForm]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(`/subscriptions/${id}`);
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.subscriptionForm]: false,
@@ -1747,10 +1903,11 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.subscriptionForm]: true,
         });
-        const res = await $axios.$delete(`/subscriptions/${id}`);
+        const { $axios } = useNuxtApp();
+
+        const { data: res } = await $axios.delete(`/subscriptions/${id}`);
         if (res) {
           commit('DELETE_SUBSCRIPTION', id);
-        } else {
         }
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.subscriptionForm]: false,
@@ -1769,7 +1926,12 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.subscriptionForm]: true,
         });
-        const res = await $axios.$put(`/subscriptions/${payload.id}`, payload);
+        const { $axios } = useNuxtApp();
+
+        const { data: res } = await $axios.put(
+          `/subscriptions/${payload.id}`,
+          payload
+        );
         if (res) {
           commit('UPDATE_SUBSCRIPTION', res);
         }
@@ -1790,7 +1952,9 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.subscriptionForm]: true,
         });
-        const res = await $axios.$post(`/subscriptions`, payload);
+        const { $axios } = useNuxtApp();
+
+        const { data: res } = await $axios.post(`/subscriptions`, payload);
         if (res) {
           commit('ADD_SUBSCRIPTION', res);
         }
@@ -1811,6 +1975,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.settingKey]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(`/projectSettings/${payload.key}`);
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.settingKey]: false,
@@ -1825,6 +1991,8 @@ export const adminVuexStore: Module = {
     },
     async callSettingKeyAll({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(`/projectSettings/all`);
         if (res.data) {
           commit('SET_SETTINGS_KEY', res.data);
@@ -1836,7 +2004,9 @@ export const adminVuexStore: Module = {
     },
     async callSettingKeyAdd({ commit }, payload) {
       try {
-        const res = await $axios.$post(`/projectSettings`, payload);
+        const { $axios } = useNuxtApp();
+
+        const { data: res } = await $axios.post(`/projectSettings`, payload);
         if (res) {
           commit('ADD_SETTINGS_KEY', res);
         }
@@ -1847,9 +2017,14 @@ export const adminVuexStore: Module = {
     },
     async callSettingKeyUpdate({ commit }, payload) {
       try {
-        const res = await $axios.$put(`/projectSettings/${payload.key}`, {
-          value: payload.value,
-        });
+        const { $axios } = useNuxtApp();
+
+        const { data: res } = await $axios.put(
+          `/projectSettings/${payload.key}`,
+          {
+            value: payload.value,
+          }
+        );
         if (res) {
           commit('UPDATE_SETTINGS_KEY', res);
           return res;
@@ -1860,7 +2035,11 @@ export const adminVuexStore: Module = {
     },
     async callSettingKeyDelete({ commit }, payload) {
       try {
-        const res = await $axios.$delete(`/projectSettings/${payload.key}`);
+        const { $axios } = useNuxtApp();
+
+        const { data: res } = await $axios.delete(
+          `/projectSettings/${payload.key}`
+        );
         if (res) {
           commit('DELETE_SETTINGS_KEY', payload);
         }
@@ -1872,6 +2051,8 @@ export const adminVuexStore: Module = {
 
     async callCoupons({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.coupons]: true });
         const res = await $axios.get(`/coupons/all`);
         commit('SET_COUPONS', res.data);
@@ -1885,6 +2066,8 @@ export const adminVuexStore: Module = {
 
     async callCoupon({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.coupons]: true });
         const res = await $axios.get(`/coupons/${payload}`);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.coupons]: false });
@@ -1898,8 +2081,13 @@ export const adminVuexStore: Module = {
 
     async callCouponEdit({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.coupons]: true });
-        const res = await $axios.$put(`/coupons/${payload.id}`, payload);
+        const { data: res } = await $axios.put(
+          `/coupons/${payload.id}`,
+          payload
+        );
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.coupons]: false });
         return res;
       } catch (e) {
@@ -1910,8 +2098,10 @@ export const adminVuexStore: Module = {
 
     async callCouponDelete({ commit }, id) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.coupons]: true });
-        const res = await $axios.$delete(`/coupons/${id}`);
+        const { data: res } = await $axios.delete(`/coupons/${id}`);
         if (res) {
           commit('DELETE_COUPON', id);
         }
@@ -1925,8 +2115,10 @@ export const adminVuexStore: Module = {
 
     async callCouponAdd({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.coupons]: true });
-        const res = await $axios.$post(`/coupons`, payload);
+        const { data: res } = await $axios.post(`/coupons`, payload);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.coupons]: false });
         return res;
       } catch (e) {
@@ -1937,6 +2129,8 @@ export const adminVuexStore: Module = {
 
     async callStudents({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.students]: true });
         const res = await $axios.post(
           `/students/filter?PageNumber=${payload.pageNum}&PageSize=${payload.pageSize}`,
@@ -1953,6 +2147,8 @@ export const adminVuexStore: Module = {
 
     async callStudent({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.students]: true });
         const res = await $axios.get(`/students/${payload}`);
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.students]: false });
@@ -1966,8 +2162,13 @@ export const adminVuexStore: Module = {
 
     async callStudentEdit({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.students]: true });
-        const res = await $axios.$put(`/students/${payload.id}`, payload);
+        const { data: res } = await $axios.put(
+          `/students/${payload.id}`,
+          payload
+        );
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.students]: false });
         return res;
       } catch (e) {
@@ -1978,8 +2179,10 @@ export const adminVuexStore: Module = {
 
     async callStudentDelete({ commit }, id) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', { [fetchingKeysAdmin.students]: true });
-        const res = await $axios.$delete(`/students/${id}`);
+        const { data: res } = await $axios.delete(`/students/${id}`);
         if (res) {
           commit('DELETE_STUDENT', id);
         }
@@ -1996,6 +2199,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.studentsTrainings]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(
           `/studentsExam/getStudentExamsList/${payload}`
         );
@@ -2017,6 +2222,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.studentTrainingDetails]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(
           `/studentsExam/detailsForAdmin/${payload}`
         );
@@ -2035,6 +2242,8 @@ export const adminVuexStore: Module = {
 
     async callStudentSubscriptions({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.studentSubscriptions]: true,
         });
@@ -2054,6 +2263,8 @@ export const adminVuexStore: Module = {
 
     async callTagsForQuestions({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(`/tagsForQuestions/list?grade=${payload}`);
         commit('SET_QUESTIONS_TAGS', res.data);
         return res;
@@ -2065,6 +2276,8 @@ export const adminVuexStore: Module = {
 
     async callComplaintsUnreadCounts({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(`/complaints/unreplayedCount`);
         commit('SET_COMPLAINTS_UNREAD_COUNT', res.data.count);
         return res;
@@ -2076,6 +2289,8 @@ export const adminVuexStore: Module = {
 
     async callMessagesUnreadCounts({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(`/contactForm/unReadCount`);
         commit('SET_MESSAGES_UNREAD_COUNT', res.data.count);
         return res;
@@ -2087,6 +2302,8 @@ export const adminVuexStore: Module = {
 
     async callPendingApplicantsCount({ commit }, payload) {
       try {
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(
           `/partnershipApplicant/pendingApplicantsCount`
         );
@@ -2103,6 +2320,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.partnerships]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.post(
           `/partnershipApplicant/filter?PageNumber=${payload.pageNum}&PageSize=${payload.pageSize}`,
           { ...payload.filterForm }
@@ -2125,7 +2344,9 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.partnerships]: true,
         });
-        const res = await $axios.$delete(`partnershipApplicant/${id}`);
+        const { $axios } = useNuxtApp();
+
+        const { data: res } = await $axios.delete(`partnershipApplicant/${id}`);
         if (res && res.isDeleted) {
           commit('DELETE_PARTNERSHIP', id);
         }
@@ -2147,6 +2368,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.partnerships]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.post(`/partnershipApplicant/accept`, {
           ...payload,
         });
@@ -2170,6 +2393,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.lawsPackagesList]: true,
         });
+        const { $axios } = useNuxtApp();
+
         $axios
           .post(`/categories/groups/filter`, {
             ...payload,
@@ -2204,6 +2429,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.competitionResults]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.get(
           `/studentsExam/getCompetitionStudentExamsList/${id}`
         );
@@ -2225,6 +2452,8 @@ export const adminVuexStore: Module = {
         commit('SET_FETCHING_ADMIN', {
           [fetchingKeysAdmin.teachersResults]: true,
         });
+        const { $axios } = useNuxtApp();
+
         const res = await $axios.post(`/employee/filterTeachers`, payload);
         commit('SET_TEACHERS_RESULTS', res.data);
         commit('SET_FETCHING_ADMIN', {
@@ -2238,5 +2467,9 @@ export const adminVuexStore: Module = {
         });
       }
     },
+  },
+  modules: {
+    services: servicesVuexStore,
+    'social-media': socialMediaVuexStore,
   },
 };

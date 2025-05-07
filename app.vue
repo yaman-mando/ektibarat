@@ -210,13 +210,13 @@ const handleLayoutExit = (name: string) => {
   console.log(name);
 };
 
-//watch
+//events
 authEvents.signInData$.pipe(filter(Boolean)).subscribe((val) => {
   if (val) {
     signInAction(val);
   }
 });
-
+//watch
 watch(
   isLoggedIn,
   (val) => {

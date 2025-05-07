@@ -60,7 +60,7 @@
             :text="activeQuestionModel.articleUi"
           />
           <div class="aqs-w">
-            <exam-part-question
+            <lazy-app-exam-part-question-part
               ref="examPartQuestionRef"
               :mainTitle="questionTitleModel"
               :isTrain="true"
@@ -83,7 +83,7 @@
                 "
                 @onAnswerChange="onAnswerChange($event)"
               />
-            </exam-part-question>
+            </lazy-app-exam-part-question-part>
             <div class="tpa-w w-mobile-only">
               <lazy-app-train-part-actions
                 ref="trainPartMobileRef"
@@ -196,6 +196,7 @@
 import {
   checkElementIsOverFlowParent,
   getMetaTitle,
+  IS_PRODUCTION_APP,
 } from '~/main/utils/shared-utils';
 import { useStudentsExamStore } from '~/main/modules/students-exam/services/useStudentsExamStore';
 import type {
@@ -231,6 +232,7 @@ import { useTypedLazyRequest } from '~/composables/useTypedLazyRequest';
 
 type TimeSpanModel = ReturnType<typeof useTimeSpanService>;
 
+const $isDev = !IS_PRODUCTION_APP;
 //composable
 const router = useRouter();
 const route = useRoute();

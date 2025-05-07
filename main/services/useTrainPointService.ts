@@ -78,7 +78,7 @@ export function useTrainPointService(
 
     const ranges = createRanges(questionMinTimeSecond, questionMaxTimeSecond);
 
-    let points = null;
+    let points: number | null = null;
     ranges.forEach((range) => {
       if (timeSpanSecond >= range.min && timeSpanSecond <= range.max) {
         points = range.points;
