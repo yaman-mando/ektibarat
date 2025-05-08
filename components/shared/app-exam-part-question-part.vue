@@ -71,15 +71,17 @@
                 >
                   <i class="fa-solid fa-edit"></i>
                 </nuxt-link>-->
-                <form-toggle
-                  class="ad-rr"
-                  :label="'تم التدقيق'"
-                  :value="questionModel.isChecked"
-                  @update:value="onReviewAction"
-                />
-                <b-checkbox
-                  class="cu-check"
-                  :checked="isChecked"
+                <div class="flex items-center !gap-">
+                  <lazy-prime-toggle-switch
+                    v-model="questionModel.isChecked"
+                    inputId="review-check"
+                    @update:modelValue="onReviewAction"
+                  />
+                  <label for="review-check">تم التدقيق</label>
+                </div>
+
+                <lazy-prime-checkbox
+                  :value="isChecked"
                   @change="onSelect"
                 />
               </div>
@@ -142,7 +144,7 @@
                 >
                   <div
                     v-if="showFeature"
-                    v-b-tooltip.hover.focus.bottom="
+                    v-prime-tooltip="
                       'عند إضافة سؤال إلى المفضلة يمكنك إعادة التدريب به واختيار الأسئلة المعلمة بنجمة'
                     "
                     class="__q-feature"
@@ -196,8 +198,8 @@
                     @click.stop="isOpenComplaintForm = true"
                   >
                     <img
-                      width="100%"
-                      height="100%"
+                      width="28"
+                      height="25"
                       src="/images/png/warning-red.png"
                       alt="اختبارات"
                     />
@@ -217,7 +219,7 @@
             class="cat-part"
           >
             <span class="title">الأقسام:</span>
-            <mx-select-list
+            <lazy-select-list
               ref="catQuestionList"
               name="أختر قسم"
               :showSelectedItem="true"
@@ -316,10 +318,10 @@
               v-if="compareDataModal"
               class="w-full block"
             >
-              <span class="s-title">
+              <div class="s-title">
                 <div class="aq-compare-wrapper">
                   <div class="aq-compare-wrapper__hero">
-                    <mx-admin-math-text-html
+                    <lazy-app-math-text-html
                       :key="questionTitleModal"
                       :noPopover="true"
                       :text="questionTitleModal"
@@ -328,7 +330,7 @@
                       v-if="isMediaQuestionModel"
                       class="aq-compare-wrapper__media"
                     >
-                      <mx-admin-view-media-files
+                      <lazy-app-view-media-files
                         v-if="isPhotoQuestion"
                         :url="questionModel.contentUrl"
                         :requestType="pictureTypesEnum.questions"
@@ -340,7 +342,7 @@
                       />
                     </div>
                   </div>
-                  <mx-admin-math-text-html
+                  <lazy-app-math-text-html
                     v-if="compareDataModal"
                     :key="compareDataModal"
                     class="s-compare-c"
@@ -349,11 +351,11 @@
                     :text="compareDataModal"
                   />
                 </div>
-              </span>
+              </div>
             </div>
             <template v-else>
               <span class="s-title">
-                <mx-admin-math-text-html
+                <lazy-app-math-text-html
                   :key="questionTitleModal"
                   :noPopover="true"
                   :text="questionTitleModal"
@@ -364,7 +366,7 @@
                 v-if="questionDescriptionModel"
                 class="s-desc"
               >
-                <mx-admin-math-text-html
+                <lazy-app-math-text-html
                   :noPopover="true"
                   :text="questionDescriptionModel"
                 />
@@ -375,7 +377,7 @@
                   v-if="isMediaQuestionModel"
                   class="aq-content"
                 >
-                  <mx-admin-view-media-files
+                  <lazy-app-view-media-files
                     v-if="isPhotoQuestion"
                     :url="questionModel.contentUrl"
                     :requestType="pictureTypesEnum.questions"
@@ -385,7 +387,7 @@
                     radius="5"
                     :withModal="true"
                   />
-                  <mx-admin-view-media-files
+                  <lazy-app-view-media-files
                     v-if="isVideoQuestion"
                     :url="questionModel.contentUrl"
                     :requestType="pictureTypesEnum.questions"
@@ -394,7 +396,7 @@
                     :defaultUrl="questionModel.contentUrl"
                     radius="5"
                   />
-                  <mx-admin-view-media-files
+                  <lazy-app-view-media-files
                     v-if="isAudioQuestion"
                     :url="questionModel.contentUrl"
                     :requestType="pictureTypesEnum.questions"
@@ -454,6 +456,7 @@
               <img
                 class="clock-image"
                 src="/images/clock-ticking.gif"
+                alt="clock image"
               />
             </template>
           </div>
@@ -462,21 +465,21 @@
           </div>
         </div>
       </div>
-      <web-complaint-modal
+      <lazy-web-complaint-modal
         v-if="hasComplainAction"
         v-model:isOpen="isOpenComplaintForm"
         :questionId="questionModel.id"
         :examId="examId"
       />
 
-      <web-complaint-modal
+      <lazy-web-complaint-modal
         v-if="isSeo"
         v-model:isOpen="isOpenComplaintForm"
         :isSeo="true"
         :questionId="questionModel.questionGuid"
       />
 
-      <mx-admin-tags-modal
+      <lazy-admin-tags-modal
         v-if="withTags"
         v-model:isOpen="isOpenModalTags"
         :tagsList="tagsOptions"
@@ -485,7 +488,7 @@
         @selectTag="selectTag"
       />
 
-      <web-answer-help-modal
+      <lazy-web-answer-help-modal
         ref="answerHelpModalRef"
         v-model:isOpen="isOpenHelpAnswerModal"
         :isTahsele="isSeo ? isTahsele : false"
@@ -602,7 +605,7 @@ export default {
       isOpenComplaintForm: false,
       isLoadingReview: false,
       answerHelpType,
-      selectedCat: null,
+      selectedCat: null as string | number | null,
       isFeatured: false,
       isFlagged: false,
       isOpenModalTags: false,
@@ -661,14 +664,6 @@ export default {
       return (
         this.questionModel.description ?? this.questionModel.shortDescription
       );
-    },
-
-    categoryDescription() {
-      if (this.questionModel.categoryIsText) {
-        return this.questionModel.categoryDescription;
-      } else {
-        return null;
-      }
     },
 
     questionTypeModel() {
@@ -783,7 +778,7 @@ export default {
     async onFeatureClick() {
       this.isFeatured = !this.isFeatured;
       this.$emit('onFeatureChange', this.isFeatured);
-      const res = await this.$store.dispatch('student/callQuestionFeature', {
+      await this.$store.dispatch('student/callQuestionFeature', {
         questionId: this.questionModel.questionId,
         studentQuestionId: this.questionModel.id,
       });
@@ -1053,10 +1048,6 @@ export default {
     padding: 10px;
 
     ::v-deep {
-      mstyle {
-        //direction: ltr;
-      }
-
       strong,
       math,
       mstyle,
@@ -1487,9 +1478,6 @@ export default {
           font-size: 24px !important;
         }
       }
-      .aq-content {
-        //margin-top: 100px;
-      }
     }
   }
 
@@ -1524,8 +1512,6 @@ export default {
       @include web-desktop-up() {
         margin-bottom: calc(12px + 22px + 15px);
       }
-    }
-    .aq-content {
     }
   }
 
@@ -1634,7 +1620,7 @@ export default {
           &.active {
             opacity: 1;
             background: var(--purple-8c);
-            box-shadow: 0px 1px 2px 0px #000000;
+            box-shadow: 0 1px 2px 0 #000000;
           }
         }
       }
@@ -1700,7 +1686,7 @@ export default {
         &.active {
           opacity: 1;
           background: var(--purple-8c);
-          box-shadow: 0px 1px 2px 0px #000000;
+          box-shadow: 0 1px 2px 0 #000000;
         }
       }
 

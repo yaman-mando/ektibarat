@@ -1,196 +1,204 @@
 <template>
-  <div class="student-exam-details">
-    <template v-if="isLoadingPage">
-      <div class="flex items-start justify-center relative">
-        <lazy-spinner class="my-3" />
-      </div>
-    </template>
-    <template v-else>
-      <template v-if="examDetail">
-        <div class="sed-w w-container">
-          <client-only>
-            <div
-              v-if="$isDev"
-              class="bg-red-100"
-            >
-              <button @click="confirmContinueOrExitTrain">end</button>
-              <button @click="prevQuestion">prev</button>
-              <button @click="nextQuestion">next</button>
-            </div>
-          </client-only>
-          <lazy-prime-block-u-i
-            :fullScreen="true"
-            :blocked="loadingPage"
-          />
-          <div class="t-hero-m">
-            <app-button
-              label="إنهاء"
-              variant="clear"
-              size="sm"
-              iconStartClass="ek-icon-exit-door"
-              @click="exitPage"
-            />
-            <lazy-app-train-part-answers-status
-              v-if="windowSize.isMobileSize.value"
-              ref="answer_status_ref"
-              class="w-mobile-only"
-              :isMobile="true"
-              :canRemoveAnswer="canRemoveAnswerModel"
-              :isLoadingRemoveAnswer="isLoadingRemoverAnswer"
-              :correctAnswerCount="correctAnswerCount"
-              :wrongAnswerCount="wrongAnswerCount"
-              :totalPointsCount="totalPointsCount"
-              :questionMinSecond="currentQuestionDetailModel.questionMinTime"
-              :questionMaxSecond="currentQuestionDetailModel.questionMaxTime"
-              :questionPointsSetting="activePartModel.pointsSettings"
-              :questionId="currentQuestionDetailModel.questionId"
-              :canShowLaw="
-                currentQuestionDetailModel.isBelongToLaw &&
-                userCurrentSub.trainingLawWatchingCount > 0
-              "
-              @showLawsAction="onShowLaws"
-              @removeAction="removeAnswersTry"
-              @showAnswerAction="onAnswerHelpAction"
-            />
-          </div>
-          <lazy-app-exam-part-article
-            v-if="
-              activePartModel.isCategoryText && activeQuestionModel.articleUi
-            "
-            :text="activeQuestionModel.articleUi"
-          />
-          <div class="aqs-w">
-            <lazy-app-exam-part-question-part
-              ref="examPartQuestionRef"
-              :mainTitle="questionTitleModel"
-              :isTrain="true"
-              :counterValue="currentQuestionPassedSecond"
-              :question="currentQuestionDetailModel"
-              :showFeature="true"
-            >
-              <lazy-app-answer-select
-                :correctAnswerIdsList="viewCorrectAnswerIds"
-                :disableImgModal="true"
-                :selectedValue="currentQuestionAnswerId"
-                :answers="currentAnswersModel"
-                :questionState="activeQuestionModel.questionState"
-                :isDisabled="
-                  activeQuestionModel.questionState !==
-                  questionStateEnum.initial
-                "
-                :showTakfeelat="
-                  activeQuestionModel.questionState != questionStateEnum.initial
-                "
-                @onAnswerChange="onAnswerChange($event)"
-              />
-            </lazy-app-exam-part-question-part>
-            <div class="tpa-w w-mobile-only">
-              <lazy-app-train-part-actions
-                ref="trainPartMobileRef"
-                class="w-container"
-                :isActiveNext="canSelectNextQuestion"
-                :isActiveConfirm="canConfirmAnswerModel"
-                @confirmAction="applyAnswer(currentQuestionAnswerId)"
-                @nextAction="nextQuestion"
-                @complainAction="onComplaint"
-              />
-            </div>
-            <lazy-app-train-part-answers-status
-              v-if="!windowSize.isMobileSize.value"
-              ref="answer_status_ref"
-              class="w-web-up-only"
-              :canRemoveAnswer="canRemoveAnswerModel"
-              :isLoadingRemoveAnswer="isLoadingRemoverAnswer"
-              :correctAnswerCount="correctAnswerCount"
-              :wrongAnswerCount="wrongAnswerCount"
-              :totalPointsCount="totalPointsCount"
-              :questionMinSecond="currentQuestionDetailModel.questionMinTime"
-              :questionMaxSecond="currentQuestionDetailModel.questionMaxTime"
-              :questionPointsSetting="activePartModel.pointsSettings"
-              :questionId="currentQuestionDetailModel.questionId"
-              :canShowLaw="
-                currentQuestionDetailModel.isBelongToLaw &&
-                userCurrentSub.trainingLawWatchingCount > 0
-              "
-              @removeAction="removeAnswersTry"
-              @showAnswerAction="onAnswerHelpAction"
-              @showLawsAction="onShowLaws"
-            />
-          </div>
-
-          <train-part-mobile-actions
-            :questionId="currentQuestionDetailModel.questionId"
-            :canShowLaw="
-              currentQuestionDetailModel.isBelongToLaw &&
-              userCurrentSub.trainingLawWatchingCount > 0
-            "
-            :canRemoveAnswer="canRemoveAnswerModel"
-            :isLoadingRemoveAnswer="isLoadingRemoverAnswer"
-            @showLawsAction="onShowLaws"
-            @removeAction="removeAnswersTry"
-            @showAnswerAction="onAnswerHelpAction"
-            @complaintAction="onComplaint"
-          />
-          <mx-std-modal-answer-feedback
-            v-model:isOpen="isOpenFeedbackModal"
-            :isCorrect="
-              activeQuestionModel.questionState === questionStateEnum.correct
-            "
-            :msg="feedbackMsg"
-            :feedbackType="feedbackType"
-            :mediaUrl="feedbackMediaUrl"
-          />
-
-          <web-answer-help-modal
-            v-model:isOpen="isOpenHelpAnswerModal"
-            :htmlContent="currentQuestionDetailModel.feedbackInCorrectAnswer"
-          />
-          <web-complaint-modal
-            v-model:isOpen="isOpenComplaintForm"
-            :questionId="currentQuestionDetailModel.id"
-            :examId="examDetail.id"
-          />
+  <client-only>
+    <div class="student-exam-details">
+      <template v-if="isLoadingPage">
+        <div class="flex items-start justify-center relative">
+          <lazy-spinner class="my-3" />
         </div>
-        <div class="tpa-w w-web-up-only">
-          <lazy-app-train-part-actions
-            ref="trainPartWebRef"
-            class="w-container"
-            :isActiveNext="canSelectNextQuestion"
-            :isActiveConfirm="canConfirmAnswerModel"
-            @confirmAction="applyAnswer(currentQuestionAnswerId)"
-            @nextAction="nextQuestion"
-            @complainAction="onComplaint"
-            @endAction="exitPage"
-          />
-        </div>
-        <exam-confirm-exit ref="confirmExitRef" />
-        <web-train-end-modal
-          ref="trainEndModal"
-          :isLoadingContinue="isLoadingContinue"
-          @onContinue="onContinueTrain"
-          @onEnd="exitWithoutConfirm"
-        />
-        <client-only>
-          <web-train-question-warn-modal
-            ref="questionWarnModalRef"
-            :refTo="
-              windowSize.isMobileSize.value
-                ? $refs['trainPartMobileRef']
-                : $refs['trainPartWebRef']
-            "
-            :refX="
-              windowSize.isMobileSize.value ? null : $refs.examPartQuestionRef
-            "
-          />
-          <web-warn-modal
-            ref="warnModal"
-            :hideClose="true"
-            :msg="passedAllowedUnderMinAnswerMsg"
-          />
-        </client-only>
       </template>
-    </template>
-  </div>
+      <template v-else>
+        <template
+          v-if="examDetail && currentQuestionDetailModel && currentAnswersModel"
+        >
+          <div class="sed-w w-container">
+            <client-only>
+              <div
+                v-if="$isDev"
+                class="bg-red-100"
+              >
+                <button @click="confirmContinueOrExitTrain">end</button>
+                <button @click="prevQuestion">prev</button>
+                <button @click="nextQuestion">next</button>
+              </div>
+            </client-only>
+            <lazy-prime-block-u-i
+              :fullScreen="true"
+              :blocked="loadingPage"
+            />
+            <div class="t-hero-m">
+              <app-button
+                label="إنهاء"
+                variant="clear"
+                size="sm"
+                iconStartClass="ek-icon-exit-door"
+                @click="exitPage"
+              />
+              <lazy-app-train-part-answers-status
+                v-if="windowSize.isMobileSize.value && !!activePartModel"
+                ref="answer_status_ref"
+                class="w-mobile-only"
+                :isMobile="true"
+                :canRemoveAnswer="canRemoveAnswerModel"
+                :isLoadingRemoveAnswer="isLoadingRemoverAnswer"
+                :correctAnswerCount="correctAnswerCount"
+                :wrongAnswerCount="wrongAnswerCount"
+                :totalPointsCount="totalPointsCount"
+                :questionMinSecond="currentQuestionDetailModel.questionMinTime"
+                :questionMaxSecond="currentQuestionDetailModel.questionMaxTime"
+                :questionPointsSetting="activePartModel.pointsSettings"
+                :questionId="currentQuestionDetailModel.questionId"
+                :canShowLaw="
+                  currentQuestionDetailModel.isBelongToLaw &&
+                  userCurrentSub.trainingLawWatchingCount > 0
+                "
+                @showLawsAction="onShowLaws"
+                @removeAction="removeAnswersTry"
+                @showAnswerAction="onAnswerHelpAction"
+              />
+            </div>
+            <lazy-app-exam-part-article
+              v-if="
+                !!activePartModel?.isCategoryText &&
+                !!activeQuestionModel?.articleUi
+              "
+              :text="activeQuestionModel.articleUi"
+            />
+            <div class="aqs-w">
+              <lazy-app-exam-part-question-part
+                ref="examPartQuestionRef"
+                :mainTitle="questionTitleModel"
+                :isTrain="true"
+                :counterValue="currentQuestionPassedSecond"
+                :question="currentQuestionDetailModel"
+                :showFeature="true"
+              >
+                <lazy-app-answer-select
+                  v-if="!!activeQuestionModel"
+                  :correctAnswerIdsList="viewCorrectAnswerIds"
+                  :disableImgModal="true"
+                  :selectedValue="currentQuestionAnswerId"
+                  :answers="currentAnswersModel"
+                  :questionState="activeQuestionModel.questionState"
+                  :isDisabled="
+                    activeQuestionModel.questionState !==
+                    questionStateEnum.initial
+                  "
+                  :showTakfeelat="
+                    activeQuestionModel.questionState !=
+                    questionStateEnum.initial
+                  "
+                  @onAnswerChange="onAnswerChange($event)"
+                />
+              </lazy-app-exam-part-question-part>
+              <div class="tpa-w w-mobile-only">
+                <lazy-app-train-part-actions
+                  ref="trainPartMobileRef"
+                  class="w-container"
+                  :isActiveNext="canSelectNextQuestion"
+                  :isActiveConfirm="canConfirmAnswerModel"
+                  @confirmAction="onSelectAnswer(currentQuestionAnswerId)"
+                  @nextAction="nextQuestion"
+                  @complainAction="onComplaint"
+                />
+              </div>
+              <lazy-app-train-part-answers-status
+                v-if="!windowSize.isMobileSize.value && !!activePartModel"
+                ref="answer_status_ref"
+                class="w-web-up-only"
+                :canRemoveAnswer="canRemoveAnswerModel"
+                :isLoadingRemoveAnswer="isLoadingRemoverAnswer"
+                :correctAnswerCount="correctAnswerCount"
+                :wrongAnswerCount="wrongAnswerCount"
+                :totalPointsCount="totalPointsCount"
+                :questionMinSecond="currentQuestionDetailModel.questionMinTime"
+                :questionMaxSecond="currentQuestionDetailModel.questionMaxTime"
+                :questionPointsSetting="activePartModel.pointsSettings"
+                :questionId="currentQuestionDetailModel.questionId"
+                :canShowLaw="
+                  currentQuestionDetailModel.isBelongToLaw &&
+                  userCurrentSub.trainingLawWatchingCount > 0
+                "
+                @removeAction="removeAnswersTry"
+                @showAnswerAction="onAnswerHelpAction"
+                @showLawsAction="onShowLaws"
+              />
+            </div>
+
+            <lazy-train-part-mobile-actions
+              :questionId="currentQuestionDetailModel.questionId"
+              :canShowLaw="
+                currentQuestionDetailModel.isBelongToLaw &&
+                userCurrentSub.trainingLawWatchingCount > 0
+              "
+              :canRemoveAnswer="canRemoveAnswerModel"
+              :isLoadingRemoveAnswer="isLoadingRemoverAnswer"
+              @showLawsAction="onShowLaws"
+              @removeAction="removeAnswersTry"
+              @showAnswerAction="onAnswerHelpAction"
+              @complaintAction="onComplaint"
+            />
+            <lazy-modal-answer-feedback
+              v-if="!!activeQuestionModel"
+              v-model:isOpen="isOpenFeedbackModal"
+              :isCorrect="
+                activeQuestionModel.questionState === questionStateEnum.correct
+              "
+              :msg="feedbackMsg"
+              :feedbackType="feedbackType"
+              :mediaUrl="feedbackMediaUrl"
+            />
+
+            <web-answer-help-modal
+              v-model:isOpen="isOpenHelpAnswerModal"
+              :htmlContent="currentQuestionDetailModel.feedbackInCorrectAnswer"
+            />
+            <web-complaint-modal
+              v-model:isOpen="isOpenComplaintForm"
+              :questionId="currentQuestionDetailModel.id"
+              :examId="examDetail.id"
+            />
+          </div>
+          <div class="tpa-w w-web-up-only">
+            <lazy-app-train-part-actions
+              ref="trainPartWebRef"
+              class="w-container"
+              :isActiveNext="canSelectNextQuestion"
+              :isActiveConfirm="canConfirmAnswerModel"
+              @confirmAction="onSelectAnswer(currentQuestionAnswerId)"
+              @nextAction="nextQuestion"
+              @complainAction="onComplaint"
+              @endAction="exitPage"
+            />
+          </div>
+          <exam-confirm-exit ref="confirm_exit_ref" />
+          <lazy-web-train-end-modal
+            ref="train_end_modal_ref"
+            :isLoadingContinue="isLoadingContinue"
+            @onContinue="onContinueTrain"
+            @onEnd="exitWithoutConfirm"
+          />
+          <client-only>
+            <lazy-web-train-question-warn-modal
+              ref="questionWarnModalRef"
+              :refTo="
+                windowSize.isMobileSize.value
+                  ? $refs['trainPartMobileRef']
+                  : $refs['trainPartWebRef']
+              "
+              :refX="
+                windowSize.isMobileSize.value ? null : $refs.examPartQuestionRef
+              "
+            />
+            <lazy-web-warn-modal
+              ref="warnModalRef"
+              :hideClose="true"
+              :msg="passedAllowedUnderMinAnswerMsg"
+            />
+          </client-only>
+        </template>
+      </template>
+    </div>
+  </client-only>
 </template>
 <script lang="ts" setup>
 import {
@@ -229,6 +237,7 @@ import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/use
 import { APP_CONFIG } from 'public/constants/app-config';
 import { TRAIN_MODAL_WARN_CASE } from '~/main/constants/train-modal-warn-case.enum';
 import { useTypedLazyRequest } from '~/composables/useTypedLazyRequest';
+import { firstValueFrom, of } from 'rxjs';
 
 type TimeSpanModel = ReturnType<typeof useTimeSpanService>;
 
@@ -285,6 +294,9 @@ const examPartsPointsSettingsRecord = reactive<
 const answerUnderMinTimeCount = ref<number>(0);
 const confirmExitRef = useTemplateRef('confirm_exit_ref');
 const answerStatusRef = useTemplateRef('answer_status_ref');
+const questionWarnModalRefProp = useTemplateRef('questionWarnModalRef');
+const warnModal = useTemplateRef('warnModalRef');
+const trainEndModalRef = useTemplateRef('train_end_modal_ref');
 
 //fetch
 const answerData = ref<StudentsExamAnswerDTODataModel | null>(null);
@@ -352,7 +364,7 @@ const passedAllowedUnderMinAnswerMsg = computed(
 
 const staticLocales = computed(() => globalStore.staticState.locales);
 
-const questionTitleModel = computed(() => activePartModel.value.title);
+const questionTitleModel = computed(() => activePartModel.value?.title ?? '');
 
 const correctAnswerCount = computed(() => {
   let count = 0;
@@ -394,15 +406,15 @@ const currentQuestionAnswerId = computed(() => {
 const canConfirmAnswerModel = computed(
   () =>
     !!currentQuestionAnswerId.value &&
-    activeQuestionModel.value.questionState === QuestionStateEnum.initial
+    activeQuestionModel.value?.questionState === QuestionStateEnum.initial
 );
 
 const showCanTryAnswerHelp = computed(
   () =>
-    currentQuestionDetailModel.value.questionState ===
+    currentQuestionDetailModel.value?.questionState ===
       questionStateEnum.value.initial &&
     !trainingStorageState.value?.questionsState[
-      currentQuestionDetailModel.value.id
+      currentQuestionDetailModel.value?.id
     ]?.isHelpAnswer
 );
 
@@ -414,12 +426,13 @@ const canTryAnswerHelp = computed(
 
 const showCanTryRemoveButton = computed(
   () =>
-    currentQuestionDetailModel.value.questionState ===
-      questionStateEnum.value.initial && currentAnswersModel.value.length === 4
+    currentQuestionDetailModel.value?.questionState ===
+      questionStateEnum.value.initial && currentAnswersModel.value?.length === 4
 );
 
 const canTryRemoveAnswerModel = computed(
   () =>
+    !!currentQuestionDetailModel.value &&
     !trainingStorageState.value?.questionsState[
       currentQuestionDetailModel.value.id
     ]?.isRemoveAnswerUsed
@@ -439,42 +452,48 @@ const canShowAnswerHelpModel = computed(
 
 const currentAnswersModel = computed(() => {
   if (trainingStorageState.value.removedAnswerIdList.length) {
-    return currentQuestionDetailModel.value.answers.filter(
+    return currentQuestionDetailModel.value?.answers.filter(
       (a) => !trainingStorageState.value.removedAnswerIdList.includes(a.id)
     );
   }
-  return currentQuestionDetailModel.value.answers;
+  return currentQuestionDetailModel.value?.answers;
 });
 
-const activeExamPartInterval = computed(
-  () => examPartsInterval[activePartModel.value.id]
+const activeExamPartInterval = computed(() =>
+  activePartModel.value ? examPartsInterval[activePartModel.value.id] : null
 );
 
-const activeExamQuestionInterval = computed(
-  () => examQuestionsInterval[activeQuestionModel.value.id]
+const activeExamQuestionInterval = computed(() =>
+  activeQuestionModel.value
+    ? examQuestionsInterval[activeQuestionModel.value.id]
+    : null
 );
 
 const questionStateEnum = computed(() => QuestionStateEnum);
 
 const activePartModel = computed(
-  () => examDetail.value!.examParts[activePartIndex.value]
+  () => examDetail.value?.examParts[activePartIndex.value]
 );
 
 const activeQuestionListModel = computed(() =>
   activePartModel.value ? activePartModel.value.studentsQuestion : null
 );
 
-const activeQuestionModel = computed(
-  () => activeQuestionListModel.value![activeQuestionIndex.value]
+const activeQuestionModel = computed(() =>
+  activeQuestionListModel.value
+    ? activeQuestionListModel.value[activeQuestionIndex.value]
+    : null
 );
 
-const currentQuestionDetailModel = computed(
-  () => questionsDetailRecord.value[activeQuestionModel.value?.id]
+const currentQuestionDetailModel = computed(() =>
+  activeQuestionModel.value
+    ? questionsDetailRecord.value[activeQuestionModel.value.id]
+    : null
 );
 
 const viewCorrectAnswerIds = computed(() => {
   if (!correctAnswerIds.value.length) return [];
-  return currentQuestionDetailModel.value.questionState ===
+  return currentQuestionDetailModel.value?.questionState ===
     QuestionStateEnum.initial
     ? []
     : correctAnswerIds.value;
@@ -515,7 +534,7 @@ const isLastQuestion = computed(
 const canPassQuestion = computed(() =>
   isLastQuestion.value && !hasNextPart.value
     ? false
-    : activeQuestionModel.value.questionState ===
+    : activeQuestionModel.value?.questionState ===
       questionStateEnum.value.initial
 );
 
@@ -526,7 +545,9 @@ const hasNextQuestion = computed(
 const hasPrevPart = computed(() => activePartIndex.value > 0);
 
 const hasNextPart = computed(
-  () => examDetail.value!.examParts.length > activePartIndex.value + 1
+  () =>
+    !!examDetail.value &&
+    examDetail.value.examParts.length > activePartIndex.value + 1
 );
 
 const isEndQuestion = computed(
@@ -535,7 +556,7 @@ const isEndQuestion = computed(
 
 const canSelectNextQuestion = computed(
   () =>
-    activeQuestionModel.value.questionState !== QuestionStateEnum.initial &&
+    activeQuestionModel.value?.questionState !== QuestionStateEnum.initial &&
     (hasNextQuestion.value || hasNextPart.value)
 );
 
@@ -545,32 +566,32 @@ const canSelectPrevQuestion = computed(
 
 const canShowFeedback = computed(
   () =>
-    activeQuestionModel.value.questionState ===
+    activeQuestionModel.value?.questionState ===
       questionStateEnum.value.correct ||
-    activeQuestionModel.value.questionState === questionStateEnum.value.wrong
+    activeQuestionModel.value?.questionState === questionStateEnum.value.wrong
 );
 
 const isCorrectActiveQuestion = computed(
   () =>
-    activeQuestionModel.value.questionState === questionStateEnum.value.correct
+    activeQuestionModel.value?.questionState === questionStateEnum.value.correct
 );
 
 const feedbackMsg = computed(() =>
   isCorrectActiveQuestion.value
-    ? currentQuestionDetailModel.value.feedbackCorrectAnswer
-    : currentQuestionDetailModel.value.feedbackInCorrectAnswer
+    ? currentQuestionDetailModel.value?.feedbackCorrectAnswer
+    : currentQuestionDetailModel.value?.feedbackInCorrectAnswer
 );
 
 const feedbackType = computed(() =>
   isCorrectActiveQuestion.value
-    ? currentQuestionDetailModel.value.typeFeedbackCorrect
-    : currentQuestionDetailModel.value.typeFeedbackInCorrect
+    ? currentQuestionDetailModel.value?.typeFeedbackCorrect
+    : currentQuestionDetailModel.value?.typeFeedbackInCorrect
 );
 
 const feedbackMediaUrl = computed(() =>
   isCorrectActiveQuestion.value
-    ? currentQuestionDetailModel.value.feedbackCorrectUrl
-    : currentQuestionDetailModel.value.feedbackInCorrectUrl
+    ? currentQuestionDetailModel.value?.feedbackCorrectUrl
+    : currentQuestionDetailModel.value?.feedbackInCorrectUrl
 );
 
 const counterModel = computed({
@@ -585,7 +606,7 @@ const userCurrentSub = computed(() => subscriptionsStore.state.userCurrentSub!);
 //method
 const getCurrentQuestionStorageState = () => {
   return trainingStorageState.value.questionsState[
-    currentQuestionDetailModel.value.id
+    currentQuestionDetailModel.value!.id
   ];
 };
 
@@ -662,7 +683,7 @@ const initPage = async () => {
       activePartIndexVal = 0;
     }
 
-    let questionId = null;
+    let questionId: string | null = null;
 
     if (detail.examParts[activePartIndexVal].isCategoryText) {
       questionId =
@@ -718,23 +739,23 @@ const setActivePartIndexAndQuestionIndex = (
   partIndex: number,
   questionIndex: number
 ) => {
-  activeExamQuestionInterval.value.pauseTime();
-  activeExamPartInterval.value.pauseTime();
+  activeExamQuestionInterval.value?.pauseTime();
+  activeExamPartInterval.value?.pauseTime();
   [activePartIndex.value, activeQuestionIndex.value] = [
     partIndex,
     questionIndex,
   ];
-  activeExamPartInterval.value.startTime();
-  activeExamQuestionInterval.value.startTime();
+  activeExamPartInterval.value?.startTime();
+  activeExamQuestionInterval.value?.startTime();
   if (nextQuestionModel.value) {
     getQuestionApiAndUpdateRecord(nextQuestionModel.value.id);
   }
 };
 
 const setActiveQuestionIndex = (index: number) => {
-  activeExamQuestionInterval.value.pauseTime();
+  activeExamQuestionInterval.value?.pauseTime();
   activeQuestionIndex.value = index;
-  activeExamQuestionInterval.value.startTime();
+  activeExamQuestionInterval.value?.startTime();
   if (nextQuestionModel.value) {
     getQuestionApiAndUpdateRecord(nextQuestionModel.value.id);
   }
@@ -790,7 +811,7 @@ const endUpdateRemainTime = () => {
 };
 
 const nextQuestion = () => {
-  if (hasNextPart.value && isLastQuestion) {
+  if (hasNextPart.value && isLastQuestion.value) {
     setActivePartIndexAndQuestionIndex(activePartIndex.value + 1, 0);
     return;
   }
@@ -809,7 +830,9 @@ const prevQuestion = async () => {
 };
 
 const showWarnModalAnsweredBeforeMinTime = () => {
-  $refs.questionWarnModalRef.showModalWarn(TRAIN_MODAL_WARN_CASE.beforeMinTime);
+  questionWarnModalRefProp.value?.showModalWarn(
+    TRAIN_MODAL_WARN_CASE.beforeMinTime
+  );
 };
 
 const beforeAnswerHook = async () => {
@@ -818,7 +841,7 @@ const beforeAnswerHook = async () => {
     //case asked before min time
     if (
       currentQuestionPassedSecond.value <
-        currentQuestionDetailModel.value.questionMinTime &&
+        currentQuestionDetailModel.value!.questionMinTime &&
       warnState.value.showMinTimeWarn
     ) {
       stopCurrentQuestionTimer();
@@ -829,35 +852,38 @@ const beforeAnswerHook = async () => {
         answerUnderMinTimeCount.value >
         APP_CONFIG.maxAllowedAnswerCountUnderMinimumTime
       ) {
-        $refs.warnModal.showModal();
+        warnModal.value?.showModal();
         await new Promise((resolve) => setTimeout(resolve, 2000));
         await exitWithoutConfirm();
         return resolve(false);
       }
 
       showWarnModalAnsweredBeforeMinTime();
-      $refs.questionWarnModalRef.$once('onAction', async (confirm: boolean) => {
-        return resolve(confirm);
-      });
+      const confirm = await firstValueFrom(
+        questionWarnModalRefProp.value?.onActionSub ?? of(true)
+      );
+      resolve(confirm);
       return;
     }
     //case asked after max time
     if (
       currentQuestionPassedSecond.value >
-        currentQuestionDetailModel.value.questionMaxTime &&
+        currentQuestionDetailModel.value!.questionMaxTime &&
       warnState.value.showMaxTimeWarn
     ) {
       warnState.value.showMaxTimeWarn = false;
-      $refs.questionWarnModalRef.showModalWarn(
+      questionWarnModalRefProp.value?.showModalWarn(
         TRAIN_MODAL_WARN_CASE.afterMaxTime
       );
-      $refs.questionWarnModalRef.$once('onAction', async (confirm: boolean) => {
-        return resolve(confirm);
-      });
+      const confirm = await firstValueFrom(
+        questionWarnModalRefProp.value?.onActionSub ?? of(true)
+      );
+      resolve(confirm);
       return;
     }
 
     resolve(true);
+    return;
   });
 };
 
@@ -888,14 +914,14 @@ const updateExamPartQuestion = (
   examDetail.value = detail;
 };
 
-const applyAnswer = async (answerId: any) => {
+const onSelectAnswer = async (answerId: any) => {
   try {
     const result = await beforeAnswerHook();
     if (!result) return false;
 
     const questionStorageState =
       trainingStorageState.value.questionsState[
-        currentQuestionDetailModel.value.id
+        currentQuestionDetailModel.value!.id
       ];
     let answerStateType = AnswerStateTypeEnum.None;
     if (questionStorageState?.isHelpAnswer) {
@@ -916,11 +942,11 @@ const applyAnswer = async (answerId: any) => {
     callAnswerApi({
       answerId: answerId,
       answerType: answerStateType,
-      studentQuestionId: activeQuestionModel.value.id,
+      studentQuestionId: activeQuestionModel.value!.id,
       nextStudentQuestionId: nextQuestionModel.value?.id ?? null,
       studentExamTimeSpan: examInterval.currentTime.value,
-      studentExamPartTimeSpan: activeExamPartInterval.value.currentTime.value,
-      questionTimeSpan: activeExamQuestionInterval.value.currentTime.value,
+      studentExamPartTimeSpan: activeExamPartInterval.value!.currentTime.value,
+      questionTimeSpan: activeExamQuestionInterval.value!.currentTime.value,
     });
 
     const isCorrectAnswer =
@@ -929,11 +955,13 @@ const applyAnswer = async (answerId: any) => {
     //get points and assign on correct
     if (isCorrectAnswer) {
       const currentPointManager =
-        examPartsPointsSettingsRecord[activePartModel.value.id];
+        examPartsPointsSettingsRecord[activePartModel.value!.id];
       const points = currentPointManager.getPoints({
         timeSpanSecond: currentQuestionPassedSecond.value,
-        questionMaxTimeSecond: currentQuestionDetailModel.value.questionMaxTime,
-        questionMinTimeSecond: currentQuestionDetailModel.value.questionMinTime,
+        questionMaxTimeSecond:
+          currentQuestionDetailModel.value!.questionMaxTime,
+        questionMinTimeSecond:
+          currentQuestionDetailModel.value!.questionMinTime,
         hasUsedDeleteHelp: !canTryRemoveAnswerModel.value,
         hasUsedShowAnswerHelp:
           getCurrentQuestionStorageState()?.isHelpAnswer ?? false,
@@ -951,7 +979,7 @@ const applyAnswer = async (answerId: any) => {
     }
 
     //for each correct answer update
-    updateQuestionsDetailRecordState(currentQuestionDetailModel.value.id, {
+    updateQuestionsDetailRecordState(currentQuestionDetailModel.value!.id, {
       questionState: isCorrectAnswer
         ? QuestionStateEnum.correct
         : QuestionStateEnum.wrong,
@@ -987,7 +1015,7 @@ const applyAnswer = async (answerId: any) => {
 };
 
 const confirmContinueOrExitTrain = async () => {
-  $refs.trainEndModal.showModal();
+  trainEndModalRef.value?.showModal();
 };
 
 const onContinueTrain = async () => {
@@ -1023,7 +1051,7 @@ const onAnswerChange = async (answerId: number | null) => {
   if (!questionsAnswersMap.value) {
     questionsAnswersMap.value = {};
   }
-  questionsAnswersMap.value[activeQuestionModel.value.id] = answerId;
+  questionsAnswersMap.value[activeQuestionModel.value!.id] = answerId;
   questionsAnswersMap.value = { ...questionsAnswersMap.value };
 };
 
@@ -1045,12 +1073,12 @@ const stopTimers = () => {
   endUpdateRemainTime();
   endCounter();
   examInterval.pauseTime();
-  activeExamPartInterval.value.pauseTime();
+  activeExamPartInterval.value?.pauseTime();
   stopCurrentQuestionTimer();
 };
 
 const stopCurrentQuestionTimer = () => {
-  activeExamQuestionInterval.value.pauseTime();
+  activeExamQuestionInterval.value!.pauseTime();
 };
 
 const getQuestionApiAndUpdateRecord = async (questionId: string) => {
@@ -1080,8 +1108,8 @@ const initTimeSpan = () => {
   });
 
   examInterval.startTime();
-  activeExamPartInterval.value.startTime();
-  activeExamQuestionInterval.value.startTime();
+  activeExamPartInterval.value?.startTime();
+  activeExamQuestionInterval.value!.startTime();
   startQuestionTimeTracker();
 };
 
@@ -1096,7 +1124,7 @@ const startQuestionTimeTracker = () => {
 const onShowLaws = async () => {
   studentsExamStorageService.setTrainingQuestionState(
     examDetail.value!.id,
-    currentQuestionDetailModel.value.id,
+    currentQuestionDetailModel.value!.id,
     { showLawsUsed: true }
   );
   trainingStorageState.value = studentsExamStorageService.getTrainingState(
@@ -1106,7 +1134,7 @@ const onShowLaws = async () => {
 
 const onAnswerHelpAction = async () => {
   if (
-    activeQuestionModel.value.questionState !== QuestionStateEnum.initial ||
+    activeQuestionModel.value!.questionState !== QuestionStateEnum.initial ||
     !warnState.value.showHelpCorrectAnswerWarn
   ) {
     setQuestionStorageStateToHelpAnswer();
@@ -1120,16 +1148,17 @@ const onAnswerHelpAction = async () => {
   }
 
   warnState.value.showHelpCorrectAnswerWarn = false;
-  $refs.questionWarnModalRef.showModalWarn(
+  questionWarnModalRefProp.value?.showModalWarn(
     TRAIN_MODAL_WARN_CASE.showAnswerHelp
   );
 
-  $refs.questionWarnModalRef.$once('onAction', async (confirm: boolean) => {
-    if (!confirm) return;
+  const confirm = await firstValueFrom(
+    questionWarnModalRefProp.value?.onActionSub ?? of(true)
+  );
+  if (!confirm) return;
 
-    setQuestionStorageStateToHelpAnswer();
-    isOpenHelpAnswerModal.value = true;
-  });
+  setQuestionStorageStateToHelpAnswer();
+  isOpenHelpAnswerModal.value = true;
 };
 
 const setQuestionStorageStateToHelpAnswer = () => {
@@ -1140,7 +1169,7 @@ const setQuestionStorageStateToHelpAnswer = () => {
   );
   studentsExamStorageService.setTrainingQuestionState(
     examDetail.value!.id,
-    currentQuestionDetailModel.value.id,
+    currentQuestionDetailModel.value!.id,
     { isHelpAnswer: true }
   );
   trainingStorageState.value = studentsExamStorageService.getTrainingState(
@@ -1150,7 +1179,7 @@ const setQuestionStorageStateToHelpAnswer = () => {
 
 const removeAnswerApiAndUpdateStorageState = async () => {
   const removedAnswerId = await removeAnswerApi({
-    studentQuestionId: activeQuestionModel.value.id,
+    studentQuestionId: activeQuestionModel.value!.id,
   });
   if (!removedAnswerId) return;
   trainingStorageState.value.countOfTryRemoveAnswer++;
@@ -1167,7 +1196,7 @@ const removeAnswerApiAndUpdateStorageState = async () => {
   );
   studentsExamStorageService.setTrainingQuestionState(
     examDetail.value!.id,
-    currentQuestionDetailModel.value.id,
+    currentQuestionDetailModel.value!.id,
     { isRemoveAnswerUsed: true }
   );
   trainingStorageState.value = studentsExamStorageService.getTrainingState(
@@ -1187,23 +1216,24 @@ const removeAnswersTry = async () => {
   }
 
   warnState.value.showHelpRemoveAnswerWarn = false;
-  $refs.questionWarnModalRef.showModalWarn(
+  questionWarnModalRefProp.value?.showModalWarn(
     TRAIN_MODAL_WARN_CASE.deleteAnswerHelp
   );
 
-  $refs.questionWarnModalRef.$once('onAction', async (confirm: boolean) => {
-    if (!confirm) return;
-    await removeAnswerApiAndUpdateStorageState();
-  });
+  const confirm = await firstValueFrom(
+    questionWarnModalRefProp.value?.onActionSub ?? of(true)
+  );
+  if (!confirm) return;
+  await removeAnswerApiAndUpdateStorageState();
 };
 
 const getCurrentQuestionTimer = () => {
   if (
     examQuestionsInterval &&
     activeQuestionModel &&
-    examQuestionsInterval[activeQuestionModel.value.id]
+    examQuestionsInterval[activeQuestionModel.value!.id]
   ) {
-    return examQuestionsInterval[activeQuestionModel.value.id].currentTime
+    return examQuestionsInterval[activeQuestionModel.value!.id].currentTime
       .value;
   }
   return 0;
@@ -1213,10 +1243,10 @@ const getCurrentQuestionTimer = () => {
 watch(
   () => activeQuestionIndex.value,
   () => {
-    if (import.meta.client && examDetail && activeQuestionModel) {
+    if (import.meta.client && !!examDetail.value && activeQuestionModel) {
       const element = checkElementIsOverFlowParent(
         'aqt',
-        `qt-${activeQuestionModel.value.id}`
+        `qt-${activeQuestionModel.value?.id}`
       );
       if (element) {
         element.scrollIntoView();
@@ -1231,7 +1261,7 @@ watch(
 watch(
   () => activePartIndex.value,
   () => {
-    if (import.meta.client && examDetail && activePartModel) {
+    if (import.meta.client && !!activePartModel.value && activePartModel) {
       const element = checkElementIsOverFlowParent(
         'apt',
         `pt-${activePartModel.value.id}`
@@ -1272,7 +1302,7 @@ onBeforeRouteLeave(async (to, from, next) => {
     return next(false);
   }
 
-  confirmExitRef?.showModal();
+  confirmExitRef.value?.showModal();
 
   const onActionHandler = async (confirm: boolean) => {
     if (!confirm) {
@@ -1291,10 +1321,10 @@ onBeforeRouteLeave(async (to, from, next) => {
     return next();
   };
   //todo-z rx
-  const unwatch = confirmExitRef.value?.$on('onAction', (data) => {
-    onActionHandler(data);
-    unwatch();
-  });
+  const data = await firstValueFrom(
+    confirmExitRef.value?.onActionSub ?? of(true)
+  );
+  onActionHandler(data);
 });
 
 onMounted(async () => {

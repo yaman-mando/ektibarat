@@ -109,8 +109,10 @@ export default defineNuxtConfig({
       prefix: 'Prime',
       include: [
         //todo-z handle provider as vee-validate
+        'Checkbox',
+        'ToggleSwitch',
         'Popover',
-        //end popover
+        //start accordion
         'Accordion',
         'AccordionPanel',
         'AccordionHeader',
@@ -130,6 +132,10 @@ export default defineNuxtConfig({
         'Toast',
         'Button',
       ],
+    },
+    directives: {
+      prefix: 'prime-',
+      include: ['Tooltip'], //v-prime-tooltip
     },
     options: {
       theme: {

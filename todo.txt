@@ -1,4 +1,6 @@
 //training
-https://ekhtibarat.com/student/training/68153bd861246dffa2c8ef4f
+https://ekhtibarat.com/student/training/681c0bff054dad72f0f69b99
 
-http://localhost:4000/student/training/67e703ca3712affd113fc873
+http://localhost:4000/student/training/681c0bff054dad72f0f69b99
+
+window.useNuxtApp().$router.push('/student/training/681c0bff054dad72f0f69b99')

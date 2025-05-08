@@ -9,6 +9,9 @@ export {};
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    'prime-tooltip': (typeof import('primevue/tooltip'))['default'];
+    PrimeCheckbox: (typeof import('primevue/checkbox'))['default'];
+    PrimeToggleSwitch: (typeof import('primevue/toggleswitch'))['default'];
     PrimePopover: (typeof import('primevue/popover'))['default'];
     //accordion
     PrimeAccordionContent: (typeof import('primevue/accordioncontent'))['default'];
