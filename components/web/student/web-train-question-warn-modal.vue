@@ -16,21 +16,21 @@
       <img
         class="warn__image"
         :style="imageStyleModel"
-        src="~assets/images/del-answer-warn.png"
+        src="/images/del-answer-warn.png"
       />
     </template>
     <template v-if="modalType === trainModalWarnCase.showAnswerHelp">
       <img
         class="warn__image"
         :style="imageStyleModel"
-        src="~assets/images/show-answer-help.png"
+        src="/images/show-answer-help.png"
       />
     </template>
     <template v-if="modalType === trainModalWarnCase.beforeMinTime">
       <img
         class="warn__image"
         :style="imageStyleModel"
-        src="~assets/images/min-time-warn.png"
+        src="/images/min-time-warn.png"
       />
     </template>
     <template #footer>
@@ -61,8 +61,11 @@ export default {
     },
   },
   emits: ['update:isOpen', 'onAction'],
-  setup() {
+  setup(props, { expose }) {
     const onActionSub = new Subject<boolean>();
+    expose({
+      onActionSub,
+    });
     const { staticLocales } = useSetupStaticLocales();
     return { staticLocales, onActionSub };
   },

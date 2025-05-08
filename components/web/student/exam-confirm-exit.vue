@@ -42,22 +42,21 @@ export default {
     isEndAction: Boolean,
   },
   emits: ['update:isOpen', 'onAction'],
-  setup() {
+  setup(props, { expose }) {
     const isOpen = ref(false);
     function showModal() {
       isOpen.value = true;
     }
     const { staticLocales } = useSetupStaticLocales();
-
-    defineExpose({
+    const onActionSub = new Subject<boolean>();
+    expose({
       showModal,
+      onActionSub,
     });
-    return { staticLocales, isOpen, showModal };
+    return { staticLocales, isOpen, showModal, onActionSub };
   },
   data() {
-    return {
-      onActionSub: new Subject<boolean>(),
-    };
+    return {};
   },
   computed: {
     titleModel() {

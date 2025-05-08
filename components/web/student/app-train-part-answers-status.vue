@@ -139,11 +139,11 @@
                 <span class="text-[30px] font-bold text-blue-f7">
                   {{ staticLocales.trainPage.helpMethodsLabel }}
                 </span>
-                <lazy-app-service-lock v-if="hasSomeLockedAction" />
+                <lazy-service-lock v-if="hasSomeLockedAction" />
               </div>
               <div class="adc-w">
                 <div class="relative">
-                  <lazy-app-service-lock
+                  <lazy-service-lock
                     v-if="!userServicesState.HELPINPRACTICE.isActive"
                   />
                   <lazy-prime-block-u-i :blocked="isLoadingRemoveAnswer">
@@ -160,7 +160,7 @@
                   </lazy-prime-block-u-i>
                 </div>
                 <div class="relative">
-                  <lazy-app-service-lock
+                  <lazy-service-lock
                     v-if="!userServicesState.SHOWSOLVESOLUATION.isActive"
                   />
                   <button

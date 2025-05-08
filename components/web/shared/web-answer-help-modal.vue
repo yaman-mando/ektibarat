@@ -77,12 +77,12 @@ export default {
   },
   computed: {
     isSeoPage() {
-      return this.$router.currentRoute.value.path.includes(
+      return this.appRouter.currentRoute.value.path.includes(
         EXAM_QUESTIONS_ROUTES.root
       );
     },
     isLoggedIn() {
-      return this.$auth.loggedIn;
+      return this.appAuth.loggedIn;
     },
     isOpenModel: {
       get() {
@@ -131,7 +131,7 @@ export default {
           //this.closeAnswerHelpModal()
           return;
         }
-        this.$router.push(RouteHelper.userSignUp());
+        this.appRouter.push(RouteHelper.userSignUp());
         this.closeAnswerHelpModal();
       } catch (e) {
         this.loading = false;

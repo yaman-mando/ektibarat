@@ -54,7 +54,7 @@ const props = withDefaults(
 );
 
 //composable
-const { shouldUseMathJax, initMathJaxMixin } = useMathJax();
+const mathJaxService = useMathJax();
 const route = useRoute();
 
 //refs
@@ -66,7 +66,7 @@ const convertText = ref<string | undefined | null>(props.text);
 
 //computed
 const textModel = computed(() => {
-  if (shouldUseMathJax.value) {
+  if (mathJaxService.state.shouldUseMathJax) {
     return props.text;
   } else {
     return convertText.value;
@@ -105,7 +105,7 @@ onMounted(async () => {
     );
 
   if (!isControlPanel.value) {
-    initMathJaxMixin();
+    mathJaxService.initMathJaxMixin();
   }
 });
 
@@ -145,13 +145,13 @@ watch(
         );
     }
     if (!isControlPanel.value) {
-      initMathJaxMixin();
+      mathJaxService.initMathJaxMixin();
     }
   }
 );
 </script>
 <style lang="scss" scoped>
-@import 'mixin';
+@import '@/assets/scss/mixin';
 
 :root .math-popover {
   display: flex;

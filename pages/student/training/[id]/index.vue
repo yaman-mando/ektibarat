@@ -11,20 +11,17 @@
           v-if="examDetail && currentQuestionDetailModel && currentAnswersModel"
         >
           <div class="sed-w w-container">
-            <client-only>
-              <div
-                v-if="$isDev"
-                class="bg-red-100"
-              >
-                <button @click="confirmContinueOrExitTrain">end</button>
-                <button @click="prevQuestion">prev</button>
-                <button @click="nextQuestion">next</button>
-              </div>
-            </client-only>
-            <lazy-prime-block-u-i
-              :fullScreen="true"
-              :blocked="loadingPage"
-            />
+            <!--            <client-only>-->
+            <!--              <div-->
+            <!--                v-if="$isDev"-->
+            <!--                class="bg-red-100"-->
+            <!--              >-->
+            <!--                <button @click="confirmContinueOrExitTrain">end</button>-->
+            <!--                <button @click="prevQuestion">prev</button>-->
+            <!--                <button @click="nextQuestion">next</button>-->
+            <!--              </div>-->
+            <!--            </client-only>-->
+            <lazy-prime-block-u-i :blocked="loadingPage" />
             <div class="t-hero-m">
               <app-button
                 label="إنهاء"
@@ -335,7 +332,7 @@ const getExamQuestionApi = async (
   data: StudentsExamQuestionParamsDataModel
 ) => {
   questionDetailParams.value = data;
-  await answerRequest.execute();
+  await questionDetailRequest.execute();
   return questionDetailRequest.data.value;
 };
 

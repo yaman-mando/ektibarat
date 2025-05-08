@@ -593,8 +593,8 @@ export default {
     globalStore.getLocalesJsonStatic();
 
     return {
-      $router: router,
-      $route: route,
+      appRouter: router,
+      appRoute: route,
       staticLocales: globalStore.staticState.locales!,
       windowSize,
       appEvents,
@@ -812,7 +812,7 @@ export default {
       this.isLoadingReview = false;
     },
     async navToQuestionDetail() {
-      const _route = this.$router.resolve({
+      const _route = this.appRouter.resolve({
         path: RouteHelper.webExamQuestionDetailById(
           this.questionModel.questionGuid
         ),
@@ -821,7 +821,7 @@ export default {
     },
 
     async navToQuestionToday() {
-      const _route = this.$router.resolve({
+      const _route = this.appRouter.resolve({
         path: RouteHelper.webExamQuestionToday(
           this.questionModel.questionGuid,
           [],
@@ -1009,21 +1009,7 @@ export default {
         height: 100%;
       }
     }
-    /*&.withBg:before {
-      content: '';
-      background-image: url('~assets/png/ekhtibaratLogo-2.png');
-      background-position: center;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-repeat: no-repeat;
-      //filter: opacity(0.15);
-      opacity: 0.15;
-      margin: 10px;
-      background-size: contain;
-    }*/
+
     @include web-desktop-up() {
       min-height: 218px;
     }

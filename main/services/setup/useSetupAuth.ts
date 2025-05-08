@@ -6,7 +6,7 @@ export const useSetupAuth = () => {
   const authStore = useAuthStore();
 
   return {
-    $auth: reactive({
+    appAuth: reactive({
       loggedIn: authStore.isLoggedIn,
       user: authStore.userData as unknown as UserInfoDataModel,
     }),

@@ -4,6 +4,8 @@ import { useGlobalStore } from '~/main/useGlobalStore';
 import { GlobalTypes } from '~/main/constants/global-types';
 import { interval, takeWhile, tap } from 'rxjs';
 import { deepCloneUtil } from '~/main/utils/lodash.utils';
+import { reactive, toRefs } from 'vue';
+import { createPatchState } from '~/main/utils/patch-state.util';
 
 declare let MathJax: any;
 
@@ -129,35 +131,39 @@ export const convertToMathmlCode = (htmlText: string | null) => {
 };
 
 //composable
-export const useMathJax = () => {
+export const useMathJax = defineStore('math-jax-service', () => {
   const globalStore = useGlobalStore();
   const { isAliveRx } = useIsAliveRx();
 
-  //data
-  const mathjaxLibLoading = ref(false);
-  const shouldUseMathJax = ref(false);
+  //state
+  const initialState = {
+    mathjaxLibLoading: false,
+    shouldUseMathJax: false,
+  };
+  const state = reactive({ ...initialState });
+  const patchState = createPatchState(state);
 
-  //hook
-  onMounted(() => {
+  const checkCanUse = () => {
     if (import.meta.client) {
-      shouldUseMathJax.value = !isMathMLSupported() || isSafari();
-      console.warn(shouldUseMathJax, 'shouldUseMathJax');
+      patchState({ shouldUseMathJax: !isMathMLSupported() || isSafari() });
+      console.warn(state.shouldUseMathJax, 'shouldUseMathJax');
     }
-  });
+  };
 
   //method
   async function initMathJaxMixin() {
     try {
       if (import.meta.client) {
-        if (shouldUseMathJax) {
+        checkCanUse();
+        if (state.shouldUseMathJax) {
           removeEmptyTagsFromCode();
           addPrivateClassForIos();
           await sleepUtil(500);
-          mathjaxLibLoading.value = true;
+          patchState({ mathjaxLibLoading: true });
 
           await loadMathJax_tex_mml_chtml();
 
-          mathjaxLibLoading.value = false;
+          patchState({ mathjaxLibLoading: false });
 
           if (!MathJax) {
             console.error('MathJax لم يتم تحميله!');
@@ -182,7 +188,7 @@ export const useMathJax = () => {
       }
     } catch (e) {
       console.error('حدث خطأ أثناء تحميل MathJax:', e);
-      mathjaxLibLoading.value = false;
+      patchState({ mathjaxLibLoading: false });
     }
   }
 
@@ -254,5 +260,9 @@ export const useMathJax = () => {
     return globalStore.state.globalTypeUser == GlobalTypes.tahsele;
   });
 
-  return { shouldUseMathJax, initMathJaxMixin };
-};
+  return {
+    state: toRefs(readonly(state)),
+    //actions
+    initMathJaxMixin,
+  };
+});

@@ -3,7 +3,7 @@ export const useSetupRoute = () => {
   const route = useRoute();
 
   return {
-    $router: router,
-    $route: route,
+    appRouter: router,
+    appRoute: route,
   };
 };

@@ -74,7 +74,7 @@ import { useSetupStaticLocales } from '~/main/services/setup/useSetupStaticLocal
 
 export default {
   props: {
-    questionId: Object as PropType<string | number>,
+    questionId: { type: Number },
     canRemoveAnswer: Boolean,
     canShowLaw: Boolean,
     isLoadingRemoveAnswer: Boolean,

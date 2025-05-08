@@ -4,3 +4,6 @@ https://ekhtibarat.com/student/training/681c0bff054dad72f0f69b99
 http://localhost:4000/student/training/681c0bff054dad72f0f69b99
 
 window.useNuxtApp().$router.push('/student/training/681c0bff054dad72f0f69b99')
+
+//check
+~assets

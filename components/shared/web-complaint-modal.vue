@@ -23,7 +23,7 @@
         </div>
         <div class="aqs-w">
           <div
-            v-if="$auth.loggedIn"
+            v-if="appAuth.loggedIn"
             class="w-full flex flex-col gap-2 mb-3"
           >
             <span class="text-[18px] font-bold">
@@ -132,9 +132,9 @@ export default {
       try {
         const payload: ComplaintsDTODataModel = {
           type: ComplaintsTypeEnum.question,
-          email: this.$auth.user.email,
-          fullName: this.$auth.user.userName ?? '',
-          phone: this.$auth.user.phoneNumber ?? '',
+          email: this.appAuth.user.email,
+          fullName: this.appAuth.user.userName ?? '',
+          phone: this.appAuth.user.phoneNumber ?? '',
           title: `${this.staticLocales!.trainPage.complaintTextPrefix} - ${this.questionId}`,
           text: this.complaintForm.text,
           studentQuestionId: this.questionId,
