@@ -61,12 +61,21 @@ const listForSubjectRequest = useLazyAsyncData(
       shownForBlog: true,
       subjects: [runtimeConfig.public.defaultSubjectId],
     });
+  },
+  {
+    immediate: false,
   }
 );
+//computed
 const loadingList = computed(
   () => listForSubjectRequest.status.value === 'pending'
 );
 const listForSubject = computed(() => listForSubjectRequest.data.value ?? []);
+
+//hook
+onMounted(() => {
+  listForSubjectRequest.execute();
+});
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/mixin';
