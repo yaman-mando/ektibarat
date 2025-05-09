@@ -36,8 +36,8 @@
 import { deepCloneUtil } from '~/main/utils/lodash.utils';
 import {
   convertToMathmlCode,
-  useMathJax,
-} from '~/main/shared/math-jax/useMathJax';
+  useMathJaxClientService,
+} from '~/main/shared/math-jax/useMathJaxClientService';
 import { adminRootPathUtil } from '~/main/utils/admin-routes.utils';
 
 const props = withDefaults(
@@ -54,7 +54,7 @@ const props = withDefaults(
 );
 
 //composable
-const mathJaxService = useMathJax();
+const mathJaxService = useMathJaxClientService();
 const route = useRoute();
 
 //refs

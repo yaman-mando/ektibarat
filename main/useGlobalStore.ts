@@ -46,7 +46,7 @@ export const useGlobalStore = defineStore('global', () => {
 
   const state = reactive<StateType>({
     globalType: GlobalTypes.kudrat,
-    globalTypeUser: globalTypeUserCookie.value ?? null,
+    globalTypeUser: globalTypeUserCookie.value ?? GlobalTypes.kudrat,
     isSchool: false,
     defaultActiveExam: 1,
     showBlockModal: false,

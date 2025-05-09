@@ -37,7 +37,7 @@
         </div>
       </template>
     </div>
-    <template v-if="isLoggedIn && isFree">
+    <template v-if="authStore.state.isLoggedIn && isFree">
       <nuxt-link :to="webUserPanelTraining()">
         <button class="normal-btn">تدرب الآن</button>
       </nuxt-link>
@@ -52,7 +52,7 @@
       @click="emit('onSelectPacket', card.id)"
     >
       <template v-if="isFree">
-        <template v-if="!isLoggedIn">الدخول</template>
+        <template v-if="!authStore.state.isLoggedIn">الدخول</template>
       </template>
       <template v-else>اشتراك</template>
     </button>
@@ -102,7 +102,6 @@ const props = withDefaults(
 const authStore = useAuthStore();
 
 //data
-const isLoggedIn = authStore.isLoggedIn;
 const isFree = computed(() => {
   return props.card.freeType != null;
 });

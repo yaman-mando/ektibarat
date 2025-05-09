@@ -4,7 +4,7 @@
   </template>
   <template v-else>
     <template v-if="loadingList">
-      <spinner />
+      <lazy-app-spinner />
     </template>
     <template v-else>
       <div

@@ -7,8 +7,7 @@ import { deepCloneUtil } from '~/main/utils/lodash.utils';
 import { reactive, toRefs } from 'vue';
 import { createPatchState } from '~/main/utils/patch-state.util';
 
-declare let MathJax: any;
-
+const MATH_JAX_KEY = 'MathJax';
 export const isMathMLSupported = () => {
   if (import.meta.client) {
     const mathML = document.createElement('math');
@@ -22,13 +21,13 @@ export const isMathMLSupported = () => {
 
 export const loadMathJax_tex_mml_chtml = async () => {
   return new Promise((resolve, reject) => {
-    if (MathJax) {
+    if (window[MATH_JAX_KEY]) {
       //console.log('MathJax موجود بالفعل، لا حاجة للتحميل.');
       return resolve(true);
     }
 
     // ضبط الإعدادات قبل تحميل المكتبة
-    MathJax = {
+    window[MATH_JAX_KEY] = {
       tex: {
         displayAlign: 'right',
         fontCache: 'global',
@@ -47,7 +46,7 @@ export const loadMathJax_tex_mml_chtml = async () => {
       startup: {
         ready: () => {
           //console.log('MathJax جاهز!');
-          MathJax.startup.defaultReady();
+          window[MATH_JAX_KEY].startup.defaultReady();
           resolve(true);
         },
       },
@@ -60,8 +59,8 @@ export const loadMathJax_tex_mml_chtml = async () => {
 
     script.onload = () => {
       //console.log('تم تحميل MathJax بنجاح.');
-      if (MathJax?.startup?.promise) {
-        MathJax.startup.promise.then(resolve);
+      if (window[MATH_JAX_KEY]?.startup?.promise) {
+        window[MATH_JAX_KEY].startup.promise.then(resolve);
       } else {
         resolve(true);
       }
@@ -131,7 +130,7 @@ export const convertToMathmlCode = (htmlText: string | null) => {
 };
 
 //composable
-export const useMathJax = defineStore('math-jax-service', () => {
+export const useMathJaxClientService = defineStore('math-jax-service', () => {
   const globalStore = useGlobalStore();
   const { isAliveRx } = useIsAliveRx();
 
@@ -146,7 +145,7 @@ export const useMathJax = defineStore('math-jax-service', () => {
   const checkCanUse = () => {
     if (import.meta.client) {
       patchState({ shouldUseMathJax: !isMathMLSupported() || isSafari() });
-      console.warn(state.shouldUseMathJax, 'shouldUseMathJax');
+      // console.warn(state.shouldUseMathJax, 'shouldUseMathJax');
     }
   };
 
@@ -154,6 +153,8 @@ export const useMathJax = defineStore('math-jax-service', () => {
   async function initMathJaxMixin() {
     try {
       if (import.meta.client) {
+        if (!!window[MATH_JAX_KEY] || state.mathjaxLibLoading) return; //loading
+
         checkCanUse();
         if (state.shouldUseMathJax) {
           removeEmptyTagsFromCode();
@@ -165,13 +166,13 @@ export const useMathJax = defineStore('math-jax-service', () => {
 
           patchState({ mathjaxLibLoading: false });
 
-          if (!MathJax) {
+          if (!window[MATH_JAX_KEY]) {
             console.error('MathJax لم يتم تحميله!');
             return;
           }
 
-          if (MathJax.startup?.promise) {
-            await MathJax.startup.promise;
+          if (window[MATH_JAX_KEY].startup?.promise) {
+            await window[MATH_JAX_KEY].startup.promise;
           } else {
             console.warn(
               'MathJax.startup.promise غير متاح، سيتم تجربة التحميل يدويًا.'
@@ -204,18 +205,18 @@ export const useMathJax = defineStore('math-jax-service', () => {
   }
   async function mathjaxMixinRenderMath() {
     try {
-      if (!MathJax) {
+      if (!window[MATH_JAX_KEY]) {
         console.error('MathJax غير متوفر عند محاولة إعادة التهيئة.');
         return;
       }
 
-      if (typeof MathJax.typesetPromise === 'function') {
-        await MathJax.typesetPromise();
+      if (typeof window[MATH_JAX_KEY].typesetPromise === 'function') {
+        await window[MATH_JAX_KEY].typesetPromise();
       } else {
         console.warn(
           'MathJax.typesetPromise غير متاح، سيتم تجربة `MathJax.typeset()` يدويًا.'
         );
-        MathJax.typeset();
+        window[MATH_JAX_KEY].typeset();
       }
     } catch (e) {
       console.error('حدث خطأ أثناء تحديث MathJax:', e);

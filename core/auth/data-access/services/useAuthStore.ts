@@ -9,9 +9,11 @@ import {
   webUserPanelTraining,
 } from '~/main/utils/web-routes.utils';
 import { useGlobalStore } from '~/main/useGlobalStore';
+import { defineStore } from 'pinia';
+import { reactive, toRefs } from 'vue';
 
 //store
-export const useAuthStore = () => {
+export const useAuthStore = defineStore('auth-store', () => {
   const globalStore = useGlobalStore();
   const repo = useAuthRepo();
   const authState = useAuthState();
@@ -21,6 +23,12 @@ export const useAuthStore = () => {
   const userData = computed(
     () => authState.data.value as UserInfoDataModel | null
   );
+
+  const state = reactive({
+    isLoggedIn,
+    userData,
+    isLoadingProfile,
+  });
 
   const loginGoogle = (model: AuthLoginProviderDTODataModel) => {
     return repo.loginGoogle(model);
@@ -51,13 +59,12 @@ export const useAuthStore = () => {
   };
 
   return {
+    state: toRefs(readonly(state)),
+    //actions
     setAuthCookie,
     loginGoogle,
     redirectUrlAfterLogin,
-    isLoggedIn,
-    userData,
     loginApple,
     loginOTP,
-    isLoadingProfile,
   };
-};
+});

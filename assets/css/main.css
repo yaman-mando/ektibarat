@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "tailwindcss-logical";
+@config "../../tailwind.config.js";
 
 :root {
     --p-primary-color: var(--purple-8c);

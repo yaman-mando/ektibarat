@@ -1,18 +1,20 @@
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 export function useTimeSpanService(maxTimeVal = Infinity) {
-  const maxTime = ref(maxTimeVal);
-  const currentTime = ref(0);
+  const state = reactive({
+    maxTime: maxTimeVal,
+    currentTime: 0,
+  });
   const timeInterval = ref<ReturnType<typeof setInterval> | null>(null);
 
   function isPassedMaxTime() {
-    return currentTime.value > maxTime.value;
+    return state.currentTime > state.maxTime;
   }
 
   function startTime() {
     if (!timeInterval.value) {
       timeInterval.value = setInterval(() => {
-        currentTime.value++;
+        state.currentTime++;
       }, 1000);
     }
   }
@@ -25,8 +27,7 @@ export function useTimeSpanService(maxTimeVal = Infinity) {
   }
 
   return {
-    maxTime,
-    currentTime,
+    state,
     isPassedMaxTime,
     startTime,
     pauseTime,

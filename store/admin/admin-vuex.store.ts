@@ -1856,7 +1856,7 @@ export const adminVuexStore: Module = {
         const res = await $axios.get(
           `/subscriptions/all?grades=${payload.globalType}`
         );
-        if (authStore.isLoggedIn.value) {
+        if (authStore.state.isLoggedIn) {
           res.data.forEach((k, index) => {
             if (k.isFree) {
               res.data.splice(index, 1);

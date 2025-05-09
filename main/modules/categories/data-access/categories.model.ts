@@ -1,4 +1,4 @@
-//TODO-z
+//TODO-z define other props
 export type CategoriesListForSubjectFilterDataModel = {
   subjects: number[];
   shownForBlog: boolean;

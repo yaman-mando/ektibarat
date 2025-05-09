@@ -776,7 +776,8 @@ const beforePageUnload = async () => {
   try {
     loadingPage.value = true;
     stopTimers();
-    await studentsExamStore.submitExam({ id: examDetail.value!.id });
+    //todo-z uncomment
+    // await studentsExamStore.submitExam({ id: examDetail.value!.id });
     studentsExamStore.patchState({ detail: null });
   } catch (e) {
     loadingPage.value = false;
@@ -941,9 +942,9 @@ const onSelectAnswer = async (answerId: any) => {
       answerType: answerStateType,
       studentQuestionId: activeQuestionModel.value!.id,
       nextStudentQuestionId: nextQuestionModel.value?.id ?? null,
-      studentExamTimeSpan: examInterval.currentTime.value,
-      studentExamPartTimeSpan: activeExamPartInterval.value!.currentTime.value,
-      questionTimeSpan: activeExamQuestionInterval.value!.currentTime.value,
+      studentExamTimeSpan: examInterval.state.currentTime,
+      studentExamPartTimeSpan: activeExamPartInterval.value!.state.currentTime,
+      questionTimeSpan: activeExamQuestionInterval.value!.state.currentTime,
     });
 
     const isCorrectAnswer =
@@ -1227,11 +1228,11 @@ const removeAnswersTry = async () => {
 const getCurrentQuestionTimer = () => {
   if (
     examQuestionsInterval &&
-    activeQuestionModel &&
+    activeQuestionModel.value &&
     examQuestionsInterval[activeQuestionModel.value!.id]
   ) {
-    return examQuestionsInterval[activeQuestionModel.value!.id].currentTime
-      .value;
+    return examQuestionsInterval[activeQuestionModel.value!.id].state
+      .currentTime;
   }
   return 0;
 };
@@ -1317,7 +1318,6 @@ onBeforeRouteLeave(async (to, from, next) => {
     confirmNavigate.value = true;
     return next();
   };
-  //todo-z rx
   const data = await firstValueFrom(
     confirmExitRef.value?.onActionSub ?? of(true)
   );

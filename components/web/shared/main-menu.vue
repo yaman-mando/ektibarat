@@ -28,7 +28,7 @@
         label="الدخول"
         size="sm"
         :isDisabled="authState.loading.value"
-        :isLoading="isLoadingProfile"
+        :isLoading="authStore.state.isLoadingProfile"
         @click="onLoginClick"
       />
       <div
@@ -542,7 +542,6 @@ const currentRoute = computed(() => route.path);
 const authStore = useAuthStore();
 
 //data
-const isLoadingProfile = authStore.isLoadingProfile;
 const loginRegisterModalRef = ref<InstanceType<
   typeof WebLoginRegisterModal
 > | null>(null);

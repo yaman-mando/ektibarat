@@ -59,7 +59,7 @@
       </template>
 
       <client-only>
-        <mx-admin-image-cropper
+        <lazy-app-image-cropper
           v-model:openCropper="openCropper"
           :hasDelete="editableImage"
           :img="modalData.url"

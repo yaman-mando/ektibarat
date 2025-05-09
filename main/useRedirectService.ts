@@ -12,7 +12,7 @@ export const useRedirectService = () => {
   const router = useRouter();
 
   const getTrainingRedirectWithGlobalTypeUrl = (globalType: GlobalTypes) => {
-    return authStore.isLoggedIn.value
+    return authStore.state.isLoggedIn
       ? webUserPanelTrainingWithQuery({ globalType })
       : webAuthSignup();
   };
@@ -21,8 +21,8 @@ export const useRedirectService = () => {
   };
 
   const getStudentRedirectUrl = () => {
-    if (authStore.isLoggedIn.value) {
-      if (authStore.userData.value?.subscriptionDate) {
+    if (authStore.state.isLoggedIn) {
+      if (authStore.state.userData?.subscriptionDate) {
         return webUserPanelTraining();
       } else {
         return webUserPanelSubscriptions();

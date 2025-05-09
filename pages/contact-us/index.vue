@@ -94,9 +94,9 @@
                   v-model:inputValue="form.name"
                   inputId="fullName"
                   :isDisabled="
-                    authStore.isLoggedIn.value &&
-                    !!authStore.userData.value?.firstName &&
-                    !!authStore.userData.value.lastName
+                    authStore.state.isLoggedIn &&
+                    !!authStore.state.userData?.firstName &&
+                    !!authStore.state.userData.lastName
                   "
                   :rules="{ required: true }"
                   inputPlaceholder="الاسم"
@@ -105,8 +105,8 @@
                   v-model:inputValue="form.email"
                   inputId="email"
                   :isDisabled="
-                    authStore.isLoggedIn.value &&
-                    !!authStore.userData.value?.email
+                    authStore.state.isLoggedIn &&
+                    !!authStore.state.userData?.email
                   "
                   :rules="{ required: true, email: true }"
                   inputPlaceholder="البريد الالكتروني"
@@ -199,8 +199,8 @@ const submit = async () => {
   form.value = { ...INITIAL_FORM };
 };
 const fillUserData = () => {
-  if (authStore.isLoggedIn.value) {
-    const userData = authStore.userData.value;
+  if (authStore.state.isLoggedIn) {
+    const userData = authStore.state.userData;
     if (userData) {
       form.value.name =
         !!userData.firstName && !!userData.lastName

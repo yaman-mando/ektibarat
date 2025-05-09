@@ -7,8 +7,10 @@ export const useSetupAuth = () => {
 
   return {
     appAuth: reactive({
-      loggedIn: authStore.isLoggedIn,
-      user: authStore.userData as unknown as UserInfoDataModel,
+      loggedIn: computed(() => authStore.state.isLoggedIn),
+      user: computed(
+        () => authStore.state.userData as unknown as UserInfoDataModel
+      ),
     }),
   };
 };

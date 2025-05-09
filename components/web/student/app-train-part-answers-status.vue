@@ -6,20 +6,23 @@
     <template v-if="windowSize.isMobileSize.value">
       <div class="ex-mm">
         <client-only>
-          <div
-            class="ex-i is-mobile"
-            @mouseover="togglePopover"
-            @click="togglePopover"
-          >
-            <i class="fa-solid fa-exclamation"></i>
-          </div>
-          <prime-popover ref="pop_ref">
-            <lazy-app-train-question-setting-info
-              :minValue="questionMinSecond"
-              :maxValue="questionMaxSecond"
-              :rangeList="questionPointsSettingModel"
-            />
-          </prime-popover>
+          <lazy-app-popover-wrapper triggerEvent="click">
+            <template #trigger="{ bindTrigger }">
+              <div
+                class="ex-i is-mobile"
+                v-bind="bindTrigger"
+              >
+                <i class="fa-solid fa-exclamation"></i>
+              </div>
+            </template>
+            <template #content>
+              <lazy-app-train-question-setting-info
+                :minValue="questionMinSecond"
+                :maxValue="questionMaxSecond"
+                :rangeList="questionPointsSettingModel"
+              />
+            </template>
+          </lazy-app-popover-wrapper>
         </client-only>
         <div class="tp-icon-wrapper">
           <div class="flex items-center justify-center gap-1 text-green-8c">
@@ -65,20 +68,23 @@
               </div>
             </transition>
             <client-only>
-              <div
-                class="ex-i"
-                @mouseover="toggleSettingPopover"
-                @click="toggleSettingPopover"
-              >
-                <i class="fa-solid fa-exclamation"></i>
-              </div>
-              <prime-popover ref="setting_pop_ref">
-                <lazy-app-train-question-setting-info
-                  :minValue="questionMinSecond"
-                  :maxValue="questionMaxSecond"
-                  :rangeList="questionPointsSettingModel"
-                />
-              </prime-popover>
+              <lazy-app-popover-wrapper>
+                <template #trigger="{ bindTrigger }">
+                  <div
+                    class="ex-i"
+                    v-bind="bindTrigger"
+                  >
+                    <i class="fa-solid fa-exclamation"></i>
+                  </div>
+                </template>
+                <template #content>
+                  <lazy-app-train-question-setting-info
+                    :minValue="questionMinSecond"
+                    :maxValue="questionMaxSecond"
+                    :rangeList="questionPointsSettingModel"
+                  />
+                </template>
+              </lazy-app-popover-wrapper>
             </client-only>
           </div>
         </div>
@@ -233,8 +239,6 @@ const globalStore = useGlobalStore();
 const subscriptionsStore = useSubscriptionsStore();
 
 //refs
-const popOverRef = useTemplateRef('pop_ref');
-const settingPopoverRef = useTemplateRef('setting_pop_ref');
 const lawsModalRef = useTemplateRef('laws_images_modal_ref');
 const endTargetRef = useTemplateRef('end_target_ref');
 //data
@@ -260,10 +264,6 @@ const questionPointsSettingModel = computed(() => {
 });
 
 //method
-const togglePopover = (event: any) => {
-  popOverRef.value?.toggle(event);
-};
-
 function onLawsClick() {
   lawsModalRef.value?.showModal();
   emit('showLawsAction');
@@ -321,9 +321,6 @@ function setPoint(totalPoints: number | null, plusPoints: number | null) {
 onMounted(() => {
   globalStore.getLocalesJsonStatic();
 });
-const toggleSettingPopover = (event: any) => {
-  settingPopoverRef.value?.toggle(event);
-};
 </script>
 <style lang="scss" scoped>
 @import '@/assets/scss/mixin';
