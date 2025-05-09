@@ -1,9 +1,5 @@
 <template>
   <nuxt-route-announcer />
-  <lazy-prime-block-u-i
-    :blocked="isLoadingProfile"
-    fullScreen
-  />
   <nuxt-layout>
     <nuxt-page />
   </nuxt-layout>
@@ -41,7 +37,6 @@ const clarityStore = useClarityStore();
 const runtimeConfig = useRuntimeConfig();
 
 //data
-const isLoadingProfile = authStore.isLoadingProfile;
 const isLoggedIn = computed(() => auth.status.value === 'authenticated');
 const userData = computed(() => auth.data.value as UserInfoDataModel);
 
@@ -206,9 +201,7 @@ const handleClarityUser = async (model: {
   }
 };
 
-const handleLayoutExit = (name: string) => {
-  console.log(name);
-};
+const handleLayoutExit = (name: string) => {};
 
 //events
 authEvents.signInData$.pipe(filter(Boolean)).subscribe((val) => {

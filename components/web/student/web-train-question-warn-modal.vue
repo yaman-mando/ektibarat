@@ -62,20 +62,36 @@ export default {
   },
   emits: ['update:isOpen', 'onAction'],
   setup(props, { expose }) {
+    const { staticLocales } = useSetupStaticLocales();
+    const modalType = ref<any | number>(null);
+    const message = ref<string>('');
+    const isOpenModel = ref<boolean>(false);
     const onActionSub = new Subject<boolean>();
+    function showModalWarn(val) {
+      modalType.value = val;
+      const messageCase = {
+        [TRAIN_MODAL_WARN_CASE.beforeMinTime]:
+          staticLocales?.trainPage.beforeMinTime,
+        [TRAIN_MODAL_WARN_CASE.afterMaxTime]:
+          staticLocales?.trainPage.afterMaxTime,
+        [TRAIN_MODAL_WARN_CASE.deleteAnswerHelp]:
+          staticLocales?.trainPage.deleteAnswerHelp,
+        [TRAIN_MODAL_WARN_CASE.showAnswerHelp]:
+          staticLocales?.trainPage.showAnswerHelp,
+      };
+      message.value = messageCase[val];
+      isOpenModel.value = true;
+    }
     expose({
       onActionSub,
+      showModalWarn,
     });
-    const { staticLocales } = useSetupStaticLocales();
-    return { staticLocales, onActionSub };
+    return { staticLocales, onActionSub, modalType, message, isOpenModel };
   },
   data() {
     return {
-      message: '',
-      isOpenModel: false,
       bottomGap: 0,
       leftGap: 0,
-      modalType: null,
       modalTimer: null as null | ReturnType<typeof setTimeout>,
     };
   },

@@ -19,7 +19,6 @@ declare module 'vue' {
     PrimeAccordionPanel: (typeof import('primevue/accordionpanel'))['default'];
     PrimeAccordion: (typeof import('primevue/accordion'))['default'];
     //end accordion
-    PrimeBlockUI: (typeof import('primevue/blockui'))['default'];
     //tabs
     PrimeTabPanel: (typeof import('primevue/tabpanel'))['default'];
     PrimeTabPanels: (typeof import('primevue/tabpanels'))['default'];

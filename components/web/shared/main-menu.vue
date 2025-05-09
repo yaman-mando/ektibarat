@@ -22,12 +22,13 @@
         />
       </nuxt-link>
 
-      <app-button
+      <lazy-app-button
         v-if="!isLoggedIn"
         variant="clear"
         label="الدخول"
         size="sm"
         :isDisabled="authState.loading.value"
+        :isLoading="isLoadingProfile"
         @click="onLoginClick"
       />
       <div
@@ -466,6 +467,7 @@ import {
   webPathTahselPathUtil,
   webPricesPathUtil,
 } from '~/main/utils/web-routes.utils';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 
 type MenuItemUi = {
   id: number;
@@ -537,8 +539,10 @@ const route = useRoute();
 const { state, patchState: pathGlobalStore } = useGlobalStore();
 const subscriptionsStore = useSubscriptionsStore();
 const currentRoute = computed(() => route.path);
+const authStore = useAuthStore();
 
 //data
+const isLoadingProfile = authStore.isLoadingProfile;
 const loginRegisterModalRef = ref<InstanceType<
   typeof WebLoginRegisterModal
 > | null>(null);

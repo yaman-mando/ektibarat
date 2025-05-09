@@ -3,54 +3,50 @@
     <vee-form
       v-bind="attrs"
       ref="pageForm"
-      class="w-full block"
+      class="w-full relative flex flex-col justify-start gap-6"
     >
-      <lazy-prime-block-u-i
-        class="w-full flex flex-col justify-start gap-6"
-        :blocked="loginOtpReq.status.value === 'pending'"
-      >
-        <template v-if="!isCodeStep">
-          <lazy-phone-input @onInputPhone="onChange($event)" />
-          <span
-            v-if="errorMessage"
-            class="err-msg"
-          >
-            {{ errorMessage }}
+      <lazy-app-overlay v-if="loginOtpReq.status.value === 'pending'" />
+      <template v-if="!isCodeStep">
+        <lazy-phone-input @onInputPhone="onChange($event)" />
+        <span
+          v-if="errorMessage"
+          class="err-msg"
+        >
+          {{ errorMessage }}
+        </span>
+        <span class="note">سيتم إرسال رمز الدخول إلى الواتساب</span>
+      </template>
+      <template v-if="isCodeStep">
+        <div class="rw-user-info">
+          <span class="code-label">
+            يرجى إدخال الكود الواصل إليكم عبر الواتس اب
           </span>
-          <span class="note">سيتم إرسال رمز الدخول إلى الواتساب</span>
-        </template>
-        <template v-if="isCodeStep">
-          <div class="rw-user-info">
-            <span class="code-label">
-              يرجى إدخال الكود الواصل إليكم عبر الواتس اب
-            </span>
-            <span class="user-data">
-              {{ data.phone }}
-              <button
-                class="change-method"
-                @click="backToInput"
-              >
-                تغيير
-              </button>
-            </span>
-          </div>
-          <code-input
-            :fields="4"
-            :fieldWidth="50"
-            :fieldHeight="45"
-            :radius="8"
-            :required="true"
-            style="direction: ltr"
-            @complete="onCompleteCode"
-          />
-        </template>
-        <app-button
-          :isDisabled="!!errorMessage || fullTries"
-          size="sm"
-          :label="isCodeStep ? 'إعادة إرسال الكود' : 'إرسال'"
-          @click="onSubmitClick"
+          <span class="user-data">
+            {{ data.phone }}
+            <button
+              class="change-method"
+              @click="backToInput"
+            >
+              تغيير
+            </button>
+          </span>
+        </div>
+        <code-input
+          :fields="4"
+          :fieldWidth="50"
+          :fieldHeight="45"
+          :radius="8"
+          :required="true"
+          style="direction: ltr"
+          @complete="onCompleteCode"
         />
-      </lazy-prime-block-u-i>
+      </template>
+      <app-button
+        class="!w-full"
+        :isDisabled="!!errorMessage || fullTries"
+        :label="isCodeStep ? 'إعادة إرسال الكود' : 'إرسال'"
+        @click="onSubmitClick"
+      />
     </vee-form>
   </lazy-vee-validate-provider>
 </template>

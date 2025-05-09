@@ -3,82 +3,80 @@
     <div class="rw-1">
       <span>{{ texts.title }}</span>
     </div>
-    <lazy-prime-block-u-i :blocked="registerPermissionsLoading">
-      <template v-if="!registerPermissionsLoading">
-        <div
-          v-if="activeStep !== steps.userInfo"
-          class="rw-2 actions"
+    <lazy-app-overlay v-if="registerPermissionsLoading" />
+    <template v-if="!registerPermissionsLoading">
+      <div
+        v-if="activeStep !== steps.userInfo"
+        class="rw-2 actions"
+      >
+        <lazy-prime-button
+          v-if="(isRegister && googlePermission) || !isRegister"
+          class="outline-btn by-google"
+          @click="loginByGoogle()"
         >
-          <lazy-prime-button
-            v-if="(isRegister && googlePermission) || !isRegister"
-            class="outline-btn by-google"
-            @click="loginByGoogle()"
-          >
-            <img
-              src="/images/svg/googleLogo.svg"
-              alt=""
-            />
+          <img
+            src="/images/svg/googleLogo.svg"
+            alt=""
+          />
 
-            <span>{{ texts.signGoogle }}</span>
-          </lazy-prime-button>
-          <lazy-prime-block-u-i :blocked="appleLoading">
-            <lazy-prime-button
-              v-if="(isRegister && applePermission) || !isRegister"
-              class="outline-btn by-ios"
-              @click="loginByApple"
-            >
-              <i class="fab fa-apple"></i>
-              <span>{{ texts.SignApple }}</span>
-            </lazy-prime-button>
-          </lazy-prime-block-u-i>
-          <lazy-prime-button
-            v-if="
-              ((isRegister && emailPermission) || !isRegister) &&
-              activeTab !== signTypes.email
-            "
-            class="outline-btn by-email"
-            @click="loginByEmail"
-          >
-            <i
-              class="fa"
-              :class="isRegister ? 'fa-envelope' : 'fa-lock'"
-            ></i>
-            <span>{{ texts.signEmail }}</span>
-          </lazy-prime-button>
-          <lazy-prime-button
-            v-if="
-              ((isRegister && phonePermission) || !isRegister) &&
-              activeTab !== signTypes.whatsapp
-            "
-            class="outline-btn by-watsapp"
-            @click="registerByWhatsapp()"
-          >
-            <i class="fab fa-whatsapp"></i>
-            <span>{{ texts.signWatsApp }}</span>
-          </lazy-prime-button>
-        </div>
-        <div
-          v-if="activeTab"
-          class="rw-3 info"
+          <span>{{ texts.signGoogle }}</span>
+        </lazy-prime-button>
+        <lazy-prime-button
+          v-if="(isRegister && applePermission) || !isRegister"
+          class="outline-btn by-ios"
+          :loading="appleLoading"
+          @click="loginByApple"
         >
-          <lazy-login-email
-            v-if="activeTab === signTypes.email"
-            class="!mt-6"
-          />
-          <lazy-whatsapp-form
-            v-if="activeTab === signTypes.whatsapp"
-            class="!mt-6"
-          />
-        </div>
-        <h3
-          v-if="isRegister"
-          class="conditions"
+          <i class="fab fa-apple"></i>
+          <span>{{ texts.SignApple }}</span>
+        </lazy-prime-button>
+        <lazy-prime-button
+          v-if="
+            ((isRegister && emailPermission) || !isRegister) &&
+            activeTab !== signTypes.email
+          "
+          class="outline-btn by-email"
+          @click="loginByEmail"
         >
-          توافق بتسجيلك على
-          <nuxt-link to="/conditions">الشروط والأحكام</nuxt-link>
-        </h3>
-      </template>
-    </lazy-prime-block-u-i>
+          <i
+            class="fa"
+            :class="isRegister ? 'fa-envelope' : 'fa-lock'"
+          ></i>
+          <span>{{ texts.signEmail }}</span>
+        </lazy-prime-button>
+        <lazy-prime-button
+          v-if="
+            ((isRegister && phonePermission) || !isRegister) &&
+            activeTab !== signTypes.whatsapp
+          "
+          class="outline-btn by-watsapp"
+          @click="registerByWhatsapp()"
+        >
+          <i class="fab fa-whatsapp"></i>
+          <span>{{ texts.signWatsApp }}</span>
+        </lazy-prime-button>
+      </div>
+      <div
+        v-if="activeTab"
+        class="rw-3 info"
+      >
+        <lazy-login-email
+          v-if="activeTab === signTypes.email"
+          class="!mt-6"
+        />
+        <lazy-whatsapp-form
+          v-if="activeTab === signTypes.whatsapp"
+          class="!mt-6"
+        />
+      </div>
+      <h3
+        v-if="isRegister"
+        class="conditions"
+      >
+        توافق بتسجيلك على
+        <nuxt-link to="/conditions">الشروط والأحكام</nuxt-link>
+      </h3>
+    </template>
   </div>
 </template>
 <script setup lang="ts">

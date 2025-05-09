@@ -22,30 +22,23 @@
       />
     </div>
     <div class="flex items-center justify-center wa-help-actions-row">
-      <lazy-prime-block-u-i
+      <app-button
         v-if="isSeoPage"
-        :blocked="loading"
-      >
-        <button
-          type="button"
-          class="bg-white border-green-8c relative flex items-center justify-center gap-2 active:!opacity-[.8] h-[60px] w-[120px] rounded-[10px] border-solid border-2"
-          @click="toAction"
-        >
-          <span class="text-xl text-green-8c font-bold">
-            {{ isLoggedIn ? 'تدرب' : 'تسجيل' }}
-          </span>
-        </button>
-      </lazy-prime-block-u-i>
-      <button
+        :isLoading="loading"
+        variant="outline"
+        colorType="success"
+        :label="isLoggedIn ? 'تدرب' : 'تسجيل'"
+        labelClass="text-xl text-green-8c"
+        @click="toAction"
+      />
+      <app-button
         v-else
-        type="button"
-        class="bg-white border-green-8c relative flex items-center justify-center gap-2 active:!opacity-[.8] h-[60px] w-[120px] rounded-[10px] border-solid border-2"
+        variant="outline"
+        colorType="success"
+        :label="staticLocales.trainPage.close"
+        labelClass="text-xl text-green-8c"
         @click="closeAnswerHelpModal"
-      >
-        <span class="text-xl text-green-8c font-bold">
-          {{ staticLocales.trainPage.close }}
-        </span>
-      </button>
+      />
     </div>
   </lazy-prime-dialog>
 </template>

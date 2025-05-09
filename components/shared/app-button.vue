@@ -40,7 +40,7 @@ withDefaults(
     label?: string;
     labelClass?: string;
     suffixLabel?: string;
-    colorType?: 'primary' | 'success' | 'warn' | 'blue';
+    colorType?: 'primary' | 'success' | 'warn' | 'warn-light' | 'blue';
     variant?: 'flat' | 'outline' | 'clear';
     size?: 'sm' | string;
     isAnalytics?: boolean;
@@ -68,6 +68,7 @@ withDefaults(
   width: 155px;
   border-radius: 10px;
   border: 2px solid var(--color);
+  padding: 1px 6px;
 
   &.rounded {
     border-radius: 30px;
@@ -78,6 +79,9 @@ withDefaults(
   }
   &.warn {
     --color: var(--red-5e);
+  }
+  &.warn-light {
+    --color: var(--orange-39);
   }
   &.blue {
     --color: var(--blue-d6);

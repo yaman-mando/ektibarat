@@ -16,7 +16,7 @@
       </div>
       <div class="wl-c">
         <template v-if="request.status.value === 'pending'">
-          <lazy-spinner />
+          <lazy-app-spinner />
         </template>
         <template v-else>
           <template v-if="!!data.length">

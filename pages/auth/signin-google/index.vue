@@ -1,19 +1,18 @@
 <template>
-  <div class="google-page-redirect">
-    <lazy-prime-block-u-i :blocked="isLoading">
-      <div class="logo-part">
-        <p class="title-1">مرحبا بكم في</p>
-        <p class="title-2">اختبارات</p>
-        <p class="title-3">تعلم بذكاء</p>
-        <div class="logo">
-          <img
-            src="/images/png/collection/login_logo.webp"
-            alt=""
-          />
-        </div>
-        <p class="copyRight">© Copyright {{ currentYear }}. By اختبارات</p>
+  <div class="google-page-redirect relative">
+    <lazy-app-overlay v-if="isLoading" />
+    <div class="logo-part">
+      <p class="title-1">مرحبا بكم في</p>
+      <p class="title-2">اختبارات</p>
+      <p class="title-3">تعلم بذكاء</p>
+      <div class="logo">
+        <img
+          src="/images/png/collection/login_logo.webp"
+          alt=""
+        />
       </div>
-    </lazy-prime-block-u-i>
+      <p class="copyRight">© Copyright {{ currentYear }}. By اختبارات</p>
+    </div>
   </div>
 </template>
 <script setup lang="ts">

@@ -3,7 +3,7 @@
     <div class="student-exam-details">
       <template v-if="isLoadingPage">
         <div class="flex items-start justify-center relative">
-          <lazy-spinner class="my-3" />
+          <lazy-app-spinner class="my-3" />
         </div>
       </template>
       <template v-else>
@@ -21,7 +21,7 @@
             <!--                <button @click="nextQuestion">next</button>-->
             <!--              </div>-->
             <!--            </client-only>-->
-            <lazy-prime-block-u-i :blocked="loadingPage" />
+            <app-overlay v-if="loadingPage" />
             <div class="t-hero-m">
               <app-button
                 label="إنهاء"

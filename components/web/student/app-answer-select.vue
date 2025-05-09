@@ -10,122 +10,120 @@
       { 'is-animation': isAnimation },
     ]"
   >
-    <lazy-prime-block-u-i :blocked="fetchingApi">
-      <template
-        v-for="(item, index) in answers"
-        :key="`asc-${item.id}`"
+    <lazy-app-overlay v-if="fetchingApi" />
+    <template
+      v-for="(item, index) in answers"
+      :key="`asc-${item.id}`"
+    >
+      <div
+        class="a-select-item"
+        :class="[
+          { active: isActiveItem(item.id) },
+          getStateClass(item.id),
+          getItemClass(item.id),
+          getAnswerTypeClass(item),
+          { 'has-takfeelat': getShowTakfeelat(item.isTakfeelat) },
+        ]"
+        @click="onSelectItem(item.id)"
       >
-        <div
-          class="a-select-item"
-          :class="[
-            { active: isActiveItem(item.id) },
-            getStateClass(item.id),
-            getItemClass(item.id),
-            getAnswerTypeClass(item),
-            { 'has-takfeelat': getShowTakfeelat(item.isTakfeelat) },
-          ]"
-          @click="onSelectItem(item.id)"
-        >
-          <!--      text-->
-          <template v-if="item.answerType == questionTypes.text">
-            <lazy-app-math-text-html
-              :noPopover="true"
-              :text="item.title"
+        <!--      text-->
+        <template v-if="item.answerType == questionTypes.text">
+          <lazy-app-math-text-html
+            :noPopover="true"
+            :text="item.title"
+          />
+        </template>
+        <!--      end text-->
+        <!--      photo video audio-->
+        <template v-else>
+          <div class="media-wrapper">
+            <lazy-app-view-media-files
+              v-if="item.answerType == questionTypes.photo"
+              :key="`media-${item.id}`"
+              :url="item.contentUrl"
+              :requestType="pictureTypes.answers"
+              :mediaType="questionTypes.photo"
+              :defaultType="item.answerType"
+              :defaultUrl="item.contentUrl"
+              maxHeight="120px"
+              maxWidth="120px"
+              radius="5"
+              :withModal="!disableImgModal"
+              style="width: 120px; height: 120px; aspect-ratio: 1/1"
             />
-          </template>
-          <!--      end text-->
-          <!--      photo video audio-->
-          <template v-else>
-            <div class="media-wrapper">
-              <lazy-app-view-media-files
-                v-if="item.answerType == questionTypes.photo"
-                :key="`media-${item.id}`"
-                :url="item.contentUrl"
-                :requestType="pictureTypes.answers"
-                :mediaType="questionTypes.photo"
-                :defaultType="item.answerType"
-                :defaultUrl="item.contentUrl"
-                maxHeight="120px"
-                maxWidth="120px"
-                radius="5"
-                :withModal="!disableImgModal"
-                style="width: 120px; height: 120px; aspect-ratio: 1/1"
-              />
-              <lazy-app-view-media-files
-                v-if="item.answerType == questionTypes.video"
-                :key="`media-video-${item.id}`"
-                :url="item.contentUrl"
-                :requestType="pictureTypes.answers"
-                :mediaType="questionTypes.video"
-                :defaultType="item.answerType"
-                :defaultUrl="item.contentUrl"
-                maxHeight="120px"
-                maxWidth="120px"
-                radius="5"
-              />
-              <lazy-app-view-media-files
-                v-if="item.answerType == questionTypes.audio"
-                :key="`media-audio-${item.id}`"
-                :url="item.contentUrl"
-                :requestType="pictureTypes.answers"
-                :defaultType="item.answerType"
-                :defaultUrl="item.contentUrl"
-                :mediaType="questionTypes.audio"
-                width="250px"
-              />
-            </div>
-          </template>
-          <!--      end photo video audio-->
+            <lazy-app-view-media-files
+              v-if="item.answerType == questionTypes.video"
+              :key="`media-video-${item.id}`"
+              :url="item.contentUrl"
+              :requestType="pictureTypes.answers"
+              :mediaType="questionTypes.video"
+              :defaultType="item.answerType"
+              :defaultUrl="item.contentUrl"
+              maxHeight="120px"
+              maxWidth="120px"
+              radius="5"
+            />
+            <lazy-app-view-media-files
+              v-if="item.answerType == questionTypes.audio"
+              :key="`media-audio-${item.id}`"
+              :url="item.contentUrl"
+              :requestType="pictureTypes.answers"
+              :defaultType="item.answerType"
+              :defaultUrl="item.contentUrl"
+              :mediaType="questionTypes.audio"
+              width="250px"
+            />
+          </div>
+        </template>
+        <!--      end photo video audio-->
 
-          <i
-            class="ek-icon-100-text takfeelat-icon"
-            @mouseover="toggleTakfeelatPopover($event, index)"
-            @click="toggleTakfeelatPopover($event, index)"
-          ></i>
-          <lazy-prime-popover :ref="takfeelatPopoverRefs.set">
-            <div class="w-full flex flex-col gap-2">
-              <div class="flex gap-2 items-center justify-center">
-                <i class="fa-solid fa-lock"></i>
-                <span class="font-bold text-lg">تقفيلات</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span>اختار طالب حصل على</span>
-                <span>100%</span>
-              </div>
-              <span>في اختبار القدرات هذه الإجابة</span>
+        <i
+          class="ek-icon-100-text takfeelat-icon"
+          @mouseover="toggleTakfeelatPopover($event, index)"
+          @click="toggleTakfeelatPopover($event, index)"
+        ></i>
+        <lazy-prime-popover :ref="takfeelatPopoverRefs.set">
+          <div class="w-full flex flex-col gap-2">
+            <div class="flex gap-2 items-center justify-center">
+              <i class="fa-solid fa-lock"></i>
+              <span class="font-bold text-lg">تقفيلات</span>
             </div>
+            <div class="flex items-center gap-2">
+              <span>اختار طالب حصل على</span>
+              <span>100%</span>
+            </div>
+            <span>في اختبار القدرات هذه الإجابة</span>
+          </div>
+        </lazy-prime-popover>
+
+        <!--  Selected Answer Badger shown After Answered   -->
+        <template v-if="showSelectedAnswerBadge(item.id)">
+          <div
+            class="selected-badge-q"
+            @mouseover="toggleSelectedBadgePopover($event, index)"
+            @click="toggleSelectedBadgePopover($event, index)"
+          ></div>
+          <lazy-prime-popover :ref="selectedBadgePopoverRefs.set">
+            <span>الإجابة المختارة</span>
           </lazy-prime-popover>
+        </template>
 
-          <!--  Selected Answer Badger shown After Answered   -->
-          <template v-if="showSelectedAnswerBadge(item.id)">
-            <div
-              class="selected-badge-q"
-              @mouseover="toggleSelectedBadgePopover($event, index)"
-              @click="toggleSelectedBadgePopover($event, index)"
-            ></div>
-            <lazy-prime-popover :ref="selectedBadgePopoverRefs.set">
-              <span>الإجابة المختارة</span>
-            </lazy-prime-popover>
-          </template>
-
-          <!--        animation rect-->
-          <template
-            v-if="
-              questionAnimateConfig.showAnswerRect &&
-              correctIds.includes(item.id)
-            "
-          >
-            <svg :class="questionAnimateConfig.classes.answerRect">
-              <rect
-                fill="transparent"
-                stroke="#01c48c"
-                stroke-width="2"
-              />
-            </svg>
-          </template>
-        </div>
-      </template>
-    </lazy-prime-block-u-i>
+        <!--        animation rect-->
+        <template
+          v-if="
+            questionAnimateConfig.showAnswerRect && correctIds.includes(item.id)
+          "
+        >
+          <svg :class="questionAnimateConfig.classes.answerRect">
+            <rect
+              fill="transparent"
+              stroke="#01c48c"
+              stroke-width="2"
+            />
+          </svg>
+        </template>
+      </div>
+    </template>
   </div>
 </template>
 <script setup lang="ts">
@@ -148,7 +146,7 @@ const props = withDefaults(
   defineProps<{
     answers: StudentsExamQuestionAnswerDataModel[];
     isExam?: boolean;
-    selectedValue?: number | null;
+    selectedValue?: any | null;
     questionState?: number;
     fetchingApi?: boolean;
     isSeo?: boolean;

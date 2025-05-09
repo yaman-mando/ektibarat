@@ -5,7 +5,7 @@
     <template v-if="listRequest.error.value"><lazy-error-block /></template>
     <template v-else>
       <template v-if="listRequest.status.value === 'pending'">
-        <lazy-spinner />
+        <lazy-app-spinner />
       </template>
       <template v-else>
         <div class="faqs-section">

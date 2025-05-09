@@ -4,13 +4,13 @@
 <script lang="ts" setup></script>
 <style lang="scss" scoped>
 .c-spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #ccc;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #ccc;
   border-top-color: var(--purple-8c);
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin: 10px auto;
+  margin: 8px auto;
 }
 
 @keyframes spin {

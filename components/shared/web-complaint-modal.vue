@@ -40,28 +40,20 @@
           />
         </div>
         <div class="flex items-center justify-center gap-4">
-          <button
-            type="button"
-            class="bg-gray-8b border-transparent relative flex items-center justify-center gap-2 active:!opacity-[.8] h-[60px] w-[100px] rounded-[10px] border-solid border-2"
+          <app-button
+            variant="outline"
+            colorType="warn-light"
+            :label="staticLocales.trainPage.cancel"
+            labelClass="text-xl"
             @click="closeComplaintModal"
-          >
-            <span class="text-xl text-white font-bold">
-              {{ staticLocales.trainPage.cancel }}
-            </span>
-          </button>
-          <lazy-prime-block-u-i
-            :blocked="$store.state.student.fetching.complaintRequest"
-          >
-            <button
-              type="button"
-              class="bg-orange-39 border-orange-39 relative flex items-center justify-center gap-2 active:!opacity-[.8] h-[60px] w-[100px] rounded-[10px] border-solid border-2"
-              @click="handleSubmit(actionToSubmit)"
-            >
-              <span class="text-xl text-white font-bold">
-                {{ staticLocales.trainPage.send }}
-              </span>
-            </button>
-          </lazy-prime-block-u-i>
+          />
+          <app-button
+            :isLoading="$store.state.student.fetching.complaintRequest"
+            colorType="warn-light"
+            :label="staticLocales.trainPage.send"
+            labelClass="text-xl text-white"
+            @click="handleSubmit(actionToSubmit)"
+          />
         </div>
       </vee-form>
     </lazy-vee-validate-provider>

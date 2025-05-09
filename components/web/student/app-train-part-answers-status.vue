@@ -146,33 +146,27 @@
                   <lazy-service-lock
                     v-if="!userServicesState.HELPINPRACTICE.isActive"
                   />
-                  <lazy-prime-block-u-i :blocked="isLoadingRemoveAnswer">
-                    <button
-                      :disabled="!canRemoveAnswer"
-                      type="button"
-                      class="relative text-red-63 disabled:text-white border-red-63 flex items-center justify-center gap-2 bg-white disabled:!border-transparent disabled:!bg-gray-8b active:!opacity-[.8] rounded-[10px] border-solid border-2"
-                      @click="$emit('removeAction')"
-                    >
-                      <span class="text-lg font-bold">
-                        {{ staticLocales.trainPage.removeWrongAnswerLabel }}
-                      </span>
-                    </button>
-                  </lazy-prime-block-u-i>
+                  <app-button
+                    :isLoading="isLoadingRemoveAnswer"
+                    :isDisabled="!canRemoveAnswer"
+                    :label="staticLocales.trainPage.removeWrongAnswerLabel"
+                    labelClass="text-lg"
+                    variant="outline"
+                    colorType="warn"
+                    @click="$emit('removeAction')"
+                  />
                 </div>
                 <div class="relative">
                   <lazy-service-lock
                     v-if="!userServicesState.SHOWSOLVESOLUATION.isActive"
                   />
-                  <button
-                    :disabled="!canShowAnswer"
-                    type="button"
+                  <app-button
+                    :isDisabled="!canShowAnswer"
+                    :label="staticLocales.trainPage.showSolutionLabel"
+                    colorType="success"
                     class="relative border-green-8c bg-green-8c flex items-center justify-center gap-2 disabled:!border-transparent disabled:!bg-gray-8b active:!opacity-[.8] rounded-[10px] border-solid border-2"
                     @click="$emit('showAnswerAction')"
-                  >
-                    <span class="text-lg text-white font-bold">
-                      {{ staticLocales.trainPage.showSolutionLabel }}
-                    </span>
-                  </button>
+                  />
                 </div>
                 <app-button
                   v-if="canShowLaw"

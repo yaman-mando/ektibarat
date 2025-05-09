@@ -1,71 +1,67 @@
 <template>
-  <lazy-prime-block-u-i :blocked="isLoading">
+  <div
+    class="a-select relative"
+    tabindex="-1"
+    @blur="isOpen = false"
+  >
+    <lazy-app-overlay v-if="isLoading" />
     <div
-      v-bind="$attrs"
-      class="a-select"
-      tabindex="-1"
-      @blur="isOpen = false"
+      class="a-part"
+      @click="isOpen = !isOpen"
     >
-      <div
-        class="a-part"
-        @click="isOpen = !isOpen"
+      <span
+        v-if="
+          showSelectedItem &&
+          (selectedItem || selectedItem == 0) &&
+          options.length > 0 &&
+          options.filter((k) => k[valueName] == selectedItem).length > 0
+        "
       >
-        <span
-          v-if="
-            showSelectedItem &&
-            (selectedItem || selectedItem == 0) &&
-            options.length > 0 &&
-            options.filter((k) => k[valueName] == selectedItem).length > 0
-          "
-        >
-          {{
-            options.filter((k) => k[valueName] == selectedItem)[0][labelName]
-          }}
-        </span>
-        <span v-else>{{ name }}</span>
-        <i class="fa fa-chevron-down"></i>
-      </div>
-      <div
-        v-if="isOpen"
-        class="b-part"
-      >
-        <div class="l-options">
-          <template v-if="!isMulti">
-            <div
-              v-for="(op, index) of options"
-              :key="index"
-              class="option"
-              @click="itemSelect(op)"
-            >
-              <span>
-                <i
-                  v-if="selectedItem == op[valueName]"
-                  class="fa fa-check"
-                ></i>
-              </span>
-              <span>{{ op[labelName] }}</span>
-            </div>
-          </template>
-          <template v-if="isMulti">
-            <div
-              v-for="(op, index) of options"
-              :key="index"
-              class="option"
-              @click="multiSelect(op)"
-            >
-              <span>
-                <i
-                  v-if="selectedItems.some((key) => key == op[valueName])"
-                  class="fa fa-check"
-                ></i>
-              </span>
-              <span>{{ op[labelName] }}</span>
-            </div>
-          </template>
-        </div>
+        {{ options.filter((k) => k[valueName] == selectedItem)[0][labelName] }}
+      </span>
+      <span v-else>{{ name }}</span>
+      <i class="fa fa-chevron-down"></i>
+    </div>
+    <div
+      v-if="isOpen"
+      class="b-part"
+    >
+      <div class="l-options">
+        <template v-if="!isMulti">
+          <div
+            v-for="(op, index) of options"
+            :key="index"
+            class="option"
+            @click="itemSelect(op)"
+          >
+            <span>
+              <i
+                v-if="selectedItem == op[valueName]"
+                class="fa fa-check"
+              ></i>
+            </span>
+            <span>{{ op[labelName] }}</span>
+          </div>
+        </template>
+        <template v-if="isMulti">
+          <div
+            v-for="(op, index) of options"
+            :key="index"
+            class="option"
+            @click="multiSelect(op)"
+          >
+            <span>
+              <i
+                v-if="selectedItems.some((key) => key == op[valueName])"
+                class="fa fa-check"
+              ></i>
+            </span>
+            <span>{{ op[labelName] }}</span>
+          </div>
+        </template>
       </div>
     </div>
-  </lazy-prime-block-u-i>
+  </div>
 </template>
 <script lang="ts">
 export default {

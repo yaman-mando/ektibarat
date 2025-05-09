@@ -118,7 +118,6 @@ export default defineNuxtConfig({
         'AccordionHeader',
         'AccordionContent',
         //end accordion
-        'BlockUI',
         //tabs
         'Tabs',
         'Tab',

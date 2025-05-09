@@ -5,46 +5,31 @@
   >
     <div class="tpa-wrapper">
       <div class="tpa-buttons">
-        <lazy-prime-block-u-i :blocked="isLoadingConfirm">
-          <button
-            :disabled="!isActiveConfirm || isLoadingConfirm"
-            type="button"
-            class="relative flex items-center justify-center gap-2 bg-purple-8d disabled:!border-gray-8b disabled:!bg-gray-8b active:!opacity-[.8] h-[60px] w-[155px] rounded-[10px] border-solid border-2 border-purple-8d"
-            @click="onConfirm"
-          >
-            <span class="text-lg text-white font-bold">
-              {{ staticLocales.trainPage.confirmAnswerLabel }}
-            </span>
-          </button>
-        </lazy-prime-block-u-i>
-        <button
-          :disabled="!isActiveNext"
-          type="button"
-          class="a-nb relative flex items-center justify-center gap-2 bg-purple-8d disabled:!border-transparent disabled:!bg-gray-8b active:!opacity-[.8] h-[60px] w-[155px] rounded-[10px] border-solid border-2 border-purple-8d"
+        <lazy-app-button
+          :isDisabled="!isActiveConfirm || isLoadingConfirm"
+          :isLoading="isLoadingConfirm"
+          :label="staticLocales.trainPage.confirmAnswerLabel"
+          labelClass="text-lg text-white font-bold"
+          @click="onConfirm"
+        />
+        <lazy-app-button
+          :isDisabled="!isActiveNext"
+          :label="staticLocales.trainPage.next"
+          labelClass="text-lg text-white font-bold"
+          iconEndClass="fa-solid fa-chevron-left text-white absolute left-5"
           @click="onNext"
-        >
-          <span class="text-lg text-white font-bold">
-            {{ staticLocales.trainPage.next }}
-          </span>
-          <i class="fa-solid fa-chevron-left text-white absolute left-5"></i>
-        </button>
+        />
       </div>
       <div class="c-e-wrapper">
-        <button
-          type="button"
-          class="relative w-[190px] flex items-center justify-center gap-2 bg-white disabled:!border-transparent disabled:!bg-gray-8b active:!opacity-[.8] h-[60px] rounded-[10px] border-solid border-2 border-orange-39"
+        <lazy-app-button
+          variant="outline"
+          colorType="warn-light"
+          iconStartClass="fa-solid fa-triangle-exclamation"
+          :label="staticLocales.trainPage.complaintActionLabel"
+          labelClass="text-lg text-orange-39 "
           @click="$emit('complainAction')"
-        >
-          <img
-            alt="warn"
-            src="/images/icons/warn.svg"
-            class="flex w-[28px]"
-          />
-          <span class="text-lg text-orange-39 font-bold">
-            {{ staticLocales.trainPage.complaintActionLabel }}
-          </span>
-        </button>
-        <app-button
+        />
+        <lazy-app-button
           label="إنهاء التدريب"
           variant="outline"
           iconStartClass="ek-icon-exit-door"

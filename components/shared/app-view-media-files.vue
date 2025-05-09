@@ -6,45 +6,42 @@
       class="img-type"
     >
       <template v-if="!hasError && emptyUrl[mediaType]">
-        <lazy-prime-block-u-i :blocked="isLoadImg">
-          <img
-            v-if="!isExternalLink(emptyUrl[mediaType])"
-            :class="[{ 'cursor-pointer': withModal }]"
-            :width="width"
-            :height="height"
-            :style="{
-              'border-radius': radius + 'px',
-              'max-height': maxHeight,
-              'max-width': maxWidth,
-            }"
-            :src="getFileUrl(emptyUrl[mediaType])"
-            alt=""
-            :loading="questionAnimateConfig.disableLazyImage ? 'eager' : 'lazy'"
-            @error="hasError = true"
-            @click.prevent="
-              withModal
-                ? openModal('image', getFileUrl(emptyUrl[mediaType]))
-                : ''
-            "
-          />
-          <img
-            v-else
-            :width="width"
-            :height="height"
-            :style="{
-              'border-radius': radius + 'px',
-              'max-height': maxHeight,
-              'max-width': maxWidth,
-            }"
-            :src="emptyUrl[mediaType]!"
-            alt=""
-            :loading="questionAnimateConfig.disableLazyImage ? 'eager' : 'lazy'"
-            @error="hasError = true"
-            @click.prevent="
-              withModal ? openModal('image', emptyUrl[mediaType]!, true) : ''
-            "
-          />
-        </lazy-prime-block-u-i>
+        <lazy-app-overlay v-if="isLoadImg" />
+        <img
+          v-if="!isExternalLink(emptyUrl[mediaType])"
+          :class="[{ 'cursor-pointer': withModal }]"
+          :width="width"
+          :height="height"
+          :style="{
+            'border-radius': radius + 'px',
+            'max-height': maxHeight,
+            'max-width': maxWidth,
+          }"
+          :src="getFileUrl(emptyUrl[mediaType])"
+          alt=""
+          :loading="questionAnimateConfig.disableLazyImage ? 'eager' : 'lazy'"
+          @error="hasError = true"
+          @click.prevent="
+            withModal ? openModal('image', getFileUrl(emptyUrl[mediaType])) : ''
+          "
+        />
+        <img
+          v-else
+          :width="width"
+          :height="height"
+          :style="{
+            'border-radius': radius + 'px',
+            'max-height': maxHeight,
+            'max-width': maxWidth,
+          }"
+          :src="emptyUrl[mediaType]!"
+          alt=""
+          :loading="questionAnimateConfig.disableLazyImage ? 'eager' : 'lazy'"
+          @error="hasError = true"
+          @click.prevent="
+            withModal ? openModal('image', emptyUrl[mediaType]!, true) : ''
+          "
+        />
       </template>
       <template v-else>
         <img
