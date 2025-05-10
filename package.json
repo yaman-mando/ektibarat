@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt prepare && nuxt dev --port 4000",
+    "build": "eslint --ext .js,.ts,.vue . && nuxt build",
+    "dev": "eslint --ext .js,.ts,.vue . && nuxt prepare && nuxt dev --port 4000",
     "prepare:dev": "nuxt prepare && nuxt dev --port 4000",
     "generate": "nuxt generate",
     "preview": "nuxt preview --port 4000",

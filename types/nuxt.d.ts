@@ -1,4 +1,5 @@
 import type { AxiosInstance } from 'axios';
+import type { VuexStoreState } from '~/store';
 
 declare module '#app' {
   interface NuxtApp {
@@ -9,6 +10,6 @@ declare module '#app' {
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $axios: AxiosInstance;
-    $store: Store<State>;
+    $store: Store<VuexStoreState>;
   }
 }

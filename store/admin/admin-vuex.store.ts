@@ -65,9 +65,101 @@ export const fetchingKeysAdmin = {
   teachersResults: 'teachersResults',
 };
 
-export const adminVuexStore: Module = {
+export type VuexAdminState = {
+  isDarkTheme: boolean;
+  isClosedAdminMenu: boolean;
+  onFinishEmployeeForm: number;
+  onFinishCategoryForm: number;
+  onFinishLawsForm: number;
+  onFinishLawManageForm: number;
+  onFinishServiceManageForm: number;
+  fetching: {
+    login: boolean;
+    listEmployee: boolean;
+    listSubject: boolean;
+    subjectsForGrades: boolean;
+    subjectAdd: boolean;
+    categoriesForSubjects: boolean;
+    employeeForm: boolean;
+    employeeForGrades: boolean;
+    employeeDelete: boolean;
+    employeeDetail: boolean;
+    listCategory: boolean;
+    categoryDelete: boolean;
+    categoryDetail: boolean;
+    categoryForm: boolean;
+    questionFrom: boolean;
+    examForm: boolean;
+    examDetail: boolean;
+    examUpdate: boolean;
+    examList: boolean;
+    examDelete: boolean;
+    examListDetail: boolean;
+    examListDetailQuestions: boolean;
+    examPartDelete: boolean;
+    listQuestion: boolean;
+    questionsByCategoryAndLevel: boolean;
+    faqsList: boolean;
+    contentPage: boolean;
+    subjectDetails: boolean;
+    contactUs: boolean;
+    contactForm: boolean;
+    complains: boolean;
+    complaintsForm: boolean;
+    generalInfo: boolean;
+    infoForm: boolean;
+    questionComplain: boolean;
+    addExamQuestion: boolean;
+    blogs: boolean;
+    blogsCat: boolean;
+    blogsTag: boolean;
+    setPassword: boolean;
+    coupons: boolean;
+    subscriptions: boolean;
+    settingKey: boolean;
+    partnerships: boolean;
+    lawsPackagesList: boolean;
+    teachersResults: boolean;
+  };
+  employeeList: any | null;
+  categoryList: any | null;
+  subjectList: any | null;
+  questionFrom: any | null;
+  questionFilter: any | null;
+  questionList: any[] | null;
+  questionIds: any | null;
+  questionDetails: any | null;
+  faqsList: any | null;
+  videos: any | null;
+  contactUs: any | null;
+  blogsList: any | null;
+  blogsCatList: any | null;
+  blogsTagList: any | null;
+  listOfBankNumbers: any | null;
+  subscriptionsList: any | null;
+  settingKeysList: any | null;
+  couponsList: any | null;
+  studentsList: any | null;
+  partnershipsList: any | null;
+  questionsTags: any | null;
+  complaintsUnreadCounts: any | null;
+  messagesUnreadCounts: any | null;
+  listCategoriesFirstClass: any | null;
+  listBanks: any | null;
+  listTags: any | null;
+  listLaws: any | null;
+  listParentLaws: any | null;
+  listChildLaws: any | null;
+  listExperiences: any | null;
+  pendingApplicantsCount: any | null;
+  lawsPackageList: any | null;
+  competitionResults: any | null;
+  teachersResults: any | null;
+};
+
+export const adminVuexStore: Module<VuexAdminState> = {
   namespaced: true,
-  state() {
+  state(): VuexAdminState {
     return {
       isDarkTheme: false,
       isClosedAdminMenu: false,
@@ -129,7 +221,6 @@ export const adminVuexStore: Module = {
       subjectList: null,
       questionFrom: null,
       questionFilter: null,
-      /**@type {AdminQuestionListItemModel[] | null}*/
       questionList: null,
       questionIds: null,
       questionDetails: null,

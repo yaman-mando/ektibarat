@@ -1,35 +1,78 @@
 import { createStore } from 'vuex';
 import { GlobalTypes } from '~/main/constants/global-types';
-import { ServiceTypesEnum } from '~/main/constants/service-types.enum';
-import type {
-  CurrentSubscriptionDataModel,
-  UserServicesStateUi,
-} from '~/main/modules/subscriptions/data-access/subscriptions.model';
+import type { CurrentSubscriptionDataModel } from '~/main/modules/subscriptions/data-access/subscriptions.model';
 import { deepCloneUtil } from '~/main/utils/lodash.utils';
 import { QUESTION_ANIMATE_DEFAULT_CONFIG } from '~/main/utils/question-animate.utils';
-import { subsVuexStore } from '~/store/subs-vuex.store';
-import { StudentVuexStore } from '~/store/student-vuex.store';
-import { adminVuexStore } from '~/store/admin/admin-vuex.store';
-
-const userServicesState = {} as UserServicesStateUi;
-Object.keys(ServiceTypesEnum).forEach((key) => {
-  userServicesState[key as ServiceTypesEnum] = {
-    isActive: false,
-  };
-});
+import { subsVuexStore, type VuexSubsState } from '~/store/subs-vuex.store';
+import {
+  StudentVuexStore,
+  type VuexStudentState,
+} from '~/store/student-vuex.store';
+import {
+  adminVuexStore,
+  type VuexAdminState,
+} from '~/store/admin/admin-vuex.store';
 
 const fetching = {
   currentUserSub: false,
 };
 
-export const vuexStore = createStore({
-  state() {
+export type VuexRootState = {
+  userServicesState?: never;
+  //
+  tr: any | null;
+  appStatic: any | null;
+  defaultActiveExam: number;
+  userCurrentSub: CurrentSubscriptionDataModel | null;
+  isSchool: boolean | null;
+  demoDays: number;
+  examQuestion: any | null;
+  hasMainHub: boolean;
+  hasChatHub: boolean;
+  hubIsLoading: boolean;
+  successPartners: any | null;
+  similarQuestions: any[];
+  examsPanelStatic: any | null;
+  trainingsPanelStatic: any | null;
+  file1PanelStatic: any | null;
+  partnerPanelStatic: any | null;
+  learningPanelStatic: any | null;
+  subscriptionsStatic: any | null;
+  lastMessages: any[];
+  chatStatic: any | null;
+  layoutStatic: any | null;
+  refreshInterval: any | null;
+  chatRooms: any[];
+  chatRoomsList: any[];
+  unreadMessage: any | null;
+  fetching: {
+    register: boolean;
+    [key: string]: boolean;
+  };
+  showBlockModal: boolean;
+  countryCode: string | null;
+  registrationMethod: string | null;
+  globalType: GlobalTypes;
+  globalTypeUser: GlobalTypes;
+  showSeoAdModalStart: any | null;
+  lastUserSubUpdate: number;
+  loadedCss: string[];
+  loadedScripts: string[];
+};
+
+export type VuexStoreState = VuexRootState & {
+  subs: VuexSubsState;
+  student: VuexStudentState;
+  admin: VuexAdminState;
+};
+
+export const vuexStore = createStore<VuexRootState>({
+  state(): VuexRootState {
     return {
       tr: null,
       appStatic: null,
       defaultActiveExam: 1,
       userCurrentSub: null as CurrentSubscriptionDataModel | null,
-      userServicesState,
       isSchool: null,
       demoDays: 0,
       examQuestion: null,
@@ -68,21 +111,6 @@ export const vuexStore = createStore({
   mutations: {
     SET_APP_STATIC(state, payload) {
       state.appStatic = payload;
-    },
-    SET_USER_SERVICES_STATE(state, data: UserServicesStateUi) {
-      // data.TRAININGBYCATEGORY.isActive = false;
-      // data.EXAMBYCATEGORY.isActive = true;
-      // data.BANKUSAGE.isActive = false;
-      // data.LEVELQUESTIONPRACTICE.isActive = false;
-      // data.ROWNQUESTIONPRACTICE.isActive = false;
-      // data.FAVORITEUSAGE.isActive = false;
-      // data.TAKFELATUSAGE.isActive = false;
-      // data.SHOWSOLVESOLUATION.isActive = false;
-      // data.HELPINPRACTICE.isActive = false;
-      // data.FULLEXAM.isActive = true;
-      // data.ANALAZEDEGRE.isActive = false;
-      // console.log(data);
-      state.userServicesState = data;
     },
     SET_USER_CURRENT_SUB(state, data) {
       state.userCurrentSub = data;

@@ -1,9 +1,13 @@
 import type { Module } from 'vuex';
 import type { SubscriptionsItemDataModel } from '~/main/modules/subscriptions/data-access/subscriptions.model';
 
-export const subsVuexStore: Module = {
+export type VuexSubsState = {
+  subsList: SubscriptionsItemDataModel[] | null;
+};
+
+export const subsVuexStore: Module<VuexSubsState> = {
   namespaced: true,
-  state() {
+  state(): VuexSubsState {
     return {
       subsList: null as SubscriptionsItemDataModel[] | null,
     };

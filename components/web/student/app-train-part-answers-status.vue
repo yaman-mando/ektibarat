@@ -149,7 +149,7 @@
               </div>
               <div class="adc-w">
                 <div class="relative">
-                  <lazy-service-lock
+                  <lazy-service-block
                     v-if="!userServicesState.HELPINPRACTICE.isActive"
                   />
                   <app-button
@@ -163,7 +163,7 @@
                   />
                 </div>
                 <div class="relative">
-                  <lazy-service-lock
+                  <lazy-service-block
                     v-if="!userServicesState.SHOWSOLVESOLUATION.isActive"
                   />
                   <app-button

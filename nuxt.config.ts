@@ -108,7 +108,7 @@ export default defineNuxtConfig({
     components: {
       prefix: 'Prime',
       include: [
-        //todo-z handle provider as vee-validate
+        //enhance-z handle provider as vee-validate
         'Checkbox',
         'ToggleSwitch',
         'Popover',

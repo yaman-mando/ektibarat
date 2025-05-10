@@ -38,6 +38,8 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
           return acc;
         }, {} as UserServicesStateUi);
 
+        // services.SHOWSOLVESOLUATION.isActive = false;
+        // services.HELPINPRACTICE.isActive = false;
         subscriptionsStore.patchState({ userServicesState: services });
       }
     }

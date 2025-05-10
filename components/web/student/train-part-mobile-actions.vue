@@ -13,7 +13,7 @@
 
       <div class="a-cc">
         <div class="relative">
-          <lazy-service-lock
+          <lazy-service-block
             v-if="!userServicesState.HELPINPRACTICE.isActive"
           />
           <app-button
@@ -23,12 +23,9 @@
             colorType="warn"
             @click="$emit('removeAction')"
           />
-          <button
-            class="ac-dd relative text-red-63 disabled:text-white border-red-63 flex items-center justify-center gap-2 bg-white disabled:!border-transparent disabled:!bg-gray-8b active:!opacity-[.8]"
-          ></button>
         </div>
         <div class="relative">
-          <lazy-service-lock
+          <lazy-service-block
             v-if="!userServicesState.SHOWSOLVESOLUATION.isActive"
           />
           <button
@@ -71,6 +68,7 @@
 </template>
 <script lang="ts">
 import { useSetupStaticLocales } from '~/main/services/setup/useSetupStaticLocales';
+import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 
 export default {
   props: {
@@ -91,8 +89,12 @@ export default {
   ],
   setup() {
     const { staticLocales } = useSetupStaticLocales();
+    const subscriptionsStore = useSubscriptionsStore();
     return {
       staticLocales,
+      userServicesState: computed(
+        () => subscriptionsStore.state.userServicesState
+      ),
     };
   },
   data() {
@@ -104,10 +106,6 @@ export default {
         !this.userServicesState.HELPINPRACTICE.isActive ||
         !this.userServicesState.SHOWSOLVESOLUATION.isActive
       );
-    },
-    /**@type {UserServicesStateUi}*/
-    userServicesState() {
-      return this.$store.state.userServicesState;
     },
   },
   methods: {

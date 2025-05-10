@@ -8,7 +8,7 @@ type StateType = {
   all: CommonQuestionsItemDataModel[];
 };
 
-//store todo-z ex-store
+//ex-store
 export const useCommonQuestionsStore = defineStore('common-questions', () => {
   const repo = useCommonQuestionsRepo();
 

@@ -24,9 +24,45 @@ const fetchingKeysStudent = {
   studentAnalyticsChart: 'studentAnalyticsChart',
 };
 
-export const StudentVuexStore: Module = {
+export type VuexStudentState = {
+  fetching: {
+    profile: boolean;
+    subjects: boolean;
+    exams: boolean;
+    examsWillDo: boolean;
+    examsProcessing: boolean;
+    examsDone: boolean;
+    examDetails: boolean;
+    studentExamRepeat: boolean;
+    examWizardDetails: boolean;
+    examSuggestions: boolean;
+    answer: boolean;
+    saveNote: boolean;
+    challengeDetail: boolean;
+    trainReview: boolean;
+    complaintRequest: boolean;
+    removeAnswerHelp: boolean;
+  };
+  profile: any | null;
+  isOpenMenu: boolean;
+  subjects: any | null;
+  examsWillDo: any | null;
+  examsProcessing: any | null;
+  examsDone: any | null;
+  examDetails: any | null;
+  examsWizardFilterResult: any | null;
+  examWizardDetails: any | null;
+  examSuggestions: any | null;
+  currentExamTrainPageData: any | null;
+  reviewQuestions: any | null;
+  studentAnalytics: any | null;
+  studentAnalyticsChart: any | null;
+  selectedStudentIdForTeacher: number | null;
+};
+
+export const StudentVuexStore: Module<VuexStudentState> = {
   namespaced: true,
-  state() {
+  state(): VuexStudentState {
     return {
       fetching: {
         profile: false,

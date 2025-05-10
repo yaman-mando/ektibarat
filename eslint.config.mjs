@@ -6,6 +6,17 @@ export default withNuxt(
   [
     {
       rules: {
+        //strict prop
+        'no-restricted-properties': [
+          'error',
+          {
+            object: '$store.state',
+            property: 'userServicesState',
+            message:
+              'Do not use $store.state.userServicesState. Use useSubscriptionsStore.',
+          },
+        ],
+        //end strict prop
         'no-useless-catch': 'off',
         'no-restricted-imports': [
           'error',
@@ -22,14 +33,6 @@ export default withNuxt(
             varsIgnorePattern: '^_',
             argsIgnorePattern: '^_',
             caughtErrorsIgnorePattern: '^_',
-          },
-        ],
-        'no-restricted-syntax': [
-          'off',
-          {
-            selector: 'ThisExpression',
-            message:
-              '`this` is not allowed in `<script setup>` or Composition API. Use direct refs/imports instead.',
           },
         ],
         'vue/component-name-in-template-casing': [
