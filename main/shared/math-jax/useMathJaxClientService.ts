@@ -216,7 +216,11 @@ export const useMathJaxClientService = defineStore('math-jax-service', () => {
         console.warn(
           'MathJax.typesetPromise غير متاح، سيتم تجربة `MathJax.typeset()` يدويًا.'
         );
-        window[MATH_JAX_KEY].typeset();
+        if (window[MATH_JAX_KEY]?.typeset) {
+          window[MATH_JAX_KEY].typeset();
+        } else {
+          console.warn('no typeset mathjax');
+        }
       }
     } catch (e) {
       console.error('حدث خطأ أثناء تحديث MathJax:', e);

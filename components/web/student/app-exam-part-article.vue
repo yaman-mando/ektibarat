@@ -64,7 +64,7 @@ const textModel = computed(() => {
   if (!props.text) return '';
   const regex = /\(([^)]+)\)/;
   const matches = regex.exec(props.text);
-  if (!matches) return '';
+  if (!matches) return props.text ?? '';
 
   const val = props.text.replace(matches?.[0], '');
   return val ?? '';
@@ -92,10 +92,10 @@ const trimmedTextModel = computed(() => {
     const numberOfShownChar =
       250 + innerHtmlLength.value - innerTextLength.value;
     return isExpanded.value
-      ? textModel
+      ? textModel.value
       : textModel.value.substring(0, numberOfShownChar) + '...';
   } else {
-    return textModel;
+    return textModel.value;
   }
 });
 </script>

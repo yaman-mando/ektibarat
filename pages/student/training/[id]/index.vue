@@ -16,9 +16,24 @@
                 v-if="$isDev"
                 class="bg-red-100"
               >
-                <button @click="confirmContinueOrExitTrain">end</button>
-                <button @click="prevQuestion">prev</button>
-                <button @click="nextQuestion">next</button>
+                <lazy-prime-button
+                  size="small"
+                  @click="confirmContinueOrExitTrain"
+                >
+                  end
+                </lazy-prime-button>
+                <lazy-prime-button
+                  size="small"
+                  @click="prevQuestion"
+                >
+                  prev
+                </lazy-prime-button>
+                <lazy-prime-button
+                  size="small"
+                  @click="nextQuestion"
+                >
+                  next
+                </lazy-prime-button>
               </div>
             </client-only>
             <app-overlay v-if="loadingPage" />
@@ -252,7 +267,7 @@ const studentsExamStorageService = useStudentsExamStorageService();
 
 //data
 const examDetail = ref<StudentsExamDataModel | null>(null);
-const isLoadingPage = ref(true);
+const isLoadingPage = ref(false);
 const questionTrackInterval = ref<ReturnType<typeof setInterval> | null>(null);
 const warnState = ref({
   showHelpRemoveAnswerWarn: true,
@@ -515,7 +530,8 @@ const nextQuestionModel = computed(() => {
     return examDetail.value?.examParts[activePartIndex.value + 1]
       .studentsQuestion[0];
   }
-  return activeQuestionListModel.value![activeQuestionIndex.value + 1];
+  if (!activeQuestionListModel.value) return null;
+  return activeQuestionListModel.value[activeQuestionIndex.value + 1];
 });
 
 const currentPartQuestionsCountModel = computed(
@@ -620,7 +636,7 @@ const initPage = async () => {
       currentExam = examDetailRes;
     }
 
-    const detail = mapExamDetailModelToUi(currentExam);
+    const detail = mapExamDetailModelToUi(deepCloneUtil(currentExam));
 
     //if exam state is done redirect to exams page
     if (detail.state === StudentExamStateEnum.done) {
@@ -683,6 +699,10 @@ const initPage = async () => {
 
     let questionId: string | null = null;
 
+    //in case backend issue question exist in currentQuestionId but not in list
+    if (activeQuestionIndexVal === -1) {
+      activeQuestionIndexVal = 0;
+    }
     if (detail.examParts[activePartIndexVal].isCategoryText) {
       questionId =
         detail.examParts[activePartIndexVal].children[0].studentsQuestion[
@@ -709,7 +729,7 @@ const initPage = async () => {
       );
     });
 
-    examDetail.value = detail;
+    examDetail.value = deepCloneUtil(detail);
     counter.value = counterVal ?? null;
     activePartIndex.value = activePartIndexVal;
     activeQuestionIndex.value = activeQuestionIndexVal;
@@ -777,8 +797,7 @@ const beforePageUnload = async () => {
   try {
     loadingPage.value = true;
     stopTimers();
-    //todo-z uncomment
-    // await studentsExamStore.submitExam({ id: examDetail.value!.id });
+    await studentsExamStore.submitExam({ id: examDetail.value!.id });
     studentsExamStore.patchState({ detail: null });
   } catch (e) {
     loadingPage.value = false;
@@ -1028,10 +1047,8 @@ const onContinueTrain = async () => {
   const customTrainRes = await customFromTagsApi({
     studentExamId: examDetail.value!.id,
   });
-  await router.replace(webStudentTrainingPathUtil(customTrainRes!.id));
-  studentsExamStore.patchState({ detail: customTrainRes });
-  await initPage();
-  isLoadingContinue.value = false;
+  studentsExamStore.patchState({ detail: deepCloneUtil(customTrainRes) });
+  router.replace(webStudentTrainingPathUtil(customTrainRes!.id));
 };
 
 const exitPage = async () => {
@@ -1305,8 +1322,9 @@ onBeforeRouteLeave(async (to, from, next) => {
 
   const onActionHandler = async (confirm: boolean) => {
     if (!confirm) {
-      const { href } = router.resolve(route);
-      window.history.replaceState({}, null as any, href);
+      confirmNavigate.value = true;
+      await router.replace(from.fullPath);
+      confirmNavigate.value = false;
       return next(false);
     }
 
