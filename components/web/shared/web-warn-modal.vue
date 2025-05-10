@@ -4,7 +4,6 @@
     v-model="isOpen"
     :closable="false"
     :showHeader="false"
-    blockScroll
     :class="`mx-auto w-container web-warn-modal`"
     :closeOnEscape="false"
     :dismissableMask="false"

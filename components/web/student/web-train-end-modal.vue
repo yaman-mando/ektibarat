@@ -2,9 +2,10 @@
   <lazy-prime-dialog
     id="web-train-end-modal"
     v-model:visible="isOpen"
+    :modal="true"
     :closable="false"
     :showHeader="false"
-    :class="`mx-auto w-container exam-confirm-end-modal`"
+    :class="`mx-auto exam-confirm-end-modal`"
     :closeOnEscape="false"
     :dismissableMask="false"
   >
@@ -78,11 +79,10 @@ export default {
 <style lang="scss">
 @import '@/assets/scss/mixin';
 .exam-confirm-end-modal {
-  .modal-content {
-    width: 650px;
-    margin: 0 auto;
-    max-width: 90vw;
-  }
+  width: 650px !important;
+  margin: 0 auto;
+  max-width: 90vw;
+
   .ec-wrapper {
     padding: 40px 15px;
   }

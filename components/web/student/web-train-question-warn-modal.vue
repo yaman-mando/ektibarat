@@ -4,8 +4,8 @@
     :id="'web-answer-warn-modal'"
     v-model:visible="isOpenModel"
     :closable="false"
+    :modal="true"
     :showHeader="false"
-    blockScroll
     class="mx-auto w-container a-wc-m"
     :dismissableMask="false"
     :closeOnEscape="false"
@@ -31,13 +31,6 @@
         class="warn__image"
         :style="imageStyleModel"
         src="/images/min-time-warn.png"
-      />
-    </template>
-    <template #footer>
-      <app-button
-        colorType="warn"
-        :label="staticLocales.trainPage.close"
-        @click="closeModal"
       />
     </template>
   </lazy-prime-dialog>
@@ -172,11 +165,10 @@ export default {
 @import '@/assets/scss/mixin';
 
 #web-answer-warn-modal {
-  .modal-content {
-    background: transparent;
-    width: auto;
-    border: none;
-  }
+  min-width: 100dvw;
+  min-height: 100dvh;
+  background: transparent;
+  border: none;
 }
 
 .warn__image {

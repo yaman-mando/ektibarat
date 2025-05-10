@@ -26,19 +26,10 @@
       <lazy-prime-dialog
         v-model:visible="isOpenModel"
         :modal="true"
-        :closable="false"
-        :style="{ borderRadius: '15px', overflow: 'hidden' }"
-        :pt="{
-          content: {
-            class: modalContentClasses,
-          },
-          header: {
-            class: 'hidden',
-          },
-          footer: {
-            class: 'hidden',
-          },
-        }"
+        :showHeader="false"
+        :dismissableMask="true"
+        :closeOnEscape="true"
+        :closable="true"
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
         class="mx-auto w-container a-wc-m !p-0 mb-2"
       >

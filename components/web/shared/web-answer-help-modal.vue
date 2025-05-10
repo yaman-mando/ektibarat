@@ -5,6 +5,7 @@
     v-model:visible="isOpenModel"
     class="a-wc-m"
     :modal="true"
+    :showHeader="false"
     :closable="false"
     :dismissableMask="false"
     @hide="closedModal"

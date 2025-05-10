@@ -5,6 +5,9 @@
     :modal="true"
     :draggable="false"
     :showHeader="false"
+    :closable="false"
+    :closeOnEscape="false"
+    :dismissableMask="true"
   >
     <div class="wl-content">
       <div class="wl-t">
@@ -19,7 +22,7 @@
           <lazy-app-spinner />
         </template>
         <template v-else>
-          <template v-if="!!data.length">
+          <template v-if="!!data?.length">
             <div class="wl-c__images">
               <div
                 v-for="(url, index) in data"
@@ -72,7 +75,6 @@ const props = withDefaults(
 const questionsStore = useQuestionsStore();
 //data
 const isOpen = ref(false);
-const data = ref<string[]>([]);
 
 const { request, callApi } = useTypedLazyRequest<
   string,
@@ -80,6 +82,8 @@ const { request, callApi } = useTypedLazyRequest<
 >('qc-request', (param) =>
   questionsStore.getQuestionsCategoriesLawsPictures(param)
 );
+
+const data = computed(() => request.data.value);
 
 function showModal() {
   isOpen.value = true;

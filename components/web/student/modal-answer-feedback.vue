@@ -4,6 +4,8 @@
     :class="`a-modal-answer-feedback ${isCorrect ? 'success' : 'danger'}`"
     :showHeader="false"
     :closable="false"
+    :modal="true"
+    :dismissableMask="true"
   >
     <i
       class="fa fa-close close-icon d-flex align-items-center justify-content-center"
@@ -112,6 +114,9 @@ export default {
 <script setup lang="ts"></script>
 <style lang="scss">
 .a-modal-answer-feedback {
+  width: 600px;
+  max-width: 90vw;
+  margin: auto;
   &.success {
     .close-icon {
       color: var(--green-8c);
@@ -120,9 +125,7 @@ export default {
     .a-title {
       color: var(--green-8c);
     }
-    .modal-content {
-      border-color: var(--green-8c);
-    }
+    border-color: var(--green-8c);
   }
 
   &.danger {
@@ -133,12 +136,13 @@ export default {
     .a-title {
       color: var(--red-63);
     }
-    .modal-content {
-      border-color: var(--red-63);
-    }
+    border-color: var(--red-63);
   }
 
   .close-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     position: absolute;
     top: 10px;
@@ -147,13 +151,8 @@ export default {
     font-size: 12px;
     border: 1px solid;
     border-radius: 50%;
-  }
-
-  .modal-content {
-    //background-color: var(--modal-bg);
-    width: 600px;
-    max-width: 90vw;
-    margin: auto;
+    inset-block-start: 10px;
+    inset-inline-end: 10px;
   }
 
   .a-wrapper {

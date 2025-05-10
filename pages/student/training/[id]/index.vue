@@ -11,16 +11,16 @@
           v-if="examDetail && currentQuestionDetailModel && currentAnswersModel"
         >
           <div class="sed-w w-container">
-            <!--            <client-only>-->
-            <!--              <div-->
-            <!--                v-if="$isDev"-->
-            <!--                class="bg-red-100"-->
-            <!--              >-->
-            <!--                <button @click="confirmContinueOrExitTrain">end</button>-->
-            <!--                <button @click="prevQuestion">prev</button>-->
-            <!--                <button @click="nextQuestion">next</button>-->
-            <!--              </div>-->
-            <!--            </client-only>-->
+            <client-only>
+              <div
+                v-if="$isDev"
+                class="bg-red-100"
+              >
+                <button @click="confirmContinueOrExitTrain">end</button>
+                <button @click="prevQuestion">prev</button>
+                <button @click="nextQuestion">next</button>
+              </div>
+            </client-only>
             <app-overlay v-if="loadingPage" />
             <div class="t-hero-m">
               <app-button
@@ -524,9 +524,10 @@ const currentPartQuestionsCountModel = computed(
 
 const isFirstQuestion = computed(() => activeQuestionIndex.value === 0);
 
-const isLastQuestion = computed(
-  () => activeQuestionIndex.value === activeQuestionListModel.value!.length - 1
-);
+const isLastQuestion = computed(() => {
+  if (!activeQuestionListModel.value?.length) return false;
+  return activeQuestionIndex.value === activeQuestionListModel.value.length - 1;
+});
 
 const canPassQuestion = computed(() =>
   isLastQuestion.value && !hasNextPart.value
