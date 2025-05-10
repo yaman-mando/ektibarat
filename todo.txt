@@ -1,5 +1,5 @@
 //training
-window.useNuxtApp().$router.push('/student/training/681d74346a4f8f02b17564f6')
+window.useNuxtApp().$router.push('student/training/681e6a5ba8387de88283ab30')
 
 //check
 ~assets

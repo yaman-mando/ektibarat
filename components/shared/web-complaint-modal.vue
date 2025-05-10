@@ -5,6 +5,8 @@
     v-model:visible="isOpenModel"
     class="a-wc-m"
     :modal="true"
+    :closable="false"
+    :showHeader="false"
     @hide="clearForm"
   >
     <lazy-vee-validate-provider>

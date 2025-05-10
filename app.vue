@@ -3,13 +3,13 @@
   <nuxt-layout>
     <nuxt-page />
   </nuxt-layout>
+  <lazy-hello-modal ref="hello_modal_ref" />
   <lazy-prime-toast position="bottom-right" />
 </template>
 <script setup lang="ts">
 //composable
 import { useDeviceService } from '~/main/useDeviceService';
 import { useLocalStorageStore } from '~/main/useLocalStorageStore';
-import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { IS_PRODUCTION_APP, scrollToTopUtil } from '~/main/utils/shared-utils';
 import { webAuthPathUtil } from '~/main/utils/web-routes.utils';
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
@@ -20,7 +20,7 @@ import {
   authEvents,
   type SignInActionDataUiModel,
 } from '~/core/auth/data-access/services/useAuthEvents';
-import { filter } from 'rxjs';
+import { delay, filter, mergeMap, of, Subject } from 'rxjs';
 import { useGlobalStore } from '~/main/useGlobalStore';
 
 declare const google: any;
@@ -36,38 +36,37 @@ const globalStore = useGlobalStore();
 const clarityStore = useClarityStore();
 const runtimeConfig = useRuntimeConfig();
 
+//refs
+const helloModalRef = useTemplateRef('hello_modal_ref');
+
 //data
 const isLoggedIn = computed(() => auth.status.value === 'authenticated');
-const userData = computed(() => auth.data.value as UserInfoDataModel);
+const userData = computed(() => authStore.state.userData);
+const firstRegisterTrackModel = computed(() => ({
+  isLoggedIn: isLoggedIn.value,
+  userId: userData.value?.id,
+}));
 
-//meta
-useHead({
-  script: isLoggedIn.value
-    ? []
-    : [
-        {
-          src: 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js',
-          type: 'text/javascript',
-          id: ScriptsIdEnum.appleId,
-          async: true,
-          defer: true,
-        },
-        {
-          src: 'https://accounts.google.com/gsi/client',
-          type: 'text/javascript',
-          id: ScriptsIdEnum.googleId,
-          async: true,
-          defer: true,
-        },
-      ],
-});
+//subs
+const clearFirstRegisterDelaySub = new Subject<number>();
 
 //hook
 onMounted(() => {
   globalStore.getUserCountry();
+
+  clearFirstRegisterDelaySub
+    .pipe(mergeMap((val) => of(val).pipe(delay(8000))))
+    .subscribe((userId) => {
+      localStorageStore.clearFirstRegister(userId);
+    });
 });
 
 //method
+const showHelloModal = () => {
+  if (import.meta.client) {
+    helloModalRef.value?.showModal();
+  }
+};
 const initApp = async (isLoggedIn: boolean) => {
   try {
     if (deviceService.isMobileDevice.value) {
@@ -127,8 +126,12 @@ const loadGoogle = async () => {
 
 const infoRegister = () => {
   try {
-    const userId = userData.value.id;
-    if (!localStorageStore.getRegisterInfo(userId) && IS_PRODUCTION_APP) {
+    const userId = userData.value?.id;
+    if (
+      !!userId &&
+      !localStorageStore.getRegisterInfo(userId) &&
+      IS_PRODUCTION_APP
+    ) {
       localStorageStore.setRegisterInfo(userId, true);
       handleClarityUser(userData.value);
       handleFcm(userId);
@@ -166,13 +169,15 @@ const signInAction = async (data: SignInActionDataUiModel) => {
     refreshToken: data.refreshToken!,
   });
   await auth.getSession();
-  localStorageStore.setRegisterInfo(userData.value.id, true);
+  if (userData.value?.id) {
+    localStorageStore.setRegisterInfo(userData.value.id, true);
+  }
   if (IS_PRODUCTION_APP) {
     handleClarityUser({ email: data.email, id: data.id });
     handleFcm(data.id);
   }
   if (data.showWelcomeModal) {
-    localStorageStore.setFirstRegister(data.id, true);
+    localStorageStore.setFirstRegister(data.id);
   }
   await router.push(authStore.redirectUrlAfterLogin());
 };
@@ -220,6 +225,23 @@ watch(
   { immediate: true }
 );
 
+//track hello modal
+watch(
+  () => firstRegisterTrackModel.value,
+  (val) => {
+    const userId = val.userId;
+    if (!!val && val.isLoggedIn && !!userId) {
+      const isFirstRegister = localStorageStore.getFirstRegister(userId);
+      if (!isFirstRegister) {
+        localStorageStore.setFirstRegister(userId);
+        clearFirstRegisterDelaySub.next(userId);
+        showHelloModal();
+      }
+    }
+  },
+  { deep: true }
+);
+
 watch(
   () => route.meta.layout,
   (newVal, oldVal) => {
@@ -237,4 +259,26 @@ watch(
     scrollToTopUtil('website-layout');
   }
 );
+
+//meta
+useHead({
+  script: isLoggedIn.value
+    ? []
+    : [
+        {
+          src: 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js',
+          type: 'text/javascript',
+          id: ScriptsIdEnum.appleId,
+          async: true,
+          defer: true,
+        },
+        {
+          src: 'https://accounts.google.com/gsi/client',
+          type: 'text/javascript',
+          id: ScriptsIdEnum.googleId,
+          async: true,
+          defer: true,
+        },
+      ],
+});
 </script>

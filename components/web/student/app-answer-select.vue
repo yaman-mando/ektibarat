@@ -12,7 +12,7 @@
   >
     <lazy-app-overlay v-if="fetchingApi" />
     <template
-      v-for="(item, index) in answers"
+      v-for="item in answers"
       :key="`asc-${item.id}`"
     >
       <div
@@ -77,35 +77,41 @@
         </template>
         <!--      end photo video audio-->
 
-        <i
-          class="ek-icon-100-text takfeelat-icon"
-          @mouseover="toggleTakfeelatPopover($event, index)"
-          @click="toggleTakfeelatPopover($event, index)"
-        ></i>
-        <lazy-prime-popover :ref="takfeelatPopoverRefs.set">
-          <div class="w-full flex flex-col gap-2">
-            <div class="flex gap-2 items-center justify-center">
-              <i class="fa-solid fa-lock"></i>
-              <span class="font-bold text-lg">تقفيلات</span>
+        <lazy-app-popover-wrapper>
+          <template #trigger="{ bindTrigger }">
+            <i
+              class="ek-icon-100-text takfeelat-icon"
+              v-bind="bindTrigger"
+            ></i>
+          </template>
+          <template #content>
+            <div class="w-full flex flex-col gap-2">
+              <div class="flex gap-2 items-center justify-center">
+                <i class="fa-solid fa-lock"></i>
+                <span class="font-bold text-lg">تقفيلات</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span>اختار طالب حصل على</span>
+                <span>100%</span>
+              </div>
+              <span>في اختبار القدرات هذه الإجابة</span>
             </div>
-            <div class="flex items-center gap-2">
-              <span>اختار طالب حصل على</span>
-              <span>100%</span>
-            </div>
-            <span>في اختبار القدرات هذه الإجابة</span>
-          </div>
-        </lazy-prime-popover>
+          </template>
+        </lazy-app-popover-wrapper>
 
         <!--  Selected Answer Badger shown After Answered   -->
         <template v-if="showSelectedAnswerBadge(item.id)">
-          <div
-            class="selected-badge-q"
-            @mouseover="toggleSelectedBadgePopover($event, index)"
-            @click="toggleSelectedBadgePopover($event, index)"
-          ></div>
-          <lazy-prime-popover :ref="selectedBadgePopoverRefs.set">
-            <span>الإجابة المختارة</span>
-          </lazy-prime-popover>
+          <app-popover-wrapper>
+            <template #trigger="{ bindTrigger }">
+              <div
+                class="selected-badge-q"
+                v-bind="bindTrigger"
+              ></div>
+            </template>
+            <template #content>
+              <span>الإجابة المختارة</span>
+            </template>
+          </app-popover-wrapper>
         </template>
 
         <!--        animation rect-->
@@ -132,7 +138,6 @@ import type { StudentsExamQuestionAnswerDataModel } from '~/main/modules/student
 import { questionTypes } from '~/main/modules/questions/data-access/constats/question-types';
 import { pictureTypes } from '~/main/constants/picture-types';
 import { QuestionStateEnum } from '~/main/modules/students-exam/data-access/constats/question-state.enum';
-import type { PrimePopover } from '#components';
 
 const questionAnimateConfig = inject(
   'questionAnimateConfig',
@@ -162,12 +167,6 @@ const props = withDefaults(
     selectedValue: null,
   }
 );
-
-//refs
-const takfeelatPopoverRefs =
-  useTemplateRefsList<InstanceType<typeof PrimePopover>>();
-const selectedBadgePopoverRefs =
-  useTemplateRefsList<InstanceType<typeof PrimePopover>>();
 
 //data
 const selectedData = ref<number | null>(null);
@@ -204,13 +203,6 @@ const selectedValueModel = computed({
 });
 
 //method
-function toggleTakfeelatPopover(event: any, index: number) {
-  takfeelatPopoverRefs.value[index].toggle(event);
-}
-
-function toggleSelectedBadgePopover(event: any, index: number) {
-  selectedBadgePopoverRefs.value[index].toggle(event);
-}
 function showSelectedAnswerBadge(id: number) {
   return (
     isActiveItem(id) &&

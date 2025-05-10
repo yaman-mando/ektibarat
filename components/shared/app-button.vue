@@ -67,7 +67,7 @@ withDefaults(
   height: 60px;
   width: 155px;
   border-radius: 10px;
-  border: 2px solid var(--color);
+  border: 2px solid var(--color) !important;
   padding: 1px 6px;
 
   &.rounded {
@@ -122,7 +122,7 @@ withDefaults(
   &.clear {
     outline-style: none;
     background-color: transparent;
-    border: none;
+    border: none !important;
     .app-button-label {
       color: var(--color);
     }
@@ -144,7 +144,7 @@ withDefaults(
   }
 
   &:disabled {
-    border-color: transparent;
+    border-color: transparent !important;
     background: var(--gray-8b);
     .app-button-label {
       color: var(--white-ff);
@@ -152,6 +152,9 @@ withDefaults(
     .app-button-icon {
       color: var(--white-ff);
     }
+  }
+  &:hover {
+    --p-button-primary-hover-border-color: var(--color);
   }
   &:active {
     opacity: 0.8;

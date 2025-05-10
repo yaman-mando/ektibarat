@@ -14,16 +14,19 @@
       v-html="textModel"
     ></div>
     <template v-else>
-      <div
-        :id="key"
-        class="text-square"
-        @mouseover="togglePopover($event)"
-        @click="togglePopover($event)"
-        v-html="textModel"
-      ></div>
-      <lazy-prime-popover ref="popover_ref">
-        <template #title><div v-html="textModel"></div></template>
-      </lazy-prime-popover>
+      <lazy-app-popover-wrapper>
+        <template #trigger="{ bindTrigger }">
+          <div
+            :id="key"
+            class="text-square"
+            v-bind="bindTrigger"
+            v-html="textModel"
+          ></div>
+        </template>
+        <template #content>
+          <div v-html="textModel"></div>
+        </template>
+      </lazy-app-popover-wrapper>
     </template>
   </div>
   <div v-else>
@@ -57,9 +60,6 @@ const props = withDefaults(
 const mathJaxService = useMathJaxClientService();
 const route = useRoute();
 
-//refs
-const popoverRef = useTemplateRef('popover_ref');
-
 //data
 const key = ref<string>('');
 const convertText = ref<string | undefined | null>(props.text);
@@ -78,9 +78,7 @@ const isControlPanel = computed(() =>
 );
 
 //method
-function togglePopover(event: any) {
-  popoverRef.value?.toggle(event);
-}
+
 //hook
 onMounted(async () => {
   const r = (Math.random() + 1).toString(36).substring(7);

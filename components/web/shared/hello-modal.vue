@@ -110,27 +110,27 @@ const upgradeClicked = () => {
   hideModal();
   router.push(webUserPanelSubscriptions());
 };
-//TODO-z
-const _showModal = () => {
+const showModal = () => {
   isOpen.value = true;
 };
 const hideModal = () => {
   isOpen.value = false;
 };
+
+defineExpose({
+  showModal,
+});
 </script>
 <style lang="scss">
 #hello-modal-id {
   z-index: 99999999999;
+  width: 340px !important;
+  margin: 0 auto;
+  max-width: 90vw;
 }
 .hello-modal-c {
   .modal-body {
     margin-bottom: 0 !important;
-  }
-
-  .modal-content {
-    width: 340px;
-    margin: 0 auto;
-    max-width: 90vw;
   }
 
   .sbm-close-w {

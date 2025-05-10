@@ -176,6 +176,7 @@ const togglePassword = () => {
       background-color: #fff;
       width: 100%;
       padding: 0.5rem 1rem;
+      outline-color: var(--purple-8c);
       //border-radius: 10px;
       border: 1px solid var(--gray-c7);
       //font-size: 12px;

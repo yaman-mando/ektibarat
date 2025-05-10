@@ -79,7 +79,6 @@
           </div>
         </div>
       </div>
-      <lazy-hello-modal ref="modalHelloRef" />
       <lazy-block-modal />
     </client-only>
   </div>
@@ -159,7 +158,6 @@ const isLoggedIn = computed(() => status.value === 'authenticated');
 const unreadMessages = ref<number>(0);
 const isOpenContactMenu = ref(false);
 const isInternalbtn = ref(false);
-const modalHelloRef = ref(null);
 
 //hook
 onBeforeMount(() => {

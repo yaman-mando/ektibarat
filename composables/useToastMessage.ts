@@ -2,7 +2,6 @@ import { useToast } from 'primevue/usetoast';
 import type { ToastMessageOptions } from 'primevue';
 
 const defaultOptions: Pick<ToastMessageOptions, 'summary' | 'life'> = {
-  summary: 'عذراً، حدث خطأ في الطلب.',
   life: 3000,
 };
 
@@ -16,7 +15,7 @@ export const useToastMessage = () => {
   }: Partial<ToastMessageOptions> = {}) => {
     toast.add({
       severity: 'success',
-      summary: summary ?? defaultOptions.summary,
+      summary: summary ?? 'تمت العملية بنجاح.',
       detail,
       life: life ?? defaultOptions.life,
     });
@@ -29,37 +28,24 @@ export const useToastMessage = () => {
   }: Partial<ToastMessageOptions> = {}) => {
     toast.add({
       severity: 'error',
-      summary: summary ?? defaultOptions.summary,
+      summary: summary ?? 'عذراً، حدث خطأ في الطلب.',
       detail,
       life: life ?? defaultOptions.life,
     });
   };
 
-  const showInfo = ({
-    summary,
-    detail,
-    life,
-  }: Partial<ToastMessageOptions> = {}) => {
-    toast.add({
-      severity: 'info',
-      summary: summary ?? defaultOptions.summary,
-      detail,
-      life: life ?? defaultOptions.life,
-    });
-  };
-
-  const showWarn = ({
-    summary,
-    detail,
-    life,
-  }: Partial<ToastMessageOptions> = {}) => {
+  const showWarn = ({ summary, detail, life }: WarnType) => {
     toast.add({
       severity: 'warn',
-      summary: summary ?? defaultOptions.summary,
+      summary: summary,
       detail,
       life: life ?? defaultOptions.life,
     });
   };
 
-  return { showSuccess, showError, showInfo, showWarn };
+  return { showSuccess, showError, showWarn };
 };
+
+type WarnType = { summary: string } & Partial<
+  Omit<ToastMessageOptions, 'summary'>
+>;

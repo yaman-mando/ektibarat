@@ -5,6 +5,7 @@
     v-model:visible="isOpen"
     :closable="false"
     :showHeader="false"
+    :modal="true"
     :class="`mx-auto w-container exam-confirm-exit-modal`"
   >
     <div class="_imc-w">
@@ -93,15 +94,13 @@ export default {
 <style lang="scss">
 @import '@/assets/scss/mixin';
 .exam-confirm-exit-modal {
-  .modal-content {
-    border: 0;
-    width: 340px;
-    height: 447px;
-    margin: 0 auto;
-    @include web-desktop-up() {
-      width: 650px;
-      height: auto;
-    }
+  border: 0;
+  width: 340px !important;
+  height: 447px;
+  margin: 0 auto;
+  @include web-desktop-up() {
+    width: 650px !important;
+    height: auto;
   }
   ._imc-w {
     display: flex;
