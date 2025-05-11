@@ -226,7 +226,10 @@ import type {
   StudentsExamPartQuestionDataModel,
   StudentsExamRemoveAnswerDTODataModel,
 } from '~/main/modules/students-exam/data-access/models/students-exam.model';
-import { useTimeSpanService } from '~/main/services/useTimeSpanService';
+import {
+  type TimeSpanModel,
+  useTimeSpanService,
+} from '~/main/services/useTimeSpanService';
 import { useStudentsExamStorageService } from '~/main/modules/students-exam/services/useStudentsExamStorageService';
 import type {
   StudentsExamQuestionDataModel,
@@ -250,8 +253,6 @@ import { APP_CONFIG } from 'public/constants/app-config';
 import { TRAIN_MODAL_WARN_CASE } from '~/main/constants/train-modal-warn-case.enum';
 import { useTypedLazyRequest } from '~/composables/useTypedLazyRequest';
 import { firstValueFrom, of } from 'rxjs';
-
-type TimeSpanModel = ReturnType<typeof useTimeSpanService>;
 
 const $isDev = !IS_PRODUCTION_APP;
 //composable

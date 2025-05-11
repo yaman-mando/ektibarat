@@ -1,6 +1,5 @@
 import { createStore } from 'vuex';
 import { GlobalTypes } from '~/main/constants/global-types';
-import type { CurrentSubscriptionDataModel } from '~/main/modules/subscriptions/data-access/subscriptions.model';
 import { deepCloneUtil } from '~/main/utils/lodash.utils';
 import { QUESTION_ANIMATE_DEFAULT_CONFIG } from '~/main/utils/question-animate.utils';
 import { subsVuexStore, type VuexSubsState } from '~/store/subs-vuex.store';
@@ -19,11 +18,11 @@ const fetching = {
 
 export type VuexRootState = {
   userServicesState?: never;
+  userCurrentSub?: never;
   //
   tr: any | null;
   appStatic: any | null;
   defaultActiveExam: number;
-  userCurrentSub: CurrentSubscriptionDataModel | null;
   isSchool: boolean | null;
   demoDays: number;
   examQuestion: any | null;
@@ -72,7 +71,6 @@ export const vuexStore = createStore<VuexRootState>({
       tr: null,
       appStatic: null,
       defaultActiveExam: 1,
-      userCurrentSub: null as CurrentSubscriptionDataModel | null,
       isSchool: null,
       demoDays: 0,
       examQuestion: null,
@@ -111,9 +109,6 @@ export const vuexStore = createStore<VuexRootState>({
   mutations: {
     SET_APP_STATIC(state, payload) {
       state.appStatic = payload;
-    },
-    SET_USER_CURRENT_SUB(state, data) {
-      state.userCurrentSub = data;
     },
     SET_ACTIVE_EXAM_TYPE(state, payload) {
       state.defaultActiveExam = payload;
@@ -230,24 +225,6 @@ export const vuexStore = createStore<VuexRootState>({
     },
   },
   actions: {
-    async getUserCurrentSub({ commit, state }) {
-      try {
-        const { $axios } = useNuxtApp();
-        fetching.currentUserSub = true;
-        const grade = state.globalTypeUser;
-        /**@type {SubUserCurrentModel}*/
-        const response = await $axios.get(
-          `/subscriptions/current?grade=${grade}`
-        );
-        commit('SET_USER_CURRENT_SUB', response.data);
-        fetching.currentUserSub = true;
-
-        return response;
-      } catch (e) {
-        fetching.currentUserSub = false;
-        throw e;
-      }
-    },
     async getExamQuestion({ commit }, id) {
       try {
         const { $axios } = useNuxtApp();

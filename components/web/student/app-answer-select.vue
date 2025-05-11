@@ -152,7 +152,7 @@ const props = withDefaults(
     answers: StudentsExamQuestionAnswerDataModel[];
     isExam?: boolean;
     selectedValue?: any | null;
-    questionState?: number;
+    questionState?: number | null;
     fetchingApi?: boolean;
     isSeo?: boolean;
     isDisabled?: boolean;

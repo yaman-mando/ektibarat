@@ -53,6 +53,7 @@ export default {
     expose({
       showModal,
       onActionSub,
+      isOpen,
     });
     return { staticLocales, isOpen, showModal, onActionSub };
   },

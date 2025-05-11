@@ -15,6 +15,12 @@ export default withNuxt(
             message:
               'Do not use $store.state.userServicesState. Use useSubscriptionsStore.',
           },
+          {
+            object: 'state',
+            property: 'userCurrentSub',
+            message:
+              'Do not use state.userCurrentSub. Use useSubscriptionsStore instead.',
+          },
         ],
         //end strict prop
         'no-useless-catch': 'off',

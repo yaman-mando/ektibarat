@@ -33,3 +33,5 @@ export function useTimeSpanService(maxTimeVal = Infinity) {
     pauseTime,
   };
 }
+
+export type TimeSpanModel = ReturnType<typeof useTimeSpanService>;

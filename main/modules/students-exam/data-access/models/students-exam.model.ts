@@ -37,6 +37,7 @@ export type StudentsExamPartQuestionDataModel = {
   isFeatured: boolean;
   isFlagged: boolean;
   articleUi?: string | null;
+  note?: string | null;
 };
 export type StudentsExamPartSettingsDataModel = {
   questionLevel: number;
