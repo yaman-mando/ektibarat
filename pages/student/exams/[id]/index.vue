@@ -202,19 +202,20 @@ export default {
         this.confirmNavigate = true;
         await this.appRouter.replace(from.fullPath);
         this.confirmNavigate = false;
-        return next(false);
+        return false;
       }
 
       this.skipRouteLeave = true;
 
       await this.beforePageUnload();
-      return next();
+      return true;
     };
     const confirm = await firstValueFrom(
       //@ts-expect-error access ref prop
       this.$refs.confirmExitRef?.onActionSub ?? of(true)
     );
-    onActionHandler(confirm);
+    const proceed = await onActionHandler(confirm);
+    return proceed ? next() : next(false);
   },
   setup() {
     const windowSize = useWindowSize();

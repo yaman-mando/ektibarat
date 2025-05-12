@@ -1321,27 +1321,34 @@ onBeforeRouteLeave(async (to, from, next) => {
 
   confirmExitRef.value?.showModal();
 
-  const onActionHandler = async (confirm: boolean) => {
+  const onActionHandler = async (
+    confirm: boolean
+  ): Promise<{ proceed: boolean; path?: string }> => {
     if (!confirm) {
       confirmNavigate.value = true;
       await router.replace(from.fullPath);
       confirmNavigate.value = false;
-      return next(false);
+      return { proceed: false };
     }
 
     await beforePageUnload();
     const analyticsId = await checkAvailableAnalytics();
     if (analyticsId) {
       confirmNavigate.value = true;
-      return next({ path: `/student/analytics/${analyticsId}` });
+      return { proceed: true, path: `/student/analytics/${analyticsId}` };
     }
     confirmNavigate.value = true;
-    return next();
+    return { proceed: true };
   };
   const data = await firstValueFrom(
     confirmExitRef.value?.onActionSub ?? of(true)
   );
-  onActionHandler(data);
+  const result = await onActionHandler(data);
+  if (result.proceed) {
+    return result.path ? next({ path: result.path }) : next(true);
+  } else {
+    return next(false);
+  }
 });
 
 onMounted(async () => {
