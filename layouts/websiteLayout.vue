@@ -232,7 +232,7 @@ watch(
 <style lang="scss">
 @import '@/assets/scss/shared/sidebar-filter';
 @import '@/assets/scss/style';
-@import '@/assets/font-icons/ek-icon-v1.0/style';
+@import '@/assets/font-icons/ek-icon-v1.0/style.css';
 @import '@/assets/scss/main';
 
 * {

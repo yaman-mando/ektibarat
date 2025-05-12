@@ -20,7 +20,7 @@ export type StudentsExamDataModel = {
   totalPoints: number;
 };
 
-type StudentsExamPartDataModel = {
+export type StudentsExamPartDataModel = {
   id: number;
   examDetailId: number;
   title: string;

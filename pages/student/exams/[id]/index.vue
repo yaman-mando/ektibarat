@@ -11,10 +11,9 @@
           <div v-if="isDev">
             <lazy-app-button
               size="sm"
+              label="end"
               @click="confirmEndExam"
-            >
-              end
-            </lazy-app-button>
+            />
           </div>
           <!--      <div-->
           <!--        v-if="$isDev"-->
@@ -38,16 +37,17 @@
               <div class="w-container">
                 <div class="at-w">
                   <div class="at-t">
-                    <exam-part-nav
+                    <lazy-exam-part-nav
                       v-model:activePartIndex="activePartIndex"
                       :subjectName="examDetail.subjectName"
                       :examParts="examDetail.examParts"
                       :examTitle="examDetail.title"
                       @indexChanged="selectPart"
                     />
-                    <counter-part :counterValue="counterModel" />
+                    <lazy-counter-part :counterValue="counterModel" />
                   </div>
-                  <exam-part-nav-children
+                  <lazy-exam-part-nav-children
+                    v-if="activeQuestionListModel"
                     v-model:activeItemIndex="activeQuestionIndex"
                     :list="activeQuestionListModel"
                   />
@@ -116,13 +116,14 @@
             :feedbackType="feedbackType"
             :mediaUrl="feedbackMediaUrl"
           />
-          <mx-std-modal-request-form
+          <lazy-modal-request-form
+            v-if="currentQuestionDetail"
             :modalId="noteModalId"
             :type="'note'"
             :text="currentQuestionDetail.note"
             @onSubmit="onAddNote"
           />
-          <mx-std-modal-request-form
+          <lazy-modal-request-form
             :modalId="complainModalId"
             :type="'complain'"
             @onSubmit="onAddComplain"
@@ -144,7 +145,7 @@
         </client-only>
       </template>
       <template v-if="isOpenCompleteInfoModal">
-        <add-watsapp-modal
+        <lazy-add-watsapp-modal
           :key="completeInfoModalKey"
           v-model:isOpen="isOpenCompleteInfoModal"
           @onConfirm="onCompleteInfo"
@@ -178,9 +179,10 @@ import { RouteHelper } from '~/main/utils/route-helper';
 import { APP_CONFIG } from 'public/constants/app-config';
 import { TRAIN_MODAL_WARN_CASE } from '~/main/constants/train-modal-warn-case.enum';
 import { deepCloneUtil } from '~/main/utils/lodash.utils';
+import { firstValueFrom, of } from 'rxjs';
 
 export default {
-  async beforeRouteLeave(to, from, next) {
+  beforeRouteLeave: async function (to, from, next) {
     window.removeEventListener('beforeunload', this.windowBeforeUnload);
 
     if (this.skipRouteLeave) {
@@ -208,18 +210,33 @@ export default {
       await this.beforePageUnload();
       return next();
     };
-    //@ts-expect-error access ref prop
-    this.$refs.confirmExitRef?.$once('onAction', onActionHandler);
+    const confirm = await firstValueFrom(
+      //@ts-expect-error access ref prop
+      this.$refs.confirmExitRef?.onActionSub ?? of(true)
+    );
+    onActionHandler(confirm);
   },
-  layout: 'exam-layout',
   setup() {
     const windowSize = useWindowSize();
     const subscriptionsStore = useSubscriptionsStore();
     const userCurrentSub = computed(
       () => subscriptionsStore.state.userCurrentSub!
     );
+    const examDetail = ref<StudentsExamDataModel | null>(null);
+
+    definePageMeta({
+      layout: 'exam-layout',
+    });
+    useHead({
+      title: getMetaTitle(examDetail.value?.title ?? ''),
+      htmlAttrs: {
+        dir: 'rtl',
+        class: 'app-light no-menu zoom-wrapper',
+      },
+    });
 
     return {
+      examDetail,
       isDev: !IS_PRODUCTION_APP,
       windowSize,
       ...useSetupRoute(),
@@ -235,7 +252,6 @@ export default {
       skipRouteLeave: false,
       loadingPage: false,
       isLoadingQuestionDetail: false,
-      examDetail: null as StudentsExamDataModel | null,
       questionsDetailRecord: {} as {
         [key: string]: StudentsExamQuestionDataModel;
       },
@@ -263,15 +279,6 @@ export default {
       answerUnderMinTimeCount: 0,
       isOpenCompleteInfoModal: false,
       completeInfoModalKey: 1,
-    };
-  },
-  head() {
-    return {
-      title: getMetaTitle(this.examDetail?.title ?? ''),
-      htmlAttrs: {
-        dir: 'rtl',
-        class: 'app-light no-menu zoom-wrapper',
-      },
     };
   },
   computed: {
@@ -371,13 +378,15 @@ export default {
       return this.isLastQuestion && !this.hasNextPart;
     },
     canSelectNextQuestion() {
-      if (!this.activeQuestionListModel) return false;
+      if (!this.activeQuestionListModel || this.isLoadingQuestionDetail)
+        return false;
       return (
         this.activeQuestionIndex < this.activeQuestionListModel.length - 1 ||
         this.hasNextPart
       );
     },
     canSelectPrevQuestion() {
+      if (this.isLoadingQuestionDetail) return false;
       return this.activeQuestionIndex > 0 || this.hasPrevPart;
     },
     // canShowFeedback() {
@@ -700,13 +709,11 @@ export default {
           this.$refs.questionWarnModalRef?.showModalWarn(
             TRAIN_MODAL_WARN_CASE.beforeMinTime
           );
-          //@ts-expect-error access prop ref
-          this.$refs.questionWarnModalRef?.$once(
-            'onAction',
-            async (confirm) => {
-              resolve(!!confirm);
-            }
+          const confirm = await firstValueFrom(
+            //@ts-expect-error access prop ref
+            this.$refs.questionWarnModalRef?.onActionSub
           );
+          resolve(!!confirm);
         }
         resolve(true);
       });
@@ -737,7 +744,8 @@ export default {
       }
     },
     async canSelectPart(targetedPartIndex) {
-      return new Promise((resolve) => {
+      // eslint-disable-next-line no-async-promise-executor
+      return new Promise(async (resolve) => {
         //can select only next part
         if (targetedPartIndex === this.activePartIndex + 1) {
           const hasAnsweredAllQuestion =
@@ -749,13 +757,12 @@ export default {
           } else {
             //@ts-expect-error access prop ref
             this.$refs.nextPartConfirmModal?.showModal();
-            //@ts-expect-error access prop ref
-            this.$refs.nextPartConfirmModal?.$once(
-              'onAction',
-              async (confirm) => {
-                return resolve(!!confirm);
-              }
+            const confirm = await firstValueFrom(
+              //@ts-expect-error access prop ref
+              this.$refs.nextPartConfirmModal?.onActionSub
             );
+            resolve(!!confirm);
+            return;
           }
         } else {
           resolve(false);
@@ -977,8 +984,6 @@ export default {
           }
         );
         this.setQuestionsDetailRecord(questionId, questionDetailResponse.data);
-        //@ts-expect-error access ref porp
-        this.$refs.examBottomActionRef?.stopLoading();
         this.isLoadingQuestionDetail = false;
       } catch (e) {
         console.error(e);

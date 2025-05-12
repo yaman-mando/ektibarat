@@ -49,7 +49,6 @@ export type VuexRootState = {
     [key: string]: boolean;
   };
   showBlockModal: boolean;
-  countryCode: string | null;
   registrationMethod: string | null;
   globalType: GlobalTypes;
   globalTypeUser: GlobalTypes;
@@ -96,7 +95,6 @@ export const vuexStore = createStore<VuexRootState>({
         register: false,
       },
       showBlockModal: false,
-      countryCode: null,
       registrationMethod: null,
       globalType: GlobalTypes.kudrat,
       globalTypeUser: GlobalTypes.kudrat,
@@ -194,9 +192,6 @@ export const vuexStore = createStore<VuexRootState>({
     },
     SET_SHOW_BLOCK_MODAL(state, payload) {
       state.showBlockModal = payload;
-    },
-    SET_COUNTRY_CODE(state, payload) {
-      state.countryCode = payload;
     },
     SET_REGISTRATION_METHOD(state, payload) {
       state.registrationMethod = payload;

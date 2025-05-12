@@ -8,6 +8,6 @@ export const useSetupStaticLocales = () => {
   });
 
   return {
-    staticLocales: globalStore.staticState.locales,
+    staticLocales: computed(() => globalStore.staticState.locales),
   };
 };

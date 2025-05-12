@@ -64,13 +64,13 @@ export default {
       modalType.value = val;
       const messageCase = {
         [TRAIN_MODAL_WARN_CASE.beforeMinTime]:
-          staticLocales?.trainPage.beforeMinTime,
+          staticLocales.value?.trainPage.beforeMinTime,
         [TRAIN_MODAL_WARN_CASE.afterMaxTime]:
-          staticLocales?.trainPage.afterMaxTime,
+          staticLocales.value?.trainPage.afterMaxTime,
         [TRAIN_MODAL_WARN_CASE.deleteAnswerHelp]:
-          staticLocales?.trainPage.deleteAnswerHelp,
+          staticLocales.value?.trainPage.deleteAnswerHelp,
         [TRAIN_MODAL_WARN_CASE.showAnswerHelp]:
-          staticLocales?.trainPage.showAnswerHelp,
+          staticLocales.value?.trainPage.showAnswerHelp,
       };
       message.value = messageCase[val];
       isOpenModel.value = true;
