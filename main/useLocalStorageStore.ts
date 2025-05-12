@@ -6,6 +6,10 @@ type State = Record<number, boolean>;
 export const useLocalStorageStore = defineStore('local-storage-store', () => {
   const registerInfo = useStorage<State>('registerInfo', {});
   const firstRegister = useStorage<State>('firstRegister', {});
+  const isAuthenticatedAdmin = useStorage<boolean>(
+    'isAuthenticatedAdmin',
+    false
+  );
 
   const getRegisterInfo = (id: number) => {
     return registerInfo.value[id] ?? false;
@@ -31,11 +35,21 @@ export const useLocalStorageStore = defineStore('local-storage-store', () => {
     }
   };
 
+  const getIsAuthenticatedAdmin = () => {
+    return isAuthenticatedAdmin.value;
+  };
+
+  const setIsAuthenticatedAdmin = (val: boolean) => {
+    isAuthenticatedAdmin.value = val;
+  };
+
   return {
     getRegisterInfo,
     setRegisterInfo,
     getFirstRegister,
     setFirstRegister,
     clearFirstRegister,
+    getIsAuthenticatedAdmin,
+    setIsAuthenticatedAdmin,
   };
 });

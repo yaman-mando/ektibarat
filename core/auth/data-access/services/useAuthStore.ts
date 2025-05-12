@@ -11,11 +11,14 @@ import {
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { defineStore } from 'pinia';
 import { reactive, toRefs } from 'vue';
+import { UserRoles } from '~/core/auth/constants/user-roles';
+import { adminRootPathUtil } from '~/main/utils/admin-routes.utils';
 
 //store
 export const useAuthStore = defineStore('auth-store', () => {
   const globalStore = useGlobalStore();
   const repo = useAuthRepo();
+  const auth = useAuth();
   const authState = useAuthState();
   const redirectUrlCookie = useCookie('redirectUrl');
   const isLoggedIn = computed(() => authState.status.value === 'authenticated');
@@ -53,6 +56,11 @@ export const useAuthStore = defineStore('auth-store', () => {
       redirectUrlCookie.value = null;
       return url;
     }
+
+    if (state.userData?.role == UserRoles.admin) {
+      return adminRootPathUtil();
+    }
+
     return globalStore.state.globalTypeUser
       ? webUserPanelTraining()
       : webGeneralSelectionPathUtil();
@@ -66,5 +74,7 @@ export const useAuthStore = defineStore('auth-store', () => {
     redirectUrlAfterLogin,
     loginApple,
     loginOTP,
+    loginLocal: auth.signIn,
+    fetchUser: auth.getSession,
   };
 });

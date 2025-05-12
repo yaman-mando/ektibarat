@@ -60,11 +60,11 @@
             >
               <i
                 v-if="!visiblePassword"
-                class="fa-solid fa-eye"
+                class="fa fa-solid fa-eye"
               ></i>
               <i
                 v-if="visiblePassword"
-                class="fa-solid fa-eye-slash"
+                class="fa fa-solid fa-eye-slash"
               ></i>
             </div>
           </template>
@@ -94,7 +94,7 @@ const props = withDefaults(
     isTextArea?: boolean;
     inputId: string;
     inputType?: 'text' | 'password' | 'email' | 'number';
-    inputTabIndex?: number;
+    inputTabIndex?: number | string;
     rules?: Record<string, unknown>;
     isDisabled?: boolean;
     hasClear?: boolean;

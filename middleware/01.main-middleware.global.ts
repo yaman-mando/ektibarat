@@ -11,10 +11,13 @@ import {
   webUserPanelTraining,
 } from '~/main/utils/web-routes.utils';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+import { UserRoles } from '~/core/auth/constants/user-roles';
 
 export default defineNuxtRouteMiddleware(async (_to, _from) => {
   try {
     const { status, data } = useAuth();
+    const authStore = useAuthStore();
     const globalStore = useGlobalStore();
     const isLoggedIn = status.value === 'authenticated';
     const userData = data.value as UserInfoDataModel;
@@ -36,7 +39,10 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
       isLoggedIn &&
       !routersWithoutTypeSelect.some((route) => currentPath.includes(route))
     ) {
-      if (!globalStore.state.globalTypeUser) {
+      if (
+        !globalStore.state.globalTypeUser &&
+        authStore.state.userData?.role !== UserRoles.admin
+      ) {
         return navigateTo(webGeneralSelectionPathUtil());
       }
     }

@@ -168,9 +168,12 @@ const signInAction = async (data: SignInActionDataUiModel) => {
     token: data.token,
     refreshToken: data.refreshToken!,
   });
-  await auth.getSession();
-  if (userData.value?.id) {
-    localStorageStore.setRegisterInfo(userData.value.id, true);
+  const userData = authStore.state.userData;
+  if (!userData) {
+    await auth.getSession();
+  }
+  if (userData?.id) {
+    localStorageStore.setRegisterInfo(userData.id, true);
   }
   if (IS_PRODUCTION_APP) {
     handleClarityUser({ email: data.email, id: data.id });
