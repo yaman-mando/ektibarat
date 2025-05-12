@@ -914,15 +914,16 @@ export default {
     async confirmEndExam() {
       //@ts-expect-error access component ref
       this.$refs.confirmEndModalRef?.showModal();
-      //@ts-expect-error access component ref
-      this.$refs.confirmEndModalRef?.$once('onAction', (confirm) => {
-        if (!confirm) {
-          const { href } = this.appRouter.resolve(this.appRoute);
-          window.history.replaceState({}, '', href);
-        } else {
-          this.endExamAndNavToReview();
-        }
-      });
+      const confirm = await firstValueFrom(
+        //@ts-expect-error access component ref
+        this.$refs.confirmEndModalRef?.onActionSub
+      );
+      if (!confirm) {
+        const { href } = this.appRouter.resolve(this.appRoute);
+        window.history.replaceState({}, '', href);
+      } else {
+        this.endExamAndNavToReview();
+      }
     },
     async onAddNote(form) {
       try {
