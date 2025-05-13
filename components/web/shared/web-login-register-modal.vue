@@ -68,14 +68,13 @@ const hideModal = () => {
   isOpen.value = false;
 };
 
-//todo-z
 const toLogin = async () => {
   hideModal();
-  await auth.signIn(
-    { username: 'admin_ekhts', password: 'dsaewq321' },
-    { callbackUrl: '/', redirect: false }
-  );
-  // router.push(webAuthPathUtil());
+  // await auth.signIn(
+  //   { username: 'admin_ekhts', password: 'dsaewq321' },
+  //   { callbackUrl: '/', redirect: false }
+  // );
+  router.push(webAuthPathUtil());
 };
 const _toRegister = () => {
   hideModal();
