@@ -1,0 +1,185 @@
+@import '@/assets/scss/mixin';
+.competition-page {
+  .competition-contents {
+    display: grid;
+    justify-items: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+
+    ._title {
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+      color: var(--red-5e);
+    }
+
+    ._date {
+      display: flex;
+      column-gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 40px;
+      span {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        color: var(--purple-8c);
+        &.__date {
+          //color: var(--red-5e);
+        }
+      }
+    }
+
+    ._remind-time{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 30px;
+      span {
+        font-size: 16px;
+        font-weight: bold;
+        color: var(--red-5e);
+        &._started{
+          color: var(--green-8c);
+        }
+      }
+    }
+
+    .rw-info {
+      margin-top: 50px;
+      border: 1px solid #70707080;
+      border-radius: 15px;
+      padding: 19px 15px 21px;
+      display: grid;
+      justify-items: center;
+      width: 600px;
+      max-width: 95vw;
+      row-gap: 40px;
+      .i-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: var(--orange-39);
+        text-align: center;
+        line-height: 32px;
+      }
+
+      .i-items {
+        display: grid;
+        grid-auto-flow: column;
+        column-gap: 40px;
+        row-gap: 20px;
+
+        .i-item {
+          display: grid;
+          row-gap: 6px;
+          min-width: 84px;
+
+          .i-label {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--purple-8c);
+            text-align: center;
+          }
+
+          .i-info {
+            font-size: 16px;
+            color: var(--gray-63);
+            line-height: 22px;
+            text-align: center;
+          }
+        }
+      }
+
+      @include normal-btn() {
+        width: 160px;
+        height: 40px;
+        border-radius: 3px;
+        color: white;
+        //font-weight: 500;
+        font-size: 20px;
+        @include mobile-down() {
+          width: 140px;
+          height: 40px;
+          font-size: 14px;
+        }
+      }
+    }
+
+    @include mobile-down() {
+      ._title {
+        font-size: 20px;
+      }
+
+      ._date {
+        span {
+          font-size: 16px;
+        }
+      }
+
+      ._remind-time{
+        margin-top: 25px;
+        span {
+          font-size: 13px;
+          text-align: center;
+          line-height: 24px;
+          padding: 0 15px;
+        }
+      }
+
+      .rw-info {
+        margin: 50px 10px 20px;
+        .i-items {
+          column-gap: 15px;
+          .i-item {
+            .i-label {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+
+    .btn-glow {
+      background: #46008c;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(70, 0, 140, 0.6);
+      transition: all 0.3s ease-in-out;
+      position: relative;
+      overflow: hidden;
+      animation: pulse 1.5s infinite;
+    }
+
+    .btn-glow:hover {
+      transform: scale(1.03);
+    }
+
+    /* نبض */
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 10px rgba(70, 0, 140, 0.6);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(70, 0, 140, 0.9);
+      }
+      100% {
+        box-shadow: 0 0 10px rgba(70, 0, 140, 0.6);
+      }
+    }
+
+    /* وميض متحرك */
+    @keyframes shimmer {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  }
+}

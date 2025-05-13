@@ -42,7 +42,7 @@ withDefaults(
     suffixLabel?: string;
     colorType?: 'primary' | 'success' | 'warn' | 'warn-light' | 'blue';
     variant?: 'flat' | 'outline' | 'clear';
-    size?: 'sm' | string;
+    size?: 'sm' | 'md' | string;
     isAnalytics?: boolean;
     rounded?: boolean;
   }>(),
@@ -135,6 +135,17 @@ withDefaults(
     height: auto;
     width: auto;
     min-width: fit-content;
+    .app-button-label {
+      font-size: 14px;
+    }
+    .app-button-icon {
+      font-size: 12px;
+    }
+  }
+
+  &.size-md {
+    height: 40px;
+    width: 120px;
     .app-button-label {
       font-size: 14px;
     }

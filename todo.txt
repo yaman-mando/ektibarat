@@ -2,4 +2,3 @@
 ~assets
 $on
 $once
-@ts-expect-error

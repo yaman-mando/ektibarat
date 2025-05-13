@@ -1,0 +1,210 @@
+﻿{
+  "classesArray": [
+    {
+      "id": 1,
+      "label": "الأول"
+    },
+    {
+      "id": 2,
+      "label": "الثاني"
+    },
+    {
+      "id": 3,
+      "label": "الثالث"
+    },
+    {
+      "id": 4,
+      "label": "الرابع"
+    },
+    {
+      "id": 5,
+      "label": "الخامس"
+    },
+    {
+      "id": 6,
+      "label": "السادس"
+    },
+    {
+      "id": 7,
+      "label": "السابع"
+    },
+    {
+      "id": 8,
+      "label": "الثامن"
+    },
+    {
+      "id": 9,
+      "label": "التاسع"
+    },
+    {
+      "id": 10,
+      "label": "العاشر"
+    },
+    {
+      "id": 11,
+      "label": "الحادي عشر"
+    },
+    {
+      "id": 12,
+      "label": "الثاني عشر"
+    }
+  ],
+  "classesByTypeArray": [
+    {
+      "id": 13,
+      "label": "قدرات"
+    },
+    {
+      "id": 15,
+      "label": "تحصيلي"
+    }
+  ],
+  "sort": [
+    {
+      "id": 2,
+      "label": "الأحدث"
+    },
+    {
+      "id": 1,
+      "label": "الأقدم"
+    }
+  ],
+  "adminDefaultSort": [
+    {
+      "id": 1,
+      "label": "اخر تحديث"
+    },
+    {
+      "id": 2,
+      "label": "الاسم"
+    }
+  ],
+  "adminEmployeeStatusList": [
+    {
+      "id": null,
+      "label": "الجميع"
+    },
+    {
+      "id": true,
+      "label": "فعال"
+    },
+    {
+      "id": false,
+      "label": "غير فعال"
+    }
+  ],
+
+  "adminQuestionTypes": [
+    { "id": 0, "label": "خيارات متعددة(نص)" },
+    { "id": 1, "label": "خيارات متعددة(صورة)" },
+    { "id": 2, "label": "خيارات متعددة(فيديو)" },
+    { "id": 3, "label": "خيارات متعددة(صوت)" },
+    { "id": 4, "label": "صح وغلط" },
+    { "id": 5, "label": "ملأ الفراغ" }
+  ],
+
+  "adminQuestionTypesFilter": [
+    { "id": 0, "label": "نص" },
+    { "id": 1, "label": "صورة" },
+    { "id": 2, "label": "فيديو" },
+    { "id": 3, "label": "صوت" }
+  ],
+
+  "adminFeedbackTypesList": [
+    { "id": 0, "label": "نص" },
+    { "id": 1, "label": "صورة" },
+    { "id": 2, "label": "فيديو" },
+    { "id": 3, "label": "صوت" }
+  ],
+
+  "adminQuestionMediaList": [
+    { "id": 1, "label": "صورة" },
+    { "id": 2, "label": "فيديو" },
+    { "id": 3, "label": "صوت" }
+  ],
+  "adminExamLevelList": [
+    { "id": 0, "label": "سهل" },
+    { "id": 1, "label": "متوسط" },
+    { "id": 2, "label": "صعب" }
+  ],
+  "adminQuestionLevelList": [
+    { "id": 0, "label": "سهل" },
+    { "id": 1, "label": "متوسط" },
+    { "id": 2, "label": "صعب" }
+  ],
+  "examLevelList": [
+    { "id": null, "label": "الكل" },
+    { "id": 0, "label": "سهل" },
+    { "id": 1, "label": "متوسط" },
+    { "id": 2, "label": "صعب" }
+  ],
+  "genderTypes": [
+    { "id": 0, "label": "غير محدد" },
+    { "id": 1, "label": "ذكر" },
+    { "id": 2, "label": "أنثى" }
+  ],
+  "examType": [
+    { "id": true, "label": "رسمي" },
+    { "id": false, "label": "تدريب" }
+  ],
+
+  "complaintsList": [
+    { "id": 0, "label": "مشكلة في سؤال معين" },
+    { "id": 1, "label": "مشكلة في الموقع او التطبيق" },
+    { "id": 2, "label": "مشكلة اثناء امتحان" },
+    { "id": 3, "label": "مشكلة في حساب الوقت" },
+    { "id": 4, "label": "مشكلة في حساب الدرجات" },
+    { "id": 5, "label": "سبب آخر" }
+  ],
+
+  "examTypes": [
+    { "id": 1, "label": "مرحلة دراسية", "isShow": true },
+    { "id": 13, "label": "القدرات", "isShow": true },
+    { "id": 14, "label": "الموهبة", "isShow": true },
+    { "id": 15, "label": "التحصيلي", "isShow": true }
+  ],
+
+  "invitedType": [
+    { "id": 0, "label": "أصدقاء" },
+    { "id": 1, "label": "عشوائي" }
+  ],
+
+  "couponTypesArray": [
+    {
+      "id": 1,
+      "label": "مدرسة"
+    },
+    {
+      "id": 2,
+      "label": "مستخدم عادي"
+    },
+    {
+      "id": 3,
+      "label": "مؤسسة"
+    },
+    {
+      "id": 4,
+      "label": "معهد"
+    },
+    {
+      "id": 5,
+      "label": "شخص مؤثر"
+    },
+    {
+      "id": 6,
+      "label": "حملة"
+    }
+  ],
+
+  "banksType": [
+    { "id": 0, "label": "أخرى" },
+    { "id": 1, "label": "رئيسي" },
+    { "id": 2, "label": "تقفيلات" }
+  ],
+
+  "teacherQodoratType": [
+    { "id": 0, "label": "كمي" },
+    { "id": 1, "label": "لفظي" },
+    { "id": 2, "label": "الجميع" }
+  ]
+}

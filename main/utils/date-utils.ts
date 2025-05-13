@@ -100,3 +100,21 @@ export const DateHelper = () => {
     convertSecondTo_hh_mm_ss,
   };
 };
+
+export const minutesToHHMM = (totalMin) => {
+  const hours = Math.floor(totalMin / 60);
+  const minutes = Math.floor(totalMin - hours * 60);
+
+  // Padding the values to ensure they are two digits
+  let parsedHours = '';
+  let parsedMinutes = '';
+  if (hours < 10) {
+    parsedHours = '0' + hours;
+  }
+
+  if (minutes < 10) {
+    parsedMinutes = '0' + minutes;
+  }
+
+  return parsedHours + ':' + parsedMinutes + ' ساعة';
+};

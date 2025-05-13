@@ -1,0 +1,154 @@
+@import "@/assets/scss/mixin";
+
+.complaints{
+  background: #F6FAFE;
+  .web-content-page{
+    .a-part{
+      padding: 90px 0 90px 0;
+      background-color:#F6FAFE;
+    }
+  }
+  .contents{
+    width: 98%;
+    margin: auto;
+    padding-top: 77px;
+    padding-bottom: 112px;
+    padding-inline-start: calc(calc(100% - 1200px)/2);
+    padding-inline-end: calc(calc(100% - 1200px)/2);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: start;
+    justify-content: center;
+    column-gap: 28px;
+
+    .cl-start {
+      display: flex;
+      justify-content: center;
+      img{
+        max-width: 100%;
+      }
+    }
+
+    .cl-end{
+      .title {
+        font-size: 25px;
+        font-weight: bold;
+        color: black;
+      }
+      .complaints-form{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 15px;
+          ::v-deep {
+            .a-input-label{
+              display: none;
+            }
+            input {
+              border-radius: 10px;
+              height: 54px;
+              &[disabled]{
+                opacity: .5;
+              }
+            }
+            textarea{
+              border-radius: 10px;
+              min-height: 175px;
+            }
+          }
+          .form-rw-1{
+            width: 100%;
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            .a-custom-input{
+              flex: 0.48;
+            }
+          }
+          .form-rw-2{
+            gap:10px;
+            width: 100%;
+            display: grid;
+            align-items: start;
+            grid-template-columns: 1fr 1fr;
+
+            .complaintsList{
+
+
+              ::v-deep{
+                .a-form-select-label{display: none}
+                .a-form-select {
+                  .vue-treeselect__control {
+                    height: 54px;
+                    border: 1px solid;
+                    border-color: var(--input-border);
+                    border-radius: 8px;
+                    padding: 0 10px;
+                  }
+                  &.invalid{
+                    .vue-treeselect__control {
+                      border-color: var(--red-63);
+                    }
+                  }
+                }
+                .a-form-select .vue-treeselect__placeholder{
+                  font-size: 14px;
+                  font-weight: normal;
+                }
+                .a-form-select .vue-treeselect__x-container{
+                  vertical-align: middle;
+                }
+                .a-form-select .vue-treeselect__control-arrow-container{
+                  vertical-align: middle;
+                }
+              }
+            }
+          }
+
+          .form-rw-3{
+            margin-top: 22px;
+            margin-bottom: 22px;
+          }
+          .submit-btn{
+            width: 206px;
+            height: 52px;
+            background: var(--red-63);
+            color: white;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            float: left;
+            opacity: .9;
+            box-shadow: none;
+            &:hover{
+              background: var(--red-63) !important;
+              opacity: 1;
+            }
+          }
+      }
+    }
+
+    @include tablet-down(){
+      grid-template-columns: 1fr;
+      .title{
+        text-align: center;
+      }
+      .cl-end{
+        padding-top: 30px;
+      }
+    }
+
+    @include mobile-down(){
+      .cl-end{
+        .complaints-form{
+          .form-rw-1,.form-rw-2{
+            display: grid !important;
+            grid-template-columns: 1fr;
+            justify-content: normal !important;
+          }
+        }
+      }
+    }
+  }
+}
