@@ -39,7 +39,7 @@ export const fns_format = (
   }
 };
 
-export const dateUi = (date: string | null) => {
+export const dateUi = (date: string | Date | null) => {
   if (!date) return '';
 
   return fns_format({ date, format: appDateFormat.default });
