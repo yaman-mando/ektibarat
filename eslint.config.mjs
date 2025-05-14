@@ -7,6 +7,18 @@ export default withNuxt(
     {
       rules: {
         //strict prop
+        'no-restricted-syntax': [
+          'error',
+          {
+            selector: 'CallExpression[callee.name="$t"]', // Blocks $t()
+            message:
+              'Do not use $t() directly. Use the `useI18n()` composable instead.',
+          },
+          {
+            selector: 'MemberExpression[property.name="$t"]', // Blocks this.$t() or obj.$t()
+            message: 'Do not use $t(). Use the `useI18n()` composable instead.',
+          },
+        ],
         'no-restricted-properties': [
           'error',
           {
@@ -20,6 +32,17 @@ export default withNuxt(
             property: 'userCurrentSub',
             message:
               'Do not use state.userCurrentSub. Use useSubscriptionsStore instead.',
+          },
+          {
+            object: 'process',
+            property: 'env',
+            message:
+              'Do not use process.env directly. Use a config utility/module instead.',
+          },
+          {
+            object: 'this',
+            property: '$t',
+            message: 'Use useI18n() instead of this.$t().',
           },
         ],
         //end strict prop

@@ -21,3 +21,11 @@ export const pictureTypes = {
   jsonFiles: 19,
   messaging: 22,
 };
+
+export const pictureTypesRecord = Object.entries(pictureTypes).reduce(
+  (acc, [key, value]) => {
+    acc[value as string | number] = key;
+    return acc;
+  },
+  {} as Record<string | number, string>
+);

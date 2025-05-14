@@ -3,6 +3,7 @@ import { process } from 'std-env';
 export const sleepUtil = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
+// eslint-disable-next-line no-restricted-properties
 export const IS_PRODUCTION_APP = process.env.NODE_ENV === 'production';
 
 export const removeScript = (id: string) => {

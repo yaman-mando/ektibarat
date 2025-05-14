@@ -1,7 +1,11 @@
-import { ImagesFolderName } from '~/main/constants/images-folder-name';
+import {
+  ImagesFolderName,
+  LIBRARY_TYPE_FOLDER_LIST,
+} from '~/main/constants/images-folder-name';
 
 export const useImageUrl = () => {
   const config = useRuntimeConfig();
+  const baseImageUrl = config.public.baseImageUrl;
 
   const getUrl = (
     imageFolderName: string | null,
@@ -13,21 +17,34 @@ export const useImageUrl = () => {
     if (!path) return '/images/place-holder.webp';
 
     const folder = ImagesFolderName[imageFolderName];
-    const base = config.public.baseImageUrl;
 
     if (size && ext) {
-      return `${base}/${folder}/${path}-${size}.${ext}`;
+      return `${baseImageUrl}/${folder}/${path}-${size}.${ext}`;
     } else {
-      return `${base}/${folder}/${path}`;
+      return `${baseImageUrl}/${folder}/${path}`;
     }
   };
 
   const staticImageUrl = (fileName: string) => {
-    return `${config.public.baseImageUrl}/staticContent/image/${fileName}`;
+    return `${baseImageUrl}/staticContent/image/${fileName}`;
+  };
+
+  const getImageUrl = (path, imageFolderName, size, type = 'jpg') => {
+    if (type && size !== undefined) {
+      if (LIBRARY_TYPE_FOLDER_LIST.some((val) => val == imageFolderName)) {
+        return `${baseImageUrl}/${ImagesFolderName[imageFolderName]}/${path}`;
+      }
+      return `${baseImageUrl}/${ImagesFolderName[imageFolderName]}/${path}-${size}.${type}`;
+    }
+    if (LIBRARY_TYPE_FOLDER_LIST.some((val) => val == imageFolderName)) {
+      return `${baseImageUrl}/${ImagesFolderName[imageFolderName]}/${path}`;
+    }
+    return `${baseImageUrl}/${ImagesFolderName[imageFolderName]}/${path}.${type}`;
   };
 
   return {
     getUrl,
     staticImageUrl,
+    getImageUrl,
   };
 };

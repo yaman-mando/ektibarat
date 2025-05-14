@@ -588,6 +588,7 @@ export default {
     const route = useRoute();
     const windowSize = useWindowSize();
     const globalStore = useGlobalStore();
+    const runtimeConfig = useRuntimeConfig();
     globalStore.getLocalesJsonStatic();
 
     return {
@@ -596,6 +597,7 @@ export default {
       staticLocales: globalStore.staticState.locales!,
       windowSize,
       appEvents,
+      runtimeConfig,
     };
   },
   data() {
@@ -742,9 +744,10 @@ export default {
   methods: {
     async onClickRecord(guid) {
       try {
+        const root = this.runtimeConfig.public.websiteUrl;
         const payload = {
           stopFunctionName: QUESTION_ANIMATE_DEFAULT_CONFIG.stopFunctionName,
-          url: `${process.env.webSiteUrl}/question-animate/${guid}`,
+          url: `${root}/question-animate/${guid}`,
           selector: '.question-animate-page',
         };
         const domain = {

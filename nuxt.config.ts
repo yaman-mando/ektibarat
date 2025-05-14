@@ -6,6 +6,7 @@ import PrimeTheme from '@primeuix/themes/aura';
 import { process } from 'std-env';
 import { APP_ENVS, currentEnv, getEnv } from './config';
 
+// eslint-disable-next-line no-restricted-properties
 const IS_PRODUCTION_APP = process.env.NODE_ENV === 'production';
 enum AuthCookiesEnum {
   token = 'auth.token',
@@ -71,7 +72,9 @@ export default defineNuxtConfig({
       websiteUrl: getEnv().websiteUrl,
       apiUrl: getEnv().baseUrl,
       baseImageUrl: getEnv().baseImageUrl,
+      // eslint-disable-next-line no-restricted-properties
       googleClientId: process.env.GOOGLE_CLIENT_ID,
+      // eslint-disable-next-line no-restricted-properties
       appleClientId: process.env.APPLE_CLIENT_ID,
     },
   },

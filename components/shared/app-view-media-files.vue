@@ -201,15 +201,20 @@
 import { QUESTION_ANIMATE_DEFAULT_CONFIG } from '~/main/utils/question-animate.utils';
 import { ImageExt } from '~/main/constants/image-ext';
 import { ImageSize } from '~/main/constants/image-size';
-import { pictureTypes } from '~/main/constants/picture-types';
+import {
+  pictureTypes,
+  pictureTypesRecord,
+} from '~/main/constants/picture-types';
 import { dataURLtoFile } from '~/main/utils/shared-utils';
-import { $t } from '@primeuix/styled';
 import { questionTypes } from '~/main/modules/questions/data-access/constats/question-types';
+import { mediaTypeListLinkRecord } from '~/main/constants/media-type-list-link.enum';
 
 const questionAnimateConfig = inject(
   'questionAnimateConfig',
   QUESTION_ANIMATE_DEFAULT_CONFIG
 );
+
+const runtimeConfig = useRuntimeConfig();
 
 const emit = defineEmits<{
   (e: 'getFileUrl', val: string): void;
@@ -287,31 +292,31 @@ function getFileUrl(fileUrl: string | null | undefined) {
     ) {
       if (props.mediaType == 1) {
         return (
-          process.env.baseImageUrl +
+          runtimeConfig.public.baseImageUrl +
           '/' +
-          $t(`pictureTypes.${props.requestType}`) +
+          pictureTypesRecord[props.requestType] +
           '/' +
-          $t(`mediaTypeListLink.${props.mediaType}`) +
+          mediaTypeListLinkRecord[props.mediaType] +
           '/' +
           fileUrl +
           `-${props.size}.${props.ext}`
         );
       } else {
         return (
-          process.env.baseImageUrl +
+          runtimeConfig.public.baseImageUrl +
           '/' +
-          $t(`pictureTypes.${props.requestType}`) +
+          pictureTypesRecord[props.requestType] +
           '/' +
-          $t(`mediaTypeListLink.${props.mediaType}`) +
+          mediaTypeListLinkRecord[props.mediaType] +
           '/' +
           fileUrl
         );
       }
     } else {
       return (
-        process.env.baseImageUrl +
+        runtimeConfig.public.baseImageUrl +
         '/' +
-        $t(`pictureTypes.${props.requestType}`) +
+        pictureTypesRecord[props.requestType] +
         '/' +
         fileUrl +
         `-${props.size}.${props.ext}`

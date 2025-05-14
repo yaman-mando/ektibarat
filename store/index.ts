@@ -293,13 +293,6 @@ export const vuexStore = createStore<VuexRootState>({
           .default;
         commit('SET_FILE1_PANEL', JsonFile1);
         return JsonFile1;
-        /*const fetchData = await fetch(
-          `${process.env.jsonFileUrl}/${jsonFiles.file1}.json`,
-          { referrerPolicy: 'unsafe-url', cache: 'no-cache' }
-        );
-        const data = await fetchData.json();
-        commit('SET_FILE1_PANEL', data);
-        return data;*/
       } catch (e) {
         console.log(e);
       }
@@ -307,12 +300,6 @@ export const vuexStore = createStore<VuexRootState>({
 
     async getPassedTrainingPanelStatic({ commit }) {
       try {
-        /*const fetchData = await fetch(
-          `${process.env.jsonFileUrl}/${jsonFiles.passedTraining}.json`,
-          { referrerPolicy: 'unsafe-url', cache: 'no-cache' }
-        );
-        const data = await fetchData.json();
-        return data;*/
         const JsonPassedTraining = (
           await import('@/main/constants/json/passed-training.json')
         ).default;
@@ -497,9 +484,10 @@ export const vuexStore = createStore<VuexRootState>({
 
     async toRecordVideo({ commit }, guid) {
       try {
+        const runtimeConfig = useRuntimeConfig();
         const payload = {
           stopFunctionName: QUESTION_ANIMATE_DEFAULT_CONFIG.stopFunctionName,
-          url: `${process.env.webSiteUrl}/question-animate/${guid}`,
+          url: `${runtimeConfig.public.websiteUrl}/question-animate/${guid}`,
           selector: '.question-animate-page',
         };
         const domain = {

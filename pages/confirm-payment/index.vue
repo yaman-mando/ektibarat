@@ -125,6 +125,7 @@ export default {
   async setup() {
     const setupAuth = useSetupAuth();
     const setupRoute = useSetupRoute();
+    const runtimeConfig = useRuntimeConfig();
     const subscriptionsStore = useSubscriptionsStore();
     const userCurrentSub = computed(
       () => subscriptionsStore.state.userCurrentSub
@@ -135,6 +136,7 @@ export default {
       ...setupAuth,
       ...setupRoute,
       subscriptionsStore,
+      runtimeConfig,
     };
   },
   data() {
@@ -196,7 +198,7 @@ export default {
 
     async downloadInvoice() {
       try {
-        const url = `${process.env.baseApiUrl}/payment/exportInvoice/${this.id}`;
+        const url = `${this.runtimeConfig.public.apiUrl}/payment/exportInvoice/${this.id}`;
         const link = document.createElement('a');
         // If you don't know the name or want to use
         // the webserver default set name = ''
