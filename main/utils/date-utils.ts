@@ -62,6 +62,12 @@ export const timeUi = (date) => {
   return format(date, appDateFormat.time.hh_mm_ss);
 };
 
+export const dateTimeUi = (date) => {
+  if (!date) return '';
+
+  return fns_format({ date, format: appDateFormat.defaultWithTime });
+};
+
 export const DateHelper = () => {
   const convertSecondsToLabel_mm_ss = (val) => {
     if (!val || isNaN(val)) return '00:00';

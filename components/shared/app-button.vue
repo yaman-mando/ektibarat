@@ -37,7 +37,7 @@ withDefaults(
     isDisabled?: boolean;
     iconStartClass?: string;
     iconEndClass?: string;
-    label?: string;
+    label: string;
     labelClass?: string;
     suffixLabel?: string;
     colorType?: 'primary' | 'success' | 'warn' | 'warn-light' | 'blue';

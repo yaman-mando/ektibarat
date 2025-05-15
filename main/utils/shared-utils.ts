@@ -98,3 +98,23 @@ export const dataURLtoFile = (dataurl: string, filename: string) => {
 
   return new File([u8arr], filename, { type: mime });
 };
+
+export const copyToClipboard = async (text) => {
+  try {
+    if (window.isSecureContext && navigator.clipboard) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+    }
+    return true;
+  } catch ($e) {
+    console.log($e);
+    return false;
+  }
+};

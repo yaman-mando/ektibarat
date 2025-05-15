@@ -101,7 +101,6 @@
               <div class="ex-info-groups">
                 <!--        <div class="ex-info-group">
             <div class="c-start">
-              <img src="~assets/main-icon/ex-type.webp" alt="" />
               <span>نوع الامتحان</span>
             </div>
             <div class="c-end">
@@ -210,7 +209,7 @@
               :key="index"
             >
               <nuxt-link :to="`/exam-info/${item.examId}`">
-                <mx-std-exam-card
+                <exam-card
                   :key="index"
                   :item="item"
                   :type="examTypes.willDo"
@@ -247,6 +246,7 @@ import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 import { stdRouters } from '~/main/utils/route-helper';
 import { defaultMeta } from '~/main/constants/default-meta';
 import { ImagesFolderName } from '~/main/constants/images-folder-name';
+import { webAuthSignup } from '~/main/utils/web-routes.utils';
 
 const metaOption = {
   facebook: {
@@ -475,9 +475,7 @@ export default {
           }
         }
       } else {
-        await this.appRouter.push({
-          path: '/auth/signup',
-        });
+        await this.appRouter.push(webAuthSignup());
       }
     },
 
