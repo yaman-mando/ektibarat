@@ -40,7 +40,7 @@
 </template>
 <script lang="ts">
 import { useSetupStaticLocales } from '~/main/services/setup/useSetupStaticLocales';
-import { Subject } from 'rxjs';
+import { firstValueFrom, Subject } from 'rxjs';
 
 export default {
   setup(props, { expose }) {
@@ -52,13 +52,14 @@ export default {
       confirmText: '',
     });
 
-    function showModal(model: { message: string; confirmText?: string }): void {
+    function showModal(model: { message: string; confirmText?: string }) {
       modalData.value = {
         message: model.message,
         confirmText:
           model.confirmText ?? staticLocales.value?.trainPage.yes ?? '',
       };
       isOpen.value = true;
+      return firstValueFrom(onActionSub);
     }
 
     function hideModal() {

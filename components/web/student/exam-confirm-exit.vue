@@ -72,6 +72,7 @@ export default {
         : this.staticLocales?.trainPage.exitExamWarn;
     },
     confirmLabel() {
+      if (!this.staticLocales) return '';
       return this.isEndAction
         ? this.staticLocales?.trainPage.exit
         : this.staticLocales?.trainPage.exit;

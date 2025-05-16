@@ -118,3 +118,32 @@ export const copyToClipboard = async (text) => {
     return false;
   }
 };
+
+export const keyWords = [
+  'اختبارات',
+  'التعليم بطريقة اسهل',
+  'الذكاء الصنعي',
+  'امتحانات',
+  'تدريب',
+  'امتحانات فصلية',
+  'امتحانات قدرات',
+  'امتحانات تحصيلي',
+  'امتحانات موهبة',
+  'مواد علمية',
+  'تحصيل جامعي',
+];
+
+export const getKeyWords = () => {
+  let keyList: string | null = null;
+  keyWords.forEach((key, index) => {
+    if (keyList == null) {
+      keyList = key + ', ';
+    } else if (index < keyWords.length - 1) {
+      keyList += key + ', ';
+    } else {
+      keyList += key;
+    }
+  });
+
+  return keyList;
+};

@@ -33,6 +33,8 @@
             :type="inputTypeModel"
             :value="valueModel"
             class="ac-ii"
+            :min="minVal ? minVal : ''"
+            :max="maxVal ? maxVal : ''"
             @blur="handleBlur"
             @input="handleChange"
           />
@@ -48,6 +50,8 @@
             :tabindex="inputTabIndex"
             :value="valueModel"
             class="ac-ii"
+            :min="minVal ? minVal : ''"
+            :max="maxVal ? maxVal : ''"
             @blur="handleBlur"
             @input="handleChange"
           ></textarea>
@@ -93,13 +97,15 @@ const props = withDefaults(
     inputValue: string | number | null;
     isTextArea?: boolean;
     inputId: string;
-    inputType?: 'text' | 'password' | 'email' | 'number';
+    inputType?: 'text' | 'password' | 'email' | 'number' | 'datetime-local';
     inputTabIndex?: number | string;
     rules?: Record<string, unknown>;
     isDisabled?: boolean;
     hasClear?: boolean;
     hideErrorLabel?: boolean;
     textAreaRows?: number;
+    minVal?: string | null;
+    maxVal?: string | null;
   }>(),
   {
     direction: 'rtl',
@@ -110,6 +116,8 @@ const props = withDefaults(
     hasClear: false,
     hideErrorLabel: false,
     textAreaRows: 5,
+    minVal: null,
+    maxVal: null,
   }
 );
 

@@ -390,7 +390,6 @@
       </template>
 
       <vee-form
-        v-slot="{ valid, validate, handleSubmit }"
         ref="form_ref"
         tag="div"
         class="challenge-form"
@@ -402,18 +401,18 @@
           >
             <!--  step 1   -->
             <template v-if="currentStep == 1">
-              <mx-admin-custom-input
+              <form-input
                 v-model:inputValue="challengeForm.title"
-                :inputId="'title'"
+                inputId="title"
                 :rules="{ required: true }"
-                :placeholder="'اسم التحدي'"
+                inputPlaceholder="اسم التحدي"
               />
             </template>
 
             <!--  step 2   -->
             <template v-if="currentStep == 2">
               <div class="radio-group">
-                <mx-admin-form-radio
+                <form-radio
                   v-model:selected="challengeForm.invitedType"
                   class="radio-list"
                   :options="invitedType"
@@ -426,12 +425,12 @@
             <!--  step 3   -->
             <template v-if="currentStep == 3">
               <template v-if="challengeForm.invitedType == 1">
-                <mx-admin-custom-input
+                <form-input
                   v-model:inputValue="challengeForm.personsCount"
-                  :inputId="'count'"
-                  :inputType="'number'"
+                  inputId="count"
+                  inputType="number"
                   :rules="{ required: true, regex: '^(0.+|[^0].*)$' }"
-                  :placeholder="'عدد المدعوين'"
+                  inputPlaceholder="عدد المدعوين"
                 />
               </template>
 
@@ -442,8 +441,7 @@
                   :key="index"
                   class="c-email"
                 >
-                  <mx-admin-custom-input
-                    :key="index"
+                  <form-input
                     v-model:inputValue="item.name"
                     :inputId="`email-${index}`"
                     :rules="{
@@ -452,7 +450,7 @@
                       emailRule: true,
                       noSameEmail: [challengeForm.emails],
                     }"
-                    :placeholder="'البريد الإلكتروني'"
+                    inputPlaceholder="البريد الإلكتروني"
                   />
                   <i
                     v-if="index > 0"
@@ -470,13 +468,13 @@
 
             <!--  step 4   -->
             <template v-if="currentStep == 4">
-              <mx-admin-custom-input
+              <form-input
                 v-model:inputValue="challengeForm.time"
                 :inputId="'date'"
-                :inputType="'datetime-local'"
+                inputType="datetime-local"
                 :minVal="today"
                 :rules="{ required: true }"
-                :placeholder="'تاريخ التحدي'"
+                inputPlaceholder="تاريخ التحدي"
               />
             </template>
 
@@ -533,7 +531,6 @@ import { ImageSize } from '~/main/constants/image-size';
 import { examLevel } from '~/main/constants/exam-level';
 import { dateTimeUi } from '~/main/utils/date-utils';
 import type WebConfirmModal from '~/components/web/shared/web-confirm-modal.vue';
-import { firstValueFrom } from 'rxjs';
 
 defineRule('emailRule', (value: string, [email]: [string]) => {
   if (value === email) {
@@ -661,20 +658,18 @@ export default {
     },
     dateTimeUi,
     async openRemoveModal() {
-      this.confirmModalRef!.showModal({
+      const confirm = await this.confirmModalRef!.showModal({
         message: 'هل تريد ازالته من قائمة الامتحانات اللتي سوف تجريها؟',
       });
-      const confirm = await firstValueFrom(this.confirmModalRef!.onActionSub);
       if (confirm) {
         this.removeFav();
       }
     },
     async openMustLoginModal() {
-      this.confirmModalRef!.showModal({
+      const confirm = await this.confirmModalRef!.showModal({
         message: 'يجب القيام بتسجيل الدخول للقيام بهذه العملية',
         confirmText: 'تسجيل دخول',
       });
-      const confirm = await firstValueFrom(this.confirmModalRef!.onActionSub);
       if (confirm) {
         this.toLogin();
       }

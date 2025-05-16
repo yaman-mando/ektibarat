@@ -16,8 +16,8 @@
               <custom-image
                 :folderName="ImagesFolderName.Subjects"
                 :url="examInfo.subjectPictureUrl"
-                :size="imagesSize.md"
-                :ext="imagesExt.webp"
+                :size="ImageSize.md"
+                :ext="ImageExt.webp"
                 width="35"
                 height="35"
               />
@@ -45,8 +45,8 @@
               <custom-image
                 :folderName="ImagesFolderName.Exams"
                 :url="examInfo.pictureUrl"
-                :size="imagesSize.hd"
-                :ext="imagesExt.webp"
+                :size="ImageSize.hd"
+                :ext="ImageExt.webp"
                 width="100%"
                 height="auto"
                 radius="5px 5px 0px 0px"
@@ -69,11 +69,7 @@
                     : 'إضافة الامتحان إلى المفضلة'
                 "
                 :class="{ isAdded: examIsAdded }"
-                @click="
-                  appAuth.loggedIn
-                    ? addExam(examInfo.id)
-                    : (isOpenModalConfirm = true)
-                "
+                @click="openModal"
               >
                 <img
                   src="/images/main-icon/exam-btn.webp"
@@ -174,8 +170,8 @@
                         :noResponsive="true"
                         ratio="3/2"
                         :alt="item.title"
-                        :imageExt="imagesExt.jpg"
-                        :maxSize="imagesSize.md"
+                        :imageExt="ImageExt.jpg"
+                        :maxSize="ImageSize.md"
                       />
                       <!--                <mx-g-img
                     :folderName="ImagesFolderName.Exams"
@@ -221,32 +217,25 @@
           </div>
         </div>
       </div>
-      <mx-admin-confirm-modal
-        v-model:isOpen="isOpenModalConfirm"
-        msg="يجب القيام بتسجيل الدخول للقيام بهذه العملية"
-        confirmText="تسجيل دخول"
-        @confirm="toLogin"
-      />
-
-      <mx-admin-confirm-modal
-        v-model:isOpen="isOpenModalRmFav"
-        msg="هل تريد ازالته من قائمة الامتحانات اللتي سوف تجريها؟"
-        confirmText="تأكيد"
-        @confirm="removeFav"
-      />
+      <web-confirm-modal ref="confirm_modal_ref" />
     </div>
   </client-only>
 </template>
 <script lang="ts">
-import { examLevel, examTypes } from '@/common/exam-common';
-import { getKeyWords, scrollToTop } from '@/common/user-common';
 import TextSlice from '~/components/shared/text-slice.vue';
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
 import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 import { stdRouters } from '~/main/utils/route-helper';
 import { defaultMeta } from '~/main/constants/default-meta';
 import { ImagesFolderName } from '~/main/constants/images-folder-name';
-import { webAuthSignup } from '~/main/utils/web-routes.utils';
+import { webAuthSignup, webErrorPathUtil } from '~/main/utils/web-routes.utils';
+import type WebConfirmModal from '~/components/web/shared/web-confirm-modal.vue';
+import { getKeyWords, scrollToTopUtil } from '~/main/utils/shared-utils';
+import { examTypes } from '~/main/constants/exam-types';
+import { ImageExt } from '~/main/constants/image-ext';
+import { ImageSize } from '~/main/constants/image-size';
+import { examLevel } from '~/main/constants/exam-level';
+import { useStore } from 'vuex';
 
 const metaOption = {
   facebook: {
@@ -263,7 +252,30 @@ const metaOption = {
 
 export default {
   components: { TextSlice },
-  setup() {
+  async setup() {
+    const runtimeConfig = useRuntimeConfig();
+    const confirmModalRef =
+      useTemplateRef<InstanceType<typeof WebConfirmModal>>('confirm_modal_ref');
+    const { appRouter, appRoute } = useSetupRoute();
+    const store = useStore();
+    const { error } = await useAsyncData('exam-info', async () => {
+      const params = appRoute.params;
+      console.log(params);
+      console.log(decodeURIComponent(appRoute.path));
+      const id = !params.id ? params.title : params.id;
+
+      await store.dispatch('student/callExamWizardDetails', id);
+      await store.dispatch('student/callExamSuggestions', id);
+    });
+
+    if (error.value) {
+      await navigateTo(webErrorPathUtil());
+    }
+
+    const examInfo = computed(() => {
+      return store.state.student.examWizardDetails;
+    });
+
     definePageMeta({
       layout: 'website-layout',
     });
@@ -274,171 +286,132 @@ export default {
       meta: [
         { charset: 'utf-8' },
         {
-          hid: 'og:title',
           property: 'og:title',
-          content: `${this.examInfo.title ? this.examInfo.title : defaultMeta.title}`,
+          content: `${examInfo.value.title ? examInfo.value.title : defaultMeta.title}`,
         },
         {
-          hid: 'og:description',
           property: 'og:description',
           content: `${
-            this.examInfo.shortDescription
-              ? this.examInfo.shortDescription
+            examInfo.value.shortDescription
+              ? examInfo.value.shortDescription
               : defaultMeta.description
           }`,
         },
         {
-          hid: 'description',
           property: 'description',
           content: `${
-            this.examInfo.shortDescription
-              ? this.examInfo.shortDescription
+            examInfo.value.shortDescription
+              ? examInfo.value.shortDescription
               : defaultMeta.description
           }`,
         },
         { name: 'author', content: `اختبارات` },
-        { hid: 'robots', name: 'robots', content: 'index,follow' },
-        { hid: 'keywords', name: 'keywords', content: getKeyWords() },
+        { name: 'robots', content: 'index,follow' },
+        { name: 'keywords', content: getKeyWords() },
         { name: 'theme-color', content: '#4F008C' },
         { name: 'mobile-web-app-capable', content: 'yes' },
         {
-          hid: 'apple-mobile-web-app-title',
           name: 'apple-mobile-web-app-title',
-          content: `${this.examInfo.title ?? defaultMeta.title}`,
+          content: `${examInfo.value.title ?? defaultMeta.title}`,
         },
         {
-          hid: 'og:image',
           property: 'og:image',
-          content: this.examInfo.pictureUrl
-            ? `${this.$vRoute.base}/files/Exams/${this.examInfo.pictureUrl}-meta.jpg`
-            : require('@/static/images/logo-color.svg'),
+          content: examInfo.value.pictureUrl
+            ? `${runtimeConfig.public.websiteUrl}/files/Exams/${examInfo.value.pictureUrl}-meta.jpg`
+            : defaultMeta.img,
         },
         {
-          hid: 'og:image:secure_url',
           property: 'og:image:secure_url',
-          content: this.examInfo.pictureUrl
-            ? `${this.$vRoute.base}/files/Exams/${this.examInfo.pictureUrl}-meta.jpg`
-            : require('@/static/images/logo-color.svg'),
+          content: examInfo.value.pictureUrl
+            ? `${runtimeConfig.public.websiteUrl}/files/Exams/${examInfo.value.pictureUrl}-meta.jpg`
+            : defaultMeta.img,
         },
         {
-          hid: 'og:image:width',
           property: 'og:image:width',
           content: metaOption.facebook.width,
         },
         {
-          hid: 'og:image:height',
           property: 'og:image:height',
           content: metaOption.facebook.height,
         },
-        { hid: 'og:title', property: 'og:title', content: 'اختبارات' },
+        { property: 'og:title', content: 'اختبارات' },
         {
-          hid: 'og:url',
           property: 'og:url',
-          content: `${this.$vRoute.base}${this.$route.path}`,
+          content: `${runtimeConfig.public.websiteUrl}${appRoute.path}`,
         },
         {
-          hid: 'og:site_name',
           property: 'og:site_name',
           content: 'اختبارات',
         },
-        { hid: 'og:type', property: 'og:type', content: 'product' },
+        { property: 'og:type', content: 'product' },
         {
           name: 'twitter:card',
           content: 'summary_large_image',
-          vmid: 'twitter:card',
         },
         {
           name: 'twitter:creator',
-          content: `${this.examInfo.title}- @ekhtibarat`,
+          content: `${examInfo.value.title}- @ekhtibarat`,
         },
         { name: 'twitter:site', content: 'اختبارات' },
         {
-          hid: 'twitter:image',
           name: 'twitter:image',
           property: 'twitter:image',
-          content: this.examInfo.pictureUrl
-            ? `${this.$vRoute.base}/files/Exams/${this.examInfo.pictureUrl}-xs.jpg`
-            : require('@/static/images/logo-color.svg'),
-          vmid: 'twitter:image',
+          content: examInfo.value.pictureUrl
+            ? `${runtimeConfig.public.websiteUrl}/files/Exams/${examInfo.value.pictureUrl}-xs.jpg`
+            : defaultMeta.img,
         },
         {
-          hid: 'twitter:title',
           property: 'twitter:title',
-          vmid: 'twitter:title',
           name: 'twitter:title',
-          content: `${this.examInfo.title}`,
+          content: `${examInfo.value.title}`,
         },
         {
-          hid: 'twitter:description',
           name: 'twitter:description',
           property: 'twitter:description',
           content: `${
-            this.examInfo.shortDescription
-              ? this.examInfo.shortDescription
+            examInfo.value.shortDescription
+              ? examInfo.value.shortDescription
               : 'اختبارات'
           }`,
-          vmid: 'twitter:description',
         },
         {
-          hid: 'twitter:url',
           name: 'twitter:url',
           property: 'twitter:url',
-          content: `${this.$vRoute.base}${this.$route.path}`,
-          vmid: 'twitter:url',
+          content: `${runtimeConfig.public.websiteUrl}${appRoute.path}`,
         },
       ],
     });
     return {
       windowSize: useWindowSize(),
       ...useSetupAuth(),
-      ...useSetupRoute(),
+      appRoute,
+      appRouter,
       ...useToastMessage(),
+      confirmModalRef,
+      examInfo,
     };
   },
 
-  async asyncData({ store, route, redirect, params }) {
-    try {
-      console.log(params);
-      console.log(decodeURIComponent(route.path));
-      const id = !params.id ? params.title : params.id;
-
-      const examInfo = await store.dispatch(
-        'student/callExamWizardDetails',
-        id
-      );
-
-      const examSuggestions = await store.dispatch(
-        'student/callExamSuggestions',
-        id
-      );
-
-      const title = examInfo.title.split(' ').join('-');
-      if (!params.id || params.title != title) {
-        // redirect(`/exam-info/${id}/${encodeURIComponent(title)}`);
-      }
-      return {};
-    } catch (e) {
-      console.log(e);
-      redirect('/404');
-    }
-  },
   data() {
     return {
       ImagesFolderName,
-      imagesSize,
-      imagesExt,
-      examLevel,
-      examTypes,
       examIsAdded: false,
       showShare: false,
-      isOpenModalConfirm: false,
-      isOpenModalRmFav: false,
     };
   },
 
   computed: {
-    examInfo() {
-      return this.$store.state.student.examWizardDetails;
+    examLevel() {
+      return examLevel;
+    },
+    ImageSize() {
+      return ImageSize;
+    },
+    ImageExt() {
+      return ImageExt;
+    },
+    examTypes() {
+      return examTypes;
     },
 
     examSuggestions() {
@@ -457,10 +430,34 @@ export default {
       decodeURIComponent(reUrl)
     );
 
-    scrollToTop('website-layout');
+    scrollToTopUtil('website-layout');
   },
 
   methods: {
+    openModal() {
+      if (this.appAuth.loggedIn) {
+        this.addExam(this.examInfo.id);
+      } else {
+        this.openMustLoginModal();
+      }
+    },
+    async openRemoveModal() {
+      const confirm = await this.confirmModalRef!.showModal({
+        message: 'هل تريد ازالته من قائمة الامتحانات اللتي سوف تجريها؟',
+      });
+      if (confirm) {
+        this.removeFav();
+      }
+    },
+    async openMustLoginModal() {
+      const confirm = await this.confirmModalRef!.showModal({
+        message: 'يجب القيام بتسجيل الدخول للقيام بهذه العملية',
+        confirmText: 'تسجيل دخول',
+      });
+      if (confirm) {
+        this.toLogin();
+      }
+    },
     async goExam(examId) {
       if (this.appAuth.loggedIn) {
         const { data: res } = await this.$axios.post('/studentsExam', {
@@ -493,7 +490,7 @@ export default {
             this.examIsAdded = res.isFavorite;
           }
         } else {
-          this.isOpenModalRmFav = true;
+          this.openRemoveModal();
         }
       } catch (e) {
         this.examIsAdded = false;

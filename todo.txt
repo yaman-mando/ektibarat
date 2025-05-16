@@ -6,3 +6,4 @@ $once
 //components
 mx-g-img > custom-image
 mx-img > app-image
+$vRoute.base > public.websiteUrl
