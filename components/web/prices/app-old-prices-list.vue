@@ -76,7 +76,7 @@ const subsListRequest = useLazyAsyncData(
   'subs-list-all',
   async () => {
     return subscriptionsStore.getAll({
-      grade: globalStore.state.globalTypeUser ?? GlobalTypes.kudrat,
+      grade: globalStore.state.globalTypeUserValue ?? GlobalTypes.kudrat,
     });
   },
   { immediate: false }
@@ -103,7 +103,7 @@ const selectPacket = (id: number) => {
 
 //watch
 watch(
-  () => globalStore.state.globalTypeUser,
+  () => globalStore.state.globalTypeUserValue,
   () => {
     subsListRequest.execute();
   }

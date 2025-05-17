@@ -23,7 +23,7 @@ const selectedGlobalType = ref(false);
 
 //watch
 watch(
-  () => globalStore.state.globalTypeUser,
+  () => globalStore.state.globalTypeUserValue,
   (newVal) => {
     if (newVal === GlobalTypes.tahsele) {
       selectedGlobalType.value = true;
@@ -36,7 +36,7 @@ watch(
   () => selectedGlobalType.value,
   (newVal) => {
     const type = newVal ? GlobalTypes.tahsele : GlobalTypes.kudrat;
-    globalStore.patchState({ globalTypeUser: type });
+    globalStore.patchState({ globalTypeUserValue: type });
   }
 );
 

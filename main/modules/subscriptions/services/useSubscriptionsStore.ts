@@ -9,7 +9,7 @@ import { createPatchState } from '~/main/utils/patch-state.util';
 
 type StateType = {
   lastUserSubUpdate: number;
-  userCurrentSub: CurrentSubscriptionDataModel | null;
+  userCurrentSubVal: CurrentSubscriptionDataModel | null;
   userServicesState: UserServicesStateUi;
 };
 
@@ -19,7 +19,7 @@ export const useSubscriptionsStore = defineStore('subscriptions-store', () => {
 
   const initialState: StateType = {
     lastUserSubUpdate: 0,
-    userCurrentSub: null,
+    userCurrentSubVal: null,
     userServicesState: {
       TRAININGBYCATEGORY: { isActive: false },
       TAKFELATUSAGE: { isActive: false },
@@ -43,7 +43,7 @@ export const useSubscriptionsStore = defineStore('subscriptions-store', () => {
     const res = await repo.getCurrentSubs({
       grade,
     });
-    patchState({ userCurrentSub: res, lastUserSubUpdate: Date.now() });
+    patchState({ userCurrentSubVal: res, lastUserSubUpdate: Date.now() });
     return res;
   };
 

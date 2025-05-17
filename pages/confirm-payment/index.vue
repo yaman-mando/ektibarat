@@ -128,7 +128,7 @@ export default {
     const runtimeConfig = useRuntimeConfig();
     const subscriptionsStore = useSubscriptionsStore();
     const userCurrentSub = computed(
-      () => subscriptionsStore.state.userCurrentSub
+      () => subscriptionsStore.state.userCurrentSubVal
     );
 
     return {

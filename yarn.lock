@@ -5677,6 +5677,13 @@ nuxt-security@2.2.0:
     unplugin-remove "^1.0.3"
     xss "^1.0.14"
 
+nuxt3-vuex-module@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/nuxt3-vuex-module/-/nuxt3-vuex-module-1.1.2.tgz#39fdbdd369625bd593a348be563edb10c7e6813c"
+  integrity sha512-x9ZZSFctl1qbUUgRBaLahqVdMRdI+7zdc2hDCjYN4PdqSvaYnsMz2j1iN/P3R+/dfNHrDT4X46Uxb+rAmKByiA==
+  dependencies:
+    vuex "^4.0.2"
+
 nuxt@^3.16.2:
   version "3.16.2"
   resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-3.16.2.tgz#d25211e3026754993bb770a0c6f2af939ff4ecdf"

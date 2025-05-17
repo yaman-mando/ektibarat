@@ -63,10 +63,10 @@ const actions = [
 const selectType = async (type: GlobalTypes) => {
   try {
     globalStore.patchState({
-      globalTypeUser: type,
+      globalTypeUserValue: type,
     });
     globalStore.patchState({
-      globalTypeUser: type,
+      globalTypeUserValue: type,
     });
     await router.push(webUserPanelTraining());
   } catch (e) {

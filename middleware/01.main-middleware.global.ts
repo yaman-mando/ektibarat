@@ -40,7 +40,7 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
       !routersWithoutTypeSelect.some((route) => currentPath.includes(route))
     ) {
       if (
-        !globalStore.state.globalTypeUser &&
+        !globalStore.state.globalTypeUserValue &&
         authStore.state.userData?.role !== UserRoles.admin
       ) {
         return navigateTo(webGeneralSelectionPathUtil());

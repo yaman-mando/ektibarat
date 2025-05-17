@@ -12,10 +12,11 @@ import type {
   TahselJsonDataModel,
 } from '~/main/modules/shared/models/static-json-files.model';
 import { CountryPhoneCodes } from '~/main/constants/country-phone-codes';
+import { createPatchState } from '~/main/utils/patch-state.util';
 
 type StateType = {
-  globalType: GlobalTypes;
-  globalTypeUser: GlobalTypes | null;
+  globalTypeValue: GlobalTypes;
+  globalTypeUserValue: GlobalTypes | null;
   isSchool: boolean;
   defaultActiveExam: number;
   showBlockModal: boolean;
@@ -47,8 +48,8 @@ export const useGlobalStore = defineStore('global', () => {
   );
 
   const state = reactive<StateType>({
-    globalType: GlobalTypes.kudrat,
-    globalTypeUser: globalTypeUserCookie.value ?? GlobalTypes.kudrat,
+    globalTypeValue: GlobalTypes.kudrat,
+    globalTypeUserValue: globalTypeUserCookie.value ?? GlobalTypes.kudrat,
     isSchool: false,
     defaultActiveExam: 1,
     showBlockModal: false,
@@ -67,17 +68,20 @@ export const useGlobalStore = defineStore('global', () => {
     static: null,
   });
 
+  const patchStateUtil = createPatchState(state);
+
   const patchState = (newState: Partial<StateType>) => {
-    Object.assign(state, newState);
-    globalTypeUserCookie.value = state.globalTypeUser
-      ? Number(state.globalTypeUser)
+    patchStateUtil({ ...state, ...newState });
+    globalTypeUserCookie.value = state.globalTypeUserValue
+      ? Number(state.globalTypeUserValue)
       : null;
   };
 
   const clearState = () => {
-    Object.assign(state, {
-      globalType: GlobalTypes.kudrat,
-      globalTypeUser: null,
+    patchStateUtil({
+      ...state,
+      globalTypeValue: GlobalTypes.kudrat,
+      globalTypeUserValue: null,
       isSchool: false,
       defaultActiveExam: 1,
       showBlockModal: false,

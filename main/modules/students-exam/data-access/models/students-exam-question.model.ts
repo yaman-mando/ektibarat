@@ -36,6 +36,7 @@ export type StudentsExamQuestionDataModel = {
   isFeatured: boolean;
   isBelongToLaw: boolean;
   correctAnswerId: number[];
+  questionSlug: string | null;
   _correctAnswerId: string | null;
   grade: null;
   categoryId: number;
@@ -53,6 +54,7 @@ export interface StudentsExamQuestionAnswerDataModel {
   answerType: number;
   answerDegree: number;
   isTakfeelat: boolean;
+  isCorrect?: boolean;
 }
 
 interface StudentsExamQuestionCategoryDataModel {

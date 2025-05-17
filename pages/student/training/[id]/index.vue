@@ -616,7 +616,9 @@ const counterModel = computed({
   },
 });
 
-const userCurrentSub = computed(() => subscriptionsStore.state.userCurrentSub!);
+const userCurrentSub = computed(
+  () => subscriptionsStore.state.userCurrentSubVal!
+);
 
 //method
 const getCurrentQuestionStorageState = () => {
@@ -1014,7 +1016,7 @@ const onSelectAnswer = async (answerId: any) => {
         exitWithoutConfirm();
       } else {
         await subscriptionsStore.getCurrentSub(
-          globalStore.state.globalTypeUser!
+          globalStore.state.globalTypeUserValue!
         );
         if (
           userCurrentSub.value!.remainTrainingCount - 1 > 0 &&

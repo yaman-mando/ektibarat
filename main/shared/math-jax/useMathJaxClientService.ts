@@ -262,7 +262,7 @@ export const useMathJaxClientService = defineStore('math-jax-service', () => {
 
   //computed
   const isTahsele = computed(() => {
-    return globalStore.state.globalTypeUser == GlobalTypes.tahsele;
+    return globalStore.state.globalTypeUserValue == GlobalTypes.tahsele;
   });
 
   return {

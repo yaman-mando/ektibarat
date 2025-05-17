@@ -30,10 +30,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
       ) {
         const lastUpdate = subscriptionStore.state.lastUserSubUpdate ?? 0;
         if (
-          !subscriptionStore.state.userCurrentSub ||
+          !subscriptionStore.state.userCurrentSubVal ||
           now - lastUpdate > UPDATE_INTERVAL
         ) {
-          const grade = globalStore.state.globalTypeUser;
+          const grade = globalStore.state.globalTypeUserValue;
           if (grade) await subscriptionStore.getCurrentSub(grade);
         }
       }
@@ -44,7 +44,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       if (status.value === 'authenticated') {
         if (to.path.includes('/ekht-admin')) {
           if (!query.globalType) {
-            query.globalType = globalStore.state.globalType.toString();
+            query.globalType = globalStore.state.globalTypeValue.toString();
             return navigateTo({
               path: to.path,
               query,
@@ -52,7 +52,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
             });
           } else {
             globalStore.patchState({
-              globalType: query.globalType as unknown as GlobalTypes,
+              globalTypeValue: query.globalType as unknown as GlobalTypes,
             });
           }
         }
@@ -61,15 +61,17 @@ export default defineNuxtRouteMiddleware(async (to) => {
           to.path.includes('/user-panel') &&
           !to.path.includes('/ekht-admin')
         ) {
-          if (!query.globalTypeUser && globalStore.state.globalTypeUser) {
-            query.globalTypeUser = globalStore.state.globalTypeUser.toString();
+          if (!query.globalTypeUser && globalStore.state.globalTypeUserValue) {
+            query.globalTypeUser =
+              globalStore.state.globalTypeUserValue.toString();
             return navigateTo({
               path: to.path,
               query,
             });
           } else {
             globalStore.patchState({
-              globalTypeUser: query.globalTypeUser as unknown as GlobalTypes,
+              globalTypeUserValue:
+                query.globalTypeUser as unknown as GlobalTypes,
             });
           }
         }

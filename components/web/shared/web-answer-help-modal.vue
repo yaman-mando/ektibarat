@@ -6,8 +6,9 @@
     class="a-wc-m"
     :modal="true"
     :showHeader="false"
-    :closable="false"
-    :dismissableMask="false"
+    :closable="true"
+    :dismissableMask="true"
+    :closeOnEscape="true"
     @hide="closedModal"
   >
     <div class="ac-qm bg-green-8c px-3 py-3 flex gap-3 text-white items-center">

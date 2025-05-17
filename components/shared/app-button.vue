@@ -64,8 +64,9 @@ withDefaults(
   align-items: center;
   justify-content: center;
   gap: 5px;
-  height: 60px;
-  width: 155px;
+  height: 48px;
+  min-width: 155px;
+  width: fit-content;
   border-radius: 10px;
   border: 2px solid var(--color) !important;
   padding: 1px 6px;

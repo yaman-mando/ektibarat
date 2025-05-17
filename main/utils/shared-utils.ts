@@ -147,3 +147,23 @@ export const getKeyWords = () => {
 
   return keyList;
 };
+
+export const getStoredCatArray = (isTahsele = false) => {
+  const STORAGE_KEY = isTahsele ? 'selectedCatTahseleArr' : 'selectedCatArr';
+  const item = localStorage.getItem(STORAGE_KEY);
+  if (!item) {
+    return null;
+  }
+  const storedArray = JSON.parse(item);
+
+  if (!storedArray || storedArray.length === 0) {
+    return null;
+  }
+
+  return storedArray;
+};
+
+export const setStoredCatArray = (array, isTahsele = false) => {
+  const STORAGE_KEY = isTahsele ? 'selectedCatTahseleArr' : 'selectedCatArr';
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(array));
+};

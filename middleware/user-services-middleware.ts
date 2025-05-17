@@ -5,6 +5,7 @@ import { ServiceTypesEnum } from '~/main/constants/service-types.enum';
 import { webPricesPathUtil } from '~/main/utils/web-routes.utils';
 import type { UserServicesStateUi } from '~/main/modules/subscriptions/data-access/subscriptions.model';
 import { useGlobalStore } from '~/main/useGlobalStore';
+import { GlobalTypes } from '~/main/constants/global-types';
 
 export default defineNuxtRouteMiddleware(async (_to, _from) => {
   const auth = useAuth();
@@ -14,34 +15,32 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
 
   try {
     if (!!user && user.role !== UserRoles.mediaManager) {
-      if (globalStore.state.globalTypeUser) {
-        const res = await subscriptionsStore.getCurrentSub(
-          globalStore.state.globalTypeUser
-        );
-        // Optional mock:
-        // const res = {
-        //   id: '123',
-        //   endDate: new Date().toISOString(),
-        //   title: 'test',
-        //   subscriptionsServices: [],
-        // }
+      const res = await subscriptionsStore.getCurrentSub(
+        globalStore.state.globalTypeUserValue ?? GlobalTypes.kudrat
+      );
+      // Optional mock:
+      // const res = {
+      //   id: '123',
+      //   endDate: new Date().toISOString(),
+      //   title: 'test',
+      //   subscriptionsServices: [],
+      // }
 
-        const allServices = Object.values(ServiceTypesEnum);
-        const userServices = res.subscriptionsServices.map(
-          (item) => item.serviceName
-        );
+      const allServices = Object.values(ServiceTypesEnum);
+      const userServices = res.subscriptionsServices.map(
+        (item) => item.serviceName
+      );
 
-        const services = allServices.reduce((acc, service) => {
-          acc[service as ServiceTypesEnum] = {
-            isActive: userServices.includes(service),
-          };
-          return acc;
-        }, {} as UserServicesStateUi);
+      const services = allServices.reduce((acc, service) => {
+        acc[service as ServiceTypesEnum] = {
+          isActive: userServices.includes(service),
+        };
+        return acc;
+      }, {} as UserServicesStateUi);
 
-        // services.SHOWSOLVESOLUATION.isActive = false;
-        // services.HELPINPRACTICE.isActive = false;
-        subscriptionsStore.patchState({ userServicesState: services });
-      }
+      // services.SHOWSOLVESOLUATION.isActive = false;
+      // services.HELPINPRACTICE.isActive = false;
+      subscriptionsStore.patchState({ userServicesState: services });
     }
   } catch (_e: unknown) {
     return navigateTo(webPricesPathUtil(), { replace: true });

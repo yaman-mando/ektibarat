@@ -17,6 +17,11 @@ export default {
         item.path = path;
       }
 
+      //exam-questions
+      if (item.path.includes('exam-questions/:id')) {
+        item.path = '/exam-questions/:id()/:title()?';
+      }
+
       return item;
     });
   },

@@ -221,7 +221,7 @@ export default {
     const windowSize = useWindowSize();
     const subscriptionsStore = useSubscriptionsStore();
     const userCurrentSub = computed(
-      () => subscriptionsStore.state.userCurrentSub!
+      () => subscriptionsStore.state.userCurrentSubVal!
     );
     const examDetail = ref<StudentsExamDataModel | null>(null);
 

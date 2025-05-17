@@ -1,5 +1,4 @@
 import { createStore } from 'vuex';
-import { GlobalTypes } from '~/main/constants/global-types';
 import { deepCloneUtil } from '~/main/utils/lodash.utils';
 import { QUESTION_ANIMATE_DEFAULT_CONFIG } from '~/main/utils/question-animate.utils';
 import { subsVuexStore, type VuexSubsState } from '~/store/subs-vuex.store';
@@ -11,6 +10,7 @@ import {
   adminVuexStore,
   type VuexAdminState,
 } from '~/store/admin/admin-vuex.store';
+import type { StudentsExamQuestionDataModel } from '~/main/modules/students-exam/data-access/models/students-exam-question.model';
 
 const fetching = {
   currentUserSub: false,
@@ -18,7 +18,9 @@ const fetching = {
 
 export type VuexRootState = {
   userServicesState?: never;
-  userCurrentSub?: never;
+  globalType?: never;
+  globalTypeUser?: never;
+  layoutStatic?: never;
   //
   tr: any | null;
   appStatic: any | null;
@@ -39,7 +41,6 @@ export type VuexRootState = {
   subscriptionsStatic: any | null;
   lastMessages: any[];
   chatStatic: any | null;
-  layoutStatic: any | null;
   refreshInterval: any | null;
   chatRooms: any[];
   chatRoomsList: any[];
@@ -50,8 +51,6 @@ export type VuexRootState = {
   };
   showBlockModal: boolean;
   registrationMethod: string | null;
-  globalType: GlobalTypes;
-  globalTypeUser: GlobalTypes;
   showSeoAdModalStart: any | null;
   lastUserSubUpdate: number;
   loadedCss: string[];
@@ -72,7 +71,7 @@ export const vuexStore = createStore<VuexRootState>({
       defaultActiveExam: 1,
       isSchool: null,
       demoDays: 0,
-      examQuestion: null,
+      examQuestion: null as StudentsExamQuestionDataModel | null,
       hasMainHub: false,
       hasChatHub: false,
       hubIsLoading: false,
@@ -86,7 +85,6 @@ export const vuexStore = createStore<VuexRootState>({
       subscriptionsStatic: null,
       lastMessages: [],
       chatStatic: null,
-      layoutStatic: null,
       refreshInterval: null,
       chatRooms: [],
       chatRoomsList: [],
@@ -96,8 +94,6 @@ export const vuexStore = createStore<VuexRootState>({
       },
       showBlockModal: false,
       registrationMethod: null,
-      globalType: GlobalTypes.kudrat,
-      globalTypeUser: GlobalTypes.kudrat,
       showSeoAdModalStart: null,
       lastUserSubUpdate: 0,
       loadedCss: [],
@@ -105,7 +101,7 @@ export const vuexStore = createStore<VuexRootState>({
     };
   },
   mutations: {
-    SET_APP_STATIC(state, payload) {
+    SET_APP_STATIC(state: VuexRootState, payload) {
       state.appStatic = payload;
     },
     SET_ACTIVE_EXAM_TYPE(state, payload) {
@@ -156,9 +152,6 @@ export const vuexStore = createStore<VuexRootState>({
     SET_CHAT_PANEL(state, payload) {
       state.chatStatic = payload;
     },
-    SET_LAYOUT_STATIC(state, payload) {
-      state.layoutStatic = payload;
-    },
     SET_REFRESH_INTERVAL(state, payload) {
       state.refreshInterval = payload;
     },
@@ -196,12 +189,6 @@ export const vuexStore = createStore<VuexRootState>({
     SET_REGISTRATION_METHOD(state, payload) {
       state.registrationMethod = payload;
     },
-    SET_GLOBAL_TYPE(state, payload) {
-      state.globalType = payload;
-    },
-    SET_GLOBAL_TYPE_USER(state, payload) {
-      state.globalTypeUser = payload;
-    },
     SET_SEO_AD_MODAL_TEMP_START(state, payload) {
       state.showSeoAdModalStart = payload;
     },
@@ -224,9 +211,9 @@ export const vuexStore = createStore<VuexRootState>({
       try {
         const { $axios } = useNuxtApp();
 
-        const response = await $axios.get(`/questions/${id}/public`);
-        commit('SET_EXAM_QUESTION', response);
-        return response;
+        const { data } = await $axios.get(`/questions/${id}/public`);
+        commit('SET_EXAM_QUESTION', data);
+        return data;
       } catch (e) {
         console.log(e);
         throw e;
@@ -242,11 +229,11 @@ export const vuexStore = createStore<VuexRootState>({
       try {
         const { $axios } = useNuxtApp();
 
-        const response = await $axios.get(
+        const { data } = await $axios.get(
           `/questions/${id}/similarSeoQuestionsIds`
         );
-        commit('SET_SIMILAR_QUESTIONS', response.data);
-        return response;
+        commit('SET_SIMILAR_QUESTIONS', data);
+        return data;
       } catch (e) {
         console.error('❌ [getSimilarQuestion] خطأ أثناء جلب البيانات:', e);
         return null;
@@ -339,17 +326,6 @@ export const vuexStore = createStore<VuexRootState>({
         ).default;
         commit('SET_SUBSCRIPTIONS_PANEL', JsonSubscriptions);
         return JsonSubscriptions;
-      } catch (e) {
-        console.log(e);
-      }
-    },
-
-    async getLayoutStatic({ commit, state }) {
-      try {
-        const JsonLayout = (await import('@/main/constants/json/layout.json'))
-          .default;
-        commit('SET_LAYOUT_STATIC', JsonLayout);
-        return JsonLayout;
       } catch (e) {
         console.log(e);
       }

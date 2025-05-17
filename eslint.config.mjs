@@ -10,6 +10,27 @@ export default withNuxt(
         'no-restricted-syntax': [
           'error',
           {
+            selector:
+              "MemberExpression[object.property.name='state'][property.name='userCurrentSub']",
+            message:
+              'Do not use userCurrentSub from $store.state. Use useSubscriptionsStore().',
+          },
+          {
+            selector:
+              "CallExpression[callee.property.name='commit'] Literal[value='SET_GLOBAL_TYPE_USER']",
+            message: "Usage of 'SET_GLOBAL_TYPE_USER' commit is forbidden.",
+          },
+          {
+            selector:
+              "CallExpression[callee.property.name='commit'] Literal[value='SET_GLOBAL_TYPE']",
+            message: "Usage of 'SET_GLOBAL_TYPE' commit is forbidden.",
+          },
+          {
+            selector:
+              "CallExpression[callee.property.name='dispatch'] Literal[value='getUserCurrentSub']",
+            message: 'Usage forbidden',
+          },
+          {
             selector: 'CallExpression[callee.name="$t"]', // Blocks $t()
             message:
               'Do not use $t() directly. Use the `useI18n()` composable instead.',
@@ -29,9 +50,18 @@ export default withNuxt(
           },
           {
             object: 'state',
-            property: 'userCurrentSub',
-            message:
-              'Do not use state.userCurrentSub. Use useSubscriptionsStore instead.',
+            property: 'globalType',
+            message: '',
+          },
+          {
+            object: 'state',
+            property: 'globalTypeUser',
+            message: '',
+          },
+          {
+            object: 'state',
+            property: 'layoutStatic',
+            message: '',
           },
           {
             object: 'process',

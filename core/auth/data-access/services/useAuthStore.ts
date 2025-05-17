@@ -61,7 +61,7 @@ export const useAuthStore = defineStore('auth-store', () => {
       return adminRootPathUtil();
     }
 
-    return globalStore.state.globalTypeUser
+    return globalStore.state.globalTypeUserValue
       ? webUserPanelTraining()
       : webGeneralSelectionPathUtil();
   };

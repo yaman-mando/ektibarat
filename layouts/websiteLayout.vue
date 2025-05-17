@@ -221,9 +221,9 @@ watch(
     if (
       isLoggedIn.value &&
       newVal &&
-      globalStore.state.globalTypeUser !== Number(newVal)
+      globalStore.state.globalTypeUserValue !== Number(newVal)
     ) {
-      globalStore.patchState({ globalTypeUser: Number(newVal) });
+      globalStore.patchState({ globalTypeUserValue: Number(newVal) });
     }
   },
   { immediate: true }

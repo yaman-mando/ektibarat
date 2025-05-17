@@ -184,12 +184,12 @@
           </template>
           <template v-if="showTopAction">
             <div class="seo-title">
-              <button
-                class="outline-btn"
+              <app-button
+                variant="outline"
+                colorType="success"
+                label="طريقة الحل"
                 @click.stop="openAnswerHelpModal"
-              >
-                طريقة الحل
-              </button>
+              />
               <client-only>
                 <div
                   style="cursor: pointer"
@@ -540,7 +540,7 @@ export default {
     isAnimation: Boolean,
     isQuestionToday: Boolean,
     questionNumber: Number,
-    counterValue: Number,
+    counterValue: Number as PropType<number | null>,
     hideCounter: Boolean,
     question: {
       type: Object as () => StudentsExamQuestionDataModel,
