@@ -7,6 +7,7 @@ import type tahselJson from '~/main/constants/json/tahsel.json';
 import type contactUsJson from '~/main/constants/json/contact-us.json';
 import type localesJson from '~/main/constants/json/locales.json';
 import type staticJson from '~/main/constants/json/static.json';
+import type partnerShipConditionsJson from '~/main/constants/json/partnership-conditions.json';
 
 export type LayoutStaticDataModel = typeof layoutJson;
 export type HomeJsonDataModel = typeof homeJson;
@@ -21,3 +22,5 @@ export type TahselJsonDataModel = typeof tahselJson & {
 };
 export type LocalesJsonDataModel = typeof localesJson;
 export type StaticJsonDataModel = typeof staticJson;
+export type PartnerShipConditionsJsonDataModel =
+  typeof partnerShipConditionsJson;

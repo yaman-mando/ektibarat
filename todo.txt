@@ -1,4 +1,5 @@
-async setup()
+//pages
+join-us > deleted
 
 //check
 ~assets
