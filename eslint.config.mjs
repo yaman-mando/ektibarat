@@ -11,6 +11,12 @@ export default withNuxt(
           'error',
           {
             selector:
+              'ExportDefaultDeclaration > ObjectExpression > Property[key.name="setup"][value.async=true]',
+            message:
+              'Do not use async setup(). Use regular setup() and composables instead.',
+          },
+          {
+            selector:
               "MemberExpression[object.property.name='state'][property.name='userCurrentSub']",
             message:
               'Do not use userCurrentSub from $store.state. Use useSubscriptionsStore().',

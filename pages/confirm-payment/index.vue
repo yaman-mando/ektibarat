@@ -122,7 +122,7 @@ import { GlobalTypes } from '~/main/constants/global-types';
 import { webErrorPathUtil } from '~/main/utils/web-routes.utils';
 
 export default {
-  async setup() {
+  setup() {
     const setupAuth = useSetupAuth();
     const setupRoute = useSetupRoute();
     const runtimeConfig = useRuntimeConfig();

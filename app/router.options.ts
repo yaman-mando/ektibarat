@@ -22,6 +22,11 @@ export default {
         item.path = '/exam-questions/:id()/:title()?';
       }
 
+      //exam-info
+      if (item.path.includes('exam-info/:id')) {
+        item.path = '/exam-info/:id()/:title()?';
+      }
+
       return item;
     });
   },
