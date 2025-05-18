@@ -1,4 +1,4 @@
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 const sizes = {
   sm: 800,
@@ -26,20 +26,20 @@ export function useWindowSize() {
     }
   });
 
-  const isXlWindow = computed(
-    () => windowWidth.value !== null && windowWidth.value >= sizes.xlStart
-  );
-  const isMobileSize = computed(
-    () => windowWidth.value !== null && windowWidth.value <= sizes.mobileEnd
-  );
-  const isSmSize = computed(
-    () => windowWidth.value !== null && windowWidth.value <= sizes.sm
-  );
+  const state = reactive({
+    get windowWidth() {
+      return windowWidth.value;
+    },
+    get isXlWindow() {
+      return windowWidth.value !== null && windowWidth.value >= sizes.xlStart;
+    },
+    get isMobileSize() {
+      return windowWidth.value !== null && windowWidth.value <= sizes.mobileEnd;
+    },
+    get isSmSize() {
+      return windowWidth.value !== null && windowWidth.value <= sizes.sm;
+    },
+  });
 
-  return {
-    windowWidth,
-    isXlWindow,
-    isMobileSize,
-    isSmSize,
-  };
+  return state;
 }

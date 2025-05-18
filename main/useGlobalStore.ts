@@ -9,6 +9,7 @@ import type {
   LayoutStaticDataModel,
   LocalesJsonDataModel,
   PartnerShipConditionsJsonDataModel,
+  PartnerShipJsonDataModel,
   StaticJsonDataModel,
   TahselJsonDataModel,
 } from '~/main/modules/shared/models/static-json-files.model';
@@ -35,6 +36,7 @@ type StaticStateType = {
   locales: LocalesJsonDataModel | null;
   static: StaticJsonDataModel | null;
   partnerShipConditionsJson: PartnerShipConditionsJsonDataModel | null;
+  partnerShipJson: PartnerShipJsonDataModel | null;
 };
 
 export const useGlobalStore = defineStore('global', () => {
@@ -69,6 +71,7 @@ export const useGlobalStore = defineStore('global', () => {
     locales: null,
     static: null,
     partnerShipConditionsJson: null,
+    partnerShipJson: null,
   });
 
   const patchStateUtil = createPatchState(state);
@@ -156,6 +159,13 @@ export const useGlobalStore = defineStore('global', () => {
     return res as PartnerShipConditionsJsonDataModel;
   };
 
+  const getPartnerShipJsonStatic = async () => {
+    const res = (await import('~/main/constants/json/partnerships.json'))
+      .default;
+    patchStaticState({ partnerShipJson: res });
+    return res as PartnerShipJsonDataModel;
+  };
+
   const getUserCountry = async () => {
     const CACHE_DURATION = 60 * 60 * 1000;
 
@@ -205,5 +215,6 @@ export const useGlobalStore = defineStore('global', () => {
     getLocalesJsonStatic,
     getStaticJsonStatic,
     getPartnerShipConditionsJsonStatic,
+    getPartnerShipJsonStatic,
   };
 });

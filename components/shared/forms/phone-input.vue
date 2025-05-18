@@ -196,6 +196,10 @@ watch(
     validatePhone();
   }
 );
+
+defineExpose({
+  validatePhone,
+});
 </script>
 <style lang="scss">
 .phone-input {

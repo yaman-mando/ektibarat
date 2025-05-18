@@ -39,7 +39,9 @@
               <nuxt-link :to="webContactUsPathUtil()">
                 <li>اتصل بنا</li>
               </nuxt-link>
-              <li @click="toPath('/partnerships')">كن شريكاً</li>
+              <nuxt-link :to="webPartnerShipsPathUtil()">
+                <li>كن شريكاً</li>
+              </nuxt-link>
             </ul>
           </div>
           <div class="l-part">
@@ -180,7 +182,9 @@
               <nuxt-link :to="webContactUsPathUtil()">
                 <li>اتصل بنا</li>
               </nuxt-link>
-              <li @click="toPath('/partnerships')">كن شريكاً</li>
+              <nuxt-link :to="webPartnerShipsPathUtil()">
+                <li>كن شريكاً</li>
+              </nuxt-link>
             </ul>
             <span class="copy-right">{{ staticData.copyRight }}</span>
           </div>
@@ -196,6 +200,7 @@ import {
   webAboutUsPathUtil,
   webConditionsPathUtil,
   webContactUsPathUtil,
+  webPartnerShipsPathUtil,
 } from '~/main/utils/web-routes.utils'; //composable
 
 //composable

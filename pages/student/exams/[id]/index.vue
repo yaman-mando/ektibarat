@@ -133,9 +133,7 @@
           <web-train-question-warn-modal
             ref="questionWarnModalRef"
             :refTo="$refs.examBottomActionRef"
-            :refX="
-              windowSize.isMobileSize.value ? null : $refs.examPartQuestionRef
-            "
+            :refX="windowSize.isMobileSize ? null : $refs.examPartQuestionRef"
           />
           <web-warn-modal
             ref="warnModal"

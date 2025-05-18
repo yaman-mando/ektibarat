@@ -42,7 +42,7 @@ withDefaults(
     suffixLabel?: string;
     colorType?: 'primary' | 'success' | 'warn' | 'warn-light' | 'blue';
     variant?: 'flat' | 'outline' | 'clear';
-    size?: 'sm' | 'md' | string;
+    size?: 'sm' | 'md' | 'lg' | string;
     isAnalytics?: boolean;
     rounded?: boolean;
   }>(),
@@ -145,13 +145,27 @@ withDefaults(
   }
 
   &.size-md {
+    width: fit-content;
     height: 40px;
-    width: 120px;
+    min-width: 120px;
     .app-button-label {
       font-size: 14px;
     }
     .app-button-icon {
       font-size: 12px;
+    }
+  }
+
+  &.size-lg {
+    width: fit-content;
+    height: 60px;
+    min-width: 250px;
+    .app-button-label {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .app-button-icon {
+      font-size: 14px;
     }
   }
 

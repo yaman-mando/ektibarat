@@ -1,9 +1,9 @@
 <template>
   <div
     class="tp-status w-full"
-    :class="[{ 'is-mobile': windowSize.isMobileSize.value }]"
+    :class="[{ 'is-mobile': windowSize.isMobileSize }]"
   >
-    <template v-if="windowSize.isMobileSize.value">
+    <template v-if="windowSize.isMobileSize">
       <div class="ex-mm">
         <client-only>
           <lazy-app-popover-wrapper triggerEvent="click">
@@ -312,7 +312,7 @@ function setPoint(totalPoints: number | null, plusPoints: number | null) {
     onPlusPointChange();
   }
 
-  if (windowSize.isMobileSize.value) {
+  if (windowSize.isMobileSize) {
     totalPointsCountLocal.value = totalPoints;
   }
 }

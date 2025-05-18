@@ -46,7 +46,7 @@
                 @click="exitPage"
               />
               <lazy-app-train-part-answers-status
-                v-if="windowSize.isMobileSize.value && !!activePartModel"
+                v-if="windowSize.isMobileSize && !!activePartModel"
                 ref="answer_status_ref"
                 class="w-mobile-only"
                 :isMobile="true"
@@ -114,7 +114,7 @@
                 />
               </div>
               <lazy-app-train-part-answers-status
-                v-if="!windowSize.isMobileSize.value && !!activePartModel"
+                v-if="!windowSize.isMobileSize && !!activePartModel"
                 ref="answer_status_ref"
                 class="w-web-up-only"
                 :canRemoveAnswer="canRemoveAnswerModel"
@@ -193,13 +193,11 @@
             <lazy-web-train-question-warn-modal
               ref="questionWarnModalRef"
               :refTo="
-                windowSize.isMobileSize.value
+                windowSize.isMobileSize
                   ? $refs['trainPartMobileRef']
                   : $refs['trainPartWebRef']
               "
-              :refX="
-                windowSize.isMobileSize.value ? null : $refs.examPartQuestionRef
-              "
+              :refX="windowSize.isMobileSize ? null : $refs.examPartQuestionRef"
             />
             <lazy-web-warn-modal
               ref="warnModalRef"

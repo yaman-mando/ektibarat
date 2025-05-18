@@ -1,91 +1,95 @@
 <template>
   <client-only>
-    <field
-      v-slot="vSlot"
-      :name="inputId"
-      slim
-      :rules="rules"
-    >
-      <div
-        class="a-form-select"
-        tabindex="-1"
-        :class="[
-          { 'is-single': !isMulti },
-          { 'has-error': vSlot.meta.touched && !vSlot.meta.valid },
-        ]"
+    <lazy-vee-validate-provider>
+      <field
+        v-slot="vSlot"
+        v-model="value"
+        :name="inputId"
+        slim
+        :rules="rules"
       >
-        <app-overlay v-if="isLoading" />
-        <span class="a-form-select-label">{{ label }}</span>
-        <component
-          :is="treeSelectInstance"
-          ref="treeSelect"
-          v-model="value"
-          :defaultExpandLevel="defaultExpandLevel"
-          openDirection="bottom"
-          :disabled="isDisabled"
-          :multiple="isMulti"
-          :options="list"
-          :flat="isMulti"
-          :placeholder="placeholder"
-          :searchable="true"
-          :sortValueBy="'LEVEL'"
-          noChildrenText="لايوجد عناصر اخرى"
-          noOptionsText="لايوجد عناصر"
-          noResultsText="لم يتم العثور على نتيجة"
-          @close="vSlot.handleBlur"
+        <div
+          class="a-form-select"
+          tabindex="-1"
+          :class="[
+            { 'is-single': !isMulti },
+            { 'has-error': vSlot.meta.touched && !vSlot.meta.valid },
+          ]"
         >
-          <template
-            v-if="withImage"
-            #value-label="{ node }"
+          <app-overlay v-if="isLoading" />
+          <span class="a-form-select-label">{{ label }}</span>
+          <component
+            :is="treeSelectInstance"
+            :id="inputId"
+            ref="tree_select"
+            v-model="value"
+            :defaultExpandLevel="defaultExpandLevel"
+            openDirection="bottom"
+            :disabled="isDisabled"
+            :multiple="isMulti"
+            :options="list"
+            :flat="isMulti"
+            :placeholder="placeholder"
+            :searchable="true"
+            :sortValueBy="'LEVEL'"
+            noChildrenText="لايوجد عناصر اخرى"
+            noOptionsText="لايوجد عناصر"
+            noResultsText="لم يتم العثور على نتيجة"
+            @close="onClose(vSlot)"
           >
-            <app-popover-wrapper triggerEvent="hover">
-              <template #trigger="{ bindTrigger }">
-                <span
-                  v-bind="bindTrigger"
-                  :id="`item-img-${node.raw.id}`"
-                  @mouseenter="selectedItem = node.raw.id"
-                ></span>
-              </template>
-              <template #content>
-                <div class="p-inner">
-                  <custom-image
-                    :folderName="ImagesFolderName.laws"
-                    :url="node.raw.pictureUrl"
-                    :size="ImageSize.sd"
-                    :ext="ImageExt.webp"
-                    width="400"
-                    height="auto"
-                  />
-                </div>
-              </template>
-            </app-popover-wrapper>
-          </template>
-          <template
-            v-else
-            #value-label="{ node }"
-          >
-            <span>
-              <slot
-                name="innerLabel"
-                :node="node"
-              >
-                {{ node.raw.label }}
-              </slot>
-            </span>
-          </template>
-        </component>
-        <input
-          v-bind="vSlot.field"
-          type="text"
-          hidden
-        />
-        <form-error :errors="vSlot.errors" />
-      </div>
-    </field>
+            <template
+              v-if="withImage"
+              #value-label="{ node }"
+            >
+              <app-popover-wrapper triggerEvent="hover">
+                <template #trigger="{ bindTrigger }">
+                  <span
+                    v-bind="bindTrigger"
+                    :id="`item-img-${node.raw.id}`"
+                    @mouseenter="selectedItem = node.raw.id"
+                  ></span>
+                </template>
+                <template #content>
+                  <div class="p-inner">
+                    <custom-image
+                      :folderName="ImagesFolderName.laws"
+                      :url="node.raw.pictureUrl"
+                      :size="ImageSize.sd"
+                      :ext="ImageExt.webp"
+                      width="400"
+                      height="auto"
+                    />
+                  </div>
+                </template>
+              </app-popover-wrapper>
+            </template>
+            <template
+              v-else
+              #value-label="{ node }"
+            >
+              <span>
+                <slot
+                  name="innerLabel"
+                  :node="node"
+                >
+                  {{ node.raw.label }}
+                </slot>
+              </span>
+            </template>
+          </component>
+          <input
+            v-model="value"
+            type="text"
+            hidden
+          />
+          <form-error :errors="vSlot.errors" />
+        </div>
+      </field>
+    </lazy-vee-validate-provider>
   </client-only>
 </template>
 <script lang="ts">
-import { Field } from 'vee-validate';
+import { Field, type FieldSlotProps } from 'vee-validate';
 import { pictureTypes } from '~/main/constants/picture-types';
 import { ImagesFolderName } from '~/main/constants/images-folder-name';
 import { ImageSize } from '~/main/constants/image-size';
@@ -137,7 +141,8 @@ export default {
   },
   emits: ['update:selectedValues'],
   setup() {
-    // const treeSelectInstance = ref<any | null>(null);
+    const treeSelectRef =
+      useTemplateRef<Partial<{ clear: () => void }>>('tree_select');
 
     const treeSelectInstance = defineAsyncComponent(async () => {
       await import('vue3-treeselect/dist/vue3-treeselect.css');
@@ -148,11 +153,12 @@ export default {
       ImageSize,
       ImageExt,
       treeSelectInstance,
+      treeSelectRef,
     };
   },
   data() {
     return {
-      value: [],
+      value: [] as any | null,
       selectedItem: 0,
       pictureTypes,
     };
@@ -172,7 +178,12 @@ export default {
       deep: true,
       immediate: true,
       handler(newVal) {
-        this.value = newVal == undefined ? null : newVal;
+        if (newVal == undefined) {
+          this.value = null;
+          this.treeSelectRef?.clear?.();
+        } else {
+          this.value = newVal;
+        }
       },
     },
     value: {
@@ -180,6 +191,11 @@ export default {
       handler(newVal) {
         this.$emit('update:selectedValues', newVal);
       },
+    },
+  },
+  methods: {
+    onClose(vSlot: FieldSlotProps) {
+      vSlot.handleBlur();
     },
   },
 };
