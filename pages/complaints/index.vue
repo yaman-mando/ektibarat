@@ -2,7 +2,7 @@
   <div class="complaints">
     <lazy-vee-validate-provider>
       <div class="web-content-page">
-        <div class="a-part d-flex align-items-center justify-content-center">
+        <div class="a-part flex items-center justify-center">
           <div class="a-wrapper">
             <h1>الشكاوى</h1>
           </div>

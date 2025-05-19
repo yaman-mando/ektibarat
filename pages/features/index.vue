@@ -4,7 +4,7 @@
       <app-spinner />
     </template>
     <template v-else>
-      <div class="a-part d-flex align-items-center justify-content-center">
+      <div class="a-part flex items-center justify-center">
         <div class="a-wrapper">
           <h1>{{ pageTitle }}</h1>
         </div>
@@ -28,7 +28,7 @@
                 </div>
               </div>
               <div class="a-end">
-                <div class="d-flex flex-column">
+                <div class="flex flex-col">
                   <app-text-tooltip
                     triggerEvent="hover"
                     :text="item.title"

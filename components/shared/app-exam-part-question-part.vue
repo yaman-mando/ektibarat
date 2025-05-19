@@ -298,7 +298,7 @@
         >
           <div
             v-if="isAnimation || (withBg && !windowSize.isMobileSize)"
-            class="d-flex justify-content-center w-100 h-100 position-absolute"
+            class="flex justify-center w-100 h-100 absolute"
           >
             <nuxt-img
               width="auto"

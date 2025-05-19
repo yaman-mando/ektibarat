@@ -8,7 +8,7 @@
     :dismissableMask="true"
   >
     <i
-      class="fa fa-close close-icon d-flex align-items-center justify-content-center"
+      class="fa fa-close close-icon flex items-center justify-center"
       @click="closeModal"
     ></i>
     <div class="a-wrapper">
@@ -51,9 +51,7 @@
         </div>
         <!--      end photo video audio-->
       </div>
-      <div
-        class="a-end d-flex flex-column justify-content-start align-items-start"
-      >
+      <div class="a-end flex flex-col justify-center items-start">
         <span class="a-title">
           {{ isCorrect ? 'الاجابة صحيحة' : 'الاجابة خاطئة' }}
         </span>

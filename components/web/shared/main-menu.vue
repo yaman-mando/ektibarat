@@ -429,7 +429,7 @@
               </div>
             </div>
           </div>
-          <div class="pt-3 d-flex justify-center">
+          <div class="pt-3 flex justify-center">
             <custom-switch
               v-model:active="selectedGlobalType"
               :rightLabel="'قدرات'"

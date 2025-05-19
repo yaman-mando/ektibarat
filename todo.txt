@@ -1,5 +1,8 @@
 //pages
+
+//ignored
 join-us > deleted
+register-(school-teacher-student) pages > not needed
 
 //check
 ~assets

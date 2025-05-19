@@ -17,7 +17,7 @@
           </div>
           <!--      <div-->
           <!--        v-if="$isDev"-->
-          <!--        class="d-flex flex-column"-->
+          <!--        class="flex flex-col"-->
           <!--      >-->
           <!--        <span>exam : {{ examInterval.currentTime }}</span>-->
           <!--        <span v-if="examPartsInterval[activePartModel.id]">-->

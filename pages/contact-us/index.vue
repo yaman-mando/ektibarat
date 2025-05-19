@@ -4,9 +4,7 @@
     class="contact-us"
   >
     <div class="web-content-page">
-      <div
-        class="a-part d-flex align-items-center justify-content-center gap-4"
-      >
+      <div class="a-part flex items-center justify-center gap-4">
         <div class="a-wrapper">
           <h1>اتصل بنا</h1>
         </div>

@@ -3,6 +3,14 @@
 .web-content-page {
   background: #fff;
 
+  :deep(hr){
+    margin: 1rem 0;
+    color: inherit;
+    background-color: rgba(0,0,0,.1);
+    border: 0;
+    height: 1px;
+  }
+
   .a-part {
     background-image: url(/images/content-page-bg.webp);
     background-size: cover;
