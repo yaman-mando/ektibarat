@@ -31,7 +31,7 @@
 
           <div class="forget-password">
             <nuxt-link
-              to="/auth/forget-password"
+              :to="webAuthForgetPassword()"
               tabindex="6"
             >
               هل نسيت كلمة المرور؟
@@ -59,6 +59,7 @@ import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 import { authEvents } from '~/core/auth/data-access/services/useAuthEvents';
 import { useAuthState } from '#imports';
+import { webAuthForgetPassword } from '~/main/utils/web-routes.utils';
 
 export default {
   components: {
@@ -97,6 +98,7 @@ export default {
   },
 
   methods: {
+    webAuthForgetPassword,
     async sendForm() {
       try {
         const { valid } = await this.formRef!.validate();

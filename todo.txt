@@ -5,6 +5,7 @@ join-us > deleted
 register-(school-teacher-student) pages > not needed
 
 //check
+bootstrap classes
 ~assets
 $on
 $once

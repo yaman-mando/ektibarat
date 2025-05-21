@@ -76,5 +76,6 @@ export const useAuthStore = defineStore('auth-store', () => {
     loginOTP,
     loginLocal: auth.signIn,
     fetchUser: auth.getSession,
+    logout: auth.signOut,
   };
 });
