@@ -9,6 +9,7 @@ import type localesJson from '~/main/constants/json/locales.json';
 import type staticJson from '~/main/constants/json/static.json';
 import type partnerShipConditionsJson from '~/main/constants/json/partnership-conditions.json';
 import type partnerShipJson from '~/main/constants/json/partnerships.json';
+import type PricesJson from '~/main/constants/json/prices.json';
 
 export type LayoutStaticDataModel = typeof layoutJson;
 export type HomeJsonDataModel = typeof homeJson;
@@ -26,3 +27,4 @@ export type StaticJsonDataModel = typeof staticJson;
 export type PartnerShipConditionsJsonDataModel =
   typeof partnerShipConditionsJson;
 export type PartnerShipJsonDataModel = typeof partnerShipJson;
+export type PricesJsonDataModel = typeof PricesJson;

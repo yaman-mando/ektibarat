@@ -12,8 +12,8 @@ export const useImageUrl = () => {
     path: string | null,
     size: string | number | null = null,
     ext: string | null = null
-  ): string | null => {
-    if (!imageFolderName) return null;
+  ): string | undefined => {
+    if (!imageFolderName) return undefined;
     if (!path) return '/images/place-holder.webp';
 
     const folder = ImagesFolderName[imageFolderName];

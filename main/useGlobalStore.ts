@@ -10,6 +10,7 @@ import type {
   LocalesJsonDataModel,
   PartnerShipConditionsJsonDataModel,
   PartnerShipJsonDataModel,
+  PricesJsonDataModel,
   StaticJsonDataModel,
   TahselJsonDataModel,
 } from '~/main/modules/shared/models/static-json-files.model';
@@ -37,6 +38,7 @@ type StaticStateType = {
   static: StaticJsonDataModel | null;
   partnerShipConditionsJson: PartnerShipConditionsJsonDataModel | null;
   partnerShipJson: PartnerShipJsonDataModel | null;
+  prices: PricesJsonDataModel | null;
 };
 
 export const useGlobalStore = defineStore('global', () => {
@@ -72,6 +74,7 @@ export const useGlobalStore = defineStore('global', () => {
     static: null,
     partnerShipConditionsJson: null,
     partnerShipJson: null,
+    prices: null,
   });
 
   const patchStateUtil = createPatchState(state);
@@ -102,6 +105,7 @@ export const useGlobalStore = defineStore('global', () => {
   const getLayoutStatic = async () => {
     const res = (await import('~/main/constants/json/layout.json')).default;
     patchStaticState({ staticData: res });
+    return res as LayoutStaticDataModel;
   };
 
   const getHomeStatic = async () => {
@@ -166,6 +170,12 @@ export const useGlobalStore = defineStore('global', () => {
     return res as PartnerShipJsonDataModel;
   };
 
+  const getPricesJsonStatic = async () => {
+    const res = (await import('~/main/constants/json/prices.json')).default;
+    patchStaticState({ prices: res });
+    return res as PricesJsonDataModel;
+  };
+
   const getUserCountry = async () => {
     const CACHE_DURATION = 60 * 60 * 1000;
 
@@ -216,5 +226,6 @@ export const useGlobalStore = defineStore('global', () => {
     getStaticJsonStatic,
     getPartnerShipConditionsJsonStatic,
     getPartnerShipJsonStatic,
+    getPricesJsonStatic,
   };
 });

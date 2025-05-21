@@ -3,11 +3,20 @@
     ref="overlay_ref"
     class="app-overlay"
   >
-    <lazy-app-spinner />
+    <div class="app-overlay__wrapper">
+      <lazy-app-spinner />
+      <span v-if="msg">{{ msg }}</span>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+const props = withDefaults(
+  defineProps<{
+    msg?: string | null;
+  }>(),
+  { msg: null }
+);
 const overlayRef = useTemplateRef('overlay_ref');
 
 onMounted(() => {
@@ -33,5 +42,15 @@ onMounted(() => {
   align-items: center;
   z-index: 10;
   pointer-events: all;
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    span {
+      font-size: 18px;
+      font-weight: bold;
+    }
+  }
 }
 </style>
