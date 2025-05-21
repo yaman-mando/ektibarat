@@ -2,6 +2,8 @@
 
 //ignored
 join-us > deleted
+subscriptions > deleted
+tracks folder > deleted
 register-(school-teacher-student) pages > not needed
 
 //check
