@@ -167,3 +167,18 @@ export const setStoredCatArray = (array, isTahsele = false) => {
   const STORAGE_KEY = isTahsele ? 'selectedCatTahseleArr' : 'selectedCatArr';
   localStorage.setItem(STORAGE_KEY, JSON.stringify(array));
 };
+
+export const processText = (text) => {
+  if (!text || text == null) {
+    return 'لا يوجد';
+  }
+  return text;
+};
+
+export const toBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });

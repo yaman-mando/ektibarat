@@ -8,7 +8,7 @@
     :showHeader="false"
     @hide="closeModal"
   >
-    <div class="modal-contents">
+    <div class="wrap-contents">
       <div class="e-1">
         <i class="fa fa-warning"></i>
       </div>
@@ -66,7 +66,7 @@ const goToContact = () => {
     background: var(--bg-modal);
     border-radius: 13px;
 
-    .modal-contents {
+    .wrap-contents {
       .e-1 {
         display: flex;
         justify-content: center;

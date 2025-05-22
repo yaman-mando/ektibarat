@@ -681,76 +681,70 @@
 ::v-deep {
   #modal-edit-mail,
   #modal-edit-phone {
-    .modal-dialog {
-      width: 360px;
+    border-radius: 15px;
+    height: 430px;
+    width: 360px!important;
 
-      .modal-content {
-        border-radius: 15px;
-        height: 430px;
+    .code-part {
+      display: grid;
+      justify-content: center;
+      .t-1 {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--purple-8c);
+        text-align: center;
+      }
+      .t-2 {
+        margin-top: 35px;
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--gray-63);
+        text-align: center;
+      }
+      .t-3 {
+        margin-top: 6px;
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--purple-8c);
+        text-align: center;
+      }
+      .t-code-input {
+        margin-top: 30px;
+      }
+      .tries-limit {
+        font-size: 16px;
+        color: var(--gray-63);
+        opacity: 0.75;
+        position: absolute;
+        top: 300px;
+        left: 35px;
+      }
 
-        .modal-body {
-          .code-part {
-            display: grid;
-            justify-content: center;
-            .t-1 {
-              font-size: 24px;
-              font-weight: bold;
-              color: var(--purple-8c);
-              text-align: center;
-            }
-            .t-2 {
-              margin-top: 35px;
-              font-size: 16px;
-              font-weight: 500;
-              color: var(--gray-63);
-              text-align: center;
-            }
-            .t-3 {
-              margin-top: 6px;
-              font-size: 16px;
-              font-weight: 500;
-              color: var(--purple-8c);
-              text-align: center;
-            }
-            .t-code-input {
-              margin-top: 30px;
-            }
-            .tries-limit {
-              font-size: 16px;
-              color: var(--gray-63);
-              opacity: 0.75;
-              position: absolute;
-              top: 300px;
-              left: 35px;
-            }
-
-            .note-spam {
-              font-size: 16px;
-              color: var(--gray-63);
-              opacity: 0.75;
-              position: absolute;
-              top: 335px;
-              left: 25px;
-            }
-            .re-send {
-              position: absolute;
-              bottom: 20px;
-              right: calc(50% - 21px);
-              text-align: center;
-              font-size: 14px;
-              margin-top: 132px;
-              color: var(--purple-8c);
-              text-decoration-line: underline;
-              cursor: pointer;
-              &.disable {
-                opacity: 0.5;
-                pointer-events: none;
-              }
-            }
-          }
+      .note-spam {
+        font-size: 16px;
+        color: var(--gray-63);
+        opacity: 0.75;
+        position: absolute;
+        top: 335px;
+        left: 25px;
+      }
+      .re-send {
+        position: absolute;
+        bottom: 20px;
+        right: calc(50% - 21px);
+        text-align: center;
+        font-size: 14px;
+        margin-top: 132px;
+        color: var(--purple-8c);
+        text-decoration-line: underline;
+        cursor: pointer;
+        &.disable {
+          opacity: 0.5;
+          pointer-events: none;
         }
       }
     }
+
 
     .fa-close {
       position: absolute;

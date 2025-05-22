@@ -8,7 +8,7 @@
     :showHeader="false"
     @hide="hideModal"
   >
-    <div class="modal-contents">
+    <div class="main-contents">
       <i
         class="fa fa-close"
         @click="hideModal()"

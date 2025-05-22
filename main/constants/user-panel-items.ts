@@ -10,6 +10,7 @@ export const UserPanelItems = {
   'passed-training': 'passed-training',
   teachers: 9,
   teacherPanel: 10,
+  studentTraining: 11,
 } as const;
 
 export const UserPanelItemsRecord = Object.entries(UserPanelItems).reduce(
