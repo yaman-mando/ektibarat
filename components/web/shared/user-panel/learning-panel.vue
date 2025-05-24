@@ -568,7 +568,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import 'assets/scss/mixin';
+@import 'mixin';
 
 .learning-panel-part {
   display: grid;
@@ -1021,5 +1021,5 @@ export default {
 }
 </style>
 <style lang="scss">
-@import '@/assets/scss/lib/intro-lib';
+@import 'intro-lib';
 </style>
