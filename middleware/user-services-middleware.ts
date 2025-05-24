@@ -40,7 +40,7 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
 
       // services.SHOWSOLVESOLUATION.isActive = false;
       // services.HELPINPRACTICE.isActive = false;
-      subscriptionsStore.patchState({ userServicesState: services });
+      subscriptionsStore.patchState({ userServicesStateVal: services });
     }
   } catch (_e: unknown) {
     return navigateTo(webPricesPathUtil(), { replace: true });

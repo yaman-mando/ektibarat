@@ -2,15 +2,13 @@
   <lazy-prime-dialog
     id="cropper-modal"
     v-model:visible="isOpenModel"
-    :dismissableMask="false"
+    :modal="true"
+    :dismissableMask="true"
     class="cropper-modal"
     :showHeader="true"
+    :closable="true"
     @hide="close()"
   >
-    <i
-      class="fa fa-close close-btn"
-      @click="close()"
-    ></i>
     <cropper
       ref="cropper"
       class="cropper"
@@ -103,19 +101,17 @@ export default {
 };
 </script>
 <style lang="scss">
-#cropper-modal___BV_modal_outer_ {
+#cropper-modal {
   z-index: 1100 !important;
-  .modal-body {
-    position: relative;
-    .close-btn {
-      position: absolute;
-      cursor: pointer;
-      left: 3px;
-      top: 2px;
-      font-size: 20px;
-      font-weight: bold;
-      color: var(--purple-8c);
-    }
+  position: relative;
+  .close-btn {
+    position: absolute;
+    cursor: pointer;
+    left: 3px;
+    top: 2px;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--purple-8c);
   }
 
   .cropper {

@@ -2,7 +2,7 @@
   <lazy-vee-validate-provider>
     <field
       v-bind="attrs"
-      ref="fieldRef"
+      ref="field_ref"
       v-slot="{ errors, handleChange, handleBlur }"
       v-model="valueModel"
       :name="inputId"
@@ -85,6 +85,7 @@
 
 <script setup lang="ts">
 import { Field } from 'vee-validate';
+import { isStringUtil } from '~/main/utils/is-string.util';
 
 const attrs = useAttrs();
 
@@ -99,7 +100,7 @@ const props = withDefaults(
     inputId: string;
     inputType?: 'text' | 'password' | 'email' | 'number' | 'datetime-local';
     inputTabIndex?: number | string;
-    rules?: Record<string, unknown>;
+    rules?: Record<string, unknown> | string;
     isDisabled?: boolean;
     hasClear?: boolean;
     hideErrorLabel?: boolean;
@@ -132,9 +133,16 @@ const valueModel = computed({
   },
 });
 
+const fieldRef = useTemplateRef<InstanceType<typeof Field>>('field_ref');
+
 const isRequired = computed(() => {
-  if (props.rules) {
-    return 'required' in props.rules;
+  const rules = props.rules;
+  if (rules) {
+    if (isStringUtil(rules)) {
+      return rules.includes('required');
+    } else {
+      return 'required' in rules;
+    }
   }
   return false;
 });
@@ -148,6 +156,10 @@ const inputTypeModel = computed(() =>
 const togglePassword = () => {
   visiblePassword.value = !visiblePassword.value;
 };
+
+defineExpose({
+  fieldRef,
+});
 </script>
 
 <style lang="scss" scoped>

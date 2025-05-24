@@ -247,23 +247,21 @@ const closeModal = () => {
     background: transparent;
     border: none;
 
-    .modal-body {
-      margin: auto;
+    margin: auto;
 
-      iframe {
-        width: calc(100vw - 2em);
-        aspect-ratio: 16 / 9.5;
-        max-height: calc(100vh - 3em);
-        max-width: calc(100vw - 2em);
-        @media (min-width: 1430px) {
-          width: calc(100vw - 36em);
-          max-height: calc(100vh - 6em);
-        }
+    iframe {
+      width: calc(100vw - 2em);
+      aspect-ratio: 16 / 9.5;
+      max-height: calc(100vh - 3em);
+      max-width: calc(100vw - 2em);
+      @media (min-width: 1430px) {
+        width: calc(100vw - 36em);
+        max-height: calc(100vh - 6em);
       }
+    }
 
-      @include mobile-down() {
-        padding: 0;
-      }
+    @include mobile-down() {
+      padding: 0;
     }
   }
 }

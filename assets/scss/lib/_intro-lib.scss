@@ -1,0 +1,82 @@
+@import 'intro.js/introjs';
+@import 'intro.js/introjs-rtl';
+@import 'assets/scss/mixin';
+
+html:has(.introjs-overlay) {
+  height: auto !important;
+
+  .website-layout {
+    @include web-mobile-only() {
+      zoom: 1;
+    }
+  }
+
+  .chat-btn {
+    display: none !important;
+  }
+}
+
+.introjs-tooltip {
+  border-radius: 15px;
+
+  &.no-close {
+    .introjs-skipbutton {
+      display: none !important;
+    }
+  }
+
+  .introjs-skipbutton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inset-inline-end: 5px;
+    top: 5px;
+    width: 20px;
+    height: 20px;
+    color: var(--purple-8c);
+  }
+
+  .introjs-tooltiptext {
+    font-size: 12px;
+    @include web-desktop-up() {
+      font-size: 16px;
+    }
+  }
+
+  .introjs-tooltip-title {
+    text-align: center;
+    font-size: 12px;
+    color: var(--purple-8c);
+    @include web-desktop-up() {
+      font-size: 16px;
+    }
+  }
+
+  .introjs-button {
+    background-color: var(--purple-8c);
+    //font-weight: bold;
+    color: #fff;
+    will-change: transform;
+    &.introjs-disabled {
+      opacity: 0.4;
+    }
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}
+
+.introjs-tooltiptext {
+  font-family: var(--web-font);
+}
+
+.introjs-tooltipbuttons {
+  a {
+    font-family: var(--web-font);
+  }
+}
+
+.introjs-helperLayer {
+  box-shadow: rgba(33, 33, 33, 0.8) 0px 0px 1px 2px,
+    rgb(33 33 33 / 70%) 0px 0px 0px 5000px !important;
+}

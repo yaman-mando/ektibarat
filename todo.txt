@@ -7,6 +7,10 @@ tracks folder > deleted
 register-(school-teacher-student) pages > not needed
 
 //check
+.modal-dialog
+.modal-content
+.modal-body
+watcher > start with '$store
 bootstrap classes
 ~assets
 $on
@@ -17,6 +21,7 @@ $router
 window.useNuxtApp().$router.push('/exam-questions/2a949b3f-c835-4b48-a606-7fb8ac278a9a')
 
 //components
+v-prime-tooltip
 em-switch > custom-switch
 mx-g-img > custom-image
 mx-img > app-image

@@ -257,7 +257,7 @@ const hasSomeLockedAction = computed(() => {
   );
 });
 const userServicesState = computed(() => {
-  return subscriptionsStore.state.userServicesState;
+  return subscriptionsStore.state.userServicesStateVal;
 });
 const questionPointsSettingModel = computed(() => {
   return props.questionPointsSetting;

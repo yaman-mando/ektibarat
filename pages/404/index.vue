@@ -496,12 +496,12 @@
       </svg>
 
       <p id="errorText">تعذر الوصول الى الصفحة ...</p>
-      <nuxt-link
+      <a
         id="errorLink"
-        to="/"
+        href="/"
       >
         الذهاب إلى الصفحة الرئيسية
-      </nuxt-link>
+      </a>
     </main>
   </div>
 </template>

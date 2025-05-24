@@ -10,6 +10,8 @@ import type staticJson from '~/main/constants/json/static.json';
 import type partnerShipConditionsJson from '~/main/constants/json/partnership-conditions.json';
 import type partnerShipJson from '~/main/constants/json/partnerships.json';
 import type PricesJson from '~/main/constants/json/prices.json';
+import type TrainingJson from '~/main/constants/json/trainings.json';
+import type File1Json from '~/main/constants/json/file1.json';
 
 export type LayoutStaticDataModel = typeof layoutJson;
 export type HomeJsonDataModel = typeof homeJson;
@@ -28,3 +30,5 @@ export type PartnerShipConditionsJsonDataModel =
   typeof partnerShipConditionsJson;
 export type PartnerShipJsonDataModel = typeof partnerShipJson;
 export type PricesJsonDataModel = typeof PricesJson;
+export type TrainingJsonDataModel = typeof TrainingJson;
+export type File1JsonDataModel = typeof File1Json;

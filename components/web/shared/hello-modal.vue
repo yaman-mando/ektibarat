@@ -129,10 +129,6 @@ defineExpose({
   max-width: 90vw;
 }
 .hello-modal-c {
-  .modal-body {
-    margin-bottom: 0 !important;
-  }
-
   .sbm-close-w {
     position: absolute;
     left: 0;

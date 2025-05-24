@@ -2,6 +2,7 @@
   <div
     ref="overlay_ref"
     class="app-overlay"
+    :class="[{ 'full-screen': fullScreen }]"
   >
     <div class="app-overlay__wrapper">
       <lazy-app-spinner />
@@ -14,8 +15,9 @@
 const props = withDefaults(
   defineProps<{
     msg?: string | null;
+    fullScreen?: boolean;
   }>(),
-  { msg: null }
+  { msg: null, fullScreen: false }
 );
 const overlayRef = useTemplateRef('overlay_ref');
 
@@ -42,6 +44,10 @@ onMounted(() => {
   align-items: center;
   z-index: 10;
   pointer-events: all;
+
+  &.full-screen {
+    position: fixed;
+  }
   &__wrapper {
     display: flex;
     align-items: center;

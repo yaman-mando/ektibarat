@@ -124,9 +124,6 @@ export default {
   width: 600px !important;
   max-width: 90vw;
   margin: auto;
-  .modal-body {
-    padding: 0;
-  }
 
   .ad-title {
     display: flex;

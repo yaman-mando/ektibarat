@@ -93,7 +93,7 @@ export default {
     return {
       staticLocales,
       userServicesState: computed(
-        () => subscriptionsStore.state.userServicesState
+        () => subscriptionsStore.state.userServicesStateVal
       ),
     };
   },

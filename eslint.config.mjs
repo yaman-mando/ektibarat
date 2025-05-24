@@ -9,6 +9,20 @@ export default withNuxt(
         //strict prop
         'no-restricted-syntax': [
           'error',
+          //start rule: prevent watcher for start with ('$store)
+          {
+            // Catches: '$store.state.x', '$store.getters.x', etc.
+            selector: 'Property[key.type="Literal"][key.value=/^\\$store/]',
+            message:
+              'Do not directly watch $store paths. Use a computed property or Vuex helpers (mapState/mapGetters) instead.',
+          },
+          {
+            // Catches: `$store.state.${dynamicPath}` (template literals)
+            selector: 'TemplateLiteral[quasis.0.value.raw^="$store."]',
+            message:
+              'Do not directly watch dynamic $store paths. Use a computed property instead.',
+          },
+          //end
           {
             selector:
               'ExportDefaultDeclaration > ObjectExpression > Property[key.name="setup"][value.async=true]',
@@ -20,6 +34,29 @@ export default withNuxt(
               "MemberExpression[object.property.name='state'][property.name='userCurrentSub']",
             message:
               'Do not use userCurrentSub from $store.state. Use useSubscriptionsStore().',
+          },
+          //start
+          {
+            selector:
+              "CallExpression[callee.property.name='dispatch'] Literal[value='getFile1Static']",
+            message: 'Usage forbidden',
+          },
+          {
+            selector:
+              "MemberExpression[object.property.name='state'][property.name='file1PanelStatic']",
+            message: 'Do not use ',
+          },
+          //end
+          {
+            selector:
+              "MemberExpression[object.property.name='state'][property.name='globalTypeUser']",
+            message: 'Do not use globalTypeUser from $store.state.',
+          },
+          {
+            selector:
+              "MemberExpression[object.property.name='state'][property.name='userServicesState']",
+            message:
+              'Do not use userServicesState from $store.state. Use useSubscriptionsStore().',
           },
           {
             selector:

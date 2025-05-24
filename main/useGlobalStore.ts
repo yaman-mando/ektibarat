@@ -4,6 +4,7 @@ import type {
   AboutUsJsonDataModel,
   ConditionJsonDataModel,
   ContactUsJsonDataModel,
+  File1JsonDataModel,
   HomeJsonDataModel,
   KudratJsonDataModel,
   LayoutStaticDataModel,
@@ -13,6 +14,7 @@ import type {
   PricesJsonDataModel,
   StaticJsonDataModel,
   TahselJsonDataModel,
+  TrainingJsonDataModel,
 } from '~/main/modules/shared/models/static-json-files.model';
 import { CountryPhoneCodes } from '~/main/constants/country-phone-codes';
 import { createPatchState } from '~/main/utils/patch-state.util';
@@ -39,6 +41,8 @@ type StaticStateType = {
   partnerShipConditionsJson: PartnerShipConditionsJsonDataModel | null;
   partnerShipJson: PartnerShipJsonDataModel | null;
   prices: PricesJsonDataModel | null;
+  trainingJson: TrainingJsonDataModel | null;
+  file1Json: File1JsonDataModel | null;
 };
 
 export const useGlobalStore = defineStore('global', () => {
@@ -75,6 +79,8 @@ export const useGlobalStore = defineStore('global', () => {
     partnerShipConditionsJson: null,
     partnerShipJson: null,
     prices: null,
+    trainingJson: null,
+    file1Json: null,
   });
 
   const patchStateUtil = createPatchState(state);
@@ -176,6 +182,18 @@ export const useGlobalStore = defineStore('global', () => {
     return res as PricesJsonDataModel;
   };
 
+  const getTrainingJsonStatic = async () => {
+    const res = (await import('~/main/constants/json/trainings.json')).default;
+    patchStaticState({ trainingJson: res });
+    return res as TrainingJsonDataModel;
+  };
+
+  const getFile1JsonStatic = async () => {
+    const res = (await import('~/main/constants/json/file1.json')).default;
+    patchStaticState({ file1Json: res });
+    return res as File1JsonDataModel;
+  };
+
   const getUserCountry = async () => {
     const CACHE_DURATION = 60 * 60 * 1000;
 
@@ -227,5 +245,7 @@ export const useGlobalStore = defineStore('global', () => {
     getPartnerShipConditionsJsonStatic,
     getPartnerShipJsonStatic,
     getPricesJsonStatic,
+    getTrainingJsonStatic,
+    getFile1JsonStatic,
   };
 });

@@ -49,6 +49,15 @@ export type UserInfoDataModel = {
   isMediaManager: boolean;
   joinedWhatsappGroup: boolean;
   joinedTelegramGroup: boolean;
+  subscriptions: UserSubscriptionItemDataModel[] | null;
+};
+
+type UserSubscriptionItemDataModel = {
+  id: number;
+  subjectId: number;
+  title: string;
+  endDate: string;
+  freeType: string | null;
 };
 
 //identity

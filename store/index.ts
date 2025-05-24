@@ -21,6 +21,8 @@ export type VuexRootState = {
   globalType?: never;
   globalTypeUser?: never;
   layoutStatic?: never;
+  file1PanelStatic?: never;
+
   //
   tr: any | null;
   appStatic: any | null;
@@ -35,7 +37,6 @@ export type VuexRootState = {
   similarQuestions: any[];
   examsPanelStatic: any | null;
   trainingsPanelStatic: any | null;
-  file1PanelStatic: any | null;
   partnerPanelStatic: any | null;
   learningPanelStatic: any | null;
   subscriptionsStatic: any | null;
@@ -79,7 +80,6 @@ export const vuexStore = createStore<VuexRootState>({
       similarQuestions: [],
       examsPanelStatic: null,
       trainingsPanelStatic: null,
-      file1PanelStatic: null,
       partnerPanelStatic: null,
       learningPanelStatic: null,
       subscriptionsStatic: null,
@@ -136,9 +136,6 @@ export const vuexStore = createStore<VuexRootState>({
     },
     SET_TRAINING_PANEL(state, payload) {
       state.trainingsPanelStatic = payload;
-    },
-    SET_FILE1_PANEL(state, payload) {
-      state.file1PanelStatic = payload;
     },
     SET_PARTNER_PANEL(state, payload) {
       state.partnerPanelStatic = payload;
@@ -270,16 +267,6 @@ export const vuexStore = createStore<VuexRootState>({
         ).default;
         commit('SET_TRAINING_PANEL', JsonTrainings);
         return JsonTrainings;
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async getFile1Static({ commit }) {
-      try {
-        const JsonFile1 = (await import('@/main/constants/json/file1.json'))
-          .default;
-        commit('SET_FILE1_PANEL', JsonFile1);
-        return JsonFile1;
       } catch (e) {
         console.log(e);
       }

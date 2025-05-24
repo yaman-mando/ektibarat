@@ -82,7 +82,7 @@ import { pictureTypes } from '~/main/constants/picture-types';
 import { questionTypes } from '~/main/modules/questions/data-access/constats/question-types';
 import { convertToMathmlCode } from '~/main/shared/math-jax/useMathJaxClientService';
 import { appEvents } from '~/main/shared/events/app.events';
-import { filter, takeWhile } from 'rxjs';
+import { takeWhile } from 'rxjs';
 import { deepCloneUtil } from '~/main/utils/lodash.utils';
 import {
   getStoredCatArray,
@@ -277,11 +277,8 @@ export default {
       ? this.appRoute.params.title
       : this.appRoute.params.id;
     this.$store.dispatch('getSimilarQuestion', id);
-    appEvents.events$
-      .pipe(
-        filter((event) => event === 'toTraining'),
-        takeWhile(() => this.isAliveRx)
-      )
+    appEvents.toTraining$
+      .pipe(takeWhile(() => this.isAliveRx))
       .subscribe(() => {
         this.toTraining(trainingSource.help);
       });

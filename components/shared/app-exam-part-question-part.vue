@@ -492,7 +492,7 @@
       v-model:isOpen="isOpenHelpAnswerModal"
       :isTahsele="isSeo ? isTahsele : false"
       :htmlContent="questionModel.feedbackInCorrectAnswer"
-      @toTraining="appEvents.emitEvent('toTraining')"
+      @toTraining="appEvents.emitToTraining()"
     />
   </div>
 </template>

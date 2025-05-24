@@ -182,3 +182,24 @@ export const toBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+
+export const getRateLabel = (rate) => {
+  if (rate == 0) {
+    return 'لايوجد';
+  }
+  if (rate < 30) {
+    return 'ضعيف جداً';
+  }
+  if (rate < 50) {
+    return 'ضعيف';
+  }
+  if (rate < 70) {
+    return 'جيد';
+  }
+  if (rate < 90) {
+    return 'جيد جداً';
+  }
+  if (rate < 100) {
+    return 'ممتاز';
+  }
+};

@@ -1,19 +1,34 @@
-import type { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 
-//TODO-z handle $on - $off events
-type AppEventsModel = 'toTraining';
 const useAppEvents = () => {
-  const eventSub = new Subject<AppEventsModel>();
-  const events$ = eventSub.asObservable() as Observable<AppEventsModel>;
+  //to training
+  const toTrainingSub = new Subject<symbol>();
+  const toTraining$ = toTrainingSub.asObservable();
+  const emitToTraining = () => {
+    toTrainingSub.next(Symbol());
+  };
 
-  const emitEvent = (data: AppEventsModel) => {
-    eventSub.next(data);
+  //hello modal
+  const helloModalSub = new Subject<symbol>();
+  const helloModal$ = helloModalSub.asObservable();
+  const emitHelloModal = () => {
+    helloModalSub.next(Symbol());
+  };
+
+  //panner modal hidden
+  const pannerModalHiddenSub = new Subject<symbol>();
+  const pannerModalHidden$ = pannerModalHiddenSub.asObservable();
+  const emitPannerModalHidden = () => {
+    pannerModalHiddenSub.next(Symbol());
   };
 
   return {
-    emitEvent,
-    events$,
+    emitToTraining,
+    toTraining$,
+    emitHelloModal,
+    helloModal$,
+    emitPannerModalHidden,
+    pannerModalHidden$,
   };
 };
 

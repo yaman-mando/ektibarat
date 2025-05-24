@@ -23,7 +23,7 @@
       </nuxt-link>
 
       <lazy-app-button
-        v-if="!isLoggedIn"
+        v-if="!isLoggedIn && !isLoadingProfile"
         variant="clear"
         label="الدخول"
         size="sm"
@@ -207,7 +207,7 @@
         </ul>
       </div>
       <div
-        v-if="!isLoggedIn"
+        v-if="!isLoggedIn && !isLoadingProfile"
         class="actions"
       >
         <button
@@ -554,6 +554,7 @@ const selectedGlobalType = ref(
   state.globalTypeUserValue == GlobalTypes.tahsele
 );
 const isLoggedIn = computed(() => status.value === 'authenticated');
+const isLoadingProfile = computed(() => status.value === 'loading');
 const userData = computed(() => data.value as UserInfoDataModel);
 const isEmployee = computed(() => userData.value.role === UserRoles.employee);
 const activeList = ref<string | number | null>(null);

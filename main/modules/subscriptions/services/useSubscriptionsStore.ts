@@ -10,7 +10,7 @@ import { createPatchState } from '~/main/utils/patch-state.util';
 type StateType = {
   lastUserSubUpdate: number;
   userCurrentSubVal: CurrentSubscriptionDataModel | null;
-  userServicesState: UserServicesStateUi;
+  userServicesStateVal: UserServicesStateUi;
 };
 
 //store
@@ -20,7 +20,7 @@ export const useSubscriptionsStore = defineStore('subscriptions-store', () => {
   const initialState: StateType = {
     lastUserSubUpdate: 0,
     userCurrentSubVal: null,
-    userServicesState: {
+    userServicesStateVal: {
       TRAININGBYCATEGORY: { isActive: false },
       TAKFELATUSAGE: { isActive: false },
       SHOWSOLVESOLUATION: { isActive: false },
