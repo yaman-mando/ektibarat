@@ -147,7 +147,7 @@ withDefaults(
   &.size-md {
     width: fit-content;
     height: 40px;
-    min-width: 120px;
+    min-width: auto;
     .app-button-label {
       font-size: 14px;
     }

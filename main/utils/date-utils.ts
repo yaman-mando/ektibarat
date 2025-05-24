@@ -124,3 +124,55 @@ export const minutesToHHMM = (totalMin) => {
 
   return parsedHours + ':' + parsedMinutes + ' ساعة';
 };
+
+export const secondsToMMSS = (totalSeconds) => {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds - hours * 3600) / 60);
+  const seconds = Math.floor(totalSeconds - hours * 3600 - minutes * 60);
+
+  // Padding the values to ensure they are two digits
+  let parsedMinutes = '';
+  let parsedSeconds = '';
+
+  if (minutes < 10) {
+    parsedMinutes = '0' + minutes;
+  }
+  if (seconds < 10) {
+    parsedSeconds = '0' + seconds;
+  }
+  return parsedMinutes + ':' + parsedSeconds;
+};
+
+export const secondsToHHMMSS = (totalSeconds) => {
+  totalSeconds = Number(totalSeconds);
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = Math.floor(totalSeconds % 60);
+
+  const parts: string[] = [];
+
+  const getArabicUnit = (value, singular, dual, plural) => {
+    if (value === 1) return `${singular}`;
+    if (value === 2) return `${dual}`;
+    if (value < 11) return `${value} ${plural}`;
+    return `${value} ${singular}`;
+  };
+
+  if (h > 0) {
+    parts.push(getArabicUnit(h, 'ساعة', 'ساعتين', 'ساعات'));
+  }
+
+  if (m > 0) {
+    parts.push(getArabicUnit(m, 'دقيقة', 'دقيقتين', 'دقائق'));
+  }
+
+  if (s > 0) {
+    parts.push(getArabicUnit(s, 'ثانية', 'ثانيتين', 'ثوان'));
+  }
+
+  if (parts.length === 0) {
+    return 0;
+  }
+
+  return parts.join(' و ');
+};

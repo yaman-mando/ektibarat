@@ -567,22 +567,9 @@
                               (val) => (profileInfo.phoneNumber = val)
                             "
                           />
-                          <!--                      <mx-g-phone
-                            :isRequired="false"
-                            :placeholder="'5XXXXXXXXX'"
-                            v-model="profileInfo.phoneNumber"
-                            :dataError="checkPhoneError"
-                            :messageError="'رقم الجوال مسجل لدينا سابقاً'"
-                            :keyup="(isbuttonDisablePhone = false)"
-                          ></mx-g-phone>-->
                         </div>
                       </div>
-                      <!--                  <div class="m-note">
-                        <span>سيتم إرسال رمز التحقق إلى رقم الجوال المدخل</span>
-                        <span>
-                          لن يتم تغيير رقم الجوال إلا بعد إدخال رمز التحقق
-                        </span>
-                      </div>-->
+
                       <div class="ac-action relative">
                         <app-overlay v-if="processing" />
                         <button
@@ -654,7 +641,7 @@
                 activeList === userPanelItems.studentTraining
               "
             >
-              <!--            <mx-panel-student-training />-->
+              <lazy-student-training />
             </template>
             <template v-if="activeList === userPanelItems.analytics">
               <!--            <mx-panel-analytics />-->
