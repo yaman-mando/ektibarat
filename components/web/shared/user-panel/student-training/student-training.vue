@@ -18,176 +18,121 @@
     <template v-if="analyticsData">
       <div class="analytics-data is-training">
         <div
-          v-for="(group, index) of analyticsData"
-          :key="`analyticsData_${index}`"
+          v-for="(group, index1) of analyticsData"
+          :key="`analyticsData_${index1}`"
           class="analytics-group"
         >
-          <!--  g-info main toggle  -->
-          <div
-            :class="{
-              'no-child': !hasChild1(group.analayzeStudentCategories),
-            }"
-            class="g-info"
-            @click.self="
-              hasChild1(group.analayzeStudentCategories)
-                ? toggle(`analytics-group-accordion-${index}`)
-                : {}
-            "
-          >
-            <div class="r-part">
-              <div class="rw-1">
-                <text-slice
-                  :length="20"
-                  :text="group.subjectName"
-                />
-              </div>
-              <div class="rw-2">
-                <div class="info-group">
-                  <span class="t-1">الأسئلة</span>
-                  <span class="t-2">{{ group.questionsCount }}</span>
+          <lazy-prime-accordion>
+            <template #expandicon>
+              <i class="fa fa-solid fa-chevron-down c_icon"></i>
+            </template>
+            <template #collapseicon>
+              <i class="fa fa-solid fa-chevron-up c_icon"></i>
+            </template>
+            <lazy-prime-accordion-panel :value="`analyticsData_${index1}`">
+              <lazy-prime-accordion-header class="custom-panel-header">
+                <div
+                  :class="{
+                    'no-child': !hasChild1(group.analayzeStudentCategories),
+                  }"
+                  class="g-info"
+                  @click.stop.prevent
+                >
+                  <div class="r-part">
+                    <div class="rw-1">
+                      <text-slice
+                        :length="20"
+                        :text="group.subjectName"
+                      />
+                    </div>
+                    <div class="rw-2">
+                      <div class="info-group">
+                        <span class="t-1">الأسئلة</span>
+                        <span class="t-2">{{ group.questionsCount }}</span>
+                      </div>
+                      <div class="info-group">
+                        <span class="t-1">إجمالي الزمن</span>
+                        <span class="t-2">
+                          {{ secondsToHHMM(group.totalTime) }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="l-part">
+                    <div class="c-period">
+                      <p class="p-text">الفترة الزمنية</p>
+                      <select-list
+                        v-model:selectedItem="selectedPeriod"
+                        name="التصنيف الرئيسي"
+                        :options="periodList"
+                        class="sec a"
+                        :isMulti="false"
+                        :showSelectedItem="true"
+                      />
+                    </div>
+                    <!--                    <i-->
+                    <!--                      :class="-->
+                    <!--                        activeCollapse.includes(-->
+                    <!--                          `analytics-group-accordion-${index1}`-->
+                    <!--                        )-->
+                    <!--                          ? 'fa-chevron-up'-->
+                    <!--                          : 'fa-chevron-down'-->
+                    <!--                      "-->
+                    <!--                      class="fa collapse-icon"-->
+                    <!--                    ></i>-->
+                  </div>
                 </div>
-                <div class="info-group">
-                  <span class="t-1">إجمالي الزمن</span>
-                  <span class="t-2">
-                    {{ secondsToHHMM(group.totalTime) }}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="l-part">
-              <div class="c-period">
-                <p class="p-text">الفترة الزمنية</p>
-                <select-list
-                  v-model:selectedItem="selectedPeriod"
-                  name="التصنيف الرئيسي"
-                  :options="periodList"
-                  class="sec a"
-                  :isMulti="false"
-                  :showSelectedItem="true"
-                />
-              </div>
-              <i
-                :class="
-                  activeCollapse.includes(`analytics-group-accordion-${index}`)
-                    ? 'fa-chevron-up'
-                    : 'fa-chevron-down'
-                "
-                class="fa collapse-icon"
-                @click.self="
-                  hasChild1(group.analayzeStudentCategories)
-                    ? toggle(`analytics-group-accordion-${index}`)
-                    : {}
-                "
-              ></i>
-            </div>
-          </div>
-
-          <!--  g-info items main accordion     -->
-          <lazy-prime-accordion
-            v-if="hasChild1(group.analayzeStudentCategories)"
-            class="analytics-group-collapse"
-          >
-            <!--  first child toggle -->
-            <lazy-prime-accordion-panel
-              :value="`analytics-group-accordion-${index}`"
-            >
+              </lazy-prime-accordion-header>
               <lazy-prime-accordion-content>
                 <template
-                  v-for="(catGroup, index) of group.analayzeStudentCategories"
-                  :key="`group.analayzeStudentCategories_${index}`"
+                  v-for="(catGroup, index2) of group.analayzeStudentCategories"
+                  :key="`group.analayzeStudentCategories_${index2}`"
                 >
-                  <div
-                    v-if="catGroup.parentId == null"
-                    class="g-collapse-group"
+                  <lazy-prime-accordion
+                    v-if="
+                      getTableData(
+                        group.analayzeStudentCategories,
+                        catGroup.categoryId
+                      ).length > 0
+                    "
+                    class="child-custom-acc"
                   >
-                    <div
-                      :class="[
-                        {
-                          'no-child': !hasChild2(
-                            group.analayzeStudentCategories,
-                            catGroup.categoryId
-                          ),
-                        },
-                        {
-                          'not-complete': hasNotCompletePart(
-                            group.analayzeStudentCategories,
-                            catGroup.categoryId
-                          ),
-                        },
-                      ]"
-                      class="g-collapse-info"
-                      @click="
-                        hasChild2(
-                          group.analayzeStudentCategories,
-                          catGroup.categoryId
-                        )
-                          ? toggle(`g-group-accordion-${index}`)
-                          : {}
-                      "
+                    <lazy-prime-accordion-panel
+                      :value="`group.analayzeStudentCategories_${index2}`"
                     >
-                      <template v-if="!windowSize.isMobileSize">
-                        <div class="c-1">
-                          <text-slice
-                            :length="15"
-                            :text="catGroup.categoryName"
-                          />
-                          <span class="notCompleteParts">
-                            {{
-                              hasNotCompletePart(
+                      <lazy-prime-accordion-header class="custom-panel-header">
+                        <div
+                          :class="[
+                            {
+                              'no-child': !hasChild2(
                                 group.analayzeStudentCategories,
                                 catGroup.categoryId
-                              )
-                            }}
-                          </span>
-                        </div>
-                        <div class="c-3">
-                          <span class="t-1">مدة التدريب</span>
-                          <span class="t-2">
-                            {{ secondsToHHMM(catGroup.totalTime) }}
-                          </span>
-                        </div>
-                        <div class="c-3">
-                          <span class="t-1">الأسئلة</span>
-                          <span class="t-2">{{ catGroup.questionsCount }}</span>
-                        </div>
-                        <div class="c-4">
-                          <span class="t-1">الإجابات</span>
-                          <span class="t-2">
-                            <span class="t-2-1">
-                              {{ catGroup.correctAnswersCount }}
-                            </span>
-                            <span class="t-2-2"></span>
-                            <span class="t-2-3">
-                              {{ catGroup.wrongAnswersCount }}
-                            </span>
-                          </span>
-                        </div>
-                        <i
-                          v-if="
-                            hasChild2(
-                              group.analayzeStudentCategories,
-                              catGroup.categoryId
-                            )
-                          "
-                          :class="
-                            activeCollapse.includes(
-                              `g-group-accordion-${index}`
-                            )
-                              ? 'fa-chevron-up'
-                              : 'fa-chevron-down'
-                          "
-                          class="fa collapse-icon"
-                        ></i>
-                      </template>
-                      <template v-else>
-                        <div class="cl-1">
-                          <div class="c-1">
-                            <text-slice
-                              :length="12"
-                              :text="catGroup.categoryName"
-                            />
-                          </div>
-                          <div class="r-2">
+                              ),
+                            },
+                            {
+                              'not-complete': hasNotCompletePart(
+                                group.analayzeStudentCategories,
+                                catGroup.categoryId
+                              ),
+                            },
+                          ]"
+                          class="g-collapse-info"
+                        >
+                          <template v-if="!windowSize.isMobileSize">
+                            <div class="c-1">
+                              <text-slice
+                                :length="15"
+                                :text="catGroup.categoryName"
+                              />
+                              <span class="notCompleteParts">
+                                {{
+                                  hasNotCompletePart(
+                                    group.analayzeStudentCategories,
+                                    catGroup.categoryId
+                                  )
+                                }}
+                              </span>
+                            </div>
                             <div class="c-3">
                               <span class="t-1">مدة التدريب</span>
                               <span class="t-2">
@@ -212,150 +157,187 @@
                                 </span>
                               </span>
                             </div>
-                          </div>
-                        </div>
-                        <i
-                          v-if="
-                            hasChild2(
-                              group.analayzeStudentCategories,
-                              catGroup.categoryId
-                            )
-                          "
-                          :class="
-                            activeCollapse.includes(
-                              `g-group-accordion-${index}`
-                            )
-                              ? 'fa-chevron-up'
-                              : 'fa-chevron-down'
-                          "
-                          class="fa collapse-icon"
-                        ></i>
-                      </template>
-                    </div>
-                    <!--  first child collapse -->
-                    <lazy-prime-accordion
-                      v-if="
-                        hasChild2(
-                          group.analayzeStudentCategories,
-                          catGroup.categoryId
-                        )
-                      "
-                      class="g-group-collapse"
-                    >
-                      <!--  tables first child collapse  -->
-                      <lazy-prime-accordion-panel
-                        :value="`g-group-accordion-${index}`"
-                      >
-                        <lazy-prime-accordion-content>
-                          <div
-                            v-if="
-                              getTableData(
-                                group.analayzeStudentCategories,
-                                catGroup.categoryId
-                              ).length > 0
-                            "
-                            class="g-collapse-table"
-                          >
-                            <template v-if="!windowSize.isMobileSize">
-                              <div class="t-head">
-                                <span>المهارة</span>
-                                <span>الأسئلة</span>
-                                <span>الإجابات</span>
-                                <span>زمن الإجابة/المتوسط</span>
-                                <span>زمن التدريب</span>
-                                <span>تدرب</span>
+                          </template>
+                          <template v-else>
+                            <div class="cl-1">
+                              <div class="c-1">
+                                <text-slice
+                                  :length="12"
+                                  :text="catGroup.categoryName"
+                                />
                               </div>
-                              <div class="t-data">
-                                <template
-                                  v-for="(tableData, i) of getTableData(
-                                    group.analayzeStudentCategories,
-                                    catGroup.categoryId
-                                  )"
-                                  :key="`catGroup.categoryId_${i}`"
+                              <div class="r-2">
+                                <div class="c-3">
+                                  <span class="t-1">مدة التدريب</span>
+                                  <span class="t-2">
+                                    {{ secondsToHHMM(catGroup.totalTime) }}
+                                  </span>
+                                </div>
+                                <div class="c-3">
+                                  <span class="t-1">الأسئلة</span>
+                                  <span class="t-2">
+                                    {{ catGroup.questionsCount }}
+                                  </span>
+                                </div>
+                                <div class="c-4">
+                                  <span class="t-1">الإجابات</span>
+                                  <span class="t-2">
+                                    <span class="t-2-1">
+                                      {{ catGroup.correctAnswersCount }}
+                                    </span>
+                                    <span class="t-2-2"></span>
+                                    <span class="t-2-3">
+                                      {{ catGroup.wrongAnswersCount }}
+                                    </span>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                      </lazy-prime-accordion-header>
+                      <lazy-prime-accordion-content>
+                        <div class="g-collapse-table">
+                          <template v-if="!windowSize.isMobileSize">
+                            <div class="t-head">
+                              <span>المهارة</span>
+                              <span>الأسئلة</span>
+                              <span>الإجابات</span>
+                              <span>زمن الإجابة/المتوسط</span>
+                              <span>زمن التدريب</span>
+                              <span>تدرب</span>
+                            </div>
+                            <div class="t-data">
+                              <template
+                                v-for="(tableData, i) of getTableData(
+                                  group.analayzeStudentCategories,
+                                  catGroup.categoryId
+                                )"
+                                :key="`catGroup.categoryId_${i}`"
+                              >
+                                <div
+                                  class="t-col"
+                                  :class="[
+                                    { 'is-disabled': !tableData.isEnabled },
+                                  ]"
                                 >
-                                  <div
-                                    class="t-col"
-                                    :class="[
-                                      { 'is-disabled': !tableData.isEnabled },
-                                    ]"
-                                  >
-                                    <div class="to-12">
+                                  <div class="to-12">
+                                    <span class="d-1">
+                                      <text-slice
+                                        :length="30"
+                                        :text="tableData.categoryName"
+                                      />
+                                    </span>
+                                    <span class="d-2">
+                                      {{ tableData.questionsCount }}
+                                    </span>
+                                  </div>
+
+                                  <span class="d-3">
+                                    <span class="t-2-1">
+                                      {{ tableData.correctAnswersCount }}
+                                    </span>
+                                    <span class="t-2-2"></span>
+                                    <span
+                                      :data-title="
+                                        i === 0 && index2 === 0
+                                          ? introService.analyticsPanelTour
+                                              .step5.title
+                                          : null
+                                      "
+                                      :data-intro="
+                                        i === 0 && index2 === 0
+                                          ? introService.analyticsPanelTour
+                                              .step5.content
+                                          : null
+                                      "
+                                      class="t-2-3"
+                                    >
+                                      {{ tableData.wrongAnswersCount }}
+                                    </span>
+                                  </span>
+                                  <span class="d-4">
+                                    <span class="t-2-1">
+                                      {{
+                                        secondsToMMSS(
+                                          tableData.studentTimeTakenRate
+                                        )
+                                      }}
+                                    </span>
+                                    <span class="t-2-2"></span>
+                                    <span
+                                      :data-title="
+                                        i === 0 && index2 === 0
+                                          ? introService.analyticsPanelTour
+                                              .step7.title
+                                          : null
+                                      "
+                                      :data-intro="
+                                        i === 0 && index2 === 0
+                                          ? introService.analyticsPanelTour
+                                              .step7.content
+                                          : null
+                                      "
+                                      class="t-2-3"
+                                    >
+                                      {{
+                                        secondsToMMSS(
+                                          tableData.allStudentsTimeTakenRate
+                                        )
+                                      }}
+                                    </span>
+                                  </span>
+                                  <span class="d-5">
+                                    {{ secondsToHHMM(tableData.totalTime) }}
+                                  </span>
+                                  <div class="d-6">
+                                    <div class="w-full relative">
+                                      <app-button
+                                        size="md"
+                                        :isLoading="
+                                          loading &&
+                                          loading == tableData.examDefaultId
+                                        "
+                                        label="تدرب"
+                                        @click.stop="
+                                          onTrainClickStudent(
+                                            catGroup.categoryId,
+                                            tableData.categoryId
+                                          )
+                                        "
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </template>
+                            </div>
+                          </template>
+                          <template v-else>
+                            <div class="t-card">
+                              <template
+                                v-for="(tableData, i) of getTableData(
+                                  group.analayzeStudentCategories,
+                                  catGroup.categoryId
+                                )"
+                                :key="`group.analayzeStudentCategories_${index}_${i}`"
+                              >
+                                <div
+                                  class="t-col"
+                                  :class="[
+                                    { 'is-disabled': !tableData.isEnabled },
+                                  ]"
+                                >
+                                  <div class="zr-w">
+                                    <div class="r-1">
                                       <span class="d-1">
                                         <text-slice
-                                          :length="30"
+                                          :length="25"
                                           :text="tableData.categoryName"
                                         />
                                       </span>
-                                      <span class="d-2">
-                                        {{ tableData.questionsCount }}
-                                      </span>
-                                    </div>
-
-                                    <span class="d-3">
-                                      <span class="t-2-1">
-                                        {{ tableData.correctAnswersCount }}
-                                      </span>
-                                      <span class="t-2-2"></span>
-                                      <span
-                                        :data-title="
-                                          i === 0 && index === 0
-                                            ? introService.analyticsPanelTour
-                                                .step5.title
-                                            : null
-                                        "
-                                        :data-intro="
-                                          i === 0 && index === 0
-                                            ? introService.analyticsPanelTour
-                                                .step5.content
-                                            : null
-                                        "
-                                        class="t-2-3"
-                                      >
-                                        {{ tableData.wrongAnswersCount }}
-                                      </span>
-                                    </span>
-                                    <span class="d-4">
-                                      <span class="t-2-1">
-                                        {{
-                                          secondsToMMSS(
-                                            tableData.studentTimeTakenRate
-                                          )
-                                        }}
-                                      </span>
-                                      <span class="t-2-2"></span>
-                                      <span
-                                        :data-title="
-                                          i === 0 && index === 0
-                                            ? introService.analyticsPanelTour
-                                                .step7.title
-                                            : null
-                                        "
-                                        :data-intro="
-                                          i === 0 && index === 0
-                                            ? introService.analyticsPanelTour
-                                                .step7.content
-                                            : null
-                                        "
-                                        class="t-2-3"
-                                      >
-                                        {{
-                                          secondsToMMSS(
-                                            tableData.allStudentsTimeTakenRate
-                                          )
-                                        }}
-                                      </span>
-                                    </span>
-                                    <span class="d-5">
-                                      {{ secondsToHHMM(tableData.totalTime) }}
-                                    </span>
-                                    <div class="d-6">
-                                      <div class="w-full relative">
+                                      <div class="d-6">
                                         <app-button
                                           size="md"
-                                          :isLoading="
-                                            loading &&
-                                            loading == tableData.examDefaultId
-                                          "
                                           label="تدرب"
                                           @click.stop="
                                             onTrainClickStudent(
@@ -366,108 +348,63 @@
                                         />
                                       </div>
                                     </div>
-                                  </div>
-                                </template>
-                              </div>
-                            </template>
-                            <template v-else>
-                              <div class="t-card">
-                                <template
-                                  v-for="(tableData, i) of getTableData(
-                                    group.analayzeStudentCategories,
-                                    catGroup.categoryId
-                                  )"
-                                  :key="`group.analayzeStudentCategories_${index}_${i}`"
-                                >
-                                  <div
-                                    class="t-col"
-                                    :class="[
-                                      { 'is-disabled': !tableData.isEnabled },
-                                    ]"
-                                  >
-                                    <div class="zr-w">
-                                      <div class="r-1">
-                                        <span class="d-1">
-                                          <text-slice
-                                            :length="25"
-                                            :text="tableData.categoryName"
-                                          />
+                                    <div class="dds r-2">
+                                      <div class="d-2">
+                                        <span class="label">الأسئلة</span>
+                                        <span class="info">
+                                          {{ tableData.questionsCount }}
                                         </span>
-                                        <div class="d-6">
-                                          <app-button
-                                            size="md"
-                                            label="تدرب"
-                                            @click.stop="
-                                              onTrainClickStudent(
-                                                catGroup.categoryId,
-                                                tableData.categoryId
-                                              )
-                                            "
-                                          />
+                                      </div>
+                                      <div class="d-3">
+                                        <span class="label">الإجابات</span>
+                                        <div class="t-group">
+                                          <span class="t-2-1">
+                                            {{ tableData.correctAnswersCount }}
+                                          </span>
+                                          <span class="t-2-2"></span>
+                                          <span class="t-2-3">
+                                            {{ tableData.wrongAnswersCount }}
+                                          </span>
                                         </div>
                                       </div>
-                                      <div class="dds r-2">
-                                        <div class="d-2">
-                                          <span class="label">الأسئلة</span>
-                                          <span class="info">
-                                            {{ tableData.questionsCount }}
-                                          </span>
-                                        </div>
-                                        <div class="d-3">
-                                          <span class="label">الإجابات</span>
-                                          <div class="t-group">
-                                            <span class="t-2-1">
-                                              {{
-                                                tableData.correctAnswersCount
-                                              }}
-                                            </span>
-                                            <span class="t-2-2"></span>
-                                            <span class="t-2-3">
-                                              {{ tableData.wrongAnswersCount }}
-                                            </span>
-                                          </div>
-                                        </div>
-                                        <div class="d-3">
-                                          <span class="label">
-                                            زمنك/المتوسط
-                                          </span>
-                                          <div class="t-group">
-                                            <span class="t-2-1">
-                                              {{
-                                                secondsToMMSS(
-                                                  tableData.studentTimeTakenRate
-                                                )
-                                              }}
-                                            </span>
-                                            <span class="t-2-2"></span>
-                                            <span class="t-2-3">
-                                              {{
-                                                secondsToMMSS(
-                                                  tableData.allStudentsTimeTakenRate
-                                                )
-                                              }}
-                                            </span>
-                                          </div>
-                                        </div>
-                                        <div class="d-2">
-                                          <span class="label">زمن التدريب</span>
-                                          <span class="info">
+                                      <div class="d-3">
+                                        <span class="label">زمنك/المتوسط</span>
+                                        <div class="t-group">
+                                          <span class="t-2-1">
                                             {{
-                                              secondsToHHMM(tableData.totalTime)
+                                              secondsToMMSS(
+                                                tableData.studentTimeTakenRate
+                                              )
+                                            }}
+                                          </span>
+                                          <span class="t-2-2"></span>
+                                          <span class="t-2-3">
+                                            {{
+                                              secondsToMMSS(
+                                                tableData.allStudentsTimeTakenRate
+                                              )
                                             }}
                                           </span>
                                         </div>
                                       </div>
+                                      <div class="d-2">
+                                        <span class="label">زمن التدريب</span>
+                                        <span class="info">
+                                          {{
+                                            secondsToHHMM(tableData.totalTime)
+                                          }}
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
-                                </template>
-                              </div>
-                            </template>
-                          </div>
-                        </lazy-prime-accordion-content>
-                      </lazy-prime-accordion-panel>
-                    </lazy-prime-accordion>
-                  </div>
+                                </div>
+                              </template>
+                            </div>
+                          </template>
+                        </div>
+                      </lazy-prime-accordion-content>
+                    </lazy-prime-accordion-panel>
+                  </lazy-prime-accordion>
                 </template>
               </lazy-prime-accordion-content>
             </lazy-prime-accordion-panel>
@@ -527,6 +464,7 @@ export default {
   },
   data() {
     return {
+      selectedValue: null as any,
       analyticsData: null as any | null,
       activeCollapse: [] as string[],
       checkedExam: null,
@@ -573,17 +511,6 @@ export default {
 
   mounted() {
     this.requestTrainingData();
-
-    // this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {
-    //   if (isJustShown) {
-    //     this.activeCollapse.push(collapseId);
-    //   } else {
-    //     const index = this.activeCollapse.findIndex((k) => k == collapseId);
-    //     if (index !== -1) {
-    //       this.activeCollapse.splice(index, 1);
-    //     }
-    //   }
-    // });
   },
 
   methods: {
@@ -637,10 +564,6 @@ export default {
         }
       });
       return list;
-    },
-
-    toggle(collapseId) {
-      // this.$root.$emit('bv::toggle::collapse', collapseId);
     },
 
     secondsToMMSS(totalSeconds) {
