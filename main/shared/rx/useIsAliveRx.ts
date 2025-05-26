@@ -1,4 +1,3 @@
-// useAliveRx.js
 import { onBeforeUnmount, ref } from 'vue';
 
 export function useIsAliveRx() {

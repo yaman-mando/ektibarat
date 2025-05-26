@@ -6,7 +6,7 @@
   <lazy-hello-modal ref="hello_modal_ref" />
   <lazy-prime-toast position="bottom-right" />
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 //composable
 import { useDeviceService } from '~/main/useDeviceService';
 import { useLocalStorageStore } from '~/main/useLocalStorageStore';
@@ -234,8 +234,8 @@ watch(
   (val) => {
     const userId = val.userId;
     if (!!val && val.isLoggedIn && !!userId) {
-      const isFirstRegister = localStorageStore.getFirstRegister(userId);
-      if (!isFirstRegister) {
+      const isFirstRegisterExist = localStorageStore.getFirstRegister(userId);
+      if (!isFirstRegisterExist) {
         localStorageStore.setFirstRegister(userId);
         clearFirstRegisterDelaySub.next(userId);
         showHelloModal();

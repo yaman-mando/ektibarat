@@ -1,4 +1,7 @@
 import { process } from 'std-env';
+import { v4 as uuidv4 } from 'uuid';
+
+export const getUuid = () => uuidv4();
 
 export const sleepUtil = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));

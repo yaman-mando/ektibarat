@@ -176,3 +176,13 @@ export const secondsToHHMMSS = (totalSeconds) => {
 
   return parts.join(' و ');
 };
+
+export const dateDayUi = (date) => {
+  if (!date) return '';
+
+  return (
+    format(parseISO(date), appDateFormat.dayNameOnly, { locale: arLocale }) +
+    ' - ' +
+    fns_format({ date, format: appDateFormat.default })
+  );
+};

@@ -27,8 +27,8 @@
             />
           </template>
           <app-button
-            size="sm"
             label="إخفاء"
+            size="sm"
             @click="hideAds = true"
           />
         </div>
@@ -54,12 +54,12 @@
           </div>
         </client-only>
         <div
-          class="user-panel"
           :class="{
             isExam: [userPanelItems.exams, userPanelItems.trainings].includes(
               activeList
             ),
           }"
+          class="user-panel"
         >
           <div class="rw-user-panel">
             <div
@@ -88,9 +88,9 @@
                 >
                   <input
                     ref="file_ref"
+                    accept="image/*"
                     hidden
                     type="file"
-                    accept="image/*"
                     @input="uploadPhoto"
                   />
                   <div
@@ -115,8 +115,8 @@
               <div class="pt-3 type-switch">
                 <custom-switch
                   v-model:active="selectedGlobalType"
-                  :rightLabel="'قدرات'"
                   :leftLabel="'تحصيلي'"
+                  :rightLabel="'قدرات'"
                 />
               </div>
 
@@ -131,7 +131,6 @@
                 >
                   <div
                     v-if="allowShowItem(item)"
-                    class="list-item"
                     :class="[
                       { active: activeList === item.id },
                       {
@@ -140,13 +139,14 @@
                           item.id === userPanelItems.teacherPanel,
                       },
                     ]"
+                    class="list-item"
                     @click="activeList = item.id"
                   >
                     <div class="r-part">
                       <img
-                        width="16"
-                        :src="`/images/icons/menu/${item.icon}.svg`"
                         :alt="item.icon"
+                        :src="`/images/icons/menu/${item.icon}.svg`"
+                        width="16"
                       />
                       <span class="label">{{ item.label }}</span>
                       <span
@@ -184,17 +184,17 @@
               >
                 <span class="c-title">{{ item.title }}</span>
                 <span
-                  class="c-short-desc"
                   :class="{ all: readMore.includes(index) }"
+                  class="c-short-desc"
                 >
                   <text-slice
-                    :text="item.description"
                     :length="150"
+                    :text="item.description"
                   />
                 </span>
                 <a
-                  class="readMore"
                   :href="item.link"
+                  class="readMore"
                 >
                   اقرأ المزيد
                 </a>
@@ -206,7 +206,6 @@
           </div>
           <div
             v-else
-            class="rw-info"
             :class="[
               { isAnalytics: activeList === userPanelItems.analytics },
               {
@@ -215,6 +214,7 @@
                   activeList === userPanelItems.teacherPanel,
               },
             ]"
+            class="rw-info"
           >
             <template v-if="activeList === userPanelItems.profile">
               <div
@@ -241,9 +241,9 @@
                   >
                     <input
                       ref="file_ref"
+                      accept="image/*"
                       hidden
                       type="file"
-                      accept="image/*"
                       @input="uploadPhoto"
                     />
                     <div
@@ -283,15 +283,15 @@
                       <form-input
                         v-model:inputValue="profileInfo.firstName"
                         inputId="FirstName"
-                        rules="required|no_special"
                         label="الاسم الأول"
+                        rules="required|no_special"
                       />
 
                       <form-input
                         v-model:inputValue="profileInfo.lastName"
                         inputId="secondname"
-                        rules="required|no_special"
                         label="اسم العائلة"
+                        rules="required|no_special"
                       />
                     </div>
                     <div class="m-note">
@@ -308,8 +308,8 @@
                         <span>حفظ</span>
                       </button>
                       <button
-                        type="button"
                         class="btn cancel"
+                        type="button"
                         @click="closeSection"
                       >
                         <span>إلغاء</span>
@@ -378,24 +378,24 @@
                           ref="old_password_field_ref"
                           v-model:inputValue="password.oldPassword"
                           inputId="old-password"
-                          rules="required"
-                          label="الكلمة الحالية"
                           inputType="password"
+                          label="الكلمة الحالية"
+                          rules="required"
                         />
 
                         <form-input
                           v-model:inputValue="password.newPassword"
+                          :inputType="password2Type"
                           inputId="new-password"
                           label="الكلمة الجديدة"
-                          :inputType="password2Type"
                           rules="required|verify_password|min:8"
                         />
 
                         <form-input
                           v-model:inputValue="password.newPasswordConfirm"
+                          :inputType="password3Type"
                           inputId="confirmNewPassword"
                           label="تأكيد الكلمة الجديدة"
-                          :inputType="password3Type"
                           rules="required|confirmed:@new-password"
                         />
                       </div>
@@ -410,14 +410,14 @@
                       </div>
                       <div class="ac-action">
                         <button
-                          type="submit"
                           class="btn save"
+                          type="submit"
                         >
                           <span>حفظ</span>
                         </button>
                         <button
-                          type="button"
                           class="btn cancel"
+                          type="button"
                           @click="closeSection"
                         >
                           <span>إلغاء</span>
@@ -466,10 +466,10 @@
                       <div class="ac-control-wrapper">
                         <form-input
                           v-model:inputValue="profileInfo.email"
-                          inputId="email"
-                          label="البريد الألكتروني"
                           :rules="{ required: true, email: true }"
+                          inputId="email"
                           inputType="email"
+                          label="البريد الألكتروني"
                         />
                       </div>
                       <div class="m-note">
@@ -484,19 +484,19 @@
                       <div class="ac-action relative">
                         <app-overlay v-if="processing" />
                         <button
-                          type="submit"
                           :disabled="
                             !formMeta.valid ||
                             isMailConfirmed() ||
                             profileInfo.email == null
                           "
                           class="btn save"
+                          type="submit"
                         >
                           <span>تأكيد</span>
                         </button>
                         <button
-                          type="button"
                           class="btn cancel"
+                          type="button"
                           @click="closeSection"
                         >
                           <span>إلغاء</span>
@@ -573,19 +573,19 @@
                       <div class="ac-action relative">
                         <app-overlay v-if="processing" />
                         <button
-                          type="submit"
                           :disabled="
                             !meta.valid ||
                             isPhoneConfirmed() ||
                             profileInfo.phoneNumber == null
                           "
                           class="btn save"
+                          type="submit"
                         >
                           <span>تأكيد</span>
                         </button>
                         <button
-                          type="button"
                           class="btn cancel"
+                          type="button"
                           @click="closeSection"
                         >
                           <span>إلغاء</span>
@@ -601,8 +601,8 @@
                         <span class="r-label">رقم واتساب</span>
                         <span
                           v-if="appAuth.user.phoneNumber"
-                          style="direction: ltr"
                           class="r-val direction-ltr"
+                          style="direction: ltr"
                         >
                           +{{ appAuth.user.phoneNumber }}
                         </span>
@@ -644,7 +644,7 @@
               <lazy-student-training />
             </template>
             <template v-if="activeList === userPanelItems.analytics">
-              <!--            <mx-panel-analytics />-->
+              <lazy-analytics-panel />
             </template>
             <template v-if="activeList === userPanelItems.exams">
               <!--            <mx-panel-exams />-->
@@ -685,9 +685,9 @@
           <client-only>
             <app-image-cropper
               v-model:openCropper="openCropper"
+              :hasDelete="true"
               :img="img"
               :ratio="1"
-              :hasDelete="true"
               @cropImg="cropImg"
               @onDelete="deleteImg"
             />
@@ -696,12 +696,12 @@
           <lazy-prime-dialog
             id="modal-edit-mail"
             v-model:visible="openMailModal"
-            header="تعديل البريد الالكتروني"
-            :showHeader="false"
             :closable="true"
-            :modal="true"
             :closeOnEscape="true"
             :dismissableMask="false"
+            :modal="true"
+            :showHeader="false"
+            header="تعديل البريد الالكتروني"
             @afterHide="closeMailModal()"
           >
             <i
@@ -709,8 +709,8 @@
               @click="closeMailModal()"
             ></i>
             <div
-              class="code-part"
               :class="{ 'wrong-code': wrongCode }"
+              class="code-part"
             >
               <p class="t-1">تغيير البريد الإلكتروني</p>
 
@@ -721,12 +721,12 @@
               <div class="w-full relative">
                 <app-overlay v-if="processing" />
                 <code-input
-                  class="t-code-input"
-                  :fields="4"
-                  :fieldWidth="45"
                   :fieldHeight="45"
+                  :fieldWidth="45"
+                  :fields="4"
                   :radius="8"
                   :required="true"
+                  class="t-code-input"
                   style="direction: ltr"
                   @complete="sendCode"
                 />
@@ -782,12 +782,12 @@
           <lazy-prime-dialog
             id="modal-edit-phone"
             v-model:visible="openPhoneModal"
-            header="تعديل رقم الهاتف"
-            :showHeader="false"
-            :closeOnEscape="true"
             :closable="false"
+            :closeOnEscape="true"
             :dismissableMask="false"
             :modal="true"
+            :showHeader="false"
+            header="تعديل رقم الهاتف"
             @afterHide="closePhoneModal()"
           >
             <i
@@ -795,8 +795,8 @@
               @click="closePhoneModal()"
             ></i>
             <div
-              class="code-part"
               :class="{ 'wrong-code': wrongCode }"
+              class="code-part"
             >
               <p class="t-1">تغيير رقم الواتساب</p>
 
@@ -805,12 +805,12 @@
               <div class="w-full relative">
                 <app-overlay v-if="processing" />
                 <code-input
-                  class="t-code-input"
-                  :fields="4"
-                  :fieldWidth="45"
                   :fieldHeight="45"
+                  :fieldWidth="45"
+                  :fields="4"
                   :radius="8"
                   :required="true"
+                  class="t-code-input"
                   style="direction: ltr"
                   @complete="sendCode"
                 />

@@ -8,25 +8,25 @@
     <div class="wsb-wrapper__buttons">
       <a
         v-if="!isJoinedWhatsappGroup"
-        class="block"
         :href="content.whatsAppLink"
+        class="block"
         target="_blank"
       >
         <app-button
-          class="wa_button"
           :label="content.socialWhatsAppLabel"
+          class="wa_button"
           iconStartClass="fa-brands fa-whatsapp"
         />
       </a>
       <a
         v-if="!isJoinedTelegramGroup"
-        class="block"
         :href="content.telegramLink"
+        class="block"
         target="_blank"
       >
         <app-button
-          class="te_button"
           :label="content.socialTelegramLabel"
+          class="te_button"
           iconStartClass="fa-brands fa-telegram"
         />
       </a>
@@ -35,11 +35,15 @@
 </template>
 <script lang="ts">
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
+import { useGlobalStore } from '~/main/useGlobalStore';
 
 export default {
   setup() {
+    const globalStore = useGlobalStore();
+    const file1Static = computed(() => globalStore.staticState.file1Json);
     return {
       ...useSetupAuth(),
+      file1Static,
     };
   },
   data() {
@@ -69,9 +73,6 @@ export default {
       const userName = this.appAuth.user.userName;
       const message = `\u200Fمرحباً، أنا (${userName}) أرغب بالانضمام إلى مجموعة الوتساب الخاصة بكم.`;
       return encodeURIComponent(message);
-    },
-    file1Static() {
-      return this.$store.state.file1PanelStatic;
     },
     isJoinedTelegramGroup() {
       return this.appAuth.user.joinedTelegramGroup;
