@@ -77,7 +77,7 @@
       >
         تحليلاتي
       </span>
-      <div class="d-flex align-items-center gap-2">
+      <div class="flex items-center gap-2">
         <app-button
           v-if="canStartTour"
           class="sr-ho-button"
@@ -105,7 +105,7 @@
             :key="`analyticsData_${index1}`"
             class="analytics-group"
           >
-            <lazy-prime-accordion>
+            <lazy-prime-accordion class="child-custom-acc">
               <template #expandicon>
                 <i class="fa fa-solid fa-chevron-down c_icon"></i>
               </template>
@@ -234,7 +234,6 @@
                                   </span>
                                 </span>
                               </div>
-
                             </template>
                             <template v-else>
                               <div class="cl-1">
@@ -271,7 +270,6 @@
                                   </div>
                                 </div>
                               </div>
-
                             </template>
                           </div>
                         </lazy-prime-accordion-header>
@@ -472,9 +470,12 @@
             class="analytics-group"
           >
             <!--  test           -->
-            <lazy-prime-accordion>
+            <lazy-prime-accordion class="child-custom-acc">
               <lazy-prime-accordion-panel :value="`analyticsData_${index1}`">
-                <lazy-prime-accordion-header class="custom-panel-header">
+                <lazy-prime-accordion-header
+                  class="custom-panel-header"
+                  @click.stop.prevent
+                >
                   <div
                     :class="{
                       'no-child': !hasChild1(group.analayzeStudentCategories),
@@ -544,7 +545,7 @@
                             ? analyticsPanelTour.step1.content
                             : null
                         "
-                        class="flex flex-column relative items-center gap-3"
+                        class="flex flex-col relative items-center gap-3"
                       >
                         <service-block v-if="!hasAnalyzeService" />
                         <div class="r-1">
@@ -575,7 +576,6 @@
                           </template>
                         </div>
                       </div>
-
                     </div>
                   </div>
                 </lazy-prime-accordion-header>
@@ -586,16 +586,20 @@
                     ) of group.analayzeStudentCategories"
                     :key="`group.analayzeStudentCategories_${index2}`"
                   >
-                    <lazy-prime-accordion v-if="
-                              getTableData(
-                                group.analayzeStudentCategories,
-                                catGroup.categoryId
-                              ).length > 0
-                            ">
+                    <lazy-prime-accordion
+                      v-if="
+                        getTableData(
+                          group.analayzeStudentCategories,
+                          catGroup.categoryId
+                        ).length > 0
+                      "
+                    >
                       <lazy-prime-accordion-panel
                         :value="`group.analayzeStudentCategories_${index2}`"
                       >
-                        <lazy-prime-accordion-header class="custom-panel-header">
+                        <lazy-prime-accordion-header
+                          class="custom-panel-header"
+                        >
                           <div
                             :class="[
                               {
@@ -723,8 +727,6 @@
                                   </a-progress>
                                 </div>
                               </div>
-
-
                             </template>
                             <template v-else>
                               <div class="cl-1">
@@ -834,7 +836,6 @@
                                   </span>
                                 </div>
                               </div>
-
                             </template>
                           </div>
                         </lazy-prime-accordion-header>
@@ -1442,7 +1443,6 @@
                                       </template>
                                     </a-progress>
                                   </div>
-
                                 </template>
                                 <template v-else>
                                   <div class="cl-1">
@@ -1543,7 +1543,6 @@
                                       </span>
                                     </div>
                                   </div>
-
                                 </template>
                               </div>
                             </div>
@@ -1559,12 +1558,11 @@
           </div>
           <div class="analytics-group">
             <div class="chart-collapse-group">
-              <lazy-prime-accordion>
+              <lazy-prime-accordion class="child-custom-acc">
                 <lazy-prime-accordion-panel value="analytics-chart-accordion">
                   <lazy-prime-accordion-header class="custom-panel-header">
                     <div class="ch-header">
                       <span class="ch-title">تطور أدائك في المنصة</span>
-
                     </div>
                   </lazy-prime-accordion-header>
                   <lazy-prime-accordion-content>
@@ -1580,12 +1578,12 @@
                             :style="'height: 250px'"
                           />
                           <div
-                            class="d-flex align-items-center justify-content-lg-end justify-content-center gap-2"
+                            class="flex items-center lg:justify-end justify-center gap-2"
                           >
                             <form-select
                               v-model:selectedValues="selectedChartSub"
                               inputId="selectedChartSub"
-                              class="align-self-end"
+                              class="self-end"
                               style="width: 150px"
                               :list="parentFilterList"
                               :clearable="false"
@@ -1596,7 +1594,7 @@
                             <form-select
                               v-model:selectedValues="selectedChartPeriod"
                               inputId="selectedChartPeriod"
-                              class="align-self-end"
+                              class="self-end"
                               style="width: 150px"
                               :clearable="false"
                               :list="chartPeriodList"

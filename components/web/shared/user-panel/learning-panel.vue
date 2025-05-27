@@ -1020,3 +1020,6 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+@import '@/assets/scss/lib/intro-lib';
+</style>

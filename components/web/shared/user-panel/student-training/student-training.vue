@@ -22,7 +22,7 @@
           :key="`analyticsData_${index1}`"
           class="analytics-group"
         >
-          <lazy-prime-accordion>
+          <lazy-prime-accordion class="child-custom-acc">
             <template #expandicon>
               <i class="fa fa-solid fa-chevron-down c_icon"></i>
             </template>
