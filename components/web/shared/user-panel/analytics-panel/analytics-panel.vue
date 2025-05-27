@@ -105,348 +105,234 @@
             :key="`analyticsData_${index1}`"
             class="analytics-group"
           >
-            <!--  g-info main toggle  -->
-            <div
-              :class="{
-                'no-child': !hasChild1(group.analayzeStudentCategories),
-              }"
-              class="g-info"
-            >
-              <div class="r-part">
-                <div class="rw-1">
-                  <text-slice
-                    :length="20"
-                    :text="group.subjectName"
-                  />
-                </div>
-                <div class="rw-2">
-                  <div class="info-group">
-                    <span class="t-1">الأسئلة</span>
-                    <span class="t-2">{{ group.questionsCount }}</span>
-                  </div>
-                  <div class="info-group">
-                    <span class="t-1">إجمالي الزمن</span>
-                    <span class="t-2">
-                      {{ secondsToHHMMSS(group.totalTime) }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="l-part">
-                <div class="c-period">
-                  <p class="p-text">الفترة الزمنية</p>
-                  <select-list
-                    v-model:selectedItem="selectedPeriod"
-                    name="التصنيف الرئيسي"
-                    :options="periodList"
-                    class="sec a"
-                    :isMulti="false"
-                    :showSelectedItem="true"
-                  />
-                </div>
-                <i
-                  :class="
-                    activeCollapse.includes(
-                      `analytics-group-accordion-${index}`
-                    )
-                      ? 'fa-chevron-up'
-                      : 'fa-chevron-down'
-                  "
-                  class="fa collapse-icon"
-                ></i>
-              </div>
-            </div>
-
-            <!--  g-info items main accordion     -->
-            <b-collapse
-              v-if="hasChild1(group.analayzeStudentCategories)"
-              :id="`analytics-group-accordion-${index}`"
-              visible
-              class="analytics-group-collapse"
-              role="tabpanel"
-            >
-              <!--  first child toggle -->
-              <template
-                v-for="(catGroup, index) of group.analayzeStudentCategories"
-              >
-                <div
-                  v-if="catGroup.parentId == null"
-                  class="g-collapse-group"
-                >
+            <lazy-prime-accordion>
+              <template #expandicon>
+                <i class="fa fa-solid fa-chevron-down c_icon"></i>
+              </template>
+              <template #collapseicon>
+                <i class="fa fa-solid fa-chevron-up c_icon"></i>
+              </template>
+              <lazy-prime-accordion-panel :value="`analyticsData_${index1}`">
+                <lazy-prime-accordion-header class="custom-panel-header">
                   <div
-                    :class="[
-                      {
-                        'no-child': !hasChild2(
-                          group.analayzeStudentCategories,
-                          catGroup.categoryId
-                        ),
-                      },
-                      {
-                        'not-complete': hasNotCompletePart(
-                          group.analayzeStudentCategories,
-                          catGroup.categoryId
-                        ),
-                      },
-                    ]"
-                    class="g-collapse-info"
+                    :class="{
+                      'no-child': !hasChild1(group.analayzeStudentCategories),
+                    }"
+                    class="g-info"
+                    @click.stop.prevent
                   >
-                    <template v-if="!windowSize.isMobileSize">
-                      <div class="c-1">
+                    <div class="r-part">
+                      <div class="rw-1">
                         <text-slice
-                          :length="15"
-                          :text="catGroup.categoryName"
+                          :length="20"
+                          :text="group.subjectName"
                         />
-                        <span class="notCompleteParts">
-                          {{
-                            hasNotCompletePart(
-                              group.analayzeStudentCategories,
-                              catGroup.categoryId
-                            )
-                          }}
-                        </span>
                       </div>
-                      <div class="c-3">
-                        <span class="t-1">مدة التدريب</span>
-                        <span class="t-2">
-                          {{ secondsToHHMMSS(catGroup.totalTime) }}
-                        </span>
-                      </div>
-                      <div class="c-3">
-                        <span class="t-1">الأسئلة</span>
-                        <span class="t-2">{{ catGroup.questionsCount }}</span>
-                      </div>
-                      <div class="c-4">
-                        <span class="t-1">الإجابات</span>
-                        <span class="t-2">
-                          <span class="t-2-1">
-                            {{ catGroup.correctAnswersCount }}
-                          </span>
-                          <span class="t-2-2"></span>
-                          <span class="t-2-3">
-                            {{ catGroup.wrongAnswersCount }}
-                          </span>
-                        </span>
-                      </div>
-                      <i
-                        v-if="
-                          hasChild2(
-                            group.analayzeStudentCategories,
-                            catGroup.categoryId
-                          )
-                        "
-                        :class="
-                          activeCollapse.includes(`g-group-accordion-${index}`)
-                            ? 'fa-chevron-up'
-                            : 'fa-chevron-down'
-                        "
-                        class="fa collapse-icon"
-                      ></i>
-                    </template>
-                    <template v-else>
-                      <div class="cl-1">
-                        <div class="c-1">
-                          <text-slice
-                            :length="12"
-                            :text="catGroup.categoryName"
-                          />
+                      <div class="rw-2">
+                        <div class="info-group">
+                          <span class="t-1">الأسئلة</span>
+                          <span class="t-2">{{ group.questionsCount }}</span>
                         </div>
-                        <div class="r-2">
-                          <div class="c-3">
-                            <span class="t-1">مدة التدريب</span>
-                            <span class="t-2">
-                              {{ secondsToHHMMSS(catGroup.totalTime) }}
-                            </span>
-                          </div>
-                          <div class="c-3">
-                            <span class="t-1">الأسئلة</span>
-                            <span class="t-2">
-                              {{ catGroup.questionsCount }}
-                            </span>
-                          </div>
-                          <div class="c-4">
-                            <span class="t-1">الإجابات</span>
-                            <span class="t-2">
-                              <span class="t-2-1">
-                                {{ catGroup.correctAnswersCount }}
-                              </span>
-                              <span class="t-2-2"></span>
-                              <span class="t-2-3">
-                                {{ catGroup.wrongAnswersCount }}
-                              </span>
-                            </span>
-                          </div>
+                        <div class="info-group">
+                          <span class="t-1">إجمالي الزمن</span>
+                          <span class="t-2">
+                            {{ secondsToHHMMSS(group.totalTime) }}
+                          </span>
                         </div>
                       </div>
-                      <i
-                        v-if="
-                          hasChild2(
-                            group.analayzeStudentCategories,
-                            catGroup.categoryId
-                          )
-                        "
-                        :class="
-                          activeCollapse.includes(`g-group-accordion-${index}`)
-                            ? 'fa-chevron-up'
-                            : 'fa-chevron-down'
-                        "
-                        class="fa collapse-icon"
-                      ></i>
-                    </template>
+                    </div>
+                    <div class="l-part">
+                      <div class="c-period">
+                        <p class="p-text">الفترة الزمنية</p>
+                        <select-list
+                          v-model:selectedItem="selectedPeriod"
+                          name="التصنيف الرئيسي"
+                          :options="periodList"
+                          class="sec a"
+                          :isMulti="false"
+                          :showSelectedItem="true"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <!--  first child collapse -->
-                  <b-collapse
-                    v-if="
-                      hasChild2(
-                        group.analayzeStudentCategories,
-                        catGroup.categoryId
-                      )
-                    "
-                    :id="`g-group-accordion-${index}`"
-                    visible
-                    class="g-group-collapse"
-                    role="tabpanel"
+                </lazy-prime-accordion-header>
+                <lazy-prime-accordion-content>
+                  <template
+                    v-for="(
+                      catGroup, index2
+                    ) of group.analayzeStudentCategories"
+                    :key="`group.analayzeStudentCategories_${index2}`"
                   >
-                    <!--  tables first child collapse  -->
-                    <div
+                    <lazy-prime-accordion
                       v-if="
                         getTableData(
                           group.analayzeStudentCategories,
                           catGroup.categoryId
                         ).length > 0
                       "
-                      class="g-collapse-table"
+                      class="child-custom-acc"
                     >
-                      <template v-if="!windowSize.isMobileSize">
-                        <div class="t-head">
-                          <span>المهارة</span>
-                          <span>الأسئلة</span>
-                          <span>الإجابات</span>
-                          <span>زمن الإجابة/المتوسط</span>
-                          <span>زمن التدريب</span>
-                        </div>
-                        <div class="t-data">
-                          <template
-                            v-for="(tableData, i) of getTableData(
-                              group.analayzeStudentCategories,
-                              catGroup.categoryId
-                            )"
+                      <lazy-prime-accordion-panel
+                        :value="`group.analayzeStudentCategories_${index2}`"
+                      >
+                        <lazy-prime-accordion-header
+                          class="custom-panel-header"
+                        >
+                          <div
+                            :class="[
+                              {
+                                'no-child': !hasChild2(
+                                  group.analayzeStudentCategories,
+                                  catGroup.categoryId
+                                ),
+                              },
+                              {
+                                'not-complete': hasNotCompletePart(
+                                  group.analayzeStudentCategories,
+                                  catGroup.categoryId
+                                ),
+                              },
+                            ]"
+                            class="g-collapse-info"
                           >
-                            <div
-                              class="t-col"
-                              :class="[{ 'is-disabled': !tableData.isEnabled }]"
-                            >
-                              <div class="to-12">
-                                <span class="d-1">
-                                  <text-slice
-                                    :length="30"
-                                    :text="tableData.categoryName"
-                                  />
+                            <template v-if="!windowSize.isMobileSize">
+                              <div class="c-1">
+                                <text-slice
+                                  :length="15"
+                                  :text="catGroup.categoryName"
+                                />
+                                <span class="notCompleteParts">
+                                  {{
+                                    hasNotCompletePart(
+                                      group.analayzeStudentCategories,
+                                      catGroup.categoryId
+                                    )
+                                  }}
                                 </span>
-                                <span class="d-2">
-                                  {{ tableData.questionsCount }}
+                              </div>
+                              <div class="c-3">
+                                <span class="t-1">مدة التدريب</span>
+                                <span class="t-2">
+                                  {{ secondsToHHMMSS(catGroup.totalTime) }}
+                                </span>
+                              </div>
+                              <div class="c-3">
+                                <span class="t-1">الأسئلة</span>
+                                <span class="t-2">
+                                  {{ catGroup.questionsCount }}
+                                </span>
+                              </div>
+                              <div class="c-4">
+                                <span class="t-1">الإجابات</span>
+                                <span class="t-2">
+                                  <span class="t-2-1">
+                                    {{ catGroup.correctAnswersCount }}
+                                  </span>
+                                  <span class="t-2-2"></span>
+                                  <span class="t-2-3">
+                                    {{ catGroup.wrongAnswersCount }}
+                                  </span>
                                 </span>
                               </div>
 
-                              <span class="d-3">
-                                <span class="t-2-1">
-                                  {{ tableData.correctAnswersCount }}
-                                </span>
-                                <span class="t-2-2"></span>
-                                <span
-                                  :data-title="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step5.title
-                                      : null
-                                  "
-                                  :data-intro="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step5.content
-                                      : null
-                                  "
-                                  class="t-2-3"
-                                >
-                                  {{ tableData.wrongAnswersCount }}
-                                </span>
-                              </span>
-                              <span class="d-4">
-                                <span class="t-2-1">
-                                  {{
-                                    secondsToMMSS(
-                                      tableData.studentTimeTakenRate
-                                    )
-                                  }}
-                                </span>
-                                <span class="t-2-2"></span>
-                                <span
-                                  :data-title="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step7.title
-                                      : null
-                                  "
-                                  :data-intro="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step7.content
-                                      : null
-                                  "
-                                  class="t-2-3"
-                                >
-                                  {{
-                                    secondsToMMSS(
-                                      tableData.allStudentsTimeTakenRate
-                                    )
-                                  }}
-                                </span>
-                              </span>
-                              <span class="d-5">
-                                {{ secondsToHHMMSS(tableData.totalTime) }}
-                              </span>
-                            </div>
-                          </template>
-                        </div>
-                      </template>
-                      <template v-else>
-                        <div class="t-card">
-                          <template
-                            v-for="(tableData, i) of getTableData(
-                              group.analayzeStudentCategories,
-                              catGroup.categoryId
-                            )"
-                          >
-                            <div
-                              class="t-col"
-                              :class="[{ 'is-disabled': !tableData.isEnabled }]"
-                            >
-                              <div class="zr-w">
-                                <div class="r-1">
-                                  <span class="d-1">
-                                    <text-slice
-                                      :length="25"
-                                      :text="tableData.categoryName"
-                                    />
-                                  </span>
+                            </template>
+                            <template v-else>
+                              <div class="cl-1">
+                                <div class="c-1">
+                                  <text-slice
+                                    :length="12"
+                                    :text="catGroup.categoryName"
+                                  />
                                 </div>
-                                <div class="dds r-2">
-                                  <div class="d-2">
-                                    <span class="label">الأسئلة</span>
-                                    <span class="info">
-                                      {{ tableData.questionsCount }}
+                                <div class="r-2">
+                                  <div class="c-3">
+                                    <span class="t-1">مدة التدريب</span>
+                                    <span class="t-2">
+                                      {{ secondsToHHMMSS(catGroup.totalTime) }}
                                     </span>
                                   </div>
-                                  <div class="d-3">
-                                    <span class="label">الإجابات</span>
-                                    <div class="t-group">
+                                  <div class="c-3">
+                                    <span class="t-1">الأسئلة</span>
+                                    <span class="t-2">
+                                      {{ catGroup.questionsCount }}
+                                    </span>
+                                  </div>
+                                  <div class="c-4">
+                                    <span class="t-1">الإجابات</span>
+                                    <span class="t-2">
+                                      <span class="t-2-1">
+                                        {{ catGroup.correctAnswersCount }}
+                                      </span>
+                                      <span class="t-2-2"></span>
+                                      <span class="t-2-3">
+                                        {{ catGroup.wrongAnswersCount }}
+                                      </span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </template>
+                          </div>
+                        </lazy-prime-accordion-header>
+                        <lazy-prime-accordion-content>
+                          <div class="g-collapse-table">
+                            <template v-if="!windowSize.isMobileSize">
+                              <div class="t-head">
+                                <span>المهارة</span>
+                                <span>الأسئلة</span>
+                                <span>الإجابات</span>
+                                <span>زمن الإجابة/المتوسط</span>
+                                <span>زمن التدريب</span>
+                              </div>
+                              <div class="t-data">
+                                <template
+                                  v-for="(tableData, i) of getTableData(
+                                    group.analayzeStudentCategories,
+                                    catGroup.categoryId
+                                  )"
+                                  :key="`catGroup.categoryId_${i}`"
+                                >
+                                  <div
+                                    class="t-col"
+                                    :class="[
+                                      { 'is-disabled': !tableData.isEnabled },
+                                    ]"
+                                  >
+                                    <div class="to-12">
+                                      <span class="d-1">
+                                        <text-slice
+                                          :length="30"
+                                          :text="tableData.categoryName"
+                                        />
+                                      </span>
+                                      <span class="d-2">
+                                        {{ tableData.questionsCount }}
+                                      </span>
+                                    </div>
+
+                                    <span class="d-3">
                                       <span class="t-2-1">
                                         {{ tableData.correctAnswersCount }}
                                       </span>
                                       <span class="t-2-2"></span>
-                                      <span class="t-2-3">
+                                      <span
+                                        :data-title="
+                                          i === 0 && index2 === 0
+                                            ? analyticsPanelTour.step5.title
+                                            : null
+                                        "
+                                        :data-intro="
+                                          i === 0 && index2 === 0
+                                            ? analyticsPanelTour.step5.content
+                                            : null
+                                        "
+                                        class="t-2-3"
+                                      >
                                         {{ tableData.wrongAnswersCount }}
                                       </span>
-                                    </div>
-                                  </div>
-                                  <div class="d-3">
-                                    <span class="label">زمنك/المتوسط</span>
-                                    <div class="t-group">
+                                    </span>
+                                    <span class="d-4">
                                       <span class="t-2-1">
                                         {{
                                           secondsToMMSS(
@@ -455,32 +341,126 @@
                                         }}
                                       </span>
                                       <span class="t-2-2"></span>
-                                      <span class="t-2-3">
+                                      <span
+                                        :data-title="
+                                          i === 0 && index2 === 0
+                                            ? analyticsPanelTour.step7.title
+                                            : null
+                                        "
+                                        :data-intro="
+                                          i === 0 && index2 === 0
+                                            ? analyticsPanelTour.step7.content
+                                            : null
+                                        "
+                                        class="t-2-3"
+                                      >
                                         {{
                                           secondsToMMSS(
                                             tableData.allStudentsTimeTakenRate
                                           )
                                         }}
                                       </span>
-                                    </div>
-                                  </div>
-                                  <div class="d-2">
-                                    <span class="label">زمن التدريب</span>
-                                    <span class="info">
+                                    </span>
+                                    <span class="d-5">
                                       {{ secondsToHHMMSS(tableData.totalTime) }}
                                     </span>
                                   </div>
-                                </div>
+                                </template>
                               </div>
-                            </div>
-                          </template>
-                        </div>
-                      </template>
-                    </div>
-                  </b-collapse>
-                </div>
-              </template>
-            </b-collapse>
+                            </template>
+                            <template v-else>
+                              <div class="t-card">
+                                <template
+                                  v-for="(
+                                    tableData, indexTable
+                                  ) of getTableData(
+                                    group.analayzeStudentCategories,
+                                    catGroup.categoryId
+                                  )"
+                                  :key="`group.analayzeStudentCategories_${indexTable}_${i}`"
+                                >
+                                  <div
+                                    class="t-col"
+                                    :class="[
+                                      { 'is-disabled': !tableData.isEnabled },
+                                    ]"
+                                  >
+                                    <div class="zr-w">
+                                      <div class="r-1">
+                                        <span class="d-1">
+                                          <text-slice
+                                            :length="25"
+                                            :text="tableData.categoryName"
+                                          />
+                                        </span>
+                                      </div>
+                                      <div class="dds r-2">
+                                        <div class="d-2">
+                                          <span class="label">الأسئلة</span>
+                                          <span class="info">
+                                            {{ tableData.questionsCount }}
+                                          </span>
+                                        </div>
+                                        <div class="d-3">
+                                          <span class="label">الإجابات</span>
+                                          <div class="t-group">
+                                            <span class="t-2-1">
+                                              {{
+                                                tableData.correctAnswersCount
+                                              }}
+                                            </span>
+                                            <span class="t-2-2"></span>
+                                            <span class="t-2-3">
+                                              {{ tableData.wrongAnswersCount }}
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <div class="d-3">
+                                          <span class="label">
+                                            زمنك/المتوسط
+                                          </span>
+                                          <div class="t-group">
+                                            <span class="t-2-1">
+                                              {{
+                                                secondsToMMSS(
+                                                  tableData.studentTimeTakenRate
+                                                )
+                                              }}
+                                            </span>
+                                            <span class="t-2-2"></span>
+                                            <span class="t-2-3">
+                                              {{
+                                                secondsToMMSS(
+                                                  tableData.allStudentsTimeTakenRate
+                                                )
+                                              }}
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <div class="d-2">
+                                          <span class="label">زمن التدريب</span>
+                                          <span class="info">
+                                            {{
+                                              secondsToHHMMSS(
+                                                tableData.totalTime
+                                              )
+                                            }}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </template>
+                              </div>
+                            </template>
+                          </div>
+                        </lazy-prime-accordion-content>
+                      </lazy-prime-accordion-panel>
+                    </lazy-prime-accordion>
+                  </template>
+                </lazy-prime-accordion-content>
+              </lazy-prime-accordion-panel>
+            </lazy-prime-accordion>
           </div>
         </div>
       </template>
@@ -491,719 +471,440 @@
             :key="`analyticsData_${index1}`"
             class="analytics-group"
           >
-            <!--  g-info main toggle  -->
-            <div
-              :class="{
-                'no-child': !hasChild1(group.analayzeStudentCategories),
-              }"
-              class="g-info"
-            >
-              <div class="r-part">
-                <div class="rw-1">
-                  <text-slice
-                    :length="20"
-                    :text="group.subjectName"
-                  />
-                </div>
-                <div
-                  :data-title="
-                    analyticsPanelTour ? analyticsPanelTour.step0.title : null
-                  "
-                  :data-intro="
-                    analyticsPanelTour ? analyticsPanelTour.step0.content : null
-                  "
-                  class="rw-2"
-                >
-                  <div class="info-group">
-                    <span class="t-1">ترتيبك</span>
-                    <span class="t-2">{{ group.studentSort }}</span>
-                  </div>
-                  <div class="info-group">
-                    <span class="t-1">نقاطك</span>
-                    <span class="t-2">{{ group.studentPoints }}</span>
-                  </div>
-                  <div class="info-group">
-                    <span class="t-1">الأسئلة</span>
-                    <span class="t-2">{{ group.questionsCount }}</span>
-                  </div>
-                  <div class="info-group">
-                    <span class="t-1">النسبة</span>
-                    <template v-if="hasAnalyzeService">
-                      <template v-if="group.studentRate > 0">
-                        <span class="t-2">{{ group.studentRate }}%</span>
-                      </template>
-                      <template v-else>
-                        <span class="t-2">عدد الاسئلة غير كافي</span>
-                      </template>
-                    </template>
-                    <template v-else>
-                      <div class="relative">
-                        <service-block />
-                        <subs-only-block />
-                      </div>
-                    </template>
-                  </div>
-                </div>
-              </div>
-              <div class="l-part">
-                <div
-                  :data-title="
-                    analyticsPanelTour ? analyticsPanelTour.step1.title : null
-                  "
-                  :data-intro="
-                    analyticsPanelTour ? analyticsPanelTour.step1.content : null
-                  "
-                  class="flex flex-column relative items-center gap-3"
-                >
-                  <service-block v-if="!hasAnalyzeService" />
-                  <div class="r-1">
-                    <div class="flex items-baseline !gap-1 justify-center">
-                      <service-lock v-if="!hasAnalyzeService" />
-                      <span>الدرجة المتوقعة</span>
-                    </div>
-                    <span>في الاختبار الحقيقي</span>
-                  </div>
-                  <div class="r-2">
-                    <template v-if="hasAnalyzeService">
-                      <template v-if="group.studentRate">
-                        <span class="t-1">%</span>
-                        <span class="t-2">
-                          {{ getPredictedMark(group.studentRate) }}
-                        </span>
-                      </template>
-                      <template v-else>
-                        <span class="te-g-label red">عدد الأسئلة غير كاف</span>
-                      </template>
-                    </template>
-                    <template v-else>
-                      <span class="te-g-label">للمشتركين فقط</span>
-                    </template>
-                  </div>
-                </div>
-                <i
-                  :class="
-                    activeCollapse.includes(
-                      `analytics-group-accordion-${index}`
-                    )
-                      ? 'fa-chevron-up'
-                      : 'fa-chevron-down'
-                  "
-                  class="fa collapse-icon"
-                ></i>
-              </div>
-            </div>
-
-            <!--  g-info items main accordion     -->
-            <b-collapse
-              v-if="hasChild1(group.analayzeStudentCategories)"
-              :id="`analytics-group-accordion-${index}`"
-              visible
-              class="analytics-group-collapse"
-              role="tabpanel"
-            >
-              <!--  first child toggle -->
-              <template
-                v-for="(catGroup, index) of group.analayzeStudentCategories"
-              >
-                <div
-                  v-if="catGroup.parentId == null"
-                  class="g-collapse-group"
-                >
+            <!--  test           -->
+            <lazy-prime-accordion>
+              <lazy-prime-accordion-panel :value="`analyticsData_${index1}`">
+                <lazy-prime-accordion-header class="custom-panel-header">
                   <div
-                    :class="[
-                      {
-                        'no-child': !hasChild2(
-                          group.analayzeStudentCategories,
-                          catGroup.categoryId
-                        ),
-                      },
-                      {
-                        'not-complete': hasNotCompletePart(
-                          group.analayzeStudentCategories,
-                          catGroup.categoryId
-                        ),
-                      },
-                    ]"
-                    class="g-collapse-info"
+                    :class="{
+                      'no-child': !hasChild1(group.analayzeStudentCategories),
+                    }"
+                    class="g-info"
                   >
-                    <template v-if="!windowSize.isMobileSize">
-                      <div class="c-1">
+                    <div class="r-part">
+                      <div class="rw-1">
                         <text-slice
-                          :length="15"
-                          :text="catGroup.categoryName"
+                          :length="20"
+                          :text="group.subjectName"
                         />
-                        <span class="notCompleteParts">
-                          {{
-                            hasNotCompletePart(
-                              group.analayzeStudentCategories,
-                              catGroup.categoryId
-                            )
-                          }}
-                        </span>
-                      </div>
-                      <div class="c-2">
-                        <app-button
-                          :isLoading="
-                            !!loading && loading == catGroup.examDefaultId
-                          "
-                          :isDisabled="
-                            !!loading && loading !== catGroup.examDefaultId
-                          "
-                          size="md"
-                          label="تدرب"
-                          @click.stop="
-                            isStudent
-                              ? onTrainClickStudent(catGroup.categoryId)
-                              : goTraining(
-                                  catGroup.examDefaultId,
-                                  catGroup.categoryId
-                                )
-                          "
-                        />
-                      </div>
-                      <div class="c-3">
-                        <span class="t-1">الأسئلة</span>
-                        <span class="t-2">{{ catGroup.questionsCount }}</span>
-                      </div>
-                      <div class="c-4">
-                        <span class="t-1">الإجابات</span>
-                        <span class="t-2">
-                          <span class="t-2-1">
-                            {{ catGroup.correctAnswersCount }}
-                          </span>
-                          <span class="t-2-2"></span>
-                          <span class="t-2-3">
-                            {{ catGroup.wrongAnswersCount }}
-                          </span>
-                        </span>
                       </div>
                       <div
                         :data-title="
-                          index === 0 ? analyticsPanelTour.step2.title : null
+                          analyticsPanelTour
+                            ? analyticsPanelTour.step0.title
+                            : null
                         "
                         :data-intro="
-                          index === 0 ? analyticsPanelTour.step2.content : null
+                          analyticsPanelTour
+                            ? analyticsPanelTour.step0.content
+                            : null
                         "
-                        class="qw-e"
+                        class="rw-2"
                       >
-                        <div class="c-3 qw">
-                          <span class="t-1">التقييم</span>
-                          <span class="t-2">
-                            {{ getRateLabel(catGroup.rate) }}
-                          </span>
+                        <div class="info-group">
+                          <span class="t-1">ترتيبك</span>
+                          <span class="t-2">{{ group.studentSort }}</span>
                         </div>
-                        <div
-                          class="c-6"
-                          :class="[{ 'no-sub': !hasAnalyzeService }]"
-                        >
-                          <template v-if="!hasAnalyzeService">
-                            <service-block />
-                            <service-lock />
-                          </template>
-                          <a-progress
-                            :width="66"
-                            type="circle"
-                            :percent="catGroup.rate"
-                            stroke-linecap="round"
-                            :strokeColor="{
-                              '0%': '#FD6C6C',
-                              '100%': '#008FFB',
-                            }"
-                            trailColor="#cfd1d4"
-                            :strokeWidth="11"
-                          >
-                            <template #format="percent">
-                              <span class="percent">
-                                <span
-                                  style="
-                                    font-size: 16px;
-                                    margin-inline-end: 2px;
-                                  "
-                                >
-                                  %
-                                </span>
-                                <span>{{ percent }}</span>
-                              </span>
+                        <div class="info-group">
+                          <span class="t-1">نقاطك</span>
+                          <span class="t-2">{{ group.studentPoints }}</span>
+                        </div>
+                        <div class="info-group">
+                          <span class="t-1">الأسئلة</span>
+                          <span class="t-2">{{ group.questionsCount }}</span>
+                        </div>
+                        <div class="info-group">
+                          <span class="t-1">النسبة</span>
+                          <template v-if="hasAnalyzeService">
+                            <template v-if="group.studentRate > 0">
+                              <span class="t-2">{{ group.studentRate }}%</span>
                             </template>
-                          </a-progress>
+                            <template v-else>
+                              <span class="t-2">عدد الاسئلة غير كافي</span>
+                            </template>
+                          </template>
+                          <template v-else>
+                            <div class="relative">
+                              <service-block />
+                              <subs-only-block />
+                            </div>
+                          </template>
                         </div>
                       </div>
-
-                      <i
-                        v-if="
-                          hasChild2(
-                            group.analayzeStudentCategories,
-                            catGroup.categoryId
-                          )
+                    </div>
+                    <div class="l-part">
+                      <div
+                        :data-title="
+                          analyticsPanelTour
+                            ? analyticsPanelTour.step1.title
+                            : null
                         "
-                        :class="
-                          activeCollapse.includes(`g-group-accordion-${index}`)
-                            ? 'fa-chevron-up'
-                            : 'fa-chevron-down'
+                        :data-intro="
+                          analyticsPanelTour
+                            ? analyticsPanelTour.step1.content
+                            : null
                         "
-                        class="fa collapse-icon"
-                      ></i>
-                    </template>
-                    <template v-else>
-                      <div class="cl-1">
-                        <div class="c-1">
-                          <text-slice
-                            :length="12"
-                            :text="catGroup.categoryName"
-                          />
-                        </div>
-                        <div class="c-2">
-                          <app-button
-                            size="md"
-                            :isLoading="
-                              !!loading && loading == catGroup.examDefaultId
-                            "
-                            :isDisabled="
-                              !!loading && loading !== catGroup.examDefaultId
-                            "
-                            label="تدرب"
-                            @click.stop="
-                              isStudent
-                                ? onTrainClickStudent(catGroup.categoryId)
-                                : goTraining(
-                                    catGroup.examDefaultId,
-                                    catGroup.categoryId
-                                  )
-                            "
-                          />
+                        class="flex flex-column relative items-center gap-3"
+                      >
+                        <service-block v-if="!hasAnalyzeService" />
+                        <div class="r-1">
+                          <div
+                            class="flex items-baseline !gap-1 justify-center"
+                          >
+                            <service-lock v-if="!hasAnalyzeService" />
+                            <span>الدرجة المتوقعة</span>
+                          </div>
+                          <span>في الاختبار الحقيقي</span>
                         </div>
                         <div class="r-2">
-                          <div class="c-3">
-                            <span class="t-1">الأسئلة</span>
-                            <span class="t-2">
-                              {{ catGroup.questionsCount }}
-                            </span>
-                          </div>
-                          <div class="c-4">
-                            <span class="t-1">الإجابات</span>
-                            <span class="t-2">
-                              <span class="t-2-1">
-                                {{ catGroup.correctAnswersCount }}
-                              </span>
-                              <span class="t-2-2"></span>
-                              <span class="t-2-3">
-                                {{ catGroup.wrongAnswersCount }}
-                              </span>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        :data-title="
-                          index === 0 ? analyticsPanelTour.step2.title : null
-                        "
-                        :data-intro="
-                          index === 0 ? analyticsPanelTour.step2.content : null
-                        "
-                        class="cl-2"
-                      >
-                        <div
-                          class="c-6"
-                          :class="[{ 'no-sub': !hasAnalyzeService }]"
-                        >
-                          <template v-if="!hasAnalyzeService">
-                            <service-block />
-                            <service-lock />
-                          </template>
-                          <a-progress
-                            :width="66"
-                            type="circle"
-                            :percent="catGroup.rate"
-                            stroke-linecap="round"
-                            :strokeColor="{
-                              '0%': '#FD6C6C',
-                              '100%': '#008FFB',
-                            }"
-                            trailColor="#cfd1d4"
-                            :strokeWidth="11"
-                          >
-                            <template #format="percent">
-                              <span class="percent">
-                                <span
-                                  style="
-                                    font-size: 16px;
-                                    margin-inline-end: 2px;
-                                  "
-                                >
-                                  %
-                                </span>
-                                <span>{{ percent }}</span>
+                          <template v-if="hasAnalyzeService">
+                            <template v-if="group.studentRate">
+                              <span class="t-1">%</span>
+                              <span class="t-2">
+                                {{ getPredictedMark(group.studentRate) }}
                               </span>
                             </template>
-                          </a-progress>
-                        </div>
-                        <div class="c-3 qw">
-                          <span class="t-1">التقييم</span>
-                          <span class="t-2">
-                            {{ getRateLabel(catGroup.rate) }}
-                          </span>
+                            <template v-else>
+                              <span class="te-g-label red">
+                                عدد الأسئلة غير كاف
+                              </span>
+                            </template>
+                          </template>
+                          <template v-else>
+                            <span class="te-g-label">للمشتركين فقط</span>
+                          </template>
                         </div>
                       </div>
-                      <i
-                        v-if="
-                          hasChild2(
-                            group.analayzeStudentCategories,
-                            catGroup.categoryId
-                          )
-                        "
-                        :class="
-                          activeCollapse.includes(`g-group-accordion-${index}`)
-                            ? 'fa-chevron-up'
-                            : 'fa-chevron-down'
-                        "
-                        class="fa collapse-icon"
-                      ></i>
-                    </template>
-                  </div>
-                  <!--  first child collapse -->
-                  <b-collapse
-                    v-if="
-                      hasChild2(
-                        group.analayzeStudentCategories,
-                        catGroup.categoryId
-                      )
-                    "
-                    :id="`g-group-accordion-${index}`"
-                    visible
-                    class="g-group-collapse"
-                    role="tabpanel"
-                  >
-                    <!--  tables first child collapse  -->
-                    <div
-                      v-if="
-                        getTableData(
-                          group.analayzeStudentCategories,
-                          catGroup.categoryId
-                        ).length > 0
-                      "
-                      class="g-collapse-table"
-                    >
-                      <template v-if="!windowSize.isMobileSize">
-                        <div class="t-head">
-                          <span>المهارة</span>
-                          <span>الأسئلة</span>
-                          <span>الإجابات</span>
-                          <span>زمن الإجابة/المتوسط</span>
-                          <span>التقييم</span>
-                          <span>التدريب</span>
-                        </div>
-                        <div class="t-data">
-                          <template
-                            v-for="(tableData, i) of getTableData(
-                              group.analayzeStudentCategories,
-                              catGroup.categoryId
-                            )"
-                          >
-                            <div
-                              class="t-col"
-                              :class="[{ 'is-disabled': !tableData.isEnabled }]"
-                            >
-                              <div
-                                :data-title="
-                                  i === 0 && index === 0
-                                    ? analyticsPanelTour.step3.title
-                                    : null
-                                "
-                                :data-intro="
-                                  i === 0 && index === 0
-                                    ? analyticsPanelTour.step3.content
-                                    : null
-                                "
-                                class="to-12"
-                              >
-                                <span class="d-1">
-                                  <text-slice
-                                    :length="30"
-                                    :text="tableData.categoryName"
-                                  />
-                                </span>
-                                <span class="d-2">
-                                  {{ tableData.questionsCount }}
-                                </span>
-                              </div>
 
-                              <span class="d-3">
-                                <span
-                                  :data-title="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step4.title
-                                      : null
-                                  "
-                                  :data-intro="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step4.content
-                                      : null
-                                  "
-                                  class="t-2-1"
-                                >
-                                  {{ tableData.correctAnswersCount }}
-                                </span>
-                                <span class="t-2-2"></span>
-                                <span
-                                  :data-title="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step5.title
-                                      : null
-                                  "
-                                  :data-intro="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step5.content
-                                      : null
-                                  "
-                                  class="t-2-3"
-                                >
-                                  {{ tableData.wrongAnswersCount }}
-                                </span>
-                              </span>
-                              <span class="d-4">
-                                <span
-                                  :data-title="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step6.title
-                                      : null
-                                  "
-                                  :data-intro="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step6.content
-                                      : null
-                                  "
-                                  class="t-2-1"
-                                >
+                    </div>
+                  </div>
+                </lazy-prime-accordion-header>
+                <lazy-prime-accordion-content>
+                  <template
+                    v-for="(
+                      catGroup, index2
+                    ) of group.analayzeStudentCategories"
+                    :key="`group.analayzeStudentCategories_${index2}`"
+                  >
+                    <lazy-prime-accordion v-if="
+                              getTableData(
+                                group.analayzeStudentCategories,
+                                catGroup.categoryId
+                              ).length > 0
+                            ">
+                      <lazy-prime-accordion-panel
+                        :value="`group.analayzeStudentCategories_${index2}`"
+                      >
+                        <lazy-prime-accordion-header class="custom-panel-header">
+                          <div
+                            :class="[
+                              {
+                                'no-child': !hasChild2(
+                                  group.analayzeStudentCategories,
+                                  catGroup.categoryId
+                                ),
+                              },
+                              {
+                                'not-complete': hasNotCompletePart(
+                                  group.analayzeStudentCategories,
+                                  catGroup.categoryId
+                                ),
+                              },
+                            ]"
+                            class="g-collapse-info"
+                          >
+                            <template v-if="!windowSize.isMobileSize">
+                              <div class="c-1">
+                                <text-slice
+                                  :length="15"
+                                  :text="catGroup.categoryName"
+                                />
+                                <span class="notCompleteParts">
                                   {{
-                                    secondsToMMSS(
-                                      tableData.studentTimeTakenRate
+                                    hasNotCompletePart(
+                                      group.analayzeStudentCategories,
+                                      catGroup.categoryId
                                     )
                                   }}
                                 </span>
-                                <span class="t-2-2"></span>
-                                <span
-                                  :data-title="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step7.title
-                                      : null
-                                  "
-                                  :data-intro="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step7.content
-                                      : null
-                                  "
-                                  class="t-2-3"
-                                >
-                                  {{
-                                    secondsToMMSS(
-                                      tableData.allStudentsTimeTakenRate
-                                    )
-                                  }}
-                                </span>
-                              </span>
-                              <div
-                                :data-title="
-                                  i === 0 && index === 0
-                                    ? analyticsPanelTour.step8.title
-                                    : null
-                                "
-                                :data-intro="
-                                  i === 0 && index === 0
-                                    ? analyticsPanelTour.step8.content
-                                    : null
-                                "
-                                class="d-5"
-                              >
-                                <template v-if="tableData.isEnabled">
-                                  <span
-                                    v-if="
-                                      notEnoughQuestions(
-                                        tableData.questionsCount,
-                                        tableData.rate
-                                      )
-                                    "
-                                    class="notEnoughText"
-                                  >
-                                    عدد الأسئلة غير كاف
-                                  </span>
-                                  <app-progress-bar
-                                    v-else
-                                    :class="
-                                      tableData.rate < 30
-                                        ? 'red'
-                                        : tableData.rate < 70
-                                          ? 'orange'
-                                          : 'green'
-                                    "
-                                    :max="100"
-                                    height="18px"
-                                    :value="tableData.rate"
-                                  />
-                                </template>
-                                <template v-else>
-                                  <div class="w-full relative">
-                                    <service-block />
-                                    <subs-only-block />
-                                  </div>
-                                </template>
                               </div>
-                              <div class="d-6 relative">
-                                <app-overlay
-                                  v-if="
+                              <div class="c-2">
+                                <app-button
+                                  :isLoading="
                                     !!loading &&
-                                    loading == tableData.examDefaultId
+                                    loading == catGroup.examDefaultId
+                                  "
+                                  :isDisabled="
+                                    !!loading &&
+                                    loading !== catGroup.examDefaultId
+                                  "
+                                  size="md"
+                                  label="تدرب"
+                                  @click.stop="
+                                    isStudent
+                                      ? onTrainClickStudent(catGroup.categoryId)
+                                      : goTraining(
+                                          catGroup.examDefaultId,
+                                          catGroup.categoryId
+                                        )
                                   "
                                 />
-
-                                <div class="w-full relative">
-                                  <service-block v-if="!tableData.isEnabled" />
-                                  <app-button
-                                    v-if="
-                                      tableData.hasLawAnalyze &&
-                                      !notEnoughQuestions(
-                                        tableData.questionsCount,
-                                        tableData.rate
-                                      )
-                                    "
-                                    size="md"
-                                    :class="[
-                                      {
-                                        'opacity-60': !tableData.isEnabled,
-                                      },
-                                    ]"
-                                    label="حلل نتيجتي"
-                                    @click.stop="
-                                      toMyAnalytics(tableData.categoryId)
-                                    "
+                              </div>
+                              <div class="c-3">
+                                <span class="t-1">الأسئلة</span>
+                                <span class="t-2">
+                                  {{ catGroup.questionsCount }}
+                                </span>
+                              </div>
+                              <div class="c-4">
+                                <span class="t-1">الإجابات</span>
+                                <span class="t-2">
+                                  <span class="t-2-1">
+                                    {{ catGroup.correctAnswersCount }}
+                                  </span>
+                                  <span class="t-2-2"></span>
+                                  <span class="t-2-3">
+                                    {{ catGroup.wrongAnswersCount }}
+                                  </span>
+                                </span>
+                              </div>
+                              <div
+                                :data-title="
+                                  index2 === 0
+                                    ? analyticsPanelTour.step2.title
+                                    : null
+                                "
+                                :data-intro="
+                                  index2 === 0
+                                    ? analyticsPanelTour.step2.content
+                                    : null
+                                "
+                                class="qw-e"
+                              >
+                                <div class="c-3 qw">
+                                  <span class="t-1">التقييم</span>
+                                  <span class="t-2">
+                                    {{ getRateLabel(catGroup.rate) }}
+                                  </span>
+                                </div>
+                                <div
+                                  class="c-6"
+                                  :class="[{ 'no-sub': !hasAnalyzeService }]"
+                                >
+                                  <template v-if="!hasAnalyzeService">
+                                    <service-block />
+                                    <service-lock />
+                                  </template>
+                                  <a-progress
+                                    :size="66"
+                                    type="circle"
+                                    :percent="catGroup.rate"
+                                    stroke-linecap="round"
+                                    :strokeColor="{
+                                      '0%': '#FD6C6C',
+                                      '100%': '#008FFB',
+                                    }"
+                                    trailColor="#cfd1d4"
+                                    :strokeWidth="11"
                                   >
-                                    <template
-                                      v-if="!tableData.isEnabled"
-                                      #iconStart
-                                    >
-                                      <service-lock />
+                                    <template #format="percent">
+                                      <span class="percent">
+                                        <span
+                                          style="
+                                            font-size: 16px;
+                                            margin-inline-end: 2px;
+                                          "
+                                        >
+                                          %
+                                        </span>
+                                        <span>{{ percent }}</span>
+                                      </span>
                                     </template>
-                                  </app-button>
+                                  </a-progress>
+                                </div>
+                              </div>
+
+
+                            </template>
+                            <template v-else>
+                              <div class="cl-1">
+                                <div class="c-1">
+                                  <text-slice
+                                    :length="12"
+                                    :text="catGroup.categoryName"
+                                  />
+                                </div>
+                                <div class="c-2">
                                   <app-button
-                                    v-else
                                     size="md"
+                                    :isLoading="
+                                      !!loading &&
+                                      loading == catGroup.examDefaultId
+                                    "
+                                    :isDisabled="
+                                      !!loading &&
+                                      loading !== catGroup.examDefaultId
+                                    "
                                     label="تدرب"
                                     @click.stop="
                                       isStudent
                                         ? onTrainClickStudent(
-                                            catGroup.categoryId,
-                                            tableData.categoryId
+                                            catGroup.categoryId
                                           )
                                         : goTraining(
-                                            tableData.examDefaultId,
-                                            tableData.categoryId
+                                            catGroup.examDefaultId,
+                                            catGroup.categoryId
                                           )
                                     "
                                   />
                                 </div>
-                              </div>
-                            </div>
-                          </template>
-                        </div>
-                      </template>
-                      <template v-else>
-                        <div class="t-card">
-                          <template
-                            v-for="(tableData, i) of getTableData(
-                              group.analayzeStudentCategories,
-                              catGroup.categoryId
-                            )"
-                          >
-                            <div
-                              class="t-col"
-                              :class="[{ 'is-disabled': !tableData.isEnabled }]"
-                            >
-                              <div class="zr-w">
-                                <div class="r-1">
-                                  <span class="d-1">
-                                    <text-slice
-                                      :length="25"
-                                      :text="tableData.categoryName"
-                                    />
-                                  </span>
-                                </div>
-                                <div
-                                  :data-title="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step8.title
-                                      : null
-                                  "
-                                  :data-intro="
-                                    i === 0 && index === 0
-                                      ? analyticsPanelTour.step8.content
-                                      : null
-                                  "
-                                  class="flex justify-center justify-self-center w-full"
-                                >
-                                  <template v-if="!tableData.isEnabled">
-                                    <div class="relative">
-                                      <service-block />
-                                      <subs-only-block />
-                                    </div>
-                                  </template>
-                                  <template v-else>
-                                    <template
-                                      v-if="
-                                        notEnoughQuestions(
-                                          tableData.questionsCount,
-                                          tableData.rate
-                                        )
-                                      "
-                                    >
-                                      <span class="zr-w__label-no-enough">
-                                        عدد الاسئلة غير كاف
-                                      </span>
-                                    </template>
-                                    <template v-else>
-                                      <app-progress-bar
-                                        :class="
-                                          tableData.rate < 30
-                                            ? 'red'
-                                            : tableData.rate < 70
-                                              ? 'orange'
-                                              : 'green'
-                                        "
-                                        :max="100"
-                                        height="18px"
-                                        :value="tableData.rate"
-                                      />
-                                    </template>
-                                  </template>
-                                </div>
-                                <div class="dds r-2">
-                                  <div
-                                    :data-title="
-                                      i === 0 && index === 0
-                                        ? analyticsPanelTour.step3.title
-                                        : null
-                                    "
-                                    :data-intro="
-                                      i === 0 && index === 0
-                                        ? analyticsPanelTour.step3.content
-                                        : null
-                                    "
-                                    class="d-2"
-                                  >
-                                    <span class="label">الأسئلة</span>
-                                    <span class="info">
-                                      {{ tableData.questionsCount }}
+                                <div class="r-2">
+                                  <div class="c-3">
+                                    <span class="t-1">الأسئلة</span>
+                                    <span class="t-2">
+                                      {{ catGroup.questionsCount }}
                                     </span>
                                   </div>
-                                  <div class="d-3">
-                                    <span class="label">الإجابات</span>
-                                    <div class="t-group">
+                                  <div class="c-4">
+                                    <span class="t-1">الإجابات</span>
+                                    <span class="t-2">
+                                      <span class="t-2-1">
+                                        {{ catGroup.correctAnswersCount }}
+                                      </span>
+                                      <span class="t-2-2"></span>
+                                      <span class="t-2-3">
+                                        {{ catGroup.wrongAnswersCount }}
+                                      </span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                :data-title="
+                                  index2 === 0
+                                    ? analyticsPanelTour.step2.title
+                                    : null
+                                "
+                                :data-intro="
+                                  index2 === 0
+                                    ? analyticsPanelTour.step2.content
+                                    : null
+                                "
+                                class="cl-2"
+                              >
+                                <div
+                                  class="c-6"
+                                  :class="[{ 'no-sub': !hasAnalyzeService }]"
+                                >
+                                  <template v-if="!hasAnalyzeService">
+                                    <service-block />
+                                    <service-lock />
+                                  </template>
+                                  <a-progress
+                                    :size="66"
+                                    type="circle"
+                                    :percent="catGroup.rate"
+                                    stroke-linecap="round"
+                                    :strokeColor="{
+                                      '0%': '#FD6C6C',
+                                      '100%': '#008FFB',
+                                    }"
+                                    trailColor="#cfd1d4"
+                                    :strokeWidth="11"
+                                  >
+                                    <template #format="percent">
+                                      <span class="percent">
+                                        <span
+                                          style="
+                                            font-size: 16px;
+                                            margin-inline-end: 2px;
+                                          "
+                                        >
+                                          %
+                                        </span>
+                                        <span>{{ percent }}</span>
+                                      </span>
+                                    </template>
+                                  </a-progress>
+                                </div>
+                                <div class="c-3 qw">
+                                  <span class="t-1">التقييم</span>
+                                  <span class="t-2">
+                                    {{ getRateLabel(catGroup.rate) }}
+                                  </span>
+                                </div>
+                              </div>
+
+                            </template>
+                          </div>
+                        </lazy-prime-accordion-header>
+                        <lazy-prime-accordion-content>
+                          <!--  tables first child collapse  -->
+                          <div
+                            v-if="
+                              getTableData(
+                                group.analayzeStudentCategories,
+                                catGroup.categoryId
+                              ).length > 0
+                            "
+                            class="g-collapse-table"
+                          >
+                            <template v-if="!windowSize.isMobileSize">
+                              <div class="t-head">
+                                <span>المهارة</span>
+                                <span>الأسئلة</span>
+                                <span>الإجابات</span>
+                                <span>زمن الإجابة/المتوسط</span>
+                                <span>التقييم</span>
+                                <span>التدريب</span>
+                              </div>
+                              <div class="t-data">
+                                <template
+                                  v-for="(tableData, i) of getTableData(
+                                    group.analayzeStudentCategories,
+                                    catGroup.categoryId
+                                  )"
+                                  :key="`asd_${i}`"
+                                >
+                                  <div
+                                    class="t-col"
+                                    :class="[
+                                      { 'is-disabled': !tableData.isEnabled },
+                                    ]"
+                                  >
+                                    <div
+                                      :data-title="
+                                        i === 0 && index2 === 0
+                                          ? analyticsPanelTour.step3.title
+                                          : null
+                                      "
+                                      :data-intro="
+                                        i === 0 && index2 === 0
+                                          ? analyticsPanelTour.step3.content
+                                          : null
+                                      "
+                                      class="to-12"
+                                    >
+                                      <span class="d-1">
+                                        <text-slice
+                                          :length="30"
+                                          :text="tableData.categoryName"
+                                        />
+                                      </span>
+                                      <span class="d-2">
+                                        {{ tableData.questionsCount }}
+                                      </span>
+                                    </div>
+
+                                    <span class="d-3">
                                       <span
                                         :data-title="
-                                          i === 0 && index === 0
+                                          i === 0 && index2 === 0
                                             ? analyticsPanelTour.step4.title
                                             : null
                                         "
                                         :data-intro="
-                                          i === 0 && index === 0
+                                          i === 0 && index2 === 0
                                             ? analyticsPanelTour.step4.content
                                             : null
                                         "
@@ -1214,12 +915,12 @@
                                       <span class="t-2-2"></span>
                                       <span
                                         :data-title="
-                                          i === 0 && index === 0
+                                          i === 0 && index2 === 0
                                             ? analyticsPanelTour.step5.title
                                             : null
                                         "
                                         :data-intro="
-                                          i === 0 && index === 0
+                                          i === 0 && index2 === 0
                                             ? analyticsPanelTour.step5.content
                                             : null
                                         "
@@ -1227,19 +928,16 @@
                                       >
                                         {{ tableData.wrongAnswersCount }}
                                       </span>
-                                    </div>
-                                  </div>
-                                  <div class="d-3">
-                                    <span class="label">زمنك/المتوسط</span>
-                                    <div class="t-group">
+                                    </span>
+                                    <span class="d-4">
                                       <span
                                         :data-title="
-                                          i === 0 && index === 0
+                                          i === 0 && index2 === 0
                                             ? analyticsPanelTour.step6.title
                                             : null
                                         "
                                         :data-intro="
-                                          i === 0 && index === 0
+                                          i === 0 && index2 === 0
                                             ? analyticsPanelTour.step6.content
                                             : null
                                         "
@@ -1254,12 +952,12 @@
                                       <span class="t-2-2"></span>
                                       <span
                                         :data-title="
-                                          i === 0 && index === 0
+                                          i === 0 && index2 === 0
                                             ? analyticsPanelTour.step7.title
                                             : null
                                         "
                                         :data-intro="
-                                          i === 0 && index === 0
+                                          i === 0 && index2 === 0
                                             ? analyticsPanelTour.step7.content
                                             : null
                                         "
@@ -1271,468 +969,392 @@
                                           )
                                         }}
                                       </span>
+                                    </span>
+                                    <div
+                                      :data-title="
+                                        i === 0 && index2 === 0
+                                          ? analyticsPanelTour.step8.title
+                                          : null
+                                      "
+                                      :data-intro="
+                                        i === 0 && index2 === 0
+                                          ? analyticsPanelTour.step8.content
+                                          : null
+                                      "
+                                      class="d-5"
+                                    >
+                                      <template v-if="tableData.isEnabled">
+                                        <span
+                                          v-if="
+                                            notEnoughQuestions(
+                                              tableData.questionsCount,
+                                              tableData.rate
+                                            )
+                                          "
+                                          class="notEnoughText"
+                                        >
+                                          عدد الأسئلة غير كاف
+                                        </span>
+                                        <app-progress-bar
+                                          v-else
+                                          :class="
+                                            tableData.rate < 30
+                                              ? 'red'
+                                              : tableData.rate < 70
+                                                ? 'orange'
+                                                : 'green'
+                                          "
+                                          :max="100"
+                                          height="18px"
+                                          :value="tableData.rate"
+                                        />
+                                      </template>
+                                      <template v-else>
+                                        <div class="w-full relative">
+                                          <service-block />
+                                          <subs-only-block />
+                                        </div>
+                                      </template>
+                                    </div>
+                                    <div class="d-6 relative">
+                                      <app-overlay
+                                        v-if="
+                                          !!loading &&
+                                          loading == tableData.examDefaultId
+                                        "
+                                      />
+
+                                      <div class="w-full relative">
+                                        <service-block
+                                          v-if="!tableData.isEnabled"
+                                        />
+                                        <app-button
+                                          v-if="
+                                            tableData.hasLawAnalyze &&
+                                            !notEnoughQuestions(
+                                              tableData.questionsCount,
+                                              tableData.rate
+                                            )
+                                          "
+                                          size="md"
+                                          :class="[
+                                            {
+                                              'opacity-60':
+                                                !tableData.isEnabled,
+                                            },
+                                          ]"
+                                          label="حلل نتيجتي"
+                                          @click.stop="
+                                            toMyAnalytics(tableData.categoryId)
+                                          "
+                                        >
+                                          <template
+                                            v-if="!tableData.isEnabled"
+                                            #iconStart
+                                          >
+                                            <service-lock />
+                                          </template>
+                                        </app-button>
+                                        <app-button
+                                          v-else
+                                          size="md"
+                                          label="تدرب"
+                                          @click.stop="
+                                            isStudent
+                                              ? onTrainClickStudent(
+                                                  catGroup.categoryId,
+                                                  tableData.categoryId
+                                                )
+                                              : goTraining(
+                                                  tableData.examDefaultId,
+                                                  tableData.categoryId
+                                                )
+                                          "
+                                        />
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                                <div class="d-5 relative">
-                                  <app-overlay
-                                    v-if="
-                                      !!loading &&
-                                      loading == tableData.examDefaultId
-                                    "
-                                  />
-
-                                  <div class="w-full relative">
-                                    <service-block
-                                      v-if="!tableData.isEnabled"
-                                    />
-                                    <app-button
-                                      v-if="
-                                        tableData.hasLawAnalyze &&
-                                        !notEnoughQuestions(
-                                          tableData.questionsCount,
-                                          tableData.rate
-                                        )
-                                      "
-                                      :class="[
-                                        {
-                                          'opacity-60': !tableData.isEnabled,
-                                        },
-                                      ]"
-                                      label="حلل نتيجتي"
-                                      size="md"
-                                      @click.stop="
-                                        toMyAnalytics(tableData.categoryId)
-                                      "
-                                    >
-                                      <template
-                                        v-if="!tableData.isEnabled"
-                                        #iconStart
-                                      >
-                                        <service-lock />
-                                      </template>
-                                    </app-button>
-                                    <app-button
-                                      v-else
-                                      label="تدرب"
-                                      size="md"
-                                      @click.stop="
-                                        isStudent
-                                          ? onTrainClickStudent(
-                                              catGroup.categoryId,
-                                              tableData.categoryId
-                                            )
-                                          : goTraining(
-                                              tableData.examDefaultId,
-                                              tableData.categoryId
-                                            )
-                                      "
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </template>
-                        </div>
-                      </template>
-                    </div>
-
-                    <!--  second child of first child of main info -->
-                    <template
-                      v-if="
-                        getChildData(
-                          group.analayzeStudentCategories,
-                          catGroup.categoryId
-                        ).length > 0
-                      "
-                    >
-                      <div
-                        v-for="(child, i) of getChildData(
-                          group.analayzeStudentCategories,
-                          catGroup.categoryId
-                        )"
-                        class="g-collapse-group child"
-                        style="margin-top: 10px"
-                      >
-                        <!-- toggle of second child  -->
-                        <div
-                          :class="{
-                            'no-child': !hasChild2(
-                              group.analayzeStudentCategories,
-                              child.categoryId
-                            ),
-                          }"
-                          class="g-collapse-info"
-                        >
-                          <template v-if="!windowSize.isMobileSize">
-                            <div class="c-1">
-                              <text-slice
-                                :length="15"
-                                :text="child.categoryName"
-                              />
-                            </div>
-                            <div class="c-2 relative">
-                              <app-overlay
-                                v-if="
-                                  !!loading && loading == child.examDefaultId
-                                "
-                              />
-                              <app-button
-                                size="md"
-                                :isDisabled="
-                                  !!loading && loading !== child.examDefaultId
-                                "
-                                label="تدرب"
-                                @click.stop="
-                                  isStudent
-                                    ? onTrainClickStudent(
-                                        catGroup.categoryId,
-                                        child.categoryId
-                                      )
-                                    : goTraining(
-                                        child.examDefaultId,
-                                        child.categoryId
-                                      )
-                                "
-                              />
-                            </div>
-                            <div class="c-3">
-                              <span class="t-1">الأسئلة</span>
-                              <span class="t-2">
-                                {{ child.questionsCount }}
-                              </span>
-                            </div>
-                            <div class="c-4">
-                              <span class="t-1">الإجابات</span>
-                              <span class="t-2">
-                                <span class="t-2-1">
-                                  {{ child.correctAnswersCount }}
-                                </span>
-                                <span class="t-2-2"></span>
-                                <span class="t-2-3">
-                                  {{ child.wrongAnswersCount }}
-                                </span>
-                              </span>
-                            </div>
-                            <div class="c-3 qw">
-                              <span class="t-1">التقييم</span>
-                              <span class="t-2">
-                                {{ getRateLabel(child.rate) }}
-                              </span>
-                            </div>
-
-                            <div class="c-6">
-                              <a-progress
-                                :width="66"
-                                type="circle"
-                                :percent="child.rate"
-                                stroke-linecap="round"
-                                :strokeColor="{
-                                  '0%': '#FD6C6C',
-                                  '100%': '#008FFB',
-                                }"
-                                trailColor="#cfd1d4"
-                                :strokeWidth="11"
-                              >
-                                <template #format="percent">
-                                  <span class="percent">
-                                    <span
-                                      style="
-                                        font-size: 16px;
-                                        margin-inline-end: 2px;
-                                      "
-                                    >
-                                      %
-                                    </span>
-                                    <span>{{ percent }}</span>
-                                  </span>
                                 </template>
-                              </a-progress>
-                            </div>
-                            <i
-                              v-if="
-                                hasChild2(
-                                  group.analayzeStudentCategories,
-                                  child.categoryId
-                                )
-                              "
-                              :class="
-                                activeCollapse.includes(
-                                  `g-group-accordion-child-${i}`
-                                )
-                                  ? 'fa-chevron-up'
-                                  : 'fa-chevron-down'
-                              "
-                              class="fa collapse-icon"
-                            ></i>
-                          </template>
-                          <template v-else>
-                            <div class="cl-1">
-                              <div class="c-1">
-                                <text-slice
-                                  :length="12"
-                                  :text="child.categoryName"
-                                />
                               </div>
-                              <div class="c-2">
-                                <app-button
-                                  :isLoading="
-                                    !!loading && loading == child.examDefaultId
-                                  "
-                                  :isDisabled="
-                                    !!loading && loading !== child.examDefaultId
-                                  "
-                                  size="md"
-                                  label="تدرب"
-                                  @click.stop="
-                                    isStudent
-                                      ? onTrainClickStudent(
-                                          catGroup.categoryId,
-                                          child.categoryId
-                                        )
-                                      : goTraining(
-                                          child.examDefaultId,
-                                          child.categoryId
-                                        )
-                                  "
-                                />
-                              </div>
-                              <div class="r-2">
-                                <div class="c-3">
-                                  <span class="t-1">الأسئلة</span>
-                                  <span class="t-2">
-                                    {{ child.questionsCount }}
-                                  </span>
-                                </div>
-                                <div class="c-4">
-                                  <span class="t-1">الإجابات</span>
-                                  <span class="t-2">
-                                    <span class="t-2-1">
-                                      {{ child.correctAnswersCount }}
-                                    </span>
-                                    <span class="t-2-2"></span>
-                                    <span class="t-2-3">
-                                      {{ child.wrongAnswersCount }}
-                                    </span>
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="cl-2">
-                              <div
-                                class="c-6"
-                                :class="[{ 'no-sub': !hasAnalyzeService }]"
-                              >
-                                <template v-if="!hasAnalyzeService">
-                                  <service-block />
-                                  <service-lock />
-                                </template>
-                                <a-progress
-                                  :width="66"
-                                  type="circle"
-                                  :percent="child.rate"
-                                  stroke-linecap="round"
-                                  :strokeColor="{
-                                    '0%': '#FD6C6C',
-                                    '100%': '#008FFB',
-                                  }"
-                                  trailColor="#cfd1d4"
-                                  :strokeWidth="11"
+                            </template>
+                            <template v-else>
+                              <div class="t-card">
+                                <template
+                                  v-for="(tableData, i) of getTableData(
+                                    group.analayzeStudentCategories,
+                                    catGroup.categoryId
+                                  )"
+                                  :key="`t-card_${i}`"
                                 >
-                                  <template #format="percent">
-                                    <span class="percent">
-                                      <span
-                                        style="
-                                          font-size: 16px;
-                                          margin-inline-end: 2px;
-                                        "
-                                      >
-                                        %
-                                      </span>
-                                      <span>{{ percent }}</span>
-                                    </span>
-                                  </template>
-                                </a-progress>
-                              </div>
-                              <div class="c-3 qw">
-                                <span class="t-1">التقييم</span>
-                                <span class="t-2">
-                                  {{ getRateLabel(child.rate) }}
-                                </span>
-                              </div>
-                            </div>
-                            <i
-                              v-if="
-                                hasChild2(
-                                  group.analayzeStudentCategories,
-                                  child.categoryId
-                                )
-                              "
-                              :class="
-                                activeCollapse.includes(
-                                  `g-group-accordion-${index}`
-                                )
-                                  ? 'fa-chevron-up'
-                                  : 'fa-chevron-down'
-                              "
-                              class="fa collapse-icon"
-                            ></i>
-                          </template>
-                        </div>
-
-                        <!--  second child collapse of first child collapse -->
-                        <b-collapse
-                          v-if="
-                            hasChild2(
-                              group.analayzeStudentCategories,
-                              child.categoryId
-                            )
-                          "
-                          :id="`g-group-accordion-child-${i}`"
-                          visible
-                          class="g-group-accordion-child"
-                          role="tabpanel"
-                        >
-                          <!--    tables of second child  -->
-                          <div
-                            v-if="
-                              getTableData(
-                                group.analayzeStudentCategories,
-                                child.categoryId
-                              ).length > 0
-                            "
-                            class="g-collapse-table"
-                          >
-                            <div class="t-head">
-                              <span>المهارة</span>
-                              <span>الأسئلة</span>
-                              <span>الإجابات</span>
-                              <span>زمن الإجابة/المتوسط</span>
-                              <span>التقييم</span>
-                              <span>التدريب</span>
-                            </div>
-                            <div class="t-data">
-                              <div
-                                v-for="(tableData, i) of getTableData(
-                                  group.analayzeStudentCategories,
-                                  child.categoryId
-                                )"
-                                class="t-col"
-                                :class="[
-                                  { 'is-disabled': !tableData.isEnabled },
-                                ]"
-                              >
-                                <span class="d-1">
-                                  <text-slice
-                                    :length="20"
-                                    :text="tableData.categoryName"
-                                  />
-                                </span>
-                                <span class="d-2">
-                                  {{ tableData.questionsCount }}
-                                </span>
-                                <span class="d-3">
-                                  <span class="t-2-1">
-                                    {{ tableData.correctAnswersCount }}
-                                  </span>
-                                  <span class="t-2-2"></span>
-                                  <span class="t-2-3">
-                                    {{ tableData.wrongAnswersCount }}
-                                  </span>
-                                </span>
-                                <span class="d-4">
-                                  <span class="t-2-1">
-                                    {{
-                                      secondsToMMSS(
-                                        tableData.studentTimeTakenRate
-                                      )
-                                    }}
-                                  </span>
-                                  <span class="t-2-2"></span>
-                                  <span class="t-2-3">
-                                    {{
-                                      secondsToMMSS(
-                                        tableData.allStudentsTimeTakenRate
-                                      )
-                                    }}
-                                  </span>
-                                </span>
-                                <div class="d-5">
-                                  <span
-                                    v-if="
-                                      notEnoughQuestions(
-                                        tableData.questionsCount,
-                                        tableData.rate
-                                      )
-                                    "
-                                    class="notEnoughText"
+                                  <div
+                                    class="t-col"
+                                    :class="[
+                                      { 'is-disabled': !tableData.isEnabled },
+                                    ]"
                                   >
-                                    عدد الأسئلة غير كاف
-                                  </span>
-                                  <app-progress-bar
-                                    v-else
-                                    :class="
-                                      tableData.rate < 30
-                                        ? 'red'
-                                        : tableData.rate < 70
-                                          ? 'orange'
-                                          : 'green'
-                                    "
-                                    :max="100"
-                                    height="18px"
-                                    :value="tableData.rate"
-                                  />
-                                </div>
-                                <div class="d-6 relative">
-                                  <app-overlay
-                                    v-if="
-                                      !!loading &&
-                                      loading == child.examDefaultId
-                                    "
-                                  />
-                                  <div class="w-full relative">
-                                    <service-block
-                                      v-if="!tableData.isEnabled"
-                                    />
-                                    <app-button
-                                      size="md"
-                                      label="تدرب"
-                                      @click.stop="
-                                        isStudent
-                                          ? onTrainClickStudent(
-                                              catGroup.categoryId,
-                                              child.categoryId
-                                            )
-                                          : goTraining(
-                                              child.examDefaultId,
-                                              child.categoryId
-                                            )
-                                      "
-                                    />
+                                    <div class="zr-w">
+                                      <div class="r-1">
+                                        <span class="d-1">
+                                          <text-slice
+                                            :length="25"
+                                            :text="tableData.categoryName"
+                                          />
+                                        </span>
+                                      </div>
+                                      <div
+                                        :data-title="
+                                          i === 0 && index2 === 0
+                                            ? analyticsPanelTour.step8.title
+                                            : null
+                                        "
+                                        :data-intro="
+                                          i === 0 && index2 === 0
+                                            ? analyticsPanelTour.step8.content
+                                            : null
+                                        "
+                                        class="flex justify-center justify-self-center w-full"
+                                      >
+                                        <template v-if="!tableData.isEnabled">
+                                          <div class="relative">
+                                            <service-block />
+                                            <subs-only-block />
+                                          </div>
+                                        </template>
+                                        <template v-else>
+                                          <template
+                                            v-if="
+                                              notEnoughQuestions(
+                                                tableData.questionsCount,
+                                                tableData.rate
+                                              )
+                                            "
+                                          >
+                                            <span class="zr-w__label-no-enough">
+                                              عدد الاسئلة غير كاف
+                                            </span>
+                                          </template>
+                                          <template v-else>
+                                            <app-progress-bar
+                                              :class="
+                                                tableData.rate < 30
+                                                  ? 'red'
+                                                  : tableData.rate < 70
+                                                    ? 'orange'
+                                                    : 'green'
+                                              "
+                                              :max="100"
+                                              height="18px"
+                                              :value="tableData.rate"
+                                            />
+                                          </template>
+                                        </template>
+                                      </div>
+                                      <div class="dds r-2">
+                                        <div
+                                          :data-title="
+                                            i === 0 && index2 === 0
+                                              ? analyticsPanelTour.step3.title
+                                              : null
+                                          "
+                                          :data-intro="
+                                            i === 0 && index2 === 0
+                                              ? analyticsPanelTour.step3.content
+                                              : null
+                                          "
+                                          class="d-2"
+                                        >
+                                          <span class="label">الأسئلة</span>
+                                          <span class="info">
+                                            {{ tableData.questionsCount }}
+                                          </span>
+                                        </div>
+                                        <div class="d-3">
+                                          <span class="label">الإجابات</span>
+                                          <div class="t-group">
+                                            <span
+                                              :data-title="
+                                                i === 0 && index2 === 0
+                                                  ? analyticsPanelTour.step4
+                                                      .title
+                                                  : null
+                                              "
+                                              :data-intro="
+                                                i === 0 && index2 === 0
+                                                  ? analyticsPanelTour.step4
+                                                      .content
+                                                  : null
+                                              "
+                                              class="t-2-1"
+                                            >
+                                              {{
+                                                tableData.correctAnswersCount
+                                              }}
+                                            </span>
+                                            <span class="t-2-2"></span>
+                                            <span
+                                              :data-title="
+                                                i === 0 && index2 === 0
+                                                  ? analyticsPanelTour.step5
+                                                      .title
+                                                  : null
+                                              "
+                                              :data-intro="
+                                                i === 0 && index2 === 0
+                                                  ? analyticsPanelTour.step5
+                                                      .content
+                                                  : null
+                                              "
+                                              class="t-2-3"
+                                            >
+                                              {{ tableData.wrongAnswersCount }}
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <div class="d-3">
+                                          <span class="label">
+                                            زمنك/المتوسط
+                                          </span>
+                                          <div class="t-group">
+                                            <span
+                                              :data-title="
+                                                i === 0 && index2 === 0
+                                                  ? analyticsPanelTour.step6
+                                                      .title
+                                                  : null
+                                              "
+                                              :data-intro="
+                                                i === 0 && index2 === 0
+                                                  ? analyticsPanelTour.step6
+                                                      .content
+                                                  : null
+                                              "
+                                              class="t-2-1"
+                                            >
+                                              {{
+                                                secondsToMMSS(
+                                                  tableData.studentTimeTakenRate
+                                                )
+                                              }}
+                                            </span>
+                                            <span class="t-2-2"></span>
+                                            <span
+                                              :data-title="
+                                                i === 0 && index2 === 0
+                                                  ? analyticsPanelTour.step7
+                                                      .title
+                                                  : null
+                                              "
+                                              :data-intro="
+                                                i === 0 && index2 === 0
+                                                  ? analyticsPanelTour.step7
+                                                      .content
+                                                  : null
+                                              "
+                                              class="t-2-3"
+                                            >
+                                              {{
+                                                secondsToMMSS(
+                                                  tableData.allStudentsTimeTakenRate
+                                                )
+                                              }}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="d-5 relative">
+                                        <app-overlay
+                                          v-if="
+                                            !!loading &&
+                                            loading == tableData.examDefaultId
+                                          "
+                                        />
+
+                                        <div class="w-full relative">
+                                          <service-block
+                                            v-if="!tableData.isEnabled"
+                                          />
+                                          <app-button
+                                            v-if="
+                                              tableData.hasLawAnalyze &&
+                                              !notEnoughQuestions(
+                                                tableData.questionsCount,
+                                                tableData.rate
+                                              )
+                                            "
+                                            :class="[
+                                              {
+                                                'opacity-60':
+                                                  !tableData.isEnabled,
+                                              },
+                                            ]"
+                                            label="حلل نتيجتي"
+                                            size="md"
+                                            @click.stop="
+                                              toMyAnalytics(
+                                                tableData.categoryId
+                                              )
+                                            "
+                                          >
+                                            <template
+                                              v-if="!tableData.isEnabled"
+                                              #iconStart
+                                            >
+                                              <service-lock />
+                                            </template>
+                                          </app-button>
+                                          <app-button
+                                            v-else
+                                            label="تدرب"
+                                            size="md"
+                                            @click.stop="
+                                              isStudent
+                                                ? onTrainClickStudent(
+                                                    catGroup.categoryId,
+                                                    tableData.categoryId
+                                                  )
+                                                : goTraining(
+                                                    tableData.examDefaultId,
+                                                    tableData.categoryId
+                                                  )
+                                            "
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
                                   </div>
-                                </div>
+                                </template>
                               </div>
-                            </div>
+                            </template>
                           </div>
 
+                          <!--  second child of first child of main info -->
                           <template
                             v-if="
                               getChildData(
                                 group.analayzeStudentCategories,
-                                child.categoryId
+                                catGroup.categoryId
                               ).length > 0
                             "
                           >
                             <div
                               v-for="(child, i) of getChildData(
                                 group.analayzeStudentCategories,
-                                child.categoryId
+                                catGroup.categoryId
                               )"
+                              :key="`child_g_${i}`"
                               class="g-collapse-group child"
                               style="margin-top: 10px"
                             >
                               <!-- toggle of second child  -->
-                              <div class="g-collapse-info">
+                              <div
+                                :class="{
+                                  'no-child': !hasChild2(
+                                    group.analayzeStudentCategories,
+                                    child.categoryId
+                                  ),
+                                }"
+                                class="g-collapse-info"
+                              >
                                 <template v-if="!windowSize.isMobileSize">
                                   <div class="c-1">
                                     <text-slice
@@ -1740,17 +1362,19 @@
                                       :text="child.categoryName"
                                     />
                                   </div>
-                                  <div class="c-2">
-                                    <app-button
-                                      :isLoading="
+                                  <div class="c-2 relative">
+                                    <app-overlay
+                                      v-if="
                                         !!loading &&
                                         loading == child.examDefaultId
                                       "
+                                    />
+                                    <app-button
+                                      size="md"
                                       :isDisabled="
                                         !!loading &&
                                         loading !== child.examDefaultId
                                       "
-                                      size="md"
                                       label="تدرب"
                                       @click.stop="
                                         isStudent
@@ -1789,16 +1413,10 @@
                                       {{ getRateLabel(child.rate) }}
                                     </span>
                                   </div>
-                                  <div
-                                    class="c-6"
-                                    :class="[{ 'no-sub': !hasAnalyzeService }]"
-                                  >
-                                    <template v-if="!hasAnalyzeService">
-                                      <service-block />
-                                      <service-lock />
-                                    </template>
+
+                                  <div class="c-6">
                                     <a-progress
-                                      :width="66"
+                                      :size="66"
                                       type="circle"
                                       :percent="child.rate"
                                       stroke-linecap="round"
@@ -1824,6 +1442,7 @@
                                       </template>
                                     </a-progress>
                                   </div>
+
                                 </template>
                                 <template v-else>
                                   <div class="cl-1">
@@ -1843,8 +1462,8 @@
                                           !!loading &&
                                           loading !== child.examDefaultId
                                         "
-                                        label="تدرب"
                                         size="md"
+                                        label="تدرب"
                                         @click.stop="
                                           isStudent
                                             ? onTrainClickStudent(
@@ -1891,7 +1510,7 @@
                                         <service-lock />
                                       </template>
                                       <a-progress
-                                        :width="66"
+                                        :size="66"
                                         type="circle"
                                         :percent="child.rate"
                                         stroke-linecap="round"
@@ -1924,112 +1543,108 @@
                                       </span>
                                     </div>
                                   </div>
+
                                 </template>
                               </div>
                             </div>
                           </template>
-                        </b-collapse>
-                      </div>
-                    </template>
-                  </b-collapse>
-                </div>
-              </template>
-            </b-collapse>
+                        </lazy-prime-accordion-content>
+                      </lazy-prime-accordion-panel>
+                    </lazy-prime-accordion>
+                  </template>
+                </lazy-prime-accordion-content>
+              </lazy-prime-accordion-panel>
+            </lazy-prime-accordion>
+            <!--  end test           -->
           </div>
           <div class="analytics-group">
             <div class="chart-collapse-group">
-              <div class="ch-header">
-                <span class="ch-title">تطور أدائك في المنصة</span>
-                <i
-                  :class="
-                    activeCollapse.includes(`analytics-chart-accordion`)
-                      ? 'fa-chevron-up'
-                      : 'fa-chevron-down'
-                  "
-                  class="fa collapse-icon"
-                ></i>
-              </div>
-              <b-collapse
-                :id="`analytics-chart-accordion`"
-                visible
-                class="analytics-group-collapse g-group-collapse"
-                role="tabpanel"
-              >
-                <div
-                  v-if="hasAnalyzeService"
-                  class="ch-content"
-                >
-                  <client-only>
-                    <div class="w-full h-full flex flex-col gap-2 relative">
-                      <app-overlay
-                        v-if="isLoadingChartData"
-                        msg="⏳ جاري تحميل بيانات المخطط ..."
-                        :style="'height: 250px'"
-                      />
-                      <div
-                        class="d-flex align-items-center justify-content-lg-end justify-content-center gap-2"
-                      >
-                        <form-select
-                          v-model:selectedValues="selectedChartSub"
-                          inputId="selectedChartSub"
-                          class="align-self-end"
-                          style="width: 150px"
-                          :list="parentFilterList"
-                          :clearable="false"
-                          :label="'القسم'"
-                          :placeholder="'القسم'"
-                          :isMulti="false"
-                        />
-                        <form-select
-                          v-model:selectedValues="selectedChartPeriod"
-                          inputId="selectedChartPeriod"
-                          class="align-self-end"
-                          style="width: 150px"
-                          :clearable="false"
-                          :list="chartPeriodList"
-                          :label="'المدة'"
-                          :placeholder="'المدة'"
-                          :isMulti="false"
-                        />
-                      </div>
-                      <template v-if="!isLoadingChartData">
-                        <component
-                          :is="apexComponent"
-                          v-if="apexComponent && filterChartData.length > 0"
-                          :key="chartKey"
-                          :height="'300px'"
-                          :series="chartLineSeries"
-                          :options="chartLineOptions"
-                        />
-                        <span
-                          v-else-if="!isLoadingChartData"
-                          class="no-data"
-                        >
-                          لم تتدرب بشكل كافي ضمن الفترة الزمنية المختارة
-                        </span>
-                      </template>
-                    </div>
-                  </client-only>
-                </div>
+              <lazy-prime-accordion>
+                <lazy-prime-accordion-panel value="analytics-chart-accordion">
+                  <lazy-prime-accordion-header class="custom-panel-header">
+                    <div class="ch-header">
+                      <span class="ch-title">تطور أدائك في المنصة</span>
 
-                <div
-                  v-else
-                  class="mt-2"
-                >
-                  <div
-                    class="relative"
-                    style="cursor: pointer"
-                  >
-                    <img
-                      width="100%"
-                      height="auto"
-                      src="/images/png/no-chart.png"
-                      alt="no-chart"
-                    />
-                    <service-block />
-                  </div>
-                </div>
-              </b-collapse>
+                    </div>
+                  </lazy-prime-accordion-header>
+                  <lazy-prime-accordion-content>
+                    <div
+                      v-if="hasAnalyzeService"
+                      class="ch-content"
+                    >
+                      <client-only>
+                        <div class="w-full h-full flex flex-col gap-2 relative">
+                          <app-overlay
+                            v-if="isLoadingChartData"
+                            msg="⏳ جاري تحميل بيانات المخطط ..."
+                            :style="'height: 250px'"
+                          />
+                          <div
+                            class="d-flex align-items-center justify-content-lg-end justify-content-center gap-2"
+                          >
+                            <form-select
+                              v-model:selectedValues="selectedChartSub"
+                              inputId="selectedChartSub"
+                              class="align-self-end"
+                              style="width: 150px"
+                              :list="parentFilterList"
+                              :clearable="false"
+                              :label="'القسم'"
+                              :placeholder="'القسم'"
+                              :isMulti="false"
+                            />
+                            <form-select
+                              v-model:selectedValues="selectedChartPeriod"
+                              inputId="selectedChartPeriod"
+                              class="align-self-end"
+                              style="width: 150px"
+                              :clearable="false"
+                              :list="chartPeriodList"
+                              :label="'المدة'"
+                              :placeholder="'المدة'"
+                              :isMulti="false"
+                            />
+                          </div>
+                          <template v-if="!isLoadingChartData">
+                            <component
+                              :is="apexComponent"
+                              v-if="apexComponent && filterChartData.length > 0"
+                              :key="chartKey"
+                              :height="'300px'"
+                              :series="chartLineSeries"
+                              :options="chartLineOptions"
+                            />
+                            <span
+                              v-else-if="!isLoadingChartData"
+                              class="no-data"
+                            >
+                              لم تتدرب بشكل كافي ضمن الفترة الزمنية المختارة
+                            </span>
+                          </template>
+                        </div>
+                      </client-only>
+                    </div>
+
+                    <div
+                      v-else
+                      class="mt-2"
+                    >
+                      <div
+                        class="relative"
+                        style="cursor: pointer"
+                      >
+                        <img
+                          width="100%"
+                          height="auto"
+                          src="/images/png/no-chart.png"
+                          alt="no-chart"
+                        />
+                        <service-block />
+                      </div>
+                    </div>
+                  </lazy-prime-accordion-content>
+                </lazy-prime-accordion-panel>
+              </lazy-prime-accordion>
             </div>
           </div>
         </div>
