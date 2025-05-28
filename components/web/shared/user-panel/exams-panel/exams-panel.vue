@@ -7,16 +7,16 @@
     class="exams-part relative"
   >
     <app-overlay v-if="examLoading" />
-    <div class="w-full flex items-center justify-content-between">
+    <div class="w-full flex items-center justify-between">
       <h3 class="t-title">{{ texts.title }}</h3>
-      <button
+      <app-button
         v-if="!isExams"
-        :disabled="selectedLists.length === 0 || getQuestionCount == 0"
+        :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"
         class="btn-glow"
+        size="md"
+        :label="texts.btnText"
         @click="checkAndStart"
-      >
-        {{ texts.btnText }}
-      </button>
+      />
       <app-button
         v-if="selectedType != examTypes.exams"
         class="sr-ho-button"
@@ -115,7 +115,7 @@
             class="card"
           >
             <div class="ca-head">
-              <mx-g-em-checkbox
+              <em-checkbox
                 :ref="`card-checkbox-${index}`"
                 :indeterminate="someItemSelected(card.id)"
                 :checked="allItemSelected(card.id)"
@@ -142,50 +142,246 @@
         </template>
       </div>
 
-      <div
-        v-if="selectedType == examTypes.trainings"
-        class="rw-bank"
-        :class="activeBankCollapse ? '' : 'is-close'"
-      >
-        <div
+      <div class="rw-bank w-full">
+        <prime-accordion
+          v-if="selectedType == examTypes.trainings"
+          id="bank-training-collapse"
           :ref="trainingPanelTour.step2.ref"
           data-step="2"
           :data-disable-interaction="true"
           :data-title="isXlWindow ? trainingPanelTour.step2.title : null"
           :data-intro="isXlWindow ? trainingPanelTour.step2.content : null"
-          class="cw-bank"
         >
-          <div
-            class="c-head"
-            @click="toggleExamCollapse('bank-training-collapse')"
+          <prime-accordion-panel
+            :value="examTypes.trainings"
+            class="cw-bank"
           >
-            <div class="r-part">
-              <i class="ek-icon-sliders-solid"></i>
-              <span>خيارات متقدمة</span>
-            </div>
-            <div class="l-part">
-              <i
-                class="fa"
-                :class="
-                  activeBankCollapse ? 'fa-chevron-up' : 'fa-chevron-down'
-                "
-              ></i>
-            </div>
-          </div>
-          <b-collapse
-            id="bank-training-collapse"
-            :visible="activeBankCollapse"
+            <prime-accordion-header class="c-head">
+              <div class="r-part">
+                <i class="ek-icon-sliders-solid"></i>
+                <span>خيارات متقدمة</span>
+              </div>
+            </prime-accordion-header>
+            <prime-accordion-content>
+              <div class="__bank">
+                <div class="__full-filter">
+                  <div
+                    v-if="!isTahsele"
+                    data-step="3"
+                    :data-disable-interaction="true"
+                    :data-title="trainingPanelTour.step3.title"
+                    :data-intro="trainingPanelTour.step3.content"
+                    class="__filter_bank"
+                  >
+                    <div class="c1-wq">
+                      <div class="__c1">
+                        <i class="fa fa-folder-open"></i>
+                        <span>بنوك الأسئلة</span>
+                        <service-lock
+                          v-if="!userServicesState.BANKUSAGE.isActive"
+                        />
+                      </div>
+                      <div
+                        v-if="userCurrentSub"
+                        class="c1-wq__qe"
+                      >
+                        <span class="c1-wq__la">
+                          تم إضافة أسئلة جديدة بتاريخ
+                        </span>
+                        <span class="c1-wq__la">
+                          {{ formatDate(userCurrentSub.lastUpdateDate) }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="__c2 relative">
+                      <service-block
+                        v-if="!userServicesState.BANKUSAGE.isActive"
+                      />
+                      <range-slider
+                        v-if="isCreated"
+                        v-model:minValue="advancedFilter.oBankMinValue"
+                        v-model:maxValue="advancedFilter.oBankMaxValue"
+                        :max="maxBank"
+                        :min="minBank"
+                        :minLabel="'أقدم'"
+                        :maxLabel="'أحدث'"
+                        :step="1"
+                        :rangeMargin="1"
+                        @onUpdateValue="UpdateBankValues"
+                      />
+                    </div>
+                  </div>
+                  <div class="__filter_level">
+                    <div class="__c1 qwe">
+                      <i class="fa fa-line-chart"></i>
+                      <span v-if="isTahsele">صعوبة الأسئلة (قريباً)</span>
+                      <span v-else>صعوبة الأسئلة</span>
+                      <service-lock
+                        v-if="!userServicesState.LEVELQUESTIONPRACTICE.isActive"
+                      />
+                    </div>
+                    <div class="__c2 relative">
+                      <service-block
+                        v-if="!userServicesState.LEVELQUESTIONPRACTICE.isActive"
+                      />
+                      <range-slider
+                        v-if="isCreated"
+                        v-model:minValue="advancedFilter.oLevelMinValue"
+                        v-model:maxValue="advancedFilter.oLevelMaxValue"
+                        :disableBoxes="true"
+                        :max="10"
+                        :min="0"
+                        :step="5"
+                        :rangeMargin="1"
+                        :isDisable="isTahsele"
+                        :minLabel="'أسهل'"
+                        :maxLabel="'أصعب'"
+                      />
+                    </div>
+                  </div>
+                  <div class="__options">
+                    <div class="flex items-baseline gap-2">
+                      <service-lock
+                        v-if="
+                          !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
+                          !userServicesState.FAVORITEUSAGE.isActive ||
+                          !userServicesState.TAKFELATUSAGE.isActive
+                        "
+                      />
+                      <span class="__t">تخصيص الأسئلة</span>
+                    </div>
+                    <div class="__groups">
+                      <div
+                        data-step="4"
+                        :data-disable-interaction="true"
+                        :data-title="trainingPanelTour.step4.title"
+                        :data-intro="trainingPanelTour.step4.content"
+                        class="__group wrong-question"
+                      >
+                        <div class="__c1">
+                          <div class="__r1">
+                            <i class="fa fa-times"></i>
+                            <span>التي أخطات فيها</span>
+                          </div>
+                          <div class="__r2">فقط التي لم تجب عليها</div>
+                        </div>
+                        <div class="__c2 relative">
+                          <service-block
+                            v-if="
+                              !userServicesState.ROWNQUESTIONPRACTICE.isActive
+                            "
+                          />
+                          <prime-toggle-switch
+                            :disabled="
+                              !userServicesState.ROWNQUESTIONPRACTICE.isActive
+                            "
+                            :modelValue="advancedFilter.onlyWrongQuestions"
+                            @update:modelValue="
+                              (val) => (
+                                (advancedFilter.onlyWrongQuestions = val),
+                                (form.onlyWrongQuestions = val)
+                              )
+                            "
+                          />
+                        </div>
+                      </div>
+                      <div
+                        data-step="5"
+                        :data-disable-interaction="true"
+                        :data-title="trainingPanelTour.step5.title"
+                        :data-intro="trainingPanelTour.step5.content"
+                        class="__group starred"
+                      >
+                        <div class="__c1">
+                          <div class="__r1">
+                            <i class="fa fa-star"></i>
+                            <span>المميزة بنجمة</span>
+                          </div>
+                          <div class="__r2">فقط التي ميزتها بنجمة</div>
+                        </div>
+                        <div class="__c2 relative">
+                          <service-block
+                            v-if="!userServicesState.FAVORITEUSAGE.isActive"
+                          />
+                          <prime-toggle-switch
+                            :disabled="
+                              !userServicesState.FAVORITEUSAGE.isActive
+                            "
+                            :modelValue="advancedFilter.onlyFlaggedQuestions"
+                            @update:modelValue="
+                              (val) => (
+                                (advancedFilter.onlyFlaggedQuestions = val),
+                                (form.onlyFlaggedQuestions = val)
+                              )
+                            "
+                          />
+                        </div>
+                      </div>
+                      <div
+                        v-if="!isTahsele"
+                        data-step="6"
+                        :data-disable-interaction="true"
+                        :data-title="trainingPanelTour.step6.title"
+                        :data-intro="trainingPanelTour.step6.content"
+                        class="__group takfel"
+                      >
+                        <div class="__c1">
+                          <div class="__r1">
+                            <i class="fa fa-lock"></i>
+                            <span>أسئلة التقفيلات</span>
+                          </div>
+                          <div class="__r2">فقط أسئلة التقفيلات</div>
+                        </div>
+                        <div class="__c2 relative">
+                          <service-block
+                            v-if="!userServicesState.TAKFELATUSAGE.isActive"
+                          />
+                          <prime-toggle-switch
+                            :disabled="
+                              !userServicesState.TAKFELATUSAGE.isActive
+                            "
+                            :modelValue="advancedFilter.onlyTakfelQuestions"
+                            @update:modelValue="
+                              (val) =>
+                                (advancedFilter.onlyTakfelQuestions = val)
+                            "
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="__reset">
+                  <app-button
+                    variant="outline"
+                    colorType="warn"
+                    size="md"
+                    label="إعادة تعيين"
+                    @click="resetFilterBankValue()"
+                  />
+                </div>
+              </div>
+            </prime-accordion-content>
+          </prime-accordion-panel>
+        </prime-accordion>
+
+        <prime-accordion
+          v-if="isExams && !isTahsele"
+          id="bank-exam-collapse"
+        >
+          <prime-accordion-panel
+            value="exams"
+            class="cw-bank"
           >
-            <div class="__bank">
-              <div class="__full-filter">
-                <div
-                  v-if="!isTahsele"
-                  data-step="3"
-                  :data-disable-interaction="true"
-                  :data-title="trainingPanelTour.step3.title"
-                  :data-intro="trainingPanelTour.step3.content"
-                  class="__filter_bank"
-                >
+            <prime-accordion-header class="c-head">
+              <div class="r-part">
+                <i class="ek-icon-sliders-solid"></i>
+                <span>خيارات متقدمة</span>
+              </div>
+            </prime-accordion-header>
+            <prime-accordion-content>
+              <div class="__bank">
+                <div class="__filter">
                   <div class="c1-wq">
                     <div class="__c1">
                       <i class="fa fa-folder-open"></i>
@@ -208,7 +404,7 @@
                     <service-block
                       v-if="!userServicesState.BANKUSAGE.isActive"
                     />
-                    <mx-range-slider
+                    <range-slider
                       v-if="isCreated"
                       v-model:minValue="advancedFilter.oBankMinValue"
                       v-model:maxValue="advancedFilter.oBankMaxValue"
@@ -222,235 +418,19 @@
                     />
                   </div>
                 </div>
-                <div class="__filter_level">
-                  <div class="__c1 qwe">
-                    <i class="fa fa-line-chart"></i>
-                    <span v-if="isTahsele">صعوبة الأسئلة (قريباً)</span>
-                    <span v-else>صعوبة الأسئلة</span>
-                    <service-lock
-                      v-if="!userServicesState.LEVELQUESTIONPRACTICE.isActive"
-                    />
-                  </div>
-                  <div class="__c2 relative">
-                    <service-block
-                      v-if="!userServicesState.LEVELQUESTIONPRACTICE.isActive"
-                    />
-                    <mx-range-slider
-                      v-if="isCreated"
-                      v-model:minValue="advancedFilter.oLevelMinValue"
-                      v-model:maxValue="advancedFilter.oLevelMaxValue"
-                      :disableBoxes="true"
-                      :max="10"
-                      :min="0"
-                      :step="5"
-                      :rangeMargin="1"
-                      :isDisable="isTahsele"
-                      :minLabel="'أسهل'"
-                      :maxLabel="'أصعب'"
-                    />
-                  </div>
-                </div>
-                <div class="__options">
-                  <div class="flex items-baseline gap-2">
-                    <service-lock
-                      v-if="
-                        !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
-                        !userServicesState.FAVORITEUSAGE.isActive ||
-                        !userServicesState.TAKFELATUSAGE.isActive
-                      "
-                    />
-                    <span class="__t">تخصيص الأسئلة</span>
-                  </div>
-                  <div class="__groups">
-                    <div
-                      data-step="4"
-                      :data-disable-interaction="true"
-                      :data-title="trainingPanelTour.step4.title"
-                      :data-intro="trainingPanelTour.step4.content"
-                      class="__group wrong-question"
-                    >
-                      <div class="__c1">
-                        <div class="__r1">
-                          <i class="fa fa-times"></i>
-                          <span>التي أخطات فيها</span>
-                        </div>
-                        <div class="__r2">فقط التي لم تجب عليها</div>
-                      </div>
-                      <div class="__c2 relative">
-                        <service-block
-                          v-if="
-                            !userServicesState.ROWNQUESTIONPRACTICE.isActive
-                          "
-                        />
-                        <form-toggle
-                          :isDisabled="
-                            !userServicesState.ROWNQUESTIONPRACTICE.isActive
-                          "
-                          :value="advancedFilter.onlyWrongQuestions"
-                          :size="'sm'"
-                          @update:value="
-                            (val) => (
-                              (advancedFilter.onlyWrongQuestions = val),
-                              (form.onlyWrongQuestions = val)
-                            )
-                          "
-                        />
-                      </div>
-                    </div>
-                    <div
-                      data-step="5"
-                      :data-disable-interaction="true"
-                      :data-title="trainingPanelTour.step5.title"
-                      :data-intro="trainingPanelTour.step5.content"
-                      class="__group starred"
-                    >
-                      <div class="__c1">
-                        <div class="__r1">
-                          <i class="fa fa-star"></i>
-                          <span>المميزة بنجمة</span>
-                        </div>
-                        <div class="__r2">فقط التي ميزتها بنجمة</div>
-                      </div>
-                      <div class="__c2 relative">
-                        <service-block
-                          v-if="!userServicesState.FAVORITEUSAGE.isActive"
-                        />
-                        <form-toggle
-                          :isDisabled="
-                            !userServicesState.FAVORITEUSAGE.isActive
-                          "
-                          :value="advancedFilter.onlyFlaggedQuestions"
-                          :size="'sm'"
-                          @update:value="
-                            (val) => (
-                              (advancedFilter.onlyFlaggedQuestions = val),
-                              (form.onlyFlaggedQuestions = val)
-                            )
-                          "
-                        />
-                      </div>
-                    </div>
-                    <div
-                      v-if="!isTahsele"
-                      data-step="6"
-                      :data-disable-interaction="true"
-                      :data-title="trainingPanelTour.step6.title"
-                      :data-intro="trainingPanelTour.step6.content"
-                      class="__group takfel"
-                    >
-                      <div class="__c1">
-                        <div class="__r1">
-                          <i class="fa fa-lock"></i>
-                          <span>أسئلة التقفيلات</span>
-                        </div>
-                        <div class="__r2">فقط أسئلة التقفيلات</div>
-                      </div>
-                      <div class="__c2 relative">
-                        <service-block
-                          v-if="!userServicesState.TAKFELATUSAGE.isActive"
-                        />
-                        <form-toggle
-                          :isDisabled="
-                            !userServicesState.TAKFELATUSAGE.isActive
-                          "
-                          :value="advancedFilter.onlyTakfelQuestions"
-                          :size="'sm'"
-                          @update:value="
-                            (val) => (advancedFilter.onlyTakfelQuestions = val)
-                          "
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="__reset">
-                <app-button
-                  variant="outline"
-                  size="md"
-                  label="إعادة تعيين"
-                  @click="resetFilterBankValue()"
-                />
-              </div>
-            </div>
-          </b-collapse>
-        </div>
-      </div>
-
-      <div
-        v-if="isExams && !isTahsele"
-        class="rw-bank"
-        :class="activeBankCollapse ? '' : 'is-close'"
-      >
-        <div class="cw-bank">
-          <div
-            class="c-head"
-            @click="toggleExamCollapse('bank-exam-collapse')"
-          >
-            <div class="r-part">
-              <i class="ek-icon-sliders-solid"></i>
-              <span>خيارات متقدمة</span>
-            </div>
-            <div class="l-part">
-              <i
-                class="fa"
-                :class="
-                  activeBankCollapse ? 'fa-chevron-up' : 'fa-chevron-down'
-                "
-              ></i>
-            </div>
-          </div>
-          <b-collapse
-            id="bank-exam-collapse"
-            :visible="activeBankCollapse"
-          >
-            <div class="__bank">
-              <div class="__filter">
-                <div class="c1-wq">
-                  <div class="__c1">
-                    <i class="fa fa-folder-open"></i>
-                    <span>بنوك الأسئلة</span>
-                    <service-lock
-                      v-if="!userServicesState.BANKUSAGE.isActive"
-                    />
-                  </div>
-                  <div
-                    v-if="userCurrentSub"
-                    class="c1-wq__qe"
-                  >
-                    <span class="c1-wq__la">تم إضافة أسئلة جديدة بتاريخ</span>
-                    <span class="c1-wq__la">
-                      {{ formatDate(userCurrentSub.lastUpdateDate) }}
-                    </span>
-                  </div>
-                </div>
-                <div class="__c2 relative">
-                  <service-block v-if="!userServicesState.BANKUSAGE.isActive" />
-                  <mx-range-slider
-                    v-if="isCreated"
-                    v-model:minValue="advancedFilter.oBankMinValue"
-                    v-model:maxValue="advancedFilter.oBankMaxValue"
-                    :max="maxBank"
-                    :min="minBank"
-                    :minLabel="'أقدم'"
-                    :maxLabel="'أحدث'"
-                    :step="1"
-                    :rangeMargin="1"
-                    @onUpdateValue="UpdateBankValues"
+                <div class="__reset">
+                  <app-button
+                    variant="outline"
+                    colorType="warn"
+                    size="md"
+                    label="إعادة تعيين"
+                    @click="resetFilterBankValue()"
                   />
                 </div>
               </div>
-              <div class="__reset">
-                <app-button
-                  variant="outline"
-                  size="md"
-                  label="إعادة تعيين"
-                  @click="resetFilterBankValue()"
-                />
-              </div>
-            </div>
-          </b-collapse>
-        </div>
+            </prime-accordion-content>
+          </prime-accordion-panel>
+        </prime-accordion>
       </div>
 
       <div
@@ -528,8 +508,8 @@
           "
         />
         <app-button
+          class="!mt-3"
           :isDisabled="!publicExam"
-          size="md"
           :label="texts.btnText"
           @click="checkAndStart('full')"
         />
@@ -550,7 +530,10 @@
         <template v-if="selectedLists.length > 0">
           <div class="i-items">
             <template v-if="categoryList && categoryList.length > 0">
-              <template v-for="(card, index) of categoryList">
+              <template
+                v-for="(card, index) of categoryList"
+                :key="`${card.label}_${index}`"
+              >
                 <div
                   v-if="card.children.length > 0"
                   class="i-item hide-to-tablet"
@@ -590,8 +573,8 @@
           {{ texts.noSelectedNote }}
         </span>
         <app-button
+          class="!mt-3"
           data-disable-interaction="false"
-          size="md"
           :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"
           :label="texts.btnText"
           @click="checkAndStart"
@@ -599,11 +582,36 @@
       </div>
     </div>
 
-    <service-block-modal ref="blockModalRef" />
+    <service-block-modal ref="block_modal_ref" />
   </div>
 </template>
 <script lang="ts">
 import { useIntroService } from '~/main/services/useIntroService';
+import EmCheckbox from '~/components/shared/em-checkbox.vue';
+import RangeSlider from '~/components/shared/range-slider.vue';
+import {
+  calculateSumFromArray,
+  getStoredCatArray,
+  getUuid,
+  setStoredCatArray,
+  sleepUtil,
+} from '~/main/utils/shared-utils';
+import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
+import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
+import { AppLocalStorage } from '~/main/utils/app-storage';
+import { concat, delay, of, repeat, take, takeWhile, tap } from 'rxjs';
+import { dateUi, minutesToHHMM } from '~/main/utils/date-utils';
+import { GlobalTypes } from '~/main/constants/global-types';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import {
+  UserPanelItems,
+  UserPanelItemsRecord,
+} from '~/main/constants/user-panel-items';
+import type { ServiceBlockModal } from '#components';
+import { debounceUtil } from '~/main/utils/lodash.utils';
+import { RouteHelper } from '~/main/utils/route-helper';
+import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
+import { appEvents } from '~/main/shared/events/app.events';
 
 const SIMULATE_START_DELAY = 600;
 const TOGGLE_DELAY_GAP = 500;
@@ -665,26 +673,32 @@ const trainingTexts = {
 };
 
 export class examForm {
-  subjectId = process.env.defaultSubjectId;
+  subjectId: number | string;
+
+  constructor(subjectId: number | string) {
+    this.subjectId = subjectId;
+  }
   willDo = false;
   withoutStudentEvaluate = false;
   randomLevel = false;
   isOpen = false;
-  tagsIds = [];
-  takfeelTagsIds = [];
+  tagsIds = [] as any[];
+  takfeelTagsIds = [] as any[];
   onlyWrongQuestions = false;
   onlyFlaggedQuestions = false;
-  randomQuestionsSettings = [];
+  randomQuestionsSettings = [] as any[];
   questionsLevelsMin = 0;
   questionsLevelsMax = 10;
+  customerId: any | null = null;
+  sessionId: any | null = null;
 }
 
 export class customExamCountsForm {
   onlyWrongQuestions = false;
   onlyFlaggedQuestions = false;
-  takfeelTagsIds = [];
-  tagsIds = [];
-  randomQuestionsSettings = [];
+  takfeelTagsIds = [] as any[];
+  tagsIds = [] as any[];
+  randomQuestionsSettings = [] as any[];
 }
 
 export class advancedFilterForm {
@@ -697,35 +711,59 @@ export class advancedFilterForm {
   onlyTakfelQuestions = false;
 }
 
+//TODO-z add fcmClarityMixin
 export default {
+  components: { RangeSlider, EmCheckbox },
   setup() {
-    //TODO-z add fcmClarityMixin
+    const blockModalRef =
+      useTemplateRef<InstanceType<typeof ServiceBlockModal>>('block_modal_ref');
     const introService = useIntroService();
     const windowSize = useWindowSize();
     const runtimeConfig = useRuntimeConfig();
+    const form = ref(new examForm(runtimeConfig.public.defaultSubjectId));
+    const globalStore = useGlobalStore();
+    const subscriptionsStore = useSubscriptionsStore();
+
+    useHead({
+      htmlAttrs: {
+        class: 'zoom-wrapper',
+      },
+    });
     return {
+      userServicesState: computed(
+        () => subscriptionsStore.state.userServicesStateVal
+      ),
+      userCurrentSub: computed(
+        () => subscriptionsStore.state.userCurrentSubVal!
+      ),
+      blockModalRef,
+      form,
       introService,
       windowSize,
       runtimeConfig,
+      trainingPanelTour: computed(() => introService.trainingPanelTour),
+      isXlWindow: computed(() => windowSize.isXlWindow),
+      globalTypeUser: computed(() => globalStore.state.globalTypeUserValue),
+      ...useSetupAuth(),
+      ...useSetupRoute(),
+      ...useToastMessage(),
     };
   },
   data() {
     return {
       cards: mockData,
-      selectedCard: [],
+      selectedCard: [] as any[],
       activeSwitch: false,
       examTypes: examTypes,
       selectedType: examTypes.exams,
-      categoryList: null as any[] | null,
-      form: new examForm(),
+      categoryList: [] as any[],
       fetchLoading: false,
       examLoading: false,
       publicExam: null as any | null,
-      tagsList: [],
-      activeBankCollapse: true,
+      tagsList: [] as any[],
       advancedFilter: new advancedFilterForm(),
       activeAdvanced: false,
-      customQuestionsCount: null,
+      customQuestionsCount: null as any | null,
       isCreated: false,
       tourModel: {
         isShownOnce: false,
@@ -749,15 +787,13 @@ export default {
 
   beforeUnmount() {
     this.exitTour();
-    this.$root.$off('hello-modal-hidden');
-    this.$root.$off('panner-modal-hidden');
   },
 
   methods: {
     async selectPrimaryCat() {
       try {
         this.selectedCard = [];
-        await sleep(800);
+        await sleepUtil(800);
         const newArr = this.categoryList.flatMap((category) =>
           category.children.map((child) => child.id)
         );
@@ -791,7 +827,7 @@ export default {
         const cat = await this.$store.dispatch(
           'admin/callCategoriesBySubjects',
           {
-            subjects: [process.env.defaultSubjectIdTahsele],
+            subjects: [this.runtimeConfig.public.defaultSubjectIdTahsele],
             status: true,
           }
         );
@@ -815,7 +851,7 @@ export default {
         const cat = await this.$store.dispatch(
           'admin/callCategoriesBySubjects',
           {
-            subjects: [process.env.defaultSubjectId],
+            subjects: [this.runtimeConfig.public.defaultSubjectId],
             status: true,
           }
         );
@@ -825,9 +861,10 @@ export default {
           this.selectedAllItem();
           await this.requestPublicExam();
         }
-        this.tagsList = await this.$axios.$get(
+        const { data } = await this.$axios.get(
           `tagsForQuestions/listForStudent`
         );
+        this.tagsList = data;
         this.advancedFilter.oBankMaxValue = this.maxBankValue;
         this.advancedFilter.oBankMinValue = this.minBankValue;
         this.isCreated = true;
@@ -841,7 +878,7 @@ export default {
       if (!this.canStartTour) return;
 
       this.$nextTick(async () => {
-        const userId = this.$auth.user.id;
+        const userId = this.appAuth.user.id;
         const tourState = AppLocalStorage.getTourState(userId).trainingPanel;
         if (tourState.isShown && !forceShow) return;
 
@@ -851,9 +888,9 @@ export default {
             isShown: true,
           },
         });
-        await this.introInstanceState.lib
-          .setOptions({
-            ...this.tourConfig,
+        await this.introService.introInstanceState.lib
+          ?.setOptions({
+            ...this.introService.tourConfig,
             disableInteraction: false,
             scrollPadding: -100,
           })
@@ -861,9 +898,10 @@ export default {
         this.tourModel.isActive = true;
 
         //apply style while tour
-        this.introInstanceState.lib.onbeforeexit(() => {
+        this.introService.introInstanceState.lib?.onbeforeexit(() => {
           this.resetSimulate();
           this.tourModel.isActive = false;
+          return true;
         });
 
         //apply first step simulate
@@ -872,8 +910,8 @@ export default {
           this.simulateStep1(0);
         }
 
-        this.introInstanceState.lib.onafterchange((currentEl) => {
-          const stepIndex = currentEl.getAttribute('data-step') - 1;
+        this.introService.introInstanceState.lib?.onafterchange((currentEl) => {
+          const stepIndex = Number(currentEl.getAttribute('data-step')!) - 1;
           switch (stepIndex) {
             case 0:
               this.simulateStep1(stepIndex);
@@ -895,14 +933,14 @@ export default {
       });
     },
     async exitTour() {
-      this.introInstanceState.lib.exit(true);
+      this.introService.introInstanceState.lib?.exit(true);
     },
 
     requestPublicExam() {
       try {
         this.$axios
-          .$get(`exam/public?grade=${this.globalTypeUser}`)
-          .then((res) => {
+          .get(`exam/public?grade=${this.globalTypeUser}`)
+          .then(({ data: res }) => {
             this.publicExam = res;
           })
           .catch((err) => {
@@ -925,11 +963,11 @@ export default {
       this.resetStep1Simulate();
       this.fromSimulation = true;
 
-      await sleep(400);
-      const ref = this.$refs[this.trainingPanelTour.step1.ref];
+      await sleepUtil(400);
+      const ref = this.$refs[this.trainingPanelTour.step1.ref] as HTMLElement;
       const DELAY_BETWEEN_ACTIONS_MS = 600;
 
-      const allItems = Array.from(ref.querySelectorAll(`.ca-contents .item`));
+      const allItems = Array.from(ref!.querySelectorAll(`.ca-contents .item`));
       const items = [allItems[0], allItems[5]];
 
       const source$ = concat(
@@ -952,7 +990,8 @@ export default {
           takeWhile(
             () =>
               !!this.tourModel.isActive &&
-              this.introInstanceState.lib._currentStep === stepIndex
+              this.introService.introInstanceState.lib?._currentStep ===
+                stepIndex
           )
         )
         .subscribe();
@@ -994,7 +1033,8 @@ export default {
           takeWhile(
             () =>
               !!this.tourModel.isActive &&
-              this.introInstanceState.lib._currentStep === stepIndex
+              this.introService.introInstanceState.lib?._currentStep ===
+                stepIndex
           )
         )
         .subscribe();
@@ -1020,7 +1060,8 @@ export default {
           takeWhile(
             () =>
               !!this.tourModel.isActive &&
-              this.introInstanceState.lib._currentStep === stepIndex
+              this.introService.introInstanceState.lib?._currentStep ===
+                stepIndex
           )
         )
         .subscribe();
@@ -1046,7 +1087,8 @@ export default {
           takeWhile(
             () =>
               !!this.tourModel.isActive &&
-              this.introInstanceState.lib._currentStep === stepIndex
+              this.introService.introInstanceState.lib?._currentStep ===
+                stepIndex
           )
         )
         .subscribe();
@@ -1072,7 +1114,8 @@ export default {
           takeWhile(
             () =>
               !!this.tourModel.isActive &&
-              this.introInstanceState.lib._currentStep === stepIndex
+              this.introService.introInstanceState.lib?._currentStep ===
+                stepIndex
           )
         )
         .subscribe();
@@ -1146,7 +1189,7 @@ export default {
     },
 
     checkCard(index) {
-      this.$refs[`card-checkbox-${index}`][0].onSelect();
+      this.$refs[`card-checkbox-${index}`]?.[0].onSelect();
     },
 
     selectedAllItem() {
@@ -1216,7 +1259,7 @@ export default {
     },
 
     randomQuestionsSettingsList() {
-      const list = [];
+      const list: any[] = [];
       this.selectedLists.forEach((k) => {
         list.push({
           categoryId: k.id,
@@ -1238,7 +1281,7 @@ export default {
     },
 
     resetForm() {
-      this.form = new examForm();
+      this.form = new examForm(this.runtimeConfig.public.defaultSubjectId);
     },
 
     resetAll() {
@@ -1248,7 +1291,7 @@ export default {
 
     async changeGlobalType(type) {
       this.resetAll();
-      if (type == globalTypesEnum.tahsele) {
+      if (type == GlobalTypes.tahsele) {
         await this.requestsForTahsele();
       } else {
         await this.requestsForQudrat();
@@ -1260,9 +1303,9 @@ export default {
 
     goToExam(id, query) {
       if (this.selectedType === examTypes.exams) {
-        this.$router.push(`/student/exams/${id}`);
+        this.appRouter.push(`/student/exams/${id}`);
       } else {
-        let query = null;
+        let query = null as any | null;
         if (
           this.advancedFilter.onlyTakfelQuestions ||
           this.advancedFilter.onlyFlaggedQuestions ||
@@ -1272,7 +1315,7 @@ export default {
             isFilteredTraining: true,
           };
         }
-        this.$router.push({
+        this.appRouter.push({
           path: `/student/training/${id}`,
           query,
         });
@@ -1287,12 +1330,12 @@ export default {
       this.checkAndStart();
     },
 
-    checkAndStart(type) {
+    checkAndStart(type: string | null = null) {
       if (!this.userCurrentSub.endDate) {
-        this.$router.push({
+        this.appRouter.push({
           path: '/user-panel',
           query: {
-            page: userPanelItemsEnum[userPanelItems.subscriptionList],
+            page: UserPanelItemsRecord[UserPanelItems.subscriptionList],
           },
         });
       } else {
@@ -1304,7 +1347,7 @@ export default {
               this.userCurrentSub.remainTrainingCount <= 0 ||
               this.userCurrentSub.remainTrainingCountPerDay <= 0
             ) {
-              this.$refs?.blockModalRef.showModal();
+              this.blockModalRef!.showModal();
               return;
             }
           }
@@ -1315,16 +1358,18 @@ export default {
 
     async handleClarityData() {
       try {
+        //eslint-disable-next-line
         return new Promise(async (resolve, reject) => {
-          if (!window['clarity'] || !window.clarity) {
+          if (!window['clarity']) {
             resolve(null);
             return null;
           }
-          const custom_session_id = generateUuid();
-          const result = await window.clarity(
+          const custom_session_id = getUuid();
+
+          const result = await window['clarity'](
             'identify',
-            this.$auth.user.email,
-            this.$auth.user.id + '_' + custom_session_id
+            this.appAuth.user.email,
+            this.appAuth.user.id + '_' + custom_session_id
           );
           this.form.customerId = result?.userId;
           this.form.sessionId = result?.sessionId;
@@ -1339,30 +1384,30 @@ export default {
     async startExam() {
       try {
         this.examLoading = true;
-        if (process.env.currentEnv === 'dev') {
+        if (this.runtimeConfig.public.currentEnv === 'dev') {
           await this.handleClarityData();
         }
         this.createForm();
         const url = 'studentsExam/customFromTags';
         this.form.subjectId = this.isTahsele
-          ? process.env.defaultSubjectIdTahsele
-          : process.env.defaultSubjectId;
-        const res = await this.$axios.$post(url, this.form).catch((error) => {
-          this.processErrors(error);
-          this.examLoading = false;
-        });
+          ? this.runtimeConfig.public.defaultSubjectIdTahsele
+          : this.runtimeConfig.public.defaultSubjectId;
+        const { data: res } = await this.$axios
+          .post(url, this.form)
+          .finally(() => {
+            this.examLoading = false;
+          });
         if (res) {
           this.$store.commit('student/SET_CURRENT_EXAM_TRAIN_PAGE_DATA', res);
-          this.goToExam(res.id);
+          this.goToExam(res.id, undefined);
         }
         //this.examLoading = false;
       } catch (e) {
-        showToastError(
-          this.$bvToast,
-          { autoHideDelay: 2500 },
-          'عذراً حدث خطأ في إنشاء امتحانكم ... يرجى إعادة المحاولة'
-        );
-        await sleep(1000);
+        this.showError({
+          life: 2500,
+          summary: 'عذراً حدث خطأ في إنشاء امتحانكم ... يرجى إعادة المحاولة',
+        });
+        await sleepUtil(1000);
         this.examLoading = false;
         console.log(e);
       }
@@ -1371,45 +1416,32 @@ export default {
     async startFullExam() {
       try {
         this.examLoading = true;
-        let clarityData = null;
-        if (process.env.currentEnv === 'dev') {
+        let clarityData = null as any | null;
+        if (this.runtimeConfig.public.currentEnv === 'dev') {
           clarityData = await this.handleClarityData();
         }
-        const res = await this.$axios
-          .$post(`studentsExam`, {
+        const { data: res } = await this.$axios
+          .post(`studentsExam`, {
             examId: this.publicExam.id,
             willDo: true,
             tagsIds: this.form.tagsIds,
             customerId: clarityData?.userId ?? null,
             sessionId: clarityData?.sessionId ?? null,
           })
-          .catch((error) => {
-            if (error.response?.status == 400) {
-              if (error.response.data.errorType == 6) {
-                this.$store.commit('SET_SHOW_BLOCK_MODAL', true);
-              } else {
-                showToastError(this.$bvToast, {
-                  title: errorsEnum[error.response.data.errorType],
-                  autoHideDelay: 5000,
-                });
-              }
-            } else {
-              showToastError(this.$bvToast);
-            }
+          .finally(() => {
             this.examLoading = false;
           });
         if (res) {
           this.$store.commit('student/SET_CURRENT_EXAM_TRAIN_PAGE_DATA', res);
-          this.goToExam(res.id);
+          this.goToExam(res.id, undefined);
         }
         //this.examLoading = false;
       } catch (e) {
-        showToastError(
-          this.$bvToast,
-          { autoHideDelay: 2500 },
-          'عذراً حدث خطأ في إنشاء امتحانكم ... يرجى إعادة المحاولة'
-        );
-        await sleep(1000);
+        this.showError({
+          life: 2500,
+          summary: 'عذراً حدث خطأ في إنشاء امتحانكم ... يرجى إعادة المحاولة',
+        });
+        await sleepUtil(1000);
         this.examLoading = false;
         console.log(e);
       }
@@ -1427,13 +1459,9 @@ export default {
       return minutesToHHMM(minutes);
     },
 
-    toggleExamCollapse(id) {
-      this.activeBankCollapse = !this.activeBankCollapse;
-      //this.$root.$emit('bv::toggle::collapse', id);
-    },
-
-    debounceCustomCount: CommonUtils.debounce(
+    debounceCustomCount: debounceUtil(
       function () {
+        //@ts-expect-error access debounce
         this.getCustomCount();
       },
       800,
@@ -1448,7 +1476,7 @@ export default {
         _formData.takfeelTagsIds = this.form.takfeelTagsIds;
         _formData.tagsIds = this.form.tagsIds;
         _formData.randomQuestionsSettings = this.randomQuestionsSettingsList();
-        const res = await this.$axios.$post(
+        const { data: res } = await this.$axios.post(
           `studentsExam/customExamQuestionsCount`,
           _formData
         );
@@ -1485,12 +1513,12 @@ export default {
     checkOpenModals() {
       if (import.meta.client) {
         if (
-          this.$auth.loggedIn &&
-          localStorage.getItem(`firstRegister_${this.$auth.user.id}`)
+          this.appAuth.loggedIn &&
+          localStorage.getItem(`firstRegister_${this.appAuth.user.id}`)
         ) {
           this.openModalsCount++; // المودال الأول مفتوح
 
-          this.$root.$on('hello-modal-hidden', () => {
+          appEvents.helloModal$.pipe(take(1)).subscribe(() => {
             this.openModalsCount--; // تقليل العدد عند الإغلاق
           });
         }
@@ -1498,7 +1526,7 @@ export default {
         if (!sessionStorage.getItem('adModalShown')) {
           this.openModalsCount++; // المودال الثاني مفتوح
 
-          this.$root.$on('panner-modal-hidden', () => {
+          appEvents.pannerModalHidden$.pipe(take(1)).subscribe(() => {
             this.openModalsCount--; // تقليل العدد عند الإغلاق
           });
         }
@@ -1521,8 +1549,8 @@ export default {
         maxValue !== _default.oLevelMaxValue ||
         minValue !== _default.oLevelMinValue
       ) {
-        const minLevel = this.findLevel(minValue);
-        const maxLevel = this.findLevel(maxValue);
+        const minLevel = this.findLevel(minValue)!;
+        const maxLevel = this.findLevel(maxValue)!;
 
         if (minLevel === maxLevel) {
           return ` المستوى ${minLevel.name}`;
@@ -1547,7 +1575,7 @@ export default {
   computed: {
     canStartTour() {
       return (
-        this.isIntroLibReady &&
+        this.introService.isIntroLibReady &&
         !this.fetchLoading &&
         this.selectedType == examTypes.trainings
       );
@@ -1560,21 +1588,13 @@ export default {
     routerHelper() {
       return RouteHelper;
     },
-    /**@type {SubUserCurrentModel}*/
-    userCurrentSub() {
-      return this.$store.state.userCurrentSub;
-    },
-    /**@type {UserServicesStateUi}*/
-    userServicesState() {
-      return this.$store.state.userServicesState;
-    },
     categoryListModel() {
       return this.categoryList;
     },
     caQueryModel() {
       return {
         list: this.categoryListModel,
-        query: this.$route.query,
+        query: this.appRoute.query,
       };
     },
     texts() {
@@ -1634,7 +1654,7 @@ export default {
     },
 
     selectedLists() {
-      const list = [];
+      const list = [] as any[];
       this.selectedCard.forEach((k) => {
         this.categoryList.forEach((n) => {
           n.children.forEach((items) => {
@@ -1698,16 +1718,12 @@ export default {
       );
     },
 
-    globalTypeUser() {
-      return this.$store.state.globalTypeUser;
-    },
-
     isTahsele() {
-      return this.globalTypeUser == globalTypesEnum.tahsele;
+      return this.globalTypeUser == GlobalTypes.tahsele;
     },
 
     advancedText() {
-      const parts = [];
+      const parts = [] as string[];
       if (!this.isTahsele) {
         const bankText = this.getBankText(
           this.advancedFilter.oBankMinValue,
@@ -1740,19 +1756,19 @@ export default {
     },
   },
   watch: {
-    '$route.query.page': {
+    'appRoute.query.page': {
       immediate: true,
       deep: true,
       handler(newVal, oldVal) {
         this.selectedType = examTypes[newVal];
         this.activeSwitch = false;
         if (
-          newVal == this.userPanelItemsEnum[this.userPanelItems.trainings] ||
-          newVal == this.userPanelItemsEnum[this.userPanelItems.exams]
+          newVal == UserPanelItemsRecord[UserPanelItems.trainings] ||
+          newVal == UserPanelItemsRecord[UserPanelItems.exams]
         ) {
           this.requestStaticData();
         }
-        if (newVal == this.userPanelItemsEnum[this.userPanelItems.exams]) {
+        if (newVal == UserPanelItemsRecord[UserPanelItems.exams]) {
           this.selectedAllItem();
           this.requestPublicExam();
         } else {
@@ -1833,7 +1849,7 @@ export default {
         }
       },
     },
-    '$store.state.globalTypeUser': {
+    globalTypeUser: {
       deep: true,
       handler(newVal) {
         this.changeGlobalType(newVal);

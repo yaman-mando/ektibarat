@@ -67,6 +67,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     baseURL: getEnv().websiteUrl,
     public: {
+      currentEnv,
       defaultSubjectId: getEnv().defaultSubjectId,
       defaultSubjectIdTahsele: getEnv().defaultSubjectIdTahsele,
       websiteUrl: getEnv().websiteUrl,

@@ -1,5 +1,7 @@
-@import "./prime-overrider/prime-modal-override";
+@import './prime-overrider/prime-modal-override';
+@import './prime-overrider/prime-toggle-switch-override';
 
-[tabindex="-1"]:focus:not(.focus-visible), [tabindex="-1"]:focus:not(:focus-visible){
-  outline: 0!important;
+[tabindex='-1']:focus:not(.focus-visible),
+[tabindex='-1']:focus:not(:focus-visible) {
+  outline: 0 !important;
 }

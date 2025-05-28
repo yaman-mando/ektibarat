@@ -647,13 +647,13 @@
               <lazy-analytics-panel />
             </template>
             <template v-if="activeList === userPanelItems.exams">
-              <!--            <mx-panel-exams />-->
+              <lazy-exams-panel />
             </template>
             <template v-if="activeList === userPanelItems.reviews">
               <!--            <mx-panel-reviews />-->
             </template>
             <template v-if="activeList === userPanelItems.trainings">
-              <!--            <mx-panel-exams />-->
+              <lazy-exams-panel />
             </template>
             <template v-if="activeList === userPanelItems.subscriptionList">
               <!--            <mx-panel-subscribes />-->

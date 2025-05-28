@@ -22,6 +22,7 @@ window.useNuxtApp().$router.push('/exam-questions/2a949b3f-c835-4b48-a606-7fb8ac
 
 //components
 v-prime-tooltip
+form-toggle > prime-toggle-switch
 em-switch > custom-switch
 mx-g-img > custom-image
 mx-img > app-image

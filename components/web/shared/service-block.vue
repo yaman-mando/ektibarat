@@ -29,7 +29,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sb-w_item {
-  z-index: 1000;
+  z-index: 999;
   position: absolute;
   left: 50%;
   top: 50%;

@@ -206,3 +206,9 @@ export const getRateLabel = (rate) => {
     return 'ممتاز';
   }
 };
+
+export const calculateSumFromArray = (array, property) => {
+  return array.reduce((accumulator, object) => {
+    return accumulator + object[property];
+  }, 0);
+};

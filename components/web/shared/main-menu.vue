@@ -725,7 +725,7 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
   top: 0;
   background: white;
   box-shadow: 0 0 15px #00000033;
-  z-index: 1000;
+  z-index: 999;
   .web-header {
     padding: 20px 40px;
     display: flex;

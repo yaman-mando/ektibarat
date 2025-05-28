@@ -1,0 +1,5 @@
+.p-toggleswitch-handle {
+  margin-block-start: calc(
+    -1 * calc(var(--p-toggleswitch-handle-size) / 2)
+  ) !important;
+}

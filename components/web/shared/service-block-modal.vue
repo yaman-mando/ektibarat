@@ -56,11 +56,15 @@ import { RouteHelper } from '~/main/utils/route-helper.js';
 import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 
 export default {
-  setup() {
+  setup(props, { expose }) {
     const isOpen = ref(false);
     function showModal() {
       isOpen.value = true;
     }
+
+    expose({
+      showModal,
+    });
     return {
       ...useSetupRoute(),
       showModal,
