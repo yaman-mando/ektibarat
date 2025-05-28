@@ -3,10 +3,10 @@
     id="cropper-modal"
     v-model:visible="isOpenModel"
     :modal="true"
-    :dismissableMask="true"
+    :dismissableMask="false"
     class="cropper-modal"
     :showHeader="true"
-    :closable="true"
+    :closable="false"
     @hide="close()"
   >
     <cropper

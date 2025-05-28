@@ -105,7 +105,11 @@
             :key="`analyticsData_${index1}`"
             class="analytics-group"
           >
-            <lazy-prime-accordion class="child-custom-acc">
+            <lazy-prime-accordion
+              ref="accordion_ref"
+              v-model:value="accordionParentValue"
+              class="child-custom-acc"
+            >
               <template #expandicon>
                 <i class="fa fa-solid fa-chevron-down c_icon"></i>
               </template>
@@ -469,8 +473,10 @@
             :key="`analyticsData_${index1}`"
             class="analytics-group"
           >
-            <!--  test           -->
-            <lazy-prime-accordion class="child-custom-acc">
+            <lazy-prime-accordion
+              ref="accordion_ref"
+              class="child-custom-acc"
+            >
               <lazy-prime-accordion-panel :value="`analyticsData_${index1}`">
                 <lazy-prime-accordion-header
                   class="custom-panel-header"
@@ -598,7 +604,7 @@
                         :value="`group.analayzeStudentCategories_${index2}`"
                       >
                         <lazy-prime-accordion-header
-                          class="custom-panel-header"
+                          class="custom-panel-header g-collapse-group"
                         >
                           <div
                             :class="[
@@ -1554,7 +1560,6 @@
                 </lazy-prime-accordion-content>
               </lazy-prime-accordion-panel>
             </lazy-prime-accordion>
-            <!--  end test           -->
           </div>
           <div class="analytics-group">
             <div class="chart-collapse-group">
@@ -1698,6 +1703,7 @@ import { AppLocalStorage } from '~/main/utils/app-storage';
 import { appEvents } from '~/main/shared/events/app.events';
 import { take } from 'rxjs';
 import { useApexChartService } from '~/main/services/useApexChartService';
+import type { PrimeAccordion } from '#components';
 
 class examForm {
   subjectId: number | string;
@@ -1764,7 +1770,12 @@ export default {
     const form = ref(new examForm(runtimeConfig.public.defaultSubjectId));
     const imageUrl = useImageUrl();
     const subscriptionsStore = useSubscriptionsStore();
+    const accordionRef =
+      useTemplateRef<Array<InstanceType<typeof PrimeAccordion>>>(
+        'accordion_ref'
+      );
     return {
+      accordionRef,
       apexChartService: useApexChartService(),
       runtimeConfig,
       ...useSetupAuth(),
@@ -1788,6 +1799,7 @@ export default {
 
   data() {
     return {
+      accordionParentValue: 'analyticsData_0',
       mockData: [
         { date: '2024-08-14T00:00:00+02:00', count: 21 },
         { date: '2024-08-14T00:00:00+03:00', count: 21 },
@@ -2568,3 +2580,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped src="./analytics-panel.scss"></style>
+<style lang="scss">
+@import '@/assets/scss/lib/intro-lib';
+</style>
