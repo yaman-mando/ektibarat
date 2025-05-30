@@ -650,7 +650,7 @@
               <lazy-exams-panel />
             </template>
             <template v-if="activeList === userPanelItems.reviews">
-              <!--            <mx-panel-reviews />-->
+              <lazy-reviews-panel />
             </template>
             <template v-if="activeList === userPanelItems.trainings">
               <lazy-exams-panel />

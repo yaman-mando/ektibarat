@@ -9,6 +9,12 @@ export default withNuxt(
         //strict prop
         'no-restricted-syntax': [
           'error',
+          //prevent usage: '$route' as watcher
+          {
+            selector: 'Property[key.type="Literal"][key.value=/^\\$route/]',
+            message: 'do not use',
+          },
+          //end
           //start rule: prevent watcher for start with ('$store)
           {
             // Catches: '$store.state.x', '$store.getters.x', etc.
