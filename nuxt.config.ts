@@ -68,6 +68,7 @@ export default defineNuxtConfig({
     baseURL: getEnv().websiteUrl,
     public: {
       currentEnv,
+      paymentKey: getEnv().paymentKey,
       defaultSubjectId: getEnv().defaultSubjectId,
       defaultSubjectIdTahsele: getEnv().defaultSubjectIdTahsele,
       websiteUrl: getEnv().websiteUrl,

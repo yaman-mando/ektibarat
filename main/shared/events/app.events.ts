@@ -22,6 +22,13 @@ const useAppEvents = () => {
     pannerModalHiddenSub.next(Symbol());
   };
 
+  //survey modal
+  const surveyModalSub = new Subject<symbol>();
+  const surveyModal$ = surveyModalSub.asObservable();
+  const emitSurveyModal = () => {
+    surveyModalSub.next(Symbol());
+  };
+
   return {
     emitToTraining,
     toTraining$,
@@ -29,6 +36,8 @@ const useAppEvents = () => {
     helloModal$,
     emitPannerModalHidden,
     pannerModalHidden$,
+    emitSurveyModal,
+    surveyModal$,
   };
 };
 
