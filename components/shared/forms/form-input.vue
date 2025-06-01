@@ -9,7 +9,10 @@
       :rules="rules"
     >
       <div class="custom-input">
-        <div class="a-input-label">
+        <div
+          v-if="!hideLabel"
+          class="a-input-label"
+        >
           <label :for="inputId">
             {{ label }}
           </label>
@@ -107,6 +110,7 @@ const props = withDefaults(
     textAreaRows?: number;
     minVal?: string | null;
     maxVal?: string | null;
+    hideLabel?: boolean;
   }>(),
   {
     direction: 'rtl',
@@ -119,6 +123,7 @@ const props = withDefaults(
     textAreaRows: 5,
     minVal: null,
     maxVal: null,
+    hideLabel: false,
   }
 );
 

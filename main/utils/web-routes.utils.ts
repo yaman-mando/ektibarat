@@ -27,6 +27,7 @@ export const webUserPanelTrainingWithQuery = (
   args: Partial<{
     globalType?: GlobalTypes;
     id?: number;
+    page?: string;
   }>
 ): RouteLocationRaw => {
   const query: { page: string; globalTypeUser?: GlobalTypes; id?: number } = {
@@ -37,6 +38,9 @@ export const webUserPanelTrainingWithQuery = (
   }
   if (args.id) {
     query.id = args.id;
+  }
+  if (args.page) {
+    query.page = args.page;
   }
   return {
     path: '/user-panel',

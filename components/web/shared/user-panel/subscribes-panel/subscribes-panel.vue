@@ -10,112 +10,112 @@
       <app-overlay />
     </div>
     <template v-else>
-      <template v-if="!successPaymentCase">
-        <div
-          class="rw-1 !mis-0"
-          :class="{ 'is-sub': activeStep == steps.subscriptions }"
-        >
-          <span>الاشتراكات</span>
-        </div>
-        <template v-if="activeStep == steps.subscriptions">
-          <div class="subscriptions-step">
-            <div
-              v-if="subscriptions"
-              class="_sub_list"
-            >
+      <lazy-vee-validate-provider>
+        <template v-if="!successPaymentCase">
+          <div
+            class="rw-1 !mis-0"
+            :class="{ 'is-sub': activeStep == steps.subscriptions }"
+          >
+            <span>الاشتراكات</span>
+          </div>
+          <template v-if="activeStep == steps.subscriptions">
+            <div class="subscriptions-step">
               <div
-                v-for="sub of subscriptions"
-                class="_sub"
+                v-if="subscriptions"
+                class="_sub_list"
               >
-                <div class="_rp">
-                  <div class="c_title">
-                    <span class="_title">
-                      <template v-if="sub.subjectId == defaultSub">
-                        اختبار القدرات العامة
-                      </template>
-                      <template v-else-if="sub.subjectId == defaultSubTahsele">
-                        اختبار التحصيلي
-                      </template>
-                      <template v-else>غير معروف</template>
-                    </span>
-                    <span
-                      class="_type"
-                      :class="{ 'is-free': sub.freeType != null }"
+                <div
+                  v-for="sub of subscriptions"
+                  :key="sub.id"
+                  class="_sub"
+                >
+                  <div class="_rp">
+                    <div class="c_title">
+                      <span class="_title">
+                        <template v-if="sub.subjectId == defaultSub">
+                          اختبار القدرات العامة
+                        </template>
+                        <template
+                          v-else-if="sub.subjectId == defaultSubTahsele"
+                        >
+                          اختبار التحصيلي
+                        </template>
+                        <template v-else>غير معروف</template>
+                      </span>
+                      <span
+                        class="_type"
+                        :class="{ 'is-free': sub.freeType != null }"
+                      >
+                        <template v-if="sub.freeType == null">
+                          {{ sub.title }}
+                        </template>
+                        <template v-else>الأساسية</template>
+                      </span>
+                    </div>
+                    <div
+                      v-if="sub.freeType == null && sub.endDate"
+                      class="c_date"
                     >
-                      <template v-if="sub.freeType == null">
-                        {{ sub.title }}
-                      </template>
-                      <template v-else>الأساسية</template>
-                    </span>
+                      <span>
+                        ينتهي اشتراكك بتاريخ
+                        {{ getDataModal(sub.endDate) }}
+                      </span>
+                    </div>
+                    <div
+                      v-if="sub.freeType != null"
+                      class="c_free"
+                    >
+                      <span class="_t1">ميزات اشتراكك محدودة الآن</span>
+                      <span class="_t2">
+                        اشترك في باقات اختبارات
+                        <br v-if="windowSize.isMobileSize" />
+                        للحصول على المزيد من المزايا
+                      </span>
+                    </div>
                   </div>
-                  <div
-                    v-if="sub.freeType == null && sub.endDate"
-                    class="c_date"
-                  >
-                    <span>
-                      ينتهي اشتراكك بتاريخ
-                      <template>{{ getDataModal(sub.endDate) }}</template>
-                    </span>
+                  <div class="_lp">
+                    <app-button
+                      size="md"
+                      :label="sub.freeType == null ? 'تجديد' : 'اشترك'"
+                      @click="
+                        sub.freeType == null
+                          ? reNewSubscription(sub.id, sub.subjectId)
+                          : goToPrice(sub.subjectId)
+                      "
+                    />
                   </div>
-                  <div
-                    v-if="sub.freeType != null"
-                    class="c_free"
-                  >
-                    <span class="_t1">ميزات اشتراكك محدودة الآن</span>
-                    <span class="_t2">
-                      اشترك في باقات اختبارات
-                      <br v-if="$mq == 'mobile'" />
-                      للحصول على المزيد من المزايا
-                    </span>
-                  </div>
-                </div>
-                <div class="_lp">
-                  <b-button
-                    @click="
-                      sub.freeType == null
-                        ? reNewSubscription(sub.id, sub.subjectId)
-                        : goToPrice(sub.subjectId)
-                    "
-                  >
-                    <template v-if="sub.freeType == null">تجديد</template>
-                    <template v-else>اشترك</template>
-                  </b-button>
                 </div>
               </div>
             </div>
-          </div>
-          <complete-info-modal
-            :key="completeInfoModalKey"
-            v-model:isOpenModal="isOpenCompleteInfoModal"
-            @onCompleteInfo="onCompleteInfo"
-          />
-        </template>
-        <template v-if="activeStep == steps.payment">
-          <div
-            v-if="selectedPacket"
-            class="payment-step"
-          >
-            <div class="s1-rw-1">
-              <span class="p-selected">
-                الباقة المختارة:
-                <span class="p-name">{{ selectedPacket.title }}</span>
-              </span>
-              <span
-                class="p-change"
-                @click="goToPrice()"
-              >
-                تغيير الباقة
-              </span>
-            </div>
-            <hr class="hide-to-tablet" />
-            <div class="s1-info">
-              <b-overlay
-                :show="!appleIsLoaded"
-                opacity="1"
-              >
+            <lazy-complete-info-modal
+              :key="completeInfoModalKey"
+              v-model:isOpenModal="isOpenCompleteInfoModal"
+              @onCompleteInfo="onCompleteInfo"
+            />
+          </template>
+          <template v-if="activeStep == steps.payment">
+            <div
+              v-if="selectedPacket"
+              class="payment-step"
+            >
+              <div class="s1-rw-1">
+                <span class="p-selected">
+                  الباقة المختارة:
+                  <span class="p-name">{{ selectedPacket.title }}</span>
+                </span>
+                <span
+                  class="p-change"
+                  @click="goToPrice()"
+                >
+                  تغيير الباقة
+                </span>
+              </div>
+              <hr class="hide-to-tablet" />
+              <div class="s1-info relative">
+                <app-overlay v-if="!appleIsLoaded" />
                 <div
                   :style="{ opacity: !appleIsLoaded ? 0 : 1 }"
-                  class="s1-p1-info"
+                  class="s1-p1-info relative"
                   :class="{ free: total <= 0 }"
                 >
                   <template v-if="!selectedPacket.isFree">
@@ -127,62 +127,36 @@
                         <span>كود الخصم</span>
                       </div>
                       <div class="l-part">
-                        <validation-observer
-                          v-slot="{ valid, validate, handleSubmit }"
-                          ref="discountCodeForm"
+                        <vee-form
+                          v-slot="{ meta }"
                           tag="div"
-                          class="a-discount-form"
+                          class="a-discount-form w-full"
                         >
-                          <validation-provider
-                            ref="discount_code"
-                            v-slot="discountCodeSlot"
-                            name="discountCode"
-                            class="discountCode"
+                          <form-input
+                            v-model:inputValue="discountCodeInput"
                             :rules="{ required: true }"
-                          >
-                            <!--onkeydown="return (/^[a-z0-9]$/i.test(event.key) || event.keyCode == 8 || event.keyCode == 9 && event.keyCode != 51);"-->
-                            <!--                            @input="
-                            discountCodeInput =
-                            discountCodeInput.toUpperCase()
-                            "-->
-                            <b-input
-                              id="codeInputSm"
-                              v-model="discountCodeInput"
-                              :disabled="coupon.hasCoupon"
-                              class="hide-from-tablet"
-                              placeholder="كود الخصم"
-                            />
-                            <b-input
-                              id="codeInput"
-                              v-model="discountCodeInput"
-                              :disabled="coupon.hasCoupon"
-                              class="hide-to-tablet"
-                            />
-                            <i
-                              v-if="coupon.hasCoupon"
-                              class="fa fa-check-circle"
-                            ></i>
-                          </validation-provider>
-                          <b-button
+                            inputId="codeInputSm"
+                            :isDisabled="coupon.hasCoupon"
+                            inputPlaceholder="كود الخصم"
+                            :hideLabel="true"
+                            :hideErrorLabel="true"
+                          />
+                          <app-button
                             v-if="coupon.hasCoupon"
-                            class="normal-btn"
+                            size="md"
+                            label="إزالة"
                             @click="removeCoupon()"
-                          >
-                            إزالة
-                          </b-button>
-                          <b-overlay
+                          />
+                          <app-button
                             v-else
-                            :show="couponLoad"
-                          >
-                            <b-button
-                              :disabled="!valid"
-                              class="normal-btn"
-                              @click="requestCoupon"
-                            >
-                              تطبيق
-                            </b-button>
-                          </b-overlay>
-                        </validation-observer>
+                            size="md"
+                            colorType="success"
+                            :isLoading="couponLoad"
+                            :isDisabled="!meta.valid"
+                            label="تطبيق"
+                            @click="requestCoupon"
+                          />
+                        </vee-form>
                       </div>
                     </div>
                     <hr />
@@ -190,7 +164,7 @@
                   <div v-show="total > 0">
                     <div class="s1-p1-rw-3">
                       <span class="title">وسيلة الدفع</span>
-                      <div class="s1-p1-rw-3-rw-2">
+                      <div class="s1-p1-rw-3-rw-2 relative">
                         <div
                           :class="{
                             active: activePaymentType === paymentTypes.cards,
@@ -201,169 +175,56 @@
                           <span class="c-check"></span>
                           <div class="c-content">
                             <img
-                              src="~assets/svg/Mada.svg"
+                              src="/images/svg/Mada.svg"
                               alt="اختبارات"
                             />
                             <img
-                              src="~assets/svg/Visa.svg"
+                              src="/images/svg/Visa.svg"
                               alt="اختبارات"
                             />
                             <img
-                              src="~assets/svg/Mastercard.svg"
+                              src="/images/svg/Mastercard.svg"
                               alt="اختبارات"
                             />
                           </div>
                         </div>
-                        <b-overlay
-                          :show="!appleIsLoaded"
-                          spinnerSmall
-                          rounded="sm"
+                        <app-overlay v-if="!appleIsLoaded" />
+
+                        <div
+                          class="s1-p1-rw-3-rw-2-cl-2"
+                          :class="{
+                            active: activePaymentType === paymentTypes.apple,
+                            disabled: disableApple,
+                          }"
+                          @click="changePaymentMethod(paymentTypes.apple)"
                         >
-                          <div
-                            class="s1-p1-rw-3-rw-2-cl-2"
-                            :class="{
-                              active: activePaymentType === paymentTypes.apple,
-                              disabled: disableApple,
-                            }"
-                            @click="changePaymentMethod(paymentTypes.apple)"
-                          >
-                            <span class="c-check"></span>
-                            <div class="c-content">
-                              <img
-                                src="~assets/svg/apple-pay.svg"
-                                alt="apple-pay"
-                              />
-                              <span>أبل باي</span>
-                            </div>
+                          <span class="c-check"></span>
+                          <div class="c-content">
+                            <img
+                              src="/images/svg/apple-pay.svg"
+                              alt="apple-pay"
+                            />
+                            <span>أبل باي</span>
                           </div>
-                        </b-overlay>
+                        </div>
                       </div>
                     </div>
 
-                    <div class="card-info">
-                      <!--                      <validation-observer
-                        v-slot="{ valid, validate, handleSubmit }"
-                        tag="div"
-                        ref="cardInfoFormObserverRef"
-                        class="a-card-info-form"
-                      >
-                        <b-form
-                          class="form-el"
-                          @submit.prevent="handleSubmit(payByCard)"
-                        >
-                          <ValidationProvider
-                            ref="cready_num"
-                            name="creadyName"
-                            class="creadyName"
-                            :rules="{ required: true }"
-                            v-slot="creadyName"
-                          >
-                            <div class="c-rw-name">
-                              <label>الاسم على البطاقة</label>
-                              <b-form-input
-                                :class="[
-                                  { invalid: creadyName.errors.length > 0 },
-                                ]"
-                                required
-                                v-model="cardForm.name"
-                              ></b-form-input>
-                            </div>
-                          </ValidationProvider>
-                          <div class="c-rw-info">
-                            <ValidationProvider
-                              ref="cready_num"
-                              name="creadyNumber"
-                              class="creadyNum"
-                              :rules="{ required: true, verify_cready: true }"
-                              v-slot="creadyNum"
-                            >
-                              <div class="c-number">
-                                <label>رقم البطاقة</label>
-                                <div class="input-group">
-                                  <b-form-input
-                                    style="direction: ltr"
-                                    v-if="iMaskInstance"
-                                    v-imask="maskCardNumber"
-                                    v-model="maskVal"
-                                    :class="[
-                                      { invalid: creadyNum.errors.length > 0 },
-                                    ]"
-                                    placeholder="XXXX XXXX XXXX XXXX"
-                                  ></b-form-input>
-                                  &lt;!&ndash;                            <img&ndash;&gt;
-                                  &lt;!&ndash;                              src="~assets/svg/credit-card.svg"&ndash;&gt;
-                                  &lt;!&ndash;                              alt=""&ndash;&gt;
-                                  &lt;!&ndash;                            />&ndash;&gt;
-                                </div>
-                              </div>
-                            </ValidationProvider>
-
-                            <ValidationProvider
-                              ref="period_num"
-                              name="periodDate"
-                              class="periodDate"
-                              :rules="{ required: true, period_date: true }"
-                              v-slot="periodDate"
-                            >
-                              <div class="c-expireDate">
-                                <div class="c-expireDate-rw-1">
-                                  <label>تاريخ الانتهاء</label>
-                                  <i class="fa fa-circle-info"></i>
-                                </div>
-                                <b-form-input
-                                  style="direction: ltr"
-                                  v-if="iMaskInstance"
-                                  v-imask="maskDate"
-                                  v-model="cardForm.expireDate"
-                                  :class="[
-                                    { invalid: periodDate.errors.length > 0 },
-                                  ]"
-                                  placeholder="MM/YY"
-                                ></b-form-input>
-                              </div>
-                            </ValidationProvider>
-
-                            <ValidationProvider
-                              ref="cvv_code"
-                              name="cvvCode"
-                              class="cvcCode"
-                              :rules="{ required: true, cvv_code: true }"
-                              v-slot="cvvCode"
-                            >
-                              <div class="c-cvc">
-                                <div class="c-cvc-rw-1">
-                                  <label>رمز الأمان</label>
-                                  <i class="fa fa-circle-info"></i>
-                                </div>
-                                <b-form-input
-                                  style="direction: ltr"
-                                  v-if="iMaskInstance"
-                                  v-imask="maskCvc"
-                                  v-model="cardForm.cvc"
-                                  :class="[
-                                    { invalid: cvvCode.errors.length > 0 },
-                                  ]"
-                                  placeholder="XXX"
-                                ></b-form-input>
-                              </div>
-                            </ValidationProvider>
-                          </div>
-                        </b-form>
-                      </validation-observer>-->
-
+                    <div class="card-info relative">
                       <form
                         v-show="activePaymentType == paymentTypes.cards"
                         id="form-container"
+                        class="relative"
                         method="post"
                         action="/charge"
                       >
-                        <b-overlay :show="loadPaymentForm">
-                          <!-- Tap element will be here -->
-                          <div
-                            id="element-container"
-                            style="min-height: 176px"
-                          ></div>
-                        </b-overlay>
+                        <div
+                          id="element-container"
+                          class="relative"
+                          style="min-height: 176px"
+                        >
+                          <app-overlay v-if="loadPaymentForm" />
+                        </div>
                         <div
                           id="error-handler"
                           role="alert"
@@ -378,8 +239,6 @@
                           ></i>
                           <span id="token"></span>
                         </div>
-                        <!-- Tap pay button -->
-                        <!--                        <button id="tap-btn">Submit</button>-->
                       </form>
 
                       <div
@@ -392,42 +251,22 @@
                           لإتمام عملية الدفع عبر أبل
                         </span>
                       </div>
-                      <b-overlay :show="paymentLoad">
-                        <!--                      <b-button
-                        @click="payByCard()"
-                        class="normal-btn"
-                      >
-                        إتمام الدفع(popup)
-                      </b-button>
-                      <b-button
-                        @click="payByCard2()"
-                        class="normal-btn"
-                      >
-                        إتمام الدفع(modal)
-                      </b-button>
-                      <b-button
-                        @click="payByCard3()"
-                        class="normal-btn"
-                      >
-                        إتمام الدفع(newBlank)
-                      </b-button>-->
-                        <b-button
-                          v-if="activePaymentType == paymentTypes.cards"
-                          class="normal-btn"
-                          @click="payByCard4()"
-                        >
-                          إتمام الدفع
-                        </b-button>
-                        <div
-                          id="apple-pay-button"
-                          :style="{
-                            display:
-                              activePaymentType == paymentTypes.apple
-                                ? 'flex'
-                                : 'none',
-                          }"
-                        ></div>
-                      </b-overlay>
+                      <app-overlay v-if="paymentLoad" />
+                      <app-button
+                        v-if="activePaymentType == paymentTypes.cards"
+                        class="!mx-auto"
+                        label="إتمام الدفع"
+                        @click="payByCard4()"
+                      />
+                      <div
+                        id="apple-pay-button"
+                        :style="{
+                          display:
+                            activePaymentType == paymentTypes.apple
+                              ? 'flex'
+                              : 'none',
+                        }"
+                      ></div>
 
                       <span class="b-note">
                         سيتم تفعيل اشتراكك على هذا الحساب تلقائيا بعد إتمامك
@@ -436,127 +275,122 @@
                     </div>
                   </div>
                   <template v-if="total <= 0">
-                    <b-overlay
-                      :show="paymentLoad"
-                      style="width: 225px; margin: auto"
-                    >
-                      <b-button
-                        class="normal-btn payment-free-btn"
-                        @click="payByFree()"
-                      >
-                        إتمام التسجيل
-                      </b-button>
-                    </b-overlay>
+                    <app-overlay v-if="paymentLoad" />
+                    <app-button
+                      class="normal-btn payment-free-btn"
+                      label="إتمام التسجيل"
+                      @click="payByFree()"
+                    />
                   </template>
                 </div>
-              </b-overlay>
-              <div class="s1-p2-info">
-                <div class="s1-p2-rw-1">
-                  <span>ملخص الطلب</span>
-                </div>
-                <div class="s1-p2-info-data">
-                  <div class="info-item">
-                    <span class="title">الباقة</span>
-                    <span class="caption">{{ selectedPacket.title }}</span>
+                <div class="s1-p2-info">
+                  <div class="s1-p2-rw-1">
+                    <span>ملخص الطلب</span>
                   </div>
-                  <div class="info-item">
-                    <span class="title">مدة الاشتراك</span>
-                    <span class="caption">
-                      {{ selectedPacket.period }}
-                      <span v-if="selectedPacket.period < 11">أشهر</span>
-                      <span v-else>شهر</span>
-                    </span>
-                  </div>
-                  <template v-if="!selectedPacket.isFree">
+                  <div class="s1-p2-info-data">
                     <div class="info-item">
-                      <span class="title">السعر</span>
+                      <span class="title">الباقة</span>
+                      <span class="caption">{{ selectedPacket.title }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="title">مدة الاشتراك</span>
                       <span class="caption">
-                        {{ selectedPacket.oldPrice.toFixed(2) }} ريال
+                        {{ selectedPacket.period }}
+                        <span v-if="selectedPacket.period < 11">أشهر</span>
+                        <span v-else>شهر</span>
                       </span>
                     </div>
-                    <div class="info-item">
-                      <span class="title">تخفيض الباقة</span>
-                      <span
-                        class="caption red"
-                        style="
-                          display: flex;
-                          align-items: center;
-                          column-gap: 3px;
-                        "
-                      >
-                        <span style="direction: ltr">{{ discount }}</span>
-                        <span>ريال</span>
+                    <template v-if="!selectedPacket.isFree">
+                      <div class="info-item">
+                        <span class="title">السعر</span>
+                        <span class="caption">
+                          {{ selectedPacket.oldPrice.toFixed(2) }} ريال
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="title">تخفيض الباقة</span>
+                        <span
+                          class="caption red"
+                          style="
+                            display: flex;
+                            align-items: center;
+                            column-gap: 3px;
+                          "
+                        >
+                          <span style="direction: ltr">{{ discount }}</span>
+                          <span>ريال</span>
+                        </span>
+                      </div>
+                    </template>
+                    <div
+                      v-if="coupon.hasCoupon"
+                      class="info-item"
+                    >
+                      <span class="title">كود الخصم</span>
+                      <span class="caption red">
+                        <!--                    {{ Number(coupon.couponAmount).toFixed(2) }}- ريال-->
+                        {{ '%' + coupon.couponAmount }}
                       </span>
                     </div>
-                  </template>
-                  <div
-                    v-if="coupon.hasCoupon"
-                    class="info-item"
-                  >
-                    <span class="title">كود الخصم</span>
-                    <span class="caption red">
-                      <!--                    {{ Number(coupon.couponAmount).toFixed(2) }}- ريال-->
-                      {{ '%' + coupon.couponAmount }}
-                    </span>
                   </div>
-                </div>
-                <hr />
-                <div class="s1-p2-toplam">
-                  <span class="title">السعر الإجمالي</span>
-                  <div
+                  <hr />
+                  <div class="s1-p2-toplam">
+                    <span class="title">السعر الإجمالي</span>
+                    <div
+                      v-if="total > 0"
+                      class="price"
+                    >
+                      <span class="total">{{ total }}</span>
+                      <span>ريال</span>
+                    </div>
+                    <div
+                      v-else
+                      class="price"
+                    >
+                      <span class="total">مجاناً</span>
+                    </div>
+                  </div>
+                  <span
                     v-if="total > 0"
-                    class="price"
+                    class="s1-p2-note"
                   >
-                    <span class="total">{{ total }}</span>
-                    <span>ريال</span>
-                  </div>
-                  <div
-                    v-else
-                    class="price"
-                  >
-                    <span class="total">مجاناً</span>
-                  </div>
+                    شامل ضريبة القيمة المضافة
+                  </span>
                 </div>
-                <span
-                  v-if="total > 0"
-                  class="s1-p2-note"
-                >
-                  شامل ضريبة القيمة المضافة
-                </span>
               </div>
             </div>
+          </template>
+        </template>
+        <template v-else>
+          <div class="confirm-payment">
+            <span class="c-title">أهلا بك في اختبارات!</span>
+            <span class="c-msg">
+              <i class="fa fa-check-circle"></i>
+              <span>تم تفعيل اشتراكك بنجاح</span>
+            </span>
+            <span class="c-date">
+              ينتهي اشتراكك بتاريخ
+              <span>
+                {{ currentSubEndDateModel }}
+              </span>
+            </span>
+            <span
+              v-if="!isFreePayment"
+              class="c-mail"
+            >
+              أرسلنا نسخة من إيصال الدفع إلى بريدك الإلكتروني
+              <a :href="'mailto:' + appAuth.user.email">
+                {{ appAuth.user.email }}
+              </a>
+            </span>
+            <app-button
+              class="!mt-3"
+              label="لوحتي التعليمية"
+              @click="toLearningPanel()"
+            />
           </div>
         </template>
-      </template>
-      <template v-else>
-        <div class="confirm-payment">
-          <span class="c-title">أهلا بك في اختبارات!</span>
-          <span class="c-msg">
-            <i class="fa fa-check-circle"></i>
-            <span>تم تفعيل اشتراكك بنجاح</span>
-          </span>
-          <span class="c-date">
-            ينتهي اشتراكك بتاريخ
-            <span>
-              {{ currentSubEndDateModel }}
-            </span>
-          </span>
-          <span
-            v-if="!isFreePayment"
-            class="c-mail"
-          >
-            أرسلنا نسخة من إيصال الدفع إلى بريدك الإلكتروني
-            <a :href="'mailto:' + appAuth.user.email">
-              {{ appAuth.user.email }}
-            </a>
-          </span>
-          <app-button
-            class="!mt-3"
-            label="لوحتي التعليمية"
-            @click="toLearningPanel()"
-          />
-        </div>
-      </template>
+      </lazy-vee-validate-provider>
     </template>
 
     <prime-dialog
@@ -598,29 +432,22 @@ import {
   paymentTypeEnum,
 } from '~/main/constants/payment-type.enum';
 import { appEvents } from '~/main/shared/events/app.events';
+import { defineRule, Form as VeeForm } from 'vee-validate';
 
-extend('verify_cready', {
-  validate: (value) => {
-    return RegExp(`[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}`).test(value);
-  },
+defineRule('verify_cready', (value: string, [email]: [string]) => {
+  return RegExp(`[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}`).test(value);
 });
 
-extend('period_date', {
-  validate: (value) => {
-    return RegExp(`^(0?[1-9]|1[0-2])/([2-9][0-9])`).test(value);
-  },
+defineRule('period_date', (value: string, [email]: [string]) => {
+  return RegExp(`^(0?[1-9]|1[0-2])/([2-9][0-9])`).test(value);
 });
 
-extend('cvv_code', {
-  validate: (value) => {
-    return RegExp(`^[0-9]{3}`).test(value);
-  },
+defineRule('cvv_code', (value: string, [email]: [string]) => {
+  return RegExp(`^[0-9]{3}`).test(value);
 });
 
-extend('discount_code', {
-  validate: (value) => {
-    return RegExp(`^[A-Z0-9]{3,}`).test(value);
-  },
+defineRule('discount_code', (value: string, [email]: [string]) => {
+  return RegExp(`^[A-Z0-9]{3,}`).test(value);
 });
 
 const style = {
@@ -696,11 +523,14 @@ const paymentTypes = {
 };
 
 export default {
+  components: { VeeForm },
   setup() {
+    const windowSize = useWindowSize();
     const globalStore = useGlobalStore();
     const subscriptionsStore = useSubscriptionsStore();
     const runtimeConfig = useRuntimeConfig();
     return {
+      windowSize,
       subscriptionsStore,
       globalStore,
       ...useToastMessage(),
@@ -849,7 +679,7 @@ export default {
         this.selectedPacket.currentPrice - this.selectedPacket.oldPrice
       ).toFixed(2);
     },
-    total() {
+    total(): any {
       return (
         this.selectedPacket.currentPrice -
         (this.selectedPacket.currentPrice * this.coupon.couponAmount!) / 100
@@ -1063,7 +893,7 @@ export default {
       }
     },
 
-    goToPrice(subId = null) {
+    goToPrice(subId: number | null = null) {
       try {
         if (subId) {
           const global_type_user =

@@ -8,112 +8,114 @@
     :dismissableMask="true"
     :closeOnEscape="true"
   >
-    <i
-      class="fa fa-times"
-      @click="closeModal"
-    ></i>
-    <div class="steps">
-      <vee-form
-        ref="add_teacher_form"
-        v-slot="{ meta }"
-        slim
-        class="add-teacher-form"
-      >
-        <template v-if="activeStep === 1">
-          <span class="__text1">{{ step1Text.text1 }}</span>
-          <span class="__text2">
-            {{ step1Text.text2 }}
-          </span>
-
-          <template v-if="incomplete === inCompleteType.phone">
-            <phone-input
-              :phoneNumber="form.phoneNumber"
-              @onInputPhone="(val) => (form.phoneNumber = val)"
-            />
-          </template>
-
-          <span
-            v-if="step1ErrMsg"
-            class="__triesNote __red"
-          >
-            {{ step1ErrMsg }}
-          </span>
-
-          <span class="__text3">
-            {{ step1Text.text3 }}
-          </span>
-        </template>
-
-        <template v-if="activeStep === 2">
-          <div class="co-code">
-            <span class="__text4">{{ step1Text.text4 }}</span>
-            <span class="__text5">
-              {{ step1Text.text5 }}
+    <lazy-vee-validate-provider>
+      <i
+        class="fa fa-times"
+        @click="closeModal"
+      ></i>
+      <div class="steps">
+        <vee-form
+          ref="add_teacher_form"
+          v-slot="{ meta }"
+          slim
+          class="add-teacher-form"
+        >
+          <template v-if="activeStep === 1">
+            <span class="__text1">{{ step1Text.text1 }}</span>
+            <span class="__text2">
+              {{ step1Text.text2 }}
             </span>
 
-            <div class="cl-mail">
-              <a
-                class="mail"
-                @click="backToStep1()"
-              >
-                {{ form.phoneNumber }}+
-              </a>
-            </div>
+            <template v-if="incomplete === inCompleteType.phone">
+              <phone-input
+                :phoneNumber="form.phoneNumber"
+                @onInputPhone="(val) => (form.phoneNumber = val)"
+              />
+            </template>
 
-            <div
-              class="code-part"
-              :class="{ 'wrong-code': wrongCode }"
-            >
-              <div class="relative w-full block">
-                <lazy-app-overlay v-if="processCode" />
-                <code-input
-                  ref="code-input"
-                  :fields="4"
-                  :fieldWidth="45"
-                  :fieldHeight="45"
-                  :radius="8"
-                  :required="true"
-                  style="direction: ltr"
-                  @complete="sendCode"
-                />
-              </div>
-              <p
-                v-if="wrongCode"
-                class="wrong-code"
-              >
-                الكود خاطىء يرجى إدخال كود صحيح
-              </p>
-            </div>
-            <span class="__text6">
-              {{ step1Text.text6 }}
-            </span>
             <span
-              v-if="isFullTries"
+              v-if="step1ErrMsg"
               class="__triesNote __red"
             >
-              {{ errorMessagesText.codeTries }}
+              {{ step1ErrMsg }}
             </span>
 
-            <span
-              :class="{ disabled: isFullTries }"
-              class="resend relative"
-              @click="!isFullTries ? reSendAction() : {}"
-            >
-              <lazy-app-overlay :show="resendLoading" />
+            <span class="__text3">
+              {{ step1Text.text3 }}
             </span>
-          </div>
-        </template>
+          </template>
 
-        <template v-if="activeStep === 1">
-          <app-button
-            :isDisabled="!meta.valid || isFullTries || isExist"
-            colorType="primary"
-            label="التالي"
-            @click="nextStep()"
-          />
-        </template>
-      </vee-form>
-    </div>
+          <template v-if="activeStep === 2">
+            <div class="co-code">
+              <span class="__text4">{{ step1Text.text4 }}</span>
+              <span class="__text5">
+                {{ step1Text.text5 }}
+              </span>
+
+              <div class="cl-mail">
+                <a
+                  class="mail"
+                  @click="backToStep1()"
+                >
+                  {{ form.phoneNumber }}+
+                </a>
+              </div>
+
+              <div
+                class="code-part"
+                :class="{ 'wrong-code': wrongCode }"
+              >
+                <div class="relative w-full block">
+                  <lazy-app-overlay v-if="processCode" />
+                  <code-input
+                    ref="code-input"
+                    :fields="4"
+                    :fieldWidth="45"
+                    :fieldHeight="45"
+                    :radius="8"
+                    :required="true"
+                    style="direction: ltr"
+                    @complete="sendCode"
+                  />
+                </div>
+                <p
+                  v-if="wrongCode"
+                  class="wrong-code"
+                >
+                  الكود خاطىء يرجى إدخال كود صحيح
+                </p>
+              </div>
+              <span class="__text6">
+                {{ step1Text.text6 }}
+              </span>
+              <span
+                v-if="isFullTries"
+                class="__triesNote __red"
+              >
+                {{ errorMessagesText.codeTries }}
+              </span>
+
+              <span
+                :class="{ disabled: isFullTries }"
+                class="resend relative"
+                @click="!isFullTries ? reSendAction() : {}"
+              >
+                <lazy-app-overlay :show="resendLoading" />
+              </span>
+            </div>
+          </template>
+
+          <template v-if="activeStep === 1">
+            <app-button
+              :isDisabled="!meta.valid || isFullTries || isExist"
+              colorType="primary"
+              label="التالي"
+              @click="nextStep()"
+            />
+          </template>
+        </vee-form>
+      </div>
+    </lazy-vee-validate-provider>
   </lazy-prime-dialog>
 </template>
 <script lang="ts">

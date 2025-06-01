@@ -65,6 +65,10 @@ import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/use
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { webUserPanelTrainingWithQuery } from '~/main/utils/web-routes.utils';
 import { GlobalTypes } from '~/main/constants/global-types';
+import {
+  UserPanelItems,
+  UserPanelItemsRecord,
+} from '~/main/constants/user-panel-items';
 
 //composable
 const subscriptionsStore = useSubscriptionsStore();
@@ -98,7 +102,12 @@ onMounted(() => {
 
 //method
 const selectPacket = (id: number) => {
-  router.push(webUserPanelTrainingWithQuery({ id }));
+  router.push(
+    webUserPanelTrainingWithQuery({
+      id,
+      page: UserPanelItemsRecord[UserPanelItems.subscriptionList],
+    })
+  );
 };
 
 //watch

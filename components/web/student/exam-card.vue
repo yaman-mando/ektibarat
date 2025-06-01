@@ -389,129 +389,131 @@
         </div>
       </template>
 
-      <vee-form
-        ref="form_ref"
-        tag="div"
-        class="challenge-form"
-      >
-        <div class="form-el">
-          <div
-            class="form-rw-1"
-            :class="{ 'is-center': currentStep == 2 }"
-          >
-            <!--  step 1   -->
-            <template v-if="currentStep == 1">
-              <form-input
-                v-model:inputValue="challengeForm.title"
-                inputId="title"
-                :rules="{ required: true }"
-                inputPlaceholder="اسم التحدي"
-              />
-            </template>
-
-            <!--  step 2   -->
-            <template v-if="currentStep == 2">
-              <div class="radio-group">
-                <form-radio
-                  v-model:selected="challengeForm.invitedType"
-                  class="radio-list"
-                  :options="invitedType"
-                  groupName="invitedType"
-                  :gap="66"
-                />
-              </div>
-            </template>
-
-            <!--  step 3   -->
-            <template v-if="currentStep == 3">
-              <template v-if="challengeForm.invitedType == 1">
+      <lazy-vee-validate-provider>
+        <vee-form
+          ref="form_ref"
+          tag="div"
+          class="challenge-form"
+        >
+          <div class="form-el">
+            <div
+              class="form-rw-1"
+              :class="{ 'is-center': currentStep == 2 }"
+            >
+              <!--  step 1   -->
+              <template v-if="currentStep == 1">
                 <form-input
-                  v-model:inputValue="challengeForm.personsCount"
-                  inputId="count"
-                  inputType="number"
-                  :rules="{ required: true, regex: '^(0.+|[^0].*)$' }"
-                  inputPlaceholder="عدد المدعوين"
+                  v-model:inputValue="challengeForm.title"
+                  inputId="title"
+                  :rules="{ required: true }"
+                  inputPlaceholder="اسم التحدي"
                 />
               </template>
 
-              <template v-if="challengeForm.invitedType == 0">
-                <div
-                  v-for="(item, index) in challengeForm.emails"
-                  ref="c-email"
-                  :key="index"
-                  class="c-email"
-                >
-                  <form-input
-                    v-model:inputValue="item.name"
-                    :inputId="`email-${index}`"
-                    :rules="{
-                      required: true,
-                      email: true,
-                      emailRule: true,
-                      noSameEmail: [challengeForm.emails],
-                    }"
-                    inputPlaceholder="البريد الإلكتروني"
+              <!--  step 2   -->
+              <template v-if="currentStep == 2">
+                <div class="radio-group">
+                  <form-radio
+                    v-model:selected="challengeForm.invitedType"
+                    class="radio-list"
+                    :options="invitedType"
+                    groupName="invitedType"
+                    :gap="66"
                   />
-                  <i
-                    v-if="index > 0"
-                    class="fa fa-minus-circle"
-                    @click="removeEmail(index)"
-                  ></i>
-                  <i
-                    v-if="index == 0"
-                    class="fa fa-plus-circle"
-                    @click="addEmail()"
-                  ></i>
                 </div>
               </template>
-            </template>
 
-            <!--  step 4   -->
-            <template v-if="currentStep == 4">
-              <form-input
-                v-model:inputValue="challengeForm.time"
-                :inputId="'date'"
-                inputType="datetime-local"
-                :minVal="today"
-                :rules="{ required: true }"
-                inputPlaceholder="تاريخ التحدي"
+              <!--  step 3   -->
+              <template v-if="currentStep == 3">
+                <template v-if="challengeForm.invitedType == 1">
+                  <form-input
+                    v-model:inputValue="challengeForm.personsCount"
+                    inputId="count"
+                    inputType="number"
+                    :rules="{ required: true, regex: '^(0.+|[^0].*)$' }"
+                    inputPlaceholder="عدد المدعوين"
+                  />
+                </template>
+
+                <template v-if="challengeForm.invitedType == 0">
+                  <div
+                    v-for="(item, index) in challengeForm.emails"
+                    ref="c-email"
+                    :key="index"
+                    class="c-email"
+                  >
+                    <form-input
+                      v-model:inputValue="item.name"
+                      :inputId="`email-${index}`"
+                      :rules="{
+                        required: true,
+                        email: true,
+                        emailRule: true,
+                        noSameEmail: [challengeForm.emails],
+                      }"
+                      inputPlaceholder="البريد الإلكتروني"
+                    />
+                    <i
+                      v-if="index > 0"
+                      class="fa fa-minus-circle"
+                      @click="removeEmail(index)"
+                    ></i>
+                    <i
+                      v-if="index == 0"
+                      class="fa fa-plus-circle"
+                      @click="addEmail()"
+                    ></i>
+                  </div>
+                </template>
+              </template>
+
+              <!--  step 4   -->
+              <template v-if="currentStep == 4">
+                <form-input
+                  v-model:inputValue="challengeForm.time"
+                  :inputId="'date'"
+                  inputType="datetime-local"
+                  :minVal="today"
+                  :rules="{ required: true }"
+                  inputPlaceholder="تاريخ التحدي"
+                />
+              </template>
+
+              <!--            <mx-admin-form-button
+                @click.native="sendChallengeForm()"
+                :isLoading="isLoadingChallengeForm"
+                class="submit-btn"
+                :label="'إنشاء'"
+              ></mx-admin-form-button>-->
+            </div>
+          </div>
+          <div class="step-action">
+            <template v-if="currentStep != mySteps.length">
+              <app-button
+                variant="outline"
+                size="md"
+                label="السابق"
+                :isDisabled="currentStep < 3"
+                @click="goPrev"
+              />
+              <app-button
+                :isLoading="isLoadingChallengeForm"
+                variant="outline"
+                size="md"
+                :isDisabled="currentStep == mySteps.length"
+                label="التالي"
+                @click="goNext"
               />
             </template>
-
-            <!--            <mx-admin-form-button
-              @click.native="sendChallengeForm()"
-              :isLoading="isLoadingChallengeForm"
-              class="submit-btn"
-              :label="'إنشاء'"
-            ></mx-admin-form-button>-->
+            <app-button
+              v-else
+              size="md"
+              label="الذهاب إلى صفحة التحدي"
+              @click="goChallenge"
+            />
           </div>
-        </div>
-        <div class="step-action">
-          <template v-if="currentStep != mySteps.length">
-            <app-button
-              variant="outline"
-              size="md"
-              label="السابق"
-              :isDisabled="currentStep < 3"
-              @click="goPrev"
-            />
-            <app-button
-              :isLoading="isLoadingChallengeForm"
-              variant="outline"
-              size="md"
-              :isDisabled="currentStep == mySteps.length"
-              label="التالي"
-              @click="goNext"
-            />
-          </template>
-          <app-button
-            v-else
-            size="md"
-            label="الذهاب إلى صفحة التحدي"
-            @click="goChallenge"
-          />
-        </div>
-      </vee-form>
+        </vee-form>
+      </lazy-vee-validate-provider>
     </lazy-prime-dialog>
   </div>
 </template>

@@ -656,7 +656,7 @@
               <lazy-exams-panel />
             </template>
             <template v-if="activeList === userPanelItems.subscriptionList">
-              <!--            <mx-panel-subscribes />-->
+              <lazy-subscribes-panel />
             </template>
             <template v-if="activeList === userPanelItems.chat">
               <!--            <mx-panel-chat />-->
