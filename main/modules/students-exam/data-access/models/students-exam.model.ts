@@ -66,3 +66,27 @@ export type StudentsExamCustomFromTagsDTODataModel = {
 export type StudentsExamRemoveAnswerDTODataModel = {
   studentQuestionId: string;
 };
+
+//student exam list item
+export type StudentsExamListItemDataModel = {
+  studentExamId: string;
+  studentName: string;
+  title: string;
+  createdDate: string;
+  timeSpan: number;
+  pointsCount: number;
+  questionsCount: number;
+  correctAnswersCount: number;
+  wrongAnswersCount: number;
+  sessionId: string | null;
+  customerId: string | null;
+  partsNames: string[];
+};
+
+export type StudentsExamListItemPresenterModel =
+  StudentsExamListItemDataModel & {
+    mainLabelInfo: {
+      mainText: string;
+      tooltipText: string | null;
+    };
+  };

@@ -662,7 +662,7 @@
               <!--            <mx-panel-chat />-->
             </template>
             <template v-if="activeList === userPanelItems['passed-training']">
-              <!--            <passed-training />-->
+              <lazy-passed-training-panel />
             </template>
             <template
               v-if="
