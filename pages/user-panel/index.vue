@@ -670,7 +670,7 @@
                 activeList === userPanelItems.teachers
               "
             >
-              <!--            <mx-panel-teachers />-->
+              <lazy-teachers-panel />
             </template>
             <template
               v-if="

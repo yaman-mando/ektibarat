@@ -1,0 +1,192 @@
+@import '@/assets/scss/mixin';
+
+.a-add-teacher-modal {
+  background-color: var(--modal-bg);
+  width: 360px !important;
+  min-height: 360px;
+  max-width: 95vw;
+  margin: auto;
+  border-radius: 15px;
+
+  .fa-times {
+    position: absolute;
+    cursor: pointer;
+    left: 15px;
+    top: 15px;
+    font-size: 16px;
+    color: var(--purple-8c);
+  }
+
+  .steps {
+    .add-teacher-form {
+      display: grid;
+      justify-content: center;
+      width: 100%;
+      margin-top: 25px;
+      .__text1,
+      .__text4 {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--purple-8c);
+        text-align: center;
+      }
+      .__text2 {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--gray-63);
+        line-height: 24px;
+        text-align: center;
+        margin: 35px 0;
+      }
+      .__text3 {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--gray-63);
+        text-align: center;
+        margin-top: 25px;
+      }
+      .__text5 {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--gray-63);
+        text-align: center;
+        margin-top: 35px;
+      }
+      .__text6 {
+        font-size: 16px;
+        color: var(--gray-63);
+        text-align: center;
+        position: absolute;
+        bottom: 30px;
+        right: 0;
+        width: 100%;
+      }
+      .__text7 {
+        font-size: 16px;
+        color: var(--red-5e);
+        text-align: center;
+        position: absolute;
+        bottom: 80px;
+        right: 0;
+        width: 100%;
+      }
+      .cl-mail {
+        margin-top: 6px;
+        margin-bottom: 35px;
+        text-align: center;
+        a {
+          font-size: 16px;
+          color: var(--purple-8c);
+          cursor: pointer;
+        }
+      }
+
+      .resend {
+        font-size: 14px;
+        text-decoration: none;
+        color: var(--purple-8c);
+        text-align: center;
+        margin-top: 110px;
+        cursor: pointer;
+        &.disabled {
+          opacity: 0.5;
+          pointer-events: none;
+        }
+      }
+      .next-btn {
+        margin-top: 20px;
+        width: 330px;
+        height: 45px;
+        border-radius: 10px;
+        background-color: var(--purple-8c);
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        max-width: 90vw;
+      }
+
+      .co-code {
+        display: grid;
+        width: 330px;
+        position: relative;
+      }
+
+      .wrong-code {
+        font-size: 13px;
+        text-align: center;
+        color: var(--red-5e);
+      }
+
+      .join-to {
+        display: grid;
+        .t-1 {
+          font-size: 24px;
+          font-weight: bold;
+          color: var(--purple-8c);
+          text-align: center;
+        }
+        .t-2 {
+          font-size: 16px;
+          font-weight: 500;
+          color: var(--gray-63);
+          line-height: 24px;
+          text-align: center;
+          margin: 35px 0 30px;
+        }
+      }
+
+      .code-actions {
+        display: grid;
+        align-items: center;
+        column-gap: 20px;
+        row-gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        grid-auto-flow: column;
+        .normal-btn {
+          width: 155px;
+          height: 45px;
+          border-radius: 10px;
+          background-color: var(--purple-8c);
+          color: white;
+          font-size: 16px;
+          font-weight: bold;
+          max-width: 40vw;
+        }
+
+        .outline-btn {
+          width: 155px;
+          height: 45px;
+          border-radius: 10px;
+          border: 2px solid var(--red-5e);
+          background-color: transparent;
+          color: var(--red-5e);
+          font-size: 16px;
+          font-weight: bold;
+          max-width: 40vw;
+        }
+      }
+
+      .__triesNote {
+        font-size: 12px;
+      }
+
+      .a-input-wrapper {
+        input {
+          height: 45px;
+          border: 0.75px solid #70707080;
+          border-radius: 8px;
+        }
+      }
+      label {
+        font-size: 16px;
+        color: #252525;
+        font-weight: normal;
+      }
+
+      .__red {
+        color: var(--red-5e);
+      }
+    }
+  }
+}

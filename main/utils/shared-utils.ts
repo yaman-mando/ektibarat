@@ -212,3 +212,13 @@ export const calculateSumFromArray = (array, property) => {
     return accumulator + object[property];
   }, 0);
 };
+
+export const toWhatsApp = (phone, message?) => {
+  let whatsappLink;
+  if (message) {
+    whatsappLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  } else {
+    whatsappLink = `https://wa.me/${phone}`;
+  }
+  window.open(whatsappLink, '_blank');
+};

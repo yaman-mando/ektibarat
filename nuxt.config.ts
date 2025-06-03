@@ -113,6 +113,12 @@ export default defineNuxtConfig({
     components: {
       prefix: 'Prime',
       include: [
+        //table
+        'DataTable',
+        'Column',
+        'ColumnGroup',
+        'Row',
+        //end table
         //enhance-z handle provider as vee-validate
         'Checkbox',
         'ToggleSwitch',

@@ -10,6 +10,12 @@ export {};
 declare module 'vue' {
   export interface GlobalComponents {
     //prime
+    //table
+    'PrimeDataTable': (typeof import('primevue/datatable'))['default'];
+    'PrimeColumn': (typeof import('primevue/column'))['default'];
+    'PrimeColumnGroup': (typeof import('primevue/columngroup'))['default'];
+    'PrimeRow': (typeof import('primevue/row'))['default'];
+    //end table
     'prime-tooltip': (typeof import('primevue/tooltip'))['default'];
     PrimeCheckbox: (typeof import('primevue/checkbox'))['default'];
     PrimeToggleSwitch: (typeof import('primevue/toggleswitch'))['default'];
