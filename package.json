@@ -5,6 +5,7 @@
   "scripts": {
     "build": "eslint --ext .js,.ts,.vue . && nuxt build",
     "dev-only": "nuxt dev --port 4000",
+    "dev-only-512": "nuxt dev --port 4000 --max-old-space-size=512",
     "dev": "eslint --ext .js,.ts,.vue . && nuxt prepare && nuxt dev --port 4000",
     "prepare:dev": "nuxt prepare && nuxt dev --port 4000",
     "generate": "nuxt generate",
@@ -41,6 +42,7 @@
     "uuid": "^11.1.0",
     "vee-validate": "^4.15.0",
     "vue": "^3.5.13",
+    "vue-advanced-chat": "^2.1.0",
     "vue-advanced-cropper": "^2.8.9",
     "vue-apexcharts": "^1.7.0",
     "vue-router": "^4.5.0",

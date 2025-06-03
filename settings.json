@@ -1,0 +1,44 @@
+{
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "eslint.validate": ["javascript", "typescript", "vue"],
+    "vetur.validation.template": false,
+    "volar.takeOverMode.enabled": true,
+    "editor.fontSize": 26,
+
+  // نوع الخط (إن أردت تغيير الخط)
+  "editor.fontFamily": "Fira Code, Consolas, 'Courier New', monospace",
+
+  // تفعيل الخط الموحد (جمالية في الأكواد)
+  "editor.fontLigatures": true,
+
+  // تباعد الأسطر
+  "editor.lineHeight": 26,
+
+  // تفعيل أرقام الأسطر
+  "editor.lineNumbers": "on",
+
+  // تفعيل إبراز السطر الحالي
+  "editor.renderLineHighlight": "all",
+
+  // عرض المسافات الفارغة (اختياري)
+  "editor.renderWhitespace": "all",
+
+  // تفعيل الإكتمال التلقائي
+  "editor.suggestOnTriggerCharacters": true,
+
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/**": true,
+    "**/dist/**": true
+  },
+  "typescript.tsserver.maxTsServerMemory": 4096,
+
+  "editor.formatOnSave": true,
+  "eslint.run": "onSave"
+
+  }
+  

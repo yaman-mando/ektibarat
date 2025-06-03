@@ -35,17 +35,17 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
       }
     }
 
-    if (
-      isLoggedIn &&
-      !routersWithoutTypeSelect.some((route) => currentPath.includes(route))
-    ) {
-      if (
-        !globalStore.state.globalTypeUserValue &&
-        authStore.state.userData?.role !== UserRoles.admin
-      ) {
-        return navigateTo(webGeneralSelectionPathUtil());
-      }
-    }
+    // if (
+    //   isLoggedIn &&
+    //   !routersWithoutTypeSelect.some((route) => currentPath.includes(route))
+    // ) {
+    //   if (
+    //     !globalStore.state.globalTypeUserValue &&
+    //     authStore.state.userData?.role !== UserRoles.admin
+    //   ) {
+    //     return navigateTo(webGeneralSelectionPathUtil());
+    //   }
+    // }
 
     if (currentPath.includes('فحوصات')) {
       const indexStart = currentPath.indexOf('/', 1);

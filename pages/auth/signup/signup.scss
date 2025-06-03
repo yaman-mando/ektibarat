@@ -63,5 +63,33 @@
       //padding: 20px 15px;
       position: relative;
     }
+
+    .p-tablist-content {
+      .p-tablist-tab-list {
+        button {
+          height: 56px;
+          border-bottom: 1px solid #c7c7c7;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(188, 204, 219, .2);
+          width: 180px;
+          max-width: 49.75vw;
+
+          &.p-tab-active {
+            border-width: 1px 1px 0;
+            border-style: solid;
+            border-color: #c7c7c7 #c7c7c7 #fff;
+            background: #fff;
+          
+          }
+        
+        }
+         .p-tablist-active-bar{
+             display: none; 
+            }
+
+      }
+    }
   }
 }

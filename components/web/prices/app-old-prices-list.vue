@@ -51,9 +51,9 @@
           :key="index"
           class="pa-card"
           :card="item"
-          :ci="index"
           :isLast="index === listModel.length - 1"
           :isFirst="index === 0"
+          :ci="index"
           @onSelectPacket="selectPacket"
         />
       </div>
@@ -153,7 +153,7 @@ watch(
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    border-radius: 20px;
+    //border-radius: 20px;
     width: auto;
     margin-bottom: 2rem;
     .pa-card {

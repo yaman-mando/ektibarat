@@ -53,7 +53,7 @@
         :isDisabled="fullTries"
         class="!w-full !mt-6"
         :label="isCodeStep ? 'إعادة إرسال الكود' : 'إرسال'"
-        size="sm"
+      
         @click="submit"
       />
     </vee-form>

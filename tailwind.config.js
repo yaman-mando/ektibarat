@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  watcher: {
+    usePolling: false, // أو true على حسب النظام
+  },
   content: [
     './components/**/*.{js,vue,ts}',
     './layouts/**/*.vue',

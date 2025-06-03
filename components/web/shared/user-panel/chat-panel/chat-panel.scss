@@ -1,0 +1,24 @@
+@import '@/assets/scss/mixin';
+
+.chat-panel-page {
+  padding: 20px 33px;
+  .t-title {
+    color: var(--purple-8c);
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 26px;
+  }
+  .t-text {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: var(--black-24);
+    line-height: 24px;
+    white-space: pre-line;
+  }
+  @include tablet-down() {
+    padding: 15px 13px 30px;
+    max-width: 100vw;
+  }
+}
