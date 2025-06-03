@@ -43,11 +43,9 @@
         <app-button
           colorType="warn"
           label="حذف"
-          size="md"
           @click="onConfirm"
         />
         <app-button
-          size="md"
           variant="outline"
           label="إلغاء"
           @click="closeModal"
@@ -102,7 +100,7 @@ export default {
 .a-delete-modal {
   background-color: var(--modal-bg);
   width: 340px !important;
-  height: 388px;
+  height: auto;
   max-width: 90vw;
   margin: auto;
   border-radius: 15px;

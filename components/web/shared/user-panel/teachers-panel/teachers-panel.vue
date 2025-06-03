@@ -27,16 +27,15 @@
         v-if="tableData.length > 0"
         class="rw-table"
       >
-        <lazy-prime-data-table
+        <prime-data-table
           style="margin-top: 20px"
           :value="tableData"
           :loading="isLoadingData"
-          :rows="10"
           responsiveLayout="scroll"
           stripedRows
-          class="teachers-table p-datatable-sm"
+          class="teachers-table"
         >
-          <lazy-prime-column
+          <prime-column
             v-for="field in fields"
             :key="field.key"
             :field="field.key"
@@ -67,22 +66,24 @@
                 v-if="data.phoneNumber"
                 iconStartClass="fa fab fa-whatsapp"
                 class="whatsapp"
-                size="md"
+                size="sm"
                 label=""
+                variant="clear"
                 @click="toWhatsApp(data.phoneNumber)"
               />
               <app-button
                 icon="pi pi-trash"
-                size="md"
+                size="sm"
                 colorType="warn"
                 iconStartClass="fa fa-trash"
                 class="trash"
                 label=""
+                variant="clear"
                 @click="toDelete(data.id)"
               />
             </template>
-          </lazy-prime-column>
-        </lazy-prime-data-table>
+          </prime-column>
+        </prime-data-table>
       </div>
     </div>
 
@@ -150,12 +151,16 @@
                 class="whatsapp"
                 iconStartClass="fa fab fa-whatsapp"
                 label=""
+                size="sm"
+                variant="clear"
                 @click="toWhatsApp(item.phoneNumber)"
               />
               <app-button
                 class="trash"
                 iconStartClass="fa fa-trash"
                 label=""
+                size="sm"
+                variant="clear"
                 @click="toDelete(item.id)"
               />
             </div>
@@ -185,6 +190,30 @@ import {
   teachersQodoratTypeEnum,
   teachersStatusEnum,
 } from '~/main/constants/teacher.enum';
+
+const MOCK_TABLE_DATA = [
+  {
+    id: 1,
+    fullName: 'fullName 1',
+    teacherQodoratType: 0,
+    code: 'code 1',
+    state: 0,
+  },
+  {
+    id: 2,
+    fullName: 'fullName 2',
+    teacherQodoratType: 1,
+    code: 'code 2',
+    state: 1,
+  },
+  {
+    id: 3,
+    fullName: 'fullName 3',
+    teacherQodoratType: 2,
+    code: 'code 3',
+    state: 2,
+  },
+];
 
 export default {
   setup() {
