@@ -97,6 +97,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: ['lamejs']
+    }
   },
   modules: [
     '@pinia/nuxt',
@@ -163,6 +166,7 @@ export default defineNuxtConfig({
     '~/plugins/shared/detect-device-plugin.ts',
     '~/plugins/shared/gtag-plugin.client.ts',
     '~/plugins/shared/font-awesome-plugin.client.ts',
+    '~/plugins/shared/lamejs-plugin.client.ts',
   ],
   app: {
     head: {

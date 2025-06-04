@@ -20,6 +20,7 @@
     >
       {{ staticData.topText }}
     </h4>
+    <AppMessaging></AppMessaging>
     <!--        <mx-admin-chat-page></mx-admin-chat-page>-->
     <!-- <mx-admin-test-messaging></mx-admin-test-messaging> -->
      </template>

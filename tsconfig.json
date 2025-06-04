@@ -7,6 +7,6 @@
     "noUnusedParameters": false,
     "noUnusedLocals": false,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
   }
 }

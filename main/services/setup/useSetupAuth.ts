@@ -6,6 +6,12 @@ export const useSetupAuth = () => {
   const auth = useAuth();
   const authStore = useAuthStore();
 
+
+  const getToken = () => {
+    const token = authStore.state.token; 
+    return token ? `Bearer ${token}` : '';
+  };
+
   return {
     appAuth: reactive({
       fetchUser: auth.getSession,
@@ -13,6 +19,11 @@ export const useSetupAuth = () => {
       user: computed(
         () => authStore.state.userData as unknown as UserInfoDataModel
       ),
+      strategy: {
+        token: {
+          get: getToken,
+        },
+      },
     }),
   };
 };

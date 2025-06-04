@@ -1,43 +1,69 @@
-<!-- <template>
-
+<template>
+<div class="chat-app-service">
+    <chat-window
+        v-bind="chatProps"
+        @fetch-more-rooms="fetchMoreRooms"
+        @send-message="sendMessage"
+        @edit-message="editMessage"
+        @delete-message="deleteMessage"
+        @fetch-messages="fetchMessages"
+        @open-file="openFile"
+        @add-room="addRoom()"
+        @search-room="searchRoom($event.detail[0].value)"
+      />
+</div>
 </template>
 
-<script lang="ts">
 
-import { roles } from '@/common/exam-common';
-import {sleepUtil } from '@/main/utils/shared-utils';ss
-import { fileTypes } from '@/main/constants/file-types.enum';
-import { buildHub, chatHub } from '@/services/service-chat';
-import { CommonUtils } from '@/common/utilities/common.util';
+
+<script lang="ts">
+import {sleepUtil } from '~/main/utils/shared-utils';
+import { fileTypes } from '~/main/constants/file-types.enum';
+import { buildHub, chatHub } from '~/main/services/useChatHubService';
+import { debounceUtil,deepCloneUtil,cloneUtil } from '~/main/utils/lodash.utils';
 import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
 import { UserRoles } from '~/core/auth/constants/user-roles';
+import  ChatWindow  from 'vue-advanced-chat'
+import 'vue-advanced-chat/dist/vue-advanced-chat.css'
+
+
+type ChatMessage = {
+  _id: number;
+  content: string;
+  senderId: number | string;
+  username: string;
+  date: string;
+  timestamp: string;
+};
 
 export default {
   
 setup() {
-    const { appAuth } = useSetupAuth();
-    const currentUserId = ref(appAuth.user.id.toString());
+    
 
     return{
-        currentUserId,
-        ...useSetupRoute(),
+      ...useSetupRoute(),
       ...useSetupAuth(),
       ...useToastMessage(),
     }
 
   },
 
+  components: {
+      ChatWindow
+    },
+
   data() {
     return {
       libInstance: null,
-      currentUserId: null,
+      currentUserId: null as any,
       scrollDistance: 100,
       roomId: '',
       roomMessage: '',
-      messages: [],
+       messages: [] as any,
       messagesLoaded: false,
-      loadingRooms: true,
+      loadingRooms: false,
       isDevice: false,
       typingMessageCache: '',
       role: UserRoles,
@@ -83,8 +109,8 @@ setup() {
       },
       messageSelectionActions: [{ name: 'deleteMessages', title: 'حذف' }],
       // eslint-disable-next-line vue/no-unused-properties
-      styles: { container: { borderRadius: '4px' } },
-      theme: 'light',
+      styles: { container: { borderRadius: '4px' }} as any,
+      theme: 'light' as any,
       templatesText: [
         {
           tag: 'help',
@@ -101,7 +127,7 @@ setup() {
       ],
       fileTypes,
       isType: false,
-      typingTimer: null,
+      typingTimer: null as any,
       autoScroll: {
         send: {
           new: true, // will scroll down after sending a message
@@ -113,7 +139,7 @@ setup() {
         },
       },
       hasSearch: false,
-      searchRoomText: null,
+      searchRoomText: null as any,
       oldSearch: null,
     };
   },
@@ -148,31 +174,25 @@ setup() {
 
   methods: {
     async initialChat() {
-      /*if (this.$auth.user.id != 1 && !localStorage.getItem('isRegisterChat')) {
-        await this.addRoom();
-      }*/
       await this.fetchRooms();
       if (!chatHub) {
-        const token = this.$auth.strategy.token.get().replace('Bearer ', '');
+        const token = this.appAuth.strategy.token.get().replace('Bearer ', '');
         await buildHub(token);
       }
-      chatHub.on('ReceiveMessage', (message) => {
+      chatHub?.on('ReceiveMessage', (message) => {
         this.manageReceiveMessage(message);
       });
-      chatHub.on('ReceiveTypingUser', (room) => {
+      chatHub?.on('ReceiveTypingUser', (room) => {
         this.receiveTypeUser(room);
       });
-      chatHub.on('SeenMessages', async (isSeen) => {
+      chatHub?.on('SeenMessages', async (isSeen) => {
         if (isSeen) {
-          for (let index = 0; index < this.messages.length; index++)
-            if (!this.messages[index].seen) {
-              const _msg = { ...this.messages[index], seen: true };
-              this.messages.splice(index, 1, _msg);
-            }
+          this.messages = this.messages.map((msg) => ({
+            ...msg,
+        seen: true,
+            }));
         }
       });
-      //this.roomId = this.rooms[0]?.roomId;
-      //this.userOnline(this.roomId);
     },
 
     async userOnline(roomId) {
@@ -183,8 +203,7 @@ setup() {
           _roomId = roomId.toString();
         }
         //await this.$axios.$post(`/userOnline`, { room: roomId });
-        chatHub
-          .invoke('UserOnLine', _roomId)
+      chatHub?.invoke('UserOnLine', _roomId)
           .then((res) => {})
           .catch(function (err) {
             return console.error(err.toString());
@@ -202,26 +221,23 @@ setup() {
       this.hasSearch = false;
     },*/
 
-    searchRoom: CommonUtils.debounce(
-      function (searchVal) {
-        this.searchRoomText = searchVal;
-        this.$store
-          .dispatch('searchChatRooms', {
-            pageNum: 1,
-            pageSize: 40,
-            searchText: searchVal,
-            isSearch: true,
-          })
-          .then(async (res) => {
-            if (res.page.length > 0) {
-              this.roomId = this.rooms[0]?.roomId;
-            }
-          })
-          .catch(() => {});
-      },
-      500,
-      { leading: false, trailing: true }
-    ),
+    rawSearchRoom(searchVal: string) {
+    this.searchRoomText = searchVal;
+    this.$store.dispatch('searchChatRooms', {
+      pageNum: 1,
+      pageSize: 40,
+      searchText: searchVal,
+      isSearch: true,
+    }).then((res: any) => {
+      if (res.page.length > 0) {
+        this.roomId = this.rooms[0]?.roomId;
+      }
+    }).catch(() => {});
+  },
+    //@ts-expect-error access debounce
+    searchRoom: debounceUtil(function(searval){this.rawSearchRoom(searval)},500,
+  { leading: false, trailing: true }
+),
 
     async fetchRooms(pageNum = 1, pageSize = 40) {
       try {
@@ -257,10 +273,10 @@ setup() {
     async fetchMessages({ room, options = {} }) {
       if (room.roomId) {
         this.messagesLoaded = false;
-        const res = await this.$axios.$get(`/chat/${room.roomId}`);
+        const { data: res } = await this.$axios.get(`/chat/${room.roomId}`);
         this.messages = [...res];
         this.messagesLoaded = true;
-        let rooms = CommonUtils.deepClone(this.$store.state.chatRoomsList);
+        let rooms = deepCloneUtil(this.$store.state.chatRoomsList);
         rooms.map((k) => {
           if (k.roomId == room.roomId) {
             return (k.unreadCount = 0);
@@ -272,24 +288,25 @@ setup() {
       //this.userOnline(room.roomId);
     },
 
-    addMessages(reset) {
-      const messages = [];
-      for (let i = 0; i < 30; i++) {
-        messages.push({
-          _id: reset ? i : this.messages.length + i,
-          content: `${reset ? '' : 'paginated'} message ${i + 1}`,
-          senderId: this.currentUserId,
-          username: 'John Doe',
-          date: '13 November',
-          timestamp: '10:20',
-        });
-      }
+    addMessages(reset: boolean): ChatMessage[] {
+    const messages: ChatMessage[] = [];
 
-      return messages;
+    for (let i = 0; i < 30; i++) {
+    messages.push({
+      _id: reset ? i : this.messages.length + i,
+      content: `${reset ? '' : 'paginated '}message ${i + 1}`,
+      senderId: this.currentUserId,
+      username: 'John Doe',
+      date: '13 November', 
+      timestamp: '10:20',  
+    });
+    }
+
+    return messages;
     },
 
     getFilesObjectUrl(files) {
-      let urls = [];
+      let urls = [] as any;
       files.forEach((k) => {
         urls.push(k.name);
       });
@@ -298,10 +315,14 @@ setup() {
 
     async deleteMedia(messageId, mediaId) {
       try {
-        await this.$axios.$delete(`chat/${messageId}/deleteMedia/${mediaId}`);
+        await this.$axios.delete(`chat/${messageId}/deleteMedia/${mediaId}`);
       } catch (e) {
         console.log(e);
       }
+    },
+
+    sendeMessage2(val)  {
+        console.log(val)
     },
 
     /*signal R send methods*/
@@ -318,6 +339,8 @@ setup() {
           seen: false,
           new: false,
           deleted: false,
+          files:null as any,
+          replyMessage:null as any,
           /*reactions: { '😁': ['1234'] },*/
         };
 
@@ -358,8 +381,7 @@ setup() {
 
         //this.messages = [...this.messages, message];
 
-        await chatHub
-          .invoke('SendMessage', {
+        await chatHub?.invoke('SendMessage', {
             roomId: roomId,
             content: content,
             files: files ? this.getFilesObjectUrl(message.files) : [],
@@ -376,7 +398,7 @@ setup() {
 
     async editMessage({ messageId, newContent, roomId, files }) {
       await this.testConnection();
-      const newMessage = { edited: new Date() };
+      const newMessage = { edited: new Date() } as any;
       const oldMessage =
         this.messages[this.messages.findIndex((k) => k._id == messageId)];
       newMessage.content = newContent;
@@ -415,7 +437,7 @@ setup() {
         }
       }
 
-      const compareFiles = [];
+      const compareFiles = [] as any;
       if (newMessage.files) {
         newMessage.files.forEach((k) => {
           if (!oldMessage.files.some((t) => t.name == k.name)) {
@@ -424,8 +446,7 @@ setup() {
         });
       }
 
-      await chatHub
-        .invoke('UpdateMessage', {
+      await chatHub?.invoke('UpdateMessage', {
           roomId: roomId,
           messageId: messageId,
           content: newMessage.content,
@@ -498,7 +519,7 @@ setup() {
       //this.messages = [...this.messages, message];
 
       //console.log(message)
-      await chatHub
+      await chatHub?
         .invoke('SendMessage', {
           roomId: roomId,
           message: content,
@@ -524,8 +545,7 @@ setup() {
 
     async deleteMessage({ message, roomId }) {
       await this.testConnection();
-      await chatHub
-        .invoke('DeleteMessage', roomId, message._id)
+      await chatHub?.invoke('DeleteMessage', roomId, message._id)
         .catch(function (err) {
           return console.error(err.toString());
         });
@@ -543,7 +563,7 @@ setup() {
       } else {
         this.receiveAdd(message);
       }
-      chatHub.invoke('ListRooms', this.roomId).catch(function (err) {
+      chatHub?.invoke('ListRooms', this.roomId).catch(function (err) {
         return console.error(err.toString());
       });
     },
@@ -574,7 +594,7 @@ setup() {
 
     receiveTypeUser(room) {
       try {
-        const rooms = CommonUtils.deepClone(this.rooms);
+        const rooms = deepCloneUtil(this.rooms);
         const index = this.rooms.findIndex((k) => k.roomId == room.roomId);
         if (index !== -1) {
           rooms[index].typingUsers = room.typingUsers;
@@ -604,7 +624,7 @@ setup() {
       if (allowTypes.some((t) => t == type)) {
         return true;
       } else {
-        showToastError(this.$bvToast, {}, 'صيغة الملف غير مدعومة');
+        this.showError({ summary: 'لم تنجح عملية التسجيل ....' });
         return false;
       }
     },
@@ -645,12 +665,13 @@ setup() {
         Object.keys(obj).forEach((key) => formData.append(key, obj[key]));
 
         await this.$axios
-          .$post('media/upload', formData, {
+          .post('media/upload', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
           })
-          .then(async (res) => {
-            message.files[index].url = res.pictureUrl;
-            message.files[index].name = res.fileName;
+          .then(async (res:any) => {
+            console.log(res)
+            message.files[index].url = res.data.pictureUrl;
+            message.files[index].name = res.data.fileName;
           });
         resolve(true);
       });
@@ -668,10 +689,10 @@ setup() {
     },
 
     formattedFiles(files) {
-      const formattedFiles = [];
+      const formattedFiles = [] as any;
 
       files.forEach((file) => {
-        const messageFile = {
+        const messageFile:any = {
           name: file.name,
           size: file.size,
           type: file.type,
@@ -739,8 +760,7 @@ setup() {
     async typingMessageFun(message, roomId) {
       try {
         await this.testConnection();
-        chatHub
-          .invoke('TypingUsers', roomId, this.currentUserId, message)
+        chatHub?.invoke('TypingUsers', roomId, this.currentUserId, message)
           .catch(function (err) {
             return console.error(err.toString());
           });
@@ -752,14 +772,14 @@ setup() {
     async addRoom() {
       try {
         localStorage.setItem('isRegisterChat', 'yes');
-        await this.$axios.$post(`/chat`, { receivedUserId: 1 });
+        await this.$axios.post(`/chat`, { receivedUserId: 1 });
       } catch (e) {
         console.log(e);
       }
     },
 
     async deleteRoom(roomId) {
-      const res = await this.$axios.$delete(`/chat/${roomId}`);
+      const res = await this.$axios.delete(`/chat/${roomId}`);
     },
 
     async testConnection() {
@@ -767,9 +787,9 @@ setup() {
         return new Promise(async (resolve, reject) => {
           if (
             (chatHub && !chatHub.connectionId) ||
-            (!chatHub && this.$auth.loggedIn)
+            (!chatHub &&  this.appAuth.loggedIn)
           ) {
-            const token = this.$auth.strategy.token
+            const token = this.appAuth.strategy.token
               .get()
               .replace('Bearer ', '');
             await buildHub(token);
@@ -788,7 +808,7 @@ setup() {
         k.roomName.includes(this.searchRoomText)
       );
       if (search && search.length > 0) {
-        this.oldSearch = CommonUtils.clone(search);
+        this.oldSearch = cloneUtil(search);
         return search;
       }
       return this.oldSearch;
@@ -796,15 +816,41 @@ setup() {
   },
 
   computed: {
+    chatProps() {
+    return {
+      'current-user-id': this.currentUserId,
+      'room-id': this.roomId,
+      'position-right':"auto",
+      rooms: this.rooms,
+      messages: this.messages,
+      'loading-rooms': this.loadingRooms,
+      'messages-loaded': this.messagesLoaded,
+      'message-actions': this.messageActions,
+      'message-selection-actions': this.messageSelectionActions,
+      'text-messages': this.textMessages,
+      'templates-text': this.templatesText,
+      'auto-scroll': this.autoScroll,
+      'room-info-enabled':false,
+      'show-reaction-emojis':false,
+      'single-room': !this.isAdmin,
+      'show-add-room':false,
+    'custom-search-room-enabled':this.isAdmin,
+      theme: this.theme,
+      styles: this.styles,
+      height: this.screenHeight,
+      };
+  },
+
+
     isAdmin() {
-      return this.$auth.user.role == this.role.admin;
+      return  this.appAuth.user.role == this.role.admin;
     },
 
     screenHeight() {
       return this.isDevice ? window.innerHeight + 'px' : '530px';
     },
 
-    rooms() {
+    rooms():any {
       if (
         this.$store.state.chatRoomsList &&
         this.$store.state.chatRoomsList.length > 0
@@ -831,4 +877,31 @@ setup() {
     },
   },
 };
-</script> -->
+</script>
+
+
+<style lang="scss">
+.chat-app-service{
+    direction: ltr;
+    margin: 30px 0 !important;
+
+    #room-footer{
+        padding: 10px 0;
+    }
+    #roomTextarea{
+        text-align: right;
+    }
+    .vac-room-container{
+        column-gap: 10px;
+    }
+    .vac-info-wrapper{
+        column-gap: 10px;
+    }
+    .vac-box-search{
+        padding: 5px;
+        .vac-input{
+text-align: right;
+        }
+    }
+}
+</style>

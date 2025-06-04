@@ -26,11 +26,13 @@ export const useAuthStore = defineStore('auth-store', () => {
   const userData = computed(
     () => authState.data.value as UserInfoDataModel | null
   );
+  const token = computed(() => authState.rawToken.value);
 
   const state = reactive({
     isLoggedIn,
     userData,
     isLoadingProfile,
+    token
   });
 
   const loginGoogle = (model: AuthLoginProviderDTODataModel) => {
@@ -62,11 +64,12 @@ export const useAuthStore = defineStore('auth-store', () => {
     }
 
     return webUserPanelTraining()
-    
+
     // return globalStore.state.globalTypeUserValue
     //   ? webUserPanelTraining()
     //   : webGeneralSelectionPathUtil();
   };
+
 
   return {
     state: toRefs(readonly(state)),
