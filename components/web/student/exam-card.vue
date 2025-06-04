@@ -1247,11 +1247,9 @@ export default {
   @include normal-btn($color: white) {
     width: 100%;
   }
-  .modal-dialog {
-    max-width: 700px;
-    @include mobile-down() {
-      max-width: 97%;
-    }
+  max-width: 700px;
+  @include mobile-down() {
+    max-width: 97%;
   }
   .steps {
     display: grid;
