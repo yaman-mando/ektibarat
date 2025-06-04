@@ -13,7 +13,12 @@
       :aria-valuemin="0"
       :aria-valuemax="max"
     >
-      <span v-if="showLabel">{{ computedWidth.toFixed(0) }}%</span>
+      <span
+        v-if="showLabel"
+        class="!text-sm"
+      >
+        {{ computedWidth.toFixed(0) }}%
+      </span>
     </div>
   </div>
 </template>

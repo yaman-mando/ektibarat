@@ -678,7 +678,7 @@
                 activeList === userPanelItems.teacherPanel
               "
             >
-              <!--            <mx-panel-teacher-panel />-->
+              <lazy-teacher-info-panel />
             </template>
           </div>
 

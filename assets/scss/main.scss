@@ -13,7 +13,8 @@
   h6,
   p,
   a,
-  li,button {
+  li,
+  button {
     font-family: var(--web-font) !important;
   }
 
@@ -157,7 +158,9 @@
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
-    font-family: Open Sans, sans-serif;
+    font-family:
+      Open Sans,
+      sans-serif;
     color: #aeb4b6;
     font-size: 16px;
     font-weight: 400;
@@ -918,12 +921,12 @@
     vertical-align: baseline;
   }
   th {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
+    //margin: 0;
+    //padding: 0;
+    //border: 0;
+    //font-size: 100%;
+    //font: inherit;
+    //vertical-align: baseline;
   }
   thead {
     margin: 0;
