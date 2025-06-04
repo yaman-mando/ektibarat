@@ -285,7 +285,7 @@ watch(
       color: var(--blue-f4);
       border: 0.75px solid #4285f4;
       display: grid;
-      grid-template-columns: 16px auto;
+      grid-template-columns: 16px 1fr;
       align-items: center;
       i {
         font-size: 23px;
