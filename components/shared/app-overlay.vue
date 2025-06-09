@@ -2,11 +2,12 @@
   <div
     ref="overlay_ref"
     class="app-overlay"
-    :class="[{ 'full-screen': fullScreen }]"
+    :class="[{ 'full-screen': fullScreen }, variant]"
   >
     <div class="app-overlay__wrapper">
-      <lazy-app-spinner />
+      <lazy-app-spinner v-if="!hideSpinner" />
       <span v-if="msg">{{ msg }}</span>
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -16,8 +17,10 @@ const props = withDefaults(
   defineProps<{
     msg?: string | null;
     fullScreen?: boolean;
+    hideSpinner?: boolean;
+    variant?: 'light' | 'dark';
   }>(),
-  { msg: null, fullScreen: false }
+  { msg: null, fullScreen: false, hideSpinner: false, variant: 'light' }
 );
 const overlayRef = useTemplateRef('overlay_ref');
 
@@ -44,6 +47,10 @@ onMounted(() => {
   align-items: center;
   z-index: 10;
   pointer-events: all;
+
+  &.dark {
+    background-color: #252525bf;
+  }
 
   &.full-screen {
     position: fixed;

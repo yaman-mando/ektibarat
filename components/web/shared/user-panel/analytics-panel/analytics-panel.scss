@@ -311,10 +311,10 @@
           .ant-progress-text {
             position: absolute;
             width: 50px;
-            left: 10px;
+            //left: 10px;
             display: flex;
             align-items: center;
-            top: 10px;
+            //top: 10px;
             justify-content: center;
             height: 50px;
             .percent {
@@ -709,10 +709,10 @@
           ::v-deep .ant-progress-text {
             position: absolute;
             width: 50px;
-            left: 10px;
+            //left: 10px;
             display: flex;
             align-items: center;
-            top: 10px;
+            //top: 10px;
             justify-content: center;
             height: 50px;
             .percent {

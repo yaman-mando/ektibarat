@@ -98,8 +98,8 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
-      include: ['lamejs']
-    }
+      include: ['lamejs'],
+    },
   },
   modules: [
     '@pinia/nuxt',

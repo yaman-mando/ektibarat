@@ -22,6 +22,7 @@ export type VuexRootState = {
   globalTypeUser?: never;
   layoutStatic?: never;
   file1PanelStatic?: never;
+  showBlockModal?: never;
 
   //
   tr: any | null;
@@ -50,7 +51,6 @@ export type VuexRootState = {
     register: boolean;
     [key: string]: boolean;
   };
-  showBlockModal: boolean;
   registrationMethod: string | null;
   showSeoAdModalStart: any | null;
   lastUserSubUpdate: number;
@@ -92,7 +92,6 @@ export const vuexStore = createStore<VuexRootState>({
       fetching: {
         register: false,
       },
-      showBlockModal: false,
       registrationMethod: null,
       showSeoAdModalStart: null,
       lastUserSubUpdate: 0,
@@ -179,9 +178,6 @@ export const vuexStore = createStore<VuexRootState>({
     },
     SET_UNREAD_MESSAGE(state, payload) {
       state.unreadMessage = payload;
-    },
-    SET_SHOW_BLOCK_MODAL(state, payload) {
-      state.showBlockModal = payload;
     },
     SET_REGISTRATION_METHOD(state, payload) {
       state.registrationMethod = payload;
