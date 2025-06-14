@@ -859,9 +859,7 @@ export default {
         answerRect: document.querySelector(
           `.${this.questionAnimateConfig.classes.answerRect} rect`
         ),
-        modalOuter: document.querySelector(
-          '#question-animate-answer-modal___BV_modal_outer_'
-        ),
+        modalOuter: document.querySelector('.p-dialog-mask'),
         modal: document.querySelector('#question-animate-answer-modal'),
         modalTitle: document.querySelector(
           '#question-animate-answer-modal .qn-title-wrapper'

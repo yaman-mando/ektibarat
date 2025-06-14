@@ -7,7 +7,7 @@
     :closeOnEscape="false"
     :closable="false"
     :dismissableMask="false"
-    :modal="false"
+    :modal="true"
     contentClass="rounded-[15px] overflow-hidden"
     bodyClass="!p-0 !pb-[15px]"
     class="mx-auto w-container a-wc-m question-animate-answer-modal"
@@ -51,8 +51,7 @@ defineExpose({ showModal });
 <style lang="scss">
 @import '@/assets/scss/mixin';
 
-//todo-animate
-#question-animate-answer-modal___BV_modal_outer_ {
+.p-dialog-mask {
   opacity: 0;
 }
 
