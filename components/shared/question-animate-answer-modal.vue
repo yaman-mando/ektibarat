@@ -51,8 +51,10 @@ defineExpose({ showModal });
 <style lang="scss">
 @import '@/assets/scss/mixin';
 
-.p-dialog-mask {
-  opacity: 0;
+#question-animate-layout {
+  .p-dialog-mask {
+    opacity: 0;
+  }
 }
 
 #question-animate-answer-modal {

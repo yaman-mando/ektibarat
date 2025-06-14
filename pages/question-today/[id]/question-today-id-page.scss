@@ -1,0 +1,299 @@
+@import '@/assets/scss/mixin';
+.question-today-page {
+  min-height: 100%;
+  .w-container {
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 1080px;
+    max-width: 99vw;
+    row-gap: 15px;
+    padding: 15px 0 !important;
+    .isText .exam-question {
+      margin-bottom: 30px;
+    }
+  }
+  .rw-social {
+    display: flex;
+    column-gap: 10px;
+    row-gap: 15px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 5px;
+    .r-part {
+      display: flex;
+      flex-wrap: wrap;
+      row-gap: 10px;
+      column-gap: 10px;
+      max-width: 73%;
+      justify-content: center;
+      .s-icon {
+        position: relative;
+        span {
+          position: absolute;
+          font-size: 20px;
+          text-align: center;
+          color: white;
+          left: 80px;
+          top: 8px;
+        }
+        img {
+          width: 240px;
+        }
+        &.snapchat {
+          span {
+            color: black;
+          }
+          i {
+            position: absolute;
+            left: 13px;
+            top: 14px;
+            font-size: 22px;
+          }
+        }
+        &.telegram {
+          i {
+            position: absolute;
+            left: 13px;
+            top: 14px;
+            font-size: 22px;
+            color: #25a3e1;
+          }
+        }
+        &.tiktok {
+          i {
+            position: absolute;
+            left: 13px;
+            top: 14px;
+            font-size: 22px;
+            color: black;
+          }
+        }
+        &.x {
+          .logo {
+            position: absolute;
+            left: 13px;
+            top: 14px;
+            width: 22px;
+          }
+        }
+      }
+    }
+    .l-part {
+      height: 100%;
+      min-height: 100px;
+      display: grid;
+      align-content: center;
+      .ek-grp {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        position: relative;
+        span {
+          position: absolute;
+          font-size: 20px;
+          text-align: center;
+          color: white;
+          left: 35%;
+          top: 12px;
+        }
+        .logo {
+          position: absolute;
+          left: 4%;
+          top: 15px;
+          width: 33px;
+        }
+      }
+    }
+  }
+  .social-footer {
+    width: 100%;
+    background-image: url('/images/png/seo-head-q-left.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: #fefeff;
+    padding: 0 15px;
+    height: 80px;
+    .__container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
+      .r-part {
+        display: flex;
+        align-items: center;
+        column-gap: 5px;
+        .x-logo {
+          width: 24px;
+        }
+        i {
+          font-size: 24px;
+          color: #4b5363;
+        }
+        span {
+          font-size: 30px;
+          color: #4b5363;
+          font-weight: 500;
+          margin-inline-end: 5px;
+        }
+      }
+      .l-part {
+        span {
+          font-size: 26px;
+          color: white;
+        }
+      }
+    }
+
+    @include tablet-down() {
+      //background-size: 149% 119%;
+      background-repeat: no-repeat;
+      background-color: #fefeff;
+      //padding: 6px 10px 26px;
+      background-position: 100% 0;
+      padding: 0 5px;
+      //height: 50px;
+      .__container {
+        .r-part {
+          .x-logo {
+            width: 22px;
+          }
+          i {
+            font-size: 22px;
+          }
+          span {
+            font-size: 26px;
+          }
+        }
+        .l-part {
+          span {
+            font-size: 22px;
+          }
+        }
+      }
+    }
+
+    @include xs-down() {
+      background-position: 0 0;
+      background-size: 120% 100%;
+      padding: 0 2px;
+      .__container {
+        .r-part {
+          .x-logo {
+            width: 16px;
+          }
+          i {
+            font-size: 16px;
+          }
+          span {
+            font-size: 16px;
+          }
+        }
+        .l-part {
+          span {
+            font-size: 13px;
+          }
+        }
+      }
+    }
+  }
+
+  $icon-size: 24px;
+  $circle-size: 36px;
+
+  .vertical-icons {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 10px;
+    width: fit-content;
+
+    .icon-button {
+      background-color: transparent;
+      border: none;
+      margin: 5px 0;
+      font-size: $icon-size;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative; // لإعداد الدائرة
+      transition:
+        color 0.3s,
+        transform 0.3s;
+
+      i {
+        pointer-events: none;
+      }
+
+      &:hover {
+        color: lighten(#000, 20%);
+        transform: scale(1.1); // تكبير بسيط عند التمرير
+      }
+
+      &:disabled {
+        opacity: 0.4;
+      }
+
+      // Reel-specific styling
+      &.reel-facebookReelPost,
+      &.reel-instagramReelPost,
+      &.reel-youtubeReelPost {
+        &::before {
+          content: '';
+          position: absolute;
+          width: $circle-size;
+          height: $circle-size;
+          border: 2px solid currentColor;
+          border-radius: 50%;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: -1; // خلف الأيقونة
+        }
+      }
+
+      // Telegram
+      &.icon-telegramPost {
+        color: #0088cc;
+      }
+
+      // WhatsApp
+      &.icon-whatsAppPost {
+        color: #25d366;
+      }
+
+      // Facebook
+      &.icon-facebookPost {
+        color: #3b5998;
+      }
+
+      // Facebook Reel
+      &.reel-facebookReelPost {
+        color: darken(#3b5998, 10%);
+      }
+
+      // Instagram
+      &.icon-instagramPost {
+        color: #e4405f;
+      }
+
+      // Instagram Reel
+      &.reel-instagramReelPost {
+        color: darken(#e4405f, 10%);
+      }
+
+      // Twitter
+      &.icon-twitterPost {
+        color: #1da1f2;
+      }
+
+      // YouTube Reel
+      &.reel-youtubeReelPost {
+        color: #ff0000;
+      }
+    }
+  }
+}
