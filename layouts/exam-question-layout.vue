@@ -1,16 +1,10 @@
 <template>
-  <div
-    id="exam-question-layout"
-    class="exam-question-layout"
-  >
+  <div id="exam-question-layout" class="exam-question-layout">
     <div class="app-nuxt">
       <div class="wrapper">
         <div class="main-section">
           <main-menu />
-          <div
-            id="scroll-page"
-            class="scroll-page"
-          >
+          <div id="scroll-page" class="scroll-page">
             <div class="page-contents">
               <slot></slot>
             </div>
@@ -21,12 +15,12 @@
         </div>
       </div>
     </div>
-    <div
-      class="chat-btn"
-      @click="goChat"
-    >
+    <div class="chat-btn" @click="goChat">
       <i class="fa fa-comment"></i>
     </div>
+    <client-only>
+      <lazy-surveys-modal ref="modal_surveys_ref" />
+    </client-only>
   </div>
 </template>
 
@@ -42,6 +36,7 @@ import { deepEqualUtil } from '~/main/utils/lodash.utils';
 export default {
   setup() {
     const route = useRoute();
+      
     watch(route, (newVal, oldVal) => {
       if (!deepEqualUtil(newVal, oldVal)) {
         scrollToTopUtil('scroll-page');
@@ -61,6 +56,12 @@ export default {
       ...useSetupAuth(),
       ...useSetupRoute(),
     };
+  },
+
+  data() {
+    return {
+      openModalTimeoutId: null as any,
+    }
   },
 
   mounted() {
@@ -102,7 +103,42 @@ export default {
       const footer = document.getElementById('web-footer');
       if (footer) footer.classList.remove('is-user-panel');
     },
+
+    openSurveysModal() {
+      if (import.meta.client) {
+        //@ts-expect-error access prop ref
+        this.$refs['modal_surveys_ref']?.showModal()
+      }
+    }
   },
+
+  computed: {
+    selectedSurveys() {
+      return this.$store.state.selectedSurveys
+    }
+  },
+
+  watch: {
+    selectedSurveys: {
+      immediate: true,
+      handler(newVal) {
+        if (this.openModalTimeoutId) {
+          clearTimeout(this.openModalTimeoutId);
+          this.openModalTimeoutId = null;
+        }
+
+        if (!newVal) return;
+
+        const waitTime = (newVal.timeInitialize || 0) * 1000;
+
+        this.openModalTimeoutId = setTimeout(() => {
+          this.openSurveysModal();
+          this.openModalTimeoutId = null;
+        }, waitTime);
+      },
+    },
+  }
+
 };
 </script>
 
@@ -139,23 +175,28 @@ html {
   .app-nuxt {
     width: 100%;
     height: 100%;
+
     .wrapper {
       .main-section {
         background: #fff;
         overflow: hidden;
       }
+
       .scroll-page {
         margin-top: 100px;
         max-height: calc(100vh - 100px);
         overflow-y: auto;
         overflow-x: hidden;
+
         .page-contents {
           min-height: calc(100vh - 260px);
           display: grid;
         }
+
         @include tablet-down() {
           margin-top: 70px;
           max-height: 100%;
+
           .page-contents {
             min-height: calc(100vh - 70px - 256px);
           }
@@ -174,6 +215,7 @@ html {
     display: flex;
     justify-content: center;
     width: 100%;
+
     @include normal-btn() {
       border-radius: 20px;
       height: 40px;
@@ -201,6 +243,7 @@ html {
   height: 60px;
   box-shadow: 0 0 6px 0px var(--purple-8c);
   transition: 0.3s all;
+
   i {
     font-size: 22px !important;
     color: white !important;
@@ -216,6 +259,7 @@ html {
     height: 45px;
     left: 10px;
     bottom: 10px;
+
     i {
       font-size: 18px !important;
     }

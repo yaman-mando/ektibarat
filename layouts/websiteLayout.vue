@@ -79,11 +79,13 @@
           </div>
         </div>
       </div>
+      <lazy-surveys-modal ref="modal_surveys_ref" />
       <lazy-block-modal />
     </client-only>
   </div>
 </template>
 <script setup lang="ts">
+import { useStore } from 'vuex';
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { removeScript, sleepUtil } from '~/main/utils/shared-utils';
 import {
@@ -97,12 +99,17 @@ import { ScriptsIdEnum } from '~/main/constants/scripts-id.enum';
 const { status } = useAuth();
 const router = useRouter();
 const route = useRoute();
+const store = useStore();
 const globalStore = useGlobalStore();
 const headers = {
   __dangerouslyDisableSanitizersByTagID: {
     'custom-inline-script': ['innerHTML'],
   },
 };
+
+//refs
+const modalSurveysRef = useTemplateRef('modal_surveys_ref');
+const openModalTimeoutId = ref<any>(null)
 const extraScript = computed(() => {
   const scripts: any[] = [];
 
@@ -165,6 +172,7 @@ onBeforeMount(() => {
   removeScript(ScriptsIdEnum.appleId);
 });
 
+
 //method
 const toggleContactMenu = async () => {
   isOpenContactMenu.value = !isOpenContactMenu.value;
@@ -213,6 +221,35 @@ const navToSocial = async (type: 'chat' | 'whatsapp' | 'telegram') => {
   await sleepUtil(800);
   isInternalbtn.value = false;
 };
+
+
+const openSurveysModal = ()=> {
+  if (import.meta.client) {
+    modalSurveysRef.value?.showModal()
+  }
+}
+
+
+
+const selectedSurveys = computed(() => store.state.selectedSurveys)
+
+watch(()=>
+  selectedSurveys,
+  (newVal) => {
+    if (openModalTimeoutId.value) {
+      clearTimeout(openModalTimeoutId.value)
+      openModalTimeoutId.value = null
+    }
+
+    if (!newVal) return
+    const waitTime = (newVal.value?.timeInitialize || 0) * 1000
+    openModalTimeoutId.value = setTimeout(() => {
+      openSurveysModal()
+      openModalTimeoutId.value = null
+    }, waitTime)
+  },
+  { immediate: true,deep:true }
+)
 
 //watch
 watch(

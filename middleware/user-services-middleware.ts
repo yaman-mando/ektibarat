@@ -6,11 +6,13 @@ import { webPricesPathUtil } from '~/main/utils/web-routes.utils';
 import type { UserServicesStateUi } from '~/main/modules/subscriptions/data-access/subscriptions.model';
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { GlobalTypes } from '~/main/constants/global-types';
+import { useSurveyNavigation } from '@/main/services/useSurveyNavigation';
 
 export default defineNuxtRouteMiddleware(async (_to, _from) => {
   const auth = useAuth();
   const subscriptionsStore = useSubscriptionsStore();
   const globalStore = useGlobalStore();
+  const { handleSurveyNavigation } = useSurveyNavigation()
   const user = auth?.data.value as UserInfoDataModel;
 
   try {
@@ -41,6 +43,10 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
       // services.SHOWSOLVESOLUATION.isActive = false;
       // services.HELPINPRACTICE.isActive = false;
       subscriptionsStore.patchState({ userServicesStateVal: services });
+
+    }
+    if (!_to.path.includes('/ekht-admin')) {
+      await handleSurveyNavigation(_to)
     }
   } catch (_e: unknown) {
     return navigateTo(webPricesPathUtil(), { replace: true });

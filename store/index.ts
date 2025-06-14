@@ -56,6 +56,9 @@ export type VuexRootState = {
   lastUserSubUpdate: number;
   loadedCss: string[];
   loadedScripts: string[];
+  surveysSetting: any | null,
+  selectedSurveys: any | null,
+  surveysData: any | null,
 };
 
 export type VuexStoreState = VuexRootState & {
@@ -98,6 +101,9 @@ export const vuexStore = createStore<VuexRootState>({
       lastUserSubUpdate: 0,
       loadedCss: [],
       loadedScripts: [],
+      surveysSetting: null,
+      selectedSurveys: null,
+      surveysData: null,
     };
   },
   mutations: {
@@ -201,6 +207,16 @@ export const vuexStore = createStore<VuexRootState>({
       if (!state.loadedScripts.includes(path)) {
         state.loadedScripts.push(path);
       }
+    },
+
+    SET_SURVEYS_SETTING(state, payload) {
+      state.surveysSetting = payload;
+    },
+    SET_SELECTED_SURVEYS(state, payload) {
+      state.selectedSurveys = payload;
+    },
+    SET_SURVEYS_DATA(state, payload) {
+      state.surveysData = payload;
     },
   },
   actions: {
@@ -472,6 +488,37 @@ export const vuexStore = createStore<VuexRootState>({
         console.error('Capture failed:', error);
       }
     },
+
+    async callSettingForSurveys({ commit }, payload) {
+      try {
+        const { $axios } = useNuxtApp();
+        const res = await $axios.get(`/studentSurvey/remainSurveys`);
+        if (res.data) {
+          sessionStorage.setItem('surveys', JSON.stringify(res.data));
+          commit('SET_SURVEYS_SETTING', res.data);
+          return res.data;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    async surveysRequest({ commit }, formId) {
+      try {
+        const res = await fetch(
+          `https://apisurvey.ekhtibarat.com/api/forms/${formId}/definition`
+        );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const formData = await res.json();
+        commit('SET_SURVEYS_DATA', formData);
+      } catch (e) {
+        console.error('surveysRequest error:', e);
+      }
+    }
   },
   modules: {
     subs: subsVuexStore,

@@ -7350,6 +7350,16 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
+survey-core@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/survey-core/-/survey-core-2.1.1.tgz#d642ee3837a5fbeacd67394ae6573ee5df1c59e3"
+  integrity sha512-82cn/cj4zzavTt2+01+ISxsaI2isB9a8Q66jojkKL6DPCIUQbGoBHO6l6E1CGFH4iLr9y19jRjs3+/NQ+o9Edw==
+
+survey-vue3-ui@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/survey-vue3-ui/-/survey-vue3-ui-2.2.0.tgz#bdb895ea5b6a4bc5ef5e85f94e29681f35ee6fcf"
+  integrity sha512-CRSPnQ54okUQ3lnxo2SzI83tyKLvW2HE70opE+jblstzGd4FN6SRLkx6OuUYLor2da8zl0X0qWMjNf7pAFul8w==
+
 svgo@^3.2.0, svgo@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/svgo/-/svgo-3.3.2.tgz#ad58002652dffbb5986fc9716afe52d869ecbda8"

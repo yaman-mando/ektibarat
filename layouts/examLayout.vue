@@ -16,9 +16,45 @@
         </div>
       </div>
     </div>
+    <client-only>
+      <lazy-surveys-modal ref="modal_surveys_ref" />
+    </client-only>
   </div>
 </template>
 <script setup lang="ts">
+import { useStore } from 'vuex';
+
+
+const store = useStore();
+const modalSurveysRef = useTemplateRef('modal_surveys_ref');
+const openModalTimeoutId = ref<any>(null)
+
+const openSurveysModal = ()=> {
+  if (import.meta.client) {
+    modalSurveysRef.value?.showModal()
+  }
+}
+
+const selectedSurveys = computed(() => store.state.selectedSurveys)
+
+watch(()=>
+  selectedSurveys,
+  (newVal) => {
+    if (openModalTimeoutId.value) {
+      clearTimeout(openModalTimeoutId.value)
+      openModalTimeoutId.value = null
+    }
+
+    if (!newVal) return
+    const waitTime = (newVal.value?.timeInitialize || 0) * 1000
+    openModalTimeoutId.value = setTimeout(() => {
+      openSurveysModal()
+      openModalTimeoutId.value = null
+    }, waitTime)
+  },
+  { immediate: true,deep:true }
+)
+
 //meta
 useHead({
   title: 'اختبارات',

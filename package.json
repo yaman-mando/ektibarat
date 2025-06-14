@@ -40,6 +40,8 @@
     "pinia": "^3.0.2",
     "primevue": "^4.3.3",
     "rxjs": "^7.8.2",
+    "survey-core": "^2.1.1",
+    "survey-vue3-ui": "^2.2.0",
     "ua-parser-js": "^2.0.3",
     "uuid": "^11.1.0",
     "vee-validate": "^4.15.0",

@@ -5,6 +5,7 @@ import { useGlobalStore } from '~/main/useGlobalStore';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { webErrorPathUtil } from '~/main/utils/web-routes.utils';
+import { useSurveyNavigation } from '@/main/services/useSurveyNavigation';
 
 export default defineNuxtRouteMiddleware(async (to) => {
   try {
@@ -12,14 +13,19 @@ export default defineNuxtRouteMiddleware(async (to) => {
     const userData = computed(() => data.value as UserInfoDataModel);
     const globalStore = useGlobalStore();
     const subscriptionStore = useSubscriptionsStore();
+    const { handleSurveyNavigation } = useSurveyNavigation()
+
+  
 
     // Skip middleware on excluded routes
     const excludeRoutes = [EXAM_QUESTIONS_ROUTES.root, webErrorPathUtil()];
     const isExcluded = excludeRoutes.some((path) => to.path.includes(path));
     if (isExcluded) return;
 
+
     // Client-side only checks
     if (import.meta.client) {
+
       // Check/update subscription
       const UPDATE_INTERVAL = 5 * 60 * 1000;
       const now = Date.now();
@@ -75,6 +81,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
             });
           }
         }
+
+      }
+      if (!to.path.includes('/ekht-admin')) {
+
+        await handleSurveyNavigation(to)
       }
     }
   } catch (_error) {

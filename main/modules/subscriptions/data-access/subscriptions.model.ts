@@ -10,6 +10,8 @@ export type CurrentSubscriptionDataModel = {
   remainExamsCount: number;
   remainTrainingCount: number;
   remainTrainingCountPerDay: number;
+  totalTrainingsCount:number;
+  totalExamsCount:number;
   subjectId: number;
   trainingLawWatchingCount: number;
   remainTrainingCountBeforePhoneNumber: number;
