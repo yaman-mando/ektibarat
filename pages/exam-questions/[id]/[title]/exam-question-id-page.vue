@@ -454,7 +454,7 @@ export default {
             if (error.response?.status == 400) {
               if (error.response.data.errorType == 6) {
                 // Show block modal if the error type is 6
-                this.$store.commit('SET_SHOW_BLOCK_MODAL', true);
+                this.globalStore.patchState({ showBlockModal: true });
               } else {
                 // Display an error toast with the corresponding error message
                 this.showError({

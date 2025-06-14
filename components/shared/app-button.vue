@@ -65,9 +65,8 @@ withDefaults(
   justify-content: center;
   gap: 5px;
   height: 48px;
-  min-width: 155px;
+  width: 155px;
   max-width: 100%;
-  width: fit-content;
   box-sizing: border-box;
   border-radius: 10px;
   border: 2px solid var(--color) !important;

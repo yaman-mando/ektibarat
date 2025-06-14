@@ -9,6 +9,7 @@
         :rules="rules"
       >
         <div
+          v-bind="attrs"
           class="a-form-select"
           tabindex="-1"
           :class="[
@@ -20,6 +21,7 @@
           <span class="a-form-select-label">{{ label }}</span>
           <component
             :is="treeSelectInstance"
+            v-if="treeSelectInstance"
             :id="inputId"
             ref="tree_select"
             v-model="value"
@@ -99,6 +101,7 @@ export default {
   components: {
     Field,
   },
+  inheritAttrs: false,
 
   props: {
     rules: {
@@ -141,14 +144,18 @@ export default {
   },
   emits: ['update:selectedValues'],
   setup() {
+    const attrs = useAttrs();
+
     const treeSelectRef =
       useTemplateRef<Partial<{ clear: () => void }>>('tree_select');
-
-    const treeSelectInstance = defineAsyncComponent(async () => {
+    const treeSelectInstance = shallowRef<any | null>(null);
+    const instance = defineAsyncComponent(async () => {
       await import('vue3-treeselect/dist/vue3-treeselect.css');
       return (await import('vue3-treeselect')).default;
     });
+    treeSelectInstance.value = instance;
     return {
+      attrs,
       ImagesFolderName,
       ImageSize,
       ImageExt,

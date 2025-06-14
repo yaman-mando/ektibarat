@@ -1610,8 +1610,11 @@
                           </div>
                           <template v-if="!isLoadingChartData">
                             <component
-                              :is="apexComponent"
-                              v-if="apexComponent && filterChartData.length > 0"
+                              :is="apexChartService.apexComponent.value"
+                              v-if="
+                                apexChartService.apexComponent.value &&
+                                filterChartData.length > 0
+                              "
                               :key="chartKey"
                               :height="'300px'"
                               :series="chartLineSeries"
@@ -1832,7 +1835,6 @@ export default {
       selectedChartPeriod: chartPeriodList[0].id,
       selectedChartSub: 0 as null | number,
       isLoadingChartData: false,
-      apexComponent: null,
       filterChartData: [],
       chartKey: Symbol(),
       chartLineOptions: {

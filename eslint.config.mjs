@@ -69,6 +69,18 @@ export default withNuxt(
               "CallExpression[callee.property.name='commit'] Literal[value='SET_GLOBAL_TYPE_USER']",
             message: "Usage of 'SET_GLOBAL_TYPE_USER' commit is forbidden.",
           },
+          //start block modal
+          {
+            selector:
+              "CallExpression[callee.property.name='commit'] Literal[value='SET_SHOW_BLOCK_MODAL']",
+            message: "Usage of 'SET_SHOW_BLOCK_MODAL' commit is forbidden.",
+          },
+          {
+            selector:
+              "MemberExpression[object.property.name='state'][property.name='showBlockModal']",
+            message: 'forbidden use globalStore',
+          },
+          //end block modal
           {
             selector:
               "CallExpression[callee.property.name='commit'] Literal[value='SET_GLOBAL_TYPE']",
