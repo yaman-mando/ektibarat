@@ -31,12 +31,10 @@
                 :href="child.wordPressUrl!"
                 target="_blank"
               >
-                {{ child.label }}
-                <!-- todo-z            -->
-                <!--            <mx-g-text-slice-->
-                <!--              :length="28"-->
-                <!--              :text="child.label"-->
-                <!--            />-->
+                <text-slice
+                  :length="28"
+                  :text="child.label ?? undefined"
+                />
               </a>
             </div>
           </div>
