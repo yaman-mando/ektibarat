@@ -1,10 +1,10 @@
 <template>
-  <client-only>
+  <!-- <client-only>
     <div class="app-dashboard">
-      <!--      <mx-main-hub></mx-main-hub>-->
-      <client-only>
-        <!--        <mx-chat-hub />-->
-      </client-only>
+      
+      
+      
+
       <mx-admin-menu />
       <div
         id="admin-layout"
@@ -24,7 +24,7 @@
         <nuxt />
       </div>
 
-      <!--    sidebar forms-->
+      
 
       <template v-if="activeFormEmployee">
         <mx-admin-custom-sidebar
@@ -100,11 +100,11 @@
           />
         </template>
       </template>
-      <!--    end sidebar forms-->
+      
     </div>
-  </client-only>
+  </client-only> -->
 </template>
-<script lang="ts">
+<!-- <script lang="ts">
 export default {
   setup() {
     const theme = this.$store.state.admin.isDarkTheme
@@ -462,8 +462,8 @@ export default {
     },
   },
 };
-</script>
-<style lang="scss">
+</script> -->
+<!-- <style lang="scss">
 @import '@/assets/scss/style.scss';
 
 * {
@@ -526,4 +526,4 @@ html {
 body {
   --keyboard-zindex: 1050;
 }
-</style>
+</style> -->

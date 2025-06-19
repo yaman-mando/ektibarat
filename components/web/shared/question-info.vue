@@ -274,8 +274,7 @@ export default {
     margin: 0 15px;
     display: flex;
     justify-content: center;
-    @include normal-btn() {
-      &.reg-btn {
+    .reg-btn {
         background: var(--purple-8c);
         color: white;
         border-radius: 10px;
@@ -292,7 +291,6 @@ export default {
           min-height: 60px;
         }
       }
-    }
   }
 }
 

@@ -4,8 +4,7 @@ import { useStore } from 'vuex'
 import { GlobalTypes } from '~/main/constants/global-types';
 
 export const useSurveyNavigation = () => {
-  const { data, status } = useAuth()
-  const route = useRoute()
+  const {status } = useAuth()
   const store = useStore()
   const subscriptionsStore = useSubscriptionsStore();
 
