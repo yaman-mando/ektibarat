@@ -83,6 +83,10 @@ export const APP_ROUTES = {
     students: {
       root: 'students',
     },
+    surveys: {
+      root: 'surveys',
+      show: 'show',
+    },
   },
 };
 

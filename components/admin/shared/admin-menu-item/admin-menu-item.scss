@@ -1,0 +1,124 @@
+.m-item {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 5px;
+  color: var(--menu-item-color);
+  &:hover {
+    text-decoration: none;
+  }
+  .m-item-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 56px;
+    width: 100%;
+    &.active {
+      color: var(--menu-item-color-active);
+      background: var(--menu-item-bg);
+      border-radius: 8px;
+      .m-add {
+        transition: all 0.3s ease-in-out;
+        background: #fff;
+        i {
+          color: var(--menu-item-add-active);
+        }
+      }
+    }
+
+    .m-icon {
+      font-size: 26px;
+      margin: 0 23px 0 12px;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .m-label {
+      display: inline-block;
+      font-size: 14px;
+    }
+    .m-add {
+      position: absolute;
+      left: 39px;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--menu-item-add-bg);
+      border-radius: 50%;
+      i {
+        color: #fff;
+        font-size: 10px;
+      }
+    }
+    .m-item-toggle {
+      transition: all 0.3s ease-in-out;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 13px;
+    }
+    .m-complaints-count {
+      position: absolute;
+      left: 39px;
+      border: 1px solid;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .m-collapse {
+    width: 100%;
+  }
+  .m-collapse[data-open='true'] .m-child-list {
+    max-height: 500px;
+  }
+  .m-child-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-top: 5px;
+    .m-item-container {
+      width: 100%;
+      text-decoration: none;
+      color: black;
+      &.active {
+        color: var(--menu-item-color-active);
+        background: var(--menu-item-bg);
+        border-radius: 8px;
+      }
+    }
+    .m-item-child {
+      display: flex;
+      width: 100%;
+      min-height: 56px;
+      align-items: center;
+      justify-content: flex-start;
+      transition: all 0.3 ease-in-out;
+      .m-child-label {
+        font-size: 14px;
+        margin-right: 61px;
+      }
+    }
+  }
+}

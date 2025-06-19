@@ -1,5 +1,18 @@
 import { APP_ROUTES } from '~/main/constants/routes';
 
+export const ROUTE_QUERY_ENUM = Object.freeze({
+  categoryItemId: 'cId',
+  employeeItemId: 'eId',
+  staticPageType: 'stp',
+  isOpenFormCategory: 'isOpenFormCategory',
+  isOpenFormLaws: 'fl',
+  isOpenFormLawManage: 'flm',
+  isOpenFormServiceManage: 'fsm',
+  lawsItemId: 'lId',
+  lawManageId: 'lMd',
+  serviceManageId: 'smd',
+});
+
 export const stdRouters = {
   home: {
     id: 1,
@@ -264,4 +277,15 @@ export class RouteHelper {
   static userGeneralSelection() {
     return `/general-selection`;
   }
+
+  static adminSurveysShow() {
+    return `/${adminPrefix}/${APP_ROUTES.admin.surveys.root}/${APP_ROUTES.admin.surveys.show}`;
+  }
+  static adminSurveysDetails(id) {
+    return `/${adminPrefix}/${APP_ROUTES.admin.surveys.root}/${APP_ROUTES.admin.surveys.show}/${id}`;
+  }
 }
+
+export const main_routers = {
+  adminRoute: 'ekht-admin',
+};

@@ -1,11 +1,11 @@
 <template>
   <!-- <client-only>
     <div class="app-dashboard">
-      
-      
-      
-
-      <mx-admin-menu />
+      <!--      <mx-main-hub></mx-main-hub>-->
+      <client-only>
+        <!--        <mx-chat-hub />-->
+      </client-only>
+      <admin-menu />
       <div
         id="admin-layout"
         class="app-nuxt"
@@ -21,96 +21,113 @@
             :showSelectedItem="true"
           />
         </div>
-        <nuxt />
+        <slot></slot>
       </div>
 
-      
+      <!--    sidebar forms-->
 
-      <template v-if="activeFormEmployee">
-        <mx-admin-custom-sidebar
-          :title="
-            $route.query[ROUTE_QUERY_ENUM.employeeItemId]
-              ? 'تعديل موظف'
-              : 'إضافة موظف'
-          "
-          :sideBarId="'employee-sidebar'"
-          @onHidden="closeEmployeeForm"
-        >
-          <mx-admin-employee-form @onFinish="onFinishFormEmployee" />
-        </mx-admin-custom-sidebar>
-      </template>
+      <!--      TODO-admin sidebars-->
+      <!--      <template v-if="activeFormEmployee">-->
+      <!--        <mx-admin-custom-sidebar-->
+      <!--          :title="-->
+      <!--            appRoute.query[ROUTE_QUERY_ENUM.employeeItemId]-->
+      <!--              ? 'تعديل موظف'-->
+      <!--              : 'إضافة موظف'-->
+      <!--          "-->
+      <!--          :sideBarId="'employee-sidebar'"-->
+      <!--          @onHidden="closeEmployeeForm"-->
+      <!--        >-->
+      <!--          <mx-admin-employee-form @onFinish="onFinishFormEmployee" />-->
+      <!--        </mx-admin-custom-sidebar>-->
+      <!--      </template>-->
 
-      <template v-if="activeFormCategory">
-        <mx-admin-custom-sidebar
-          :title="
-            $route.query[ROUTE_QUERY_ENUM.categoryItemId]
-              ? 'تعديل التصنيف'
-              : 'إضافة تصنيف'
-          "
-          :sideBarId="'category-sidebar'"
-          @onHidden="closeCategoryForm"
-        >
-          <mx-admin-category-form @onFinish="onFinishFormCategory" />
-        </mx-admin-custom-sidebar>
-      </template>
+      <!--      <template v-if="activeFormCategory">-->
+      <!--        <mx-admin-custom-sidebar-->
+      <!--          :title="-->
+      <!--            appRoute.query[ROUTE_QUERY_ENUM.categoryItemId]-->
+      <!--              ? 'تعديل التصنيف'-->
+      <!--              : 'إضافة تصنيف'-->
+      <!--          "-->
+      <!--          :sideBarId="'category-sidebar'"-->
+      <!--          @onHidden="closeCategoryForm"-->
+      <!--        >-->
+      <!--          <mx-admin-category-form @onFinish="onFinishFormCategory" />-->
+      <!--        </mx-admin-custom-sidebar>-->
+      <!--      </template>-->
 
-      <template v-if="activeFormLaws">
-        <mx-admin-custom-sidebar
-          :title="$route.query[ROUTE_QUERY_ENUM.lawsItemId] ? 'تعديل' : 'إضافة'"
-          :sideBarId="'laws-sidebar'"
-          @onHidden="closeLawsForm"
-        >
-          <laws-form @onFinish="onFinishFormLaws" />
-        </mx-admin-custom-sidebar>
-      </template>
+      <!--      <template v-if="activeFormLaws">-->
+      <!--        <mx-admin-custom-sidebar-->
+      <!--          :title="-->
+      <!--            appRoute.query[ROUTE_QUERY_ENUM.lawsItemId] ? 'تعديل' : 'إضافة'-->
+      <!--          "-->
+      <!--          :sideBarId="'laws-sidebar'"-->
+      <!--          @onHidden="closeLawsForm"-->
+      <!--        >-->
+      <!--          <laws-form @onFinish="onFinishFormLaws" />-->
+      <!--        </mx-admin-custom-sidebar>-->
+      <!--      </template>-->
 
-      <template v-if="activeFormLawManage">
-        <mx-admin-custom-sidebar
-          :title="
-            $route.query[ROUTE_QUERY_ENUM.lawManageId] ? 'تعديل' : 'إضافة'
-          "
-          :sideBarId="'law-manage-sidebar'"
-          @onHidden="closeLawMangeForm"
-        >
-          <law-manage-form @onFinish="onFinishFormManageLaw" />
-        </mx-admin-custom-sidebar>
-      </template>
+      <!--      <template v-if="activeFormLawManage">-->
+      <!--        <mx-admin-custom-sidebar-->
+      <!--          :title="-->
+      <!--            appRoute.query[ROUTE_QUERY_ENUM.lawManageId] ? 'تعديل' : 'إضافة'-->
+      <!--          "-->
+      <!--          :sideBarId="'law-manage-sidebar'"-->
+      <!--          @onHidden="closeLawMangeForm"-->
+      <!--        >-->
+      <!--          <law-manage-form @onFinish="onFinishFormManageLaw" />-->
+      <!--        </mx-admin-custom-sidebar>-->
+      <!--      </template>-->
 
-      <template v-if="activeFormServiceManage">
-        <mx-admin-custom-sidebar
-          :title="
-            $route.query[ROUTE_QUERY_ENUM.serviceManageId] ? 'تعديل' : 'إضافة'
-          "
-          :sideBarId="'service-manage-sidebar'"
-          @onHidden="closeServiceMangeForm"
-        >
-          <service-manage-form @onFinish="onFinishFormManageService" />
-        </mx-admin-custom-sidebar>
-      </template>
+      <!--      <template v-if="activeFormServiceManage">-->
+      <!--        <mx-admin-custom-sidebar-->
+      <!--          :title="-->
+      <!--            appRoute.query[ROUTE_QUERY_ENUM.serviceManageId] ? 'تعديل' : 'إضافة'-->
+      <!--          "-->
+      <!--          :sideBarId="'service-manage-sidebar'"-->
+      <!--          @onHidden="closeServiceMangeForm"-->
+      <!--        >-->
+      <!--          <service-manage-form @onFinish="onFinishFormManageService" />-->
+      <!--        </mx-admin-custom-sidebar>-->
+      <!--      </template>-->
 
-      <template v-if="activeFormSubject">
-        <template
-          v-if="
-            $store.state.isSchool != 'false' && $auth.user.role == roles.admin
-          "
-        >
-          <mx-admin-add-subject-form
-            :isOpen="isOpenFormSubject"
-            @hideForm="closeSubjectForm"
-          />
-        </template>
-      </template>
-      
+      <!--      <template v-if="activeFormSubject">-->
+      <!--        <template-->
+      <!--          v-if="-->
+      <!--            $store.state.isSchool != 'false' &&-->
+      <!--            appAuth.user.role == UserRoles.admin-->
+      <!--          "-->
+      <!--        >-->
+      <!--          <mx-admin-add-subject-form-->
+      <!--            :isOpen="isOpenFormSubject"-->
+      <!--            @hideForm="closeSubjectForm"-->
+      <!--          />-->
+      <!--        </template>-->
+      <!--      </template>-->
+      <!--    end sidebar forms-->
     </div>
   </client-only> -->
 </template>
-<!-- <script lang="ts">
+<script lang="ts">
+import { useStore } from 'vuex';
+import { AppTheme } from 'public/constants/app-config';
+import { globalTypesList } from '~/main/constants/global-types';
+import { ROUTE_QUERY_ENUM } from '~/main/utils/route-helper';
+import { useSetupAdminStatic } from '~/main/services/setup/useSetupAdminStatic';
+import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
+import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
+import { UserRoles } from '~/core/auth/constants/user-roles';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { sleepUtil } from '~/main/utils/shared-utils';
+
 export default {
   setup() {
-    const theme = this.$store.state.admin.isDarkTheme
+    const store = useStore();
+    const globalStore = useGlobalStore();
+    const theme = store.state.admin.isDarkTheme
       ? AppTheme.dark
       : AppTheme.light;
-    const menuClass = this.$store.state.admin.isClosedAdminMenu
+    const menuClass = store.state.admin.isClosedAdminMenu
       ? 'is-closed-admin-menu'
       : '';
 
@@ -139,37 +156,20 @@ export default {
           src: 'https://cdn.jsdelivr.net/npm/mathlive',
           type: 'text/javascript',
         },
-        /*{
-          src: 'https://www.wiris.net/demo/editor/editor',
-          type: 'text/javascript'
-        },
-        {
-          src: 'https://cdn.jsdelivr.net/npm/@wiris/mathtype-ckeditor4@8.9.0/plugin.min.js',
-          type: 'text/javascript'
-        },
-        {
-          src:'https://cdn.ckeditor.com/4.14.0/standard-all/ckeditor.js',
-          type:'text/javascript'
-        },
-        {
-          src: 'https://unpkg.com/mathlive',
-          defer:true,
-          type:'text/javascript'
-        },*/
-        /* {
-          src: 'https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js',
-          type:'text/javascript'
-        }*/
-        /*{
-          src:'https://cdn.ckeditor.com/ckeditor5/41.0.0/super-build/ckeditor.js',
-          type:'text/javascript'
-        }*/
       ],
     });
-    return {};
+    return {
+      ...useSetupAdminStatic(),
+      ...useToastMessage(),
+      ...useSetupAuth(),
+      ...useSetupRoute(),
+      globalStore,
+    };
   },
   data() {
     return {
+      isOpenFormServiceManage: false,
+      isOpenFormLawManage: false,
       isOpenFormEmployee: false,
       isOpenFormCategory: false,
       isOpenFormLaws: false,
@@ -181,15 +181,17 @@ export default {
       activeFormLawManage: false,
       activeFormServiceManage: false,
 
-      ROUTE_QUERY_ENUM,
-      roles,
-      settingKeys,
       globalList: globalTypesList,
       selectedGlobalType: this.$store.state.globalType,
     };
   },
+  computed: {
+    UserRoles() {
+      return UserRoles;
+    },
+  },
   watch: {
-    $route: {
+    appRoute: {
       deep: true,
       immediate: true,
       async handler(newVal, oldVal) {
@@ -200,7 +202,8 @@ export default {
           if (this.isOpenFormEmployee) {
             this.activeFormEmployee = true;
             await new Promise((resolve) => setTimeout(resolve, 100));
-            this.$root.$emit('bv::toggle::collapse', 'employee-sidebar');
+            //TODO-admin
+            // this.$root.$emit('bv::toggle::collapse', 'employee-sidebar');
           }
         }
         //category form
@@ -210,7 +213,8 @@ export default {
           if (this.isOpenFormCategory) {
             this.activeFormCategory = true;
             await new Promise((resolve) => setTimeout(resolve, 100));
-            this.$root.$emit('bv::toggle::collapse', 'category-sidebar');
+            //TODO-admin
+            // this.$root.$emit('bv::toggle::collapse', 'category-sidebar');
           }
         }
 
@@ -220,7 +224,7 @@ export default {
           if (this.isOpenFormLaws) {
             this.activeFormLaws = true;
             await new Promise((resolve) => setTimeout(resolve, 100));
-            this.$root.$emit('bv::toggle::collapse', 'laws-sidebar');
+            //TODO-admin
           }
         }
 
@@ -231,7 +235,8 @@ export default {
           if (this.isOpenFormLawManage) {
             this.activeFormLawManage = true;
             await new Promise((resolve) => setTimeout(resolve, 100));
-            this.$root.$emit('bv::toggle::collapse', 'law-manage-sidebar');
+            //TODO-admin
+            // this.$root.$emit('bv::toggle::collapse', 'law-manage-sidebar');
           }
         }
 
@@ -242,7 +247,8 @@ export default {
           if (this.isOpenFormServiceManage) {
             this.activeFormServiceManage = true;
             await new Promise((resolve) => setTimeout(resolve, 100));
-            this.$root.$emit('bv::toggle::collapse', 'service-manage-sidebar');
+            //TODO-admin
+            // this.$root.$emit('bv::toggle::collapse', 'service-manage-sidebar');
           }
         }
 
@@ -252,38 +258,32 @@ export default {
           this.isOpenFormSubject = query.isOpenFormSubject == 1;
           if (this.isOpenFormSubject) {
             await new Promise((resolve) => setTimeout(resolve, 100));
-            this.$root.$emit('bv::toggle::collapse', 'add-subject-sidebar');
+            //todo-admin
+            // this.$root.$emit('bv::toggle::collapse', 'add-subject-sidebar');
           }
-        }
-      },
-    },
-    '$auth.loggedIn': {
-      handler(newVal, oldVal) {
-        if (newVal == false) {
-          //window.location.reload()
         }
       },
     },
     selectedGlobalType: {
       async handler(newVal, oldVal) {
-        this.$store.commit('SET_GLOBAL_TYPE', newVal);
-        if (newVal != this.$route.query.globalType) {
-          await sleep(1600);
-          this.$router.push({
-            name: this.$route.name,
+        this.globalStore.patchState({ globalTypeValue: newVal });
+        if (newVal != this.appRoute.query.globalType) {
+          await sleepUtil(1600);
+          this.appRouter.push({
+            name: this.appRoute.name,
             query: {
-              ...this.$route.query,
+              ...this.appRoute.query,
               globalType: newVal,
             },
           });
         }
       },
     },
-    '$route.query.globalType': {
+    'appRoute.query.globalType': {
       immediate: true,
       handler(newVal) {
         if (newVal) {
-          this.$store.commit('SET_GLOBAL_TYPE', newVal);
+          this.globalStore.patchState({ globalTypeValue: newVal });
           if (newVal != this.selectedGlobalType) {
             this.selectedGlobalType = newVal;
           }
@@ -297,33 +297,20 @@ export default {
       //const res = await this.$store.dispatch('admin/callSettingKey',{key:'isSchool'})
       //this.$store.commit('SET_IS_SCHOOL',res.data.value)
       if (this.$store.state.isSchool == 'false') {
-        StaticJson.examTypes.forEach((r, index) => {
+        this.StaticJson.examTypes.forEach((r, index) => {
           if (r.id == 1) {
             r.isShow = false;
           }
         });
       }
-      //this.changeIsSchool(res.data.value)
-      /*this.$store.state.admin.settingKeysList.forEach(r=>{
-        if(r.key == 'isSchool'){
-          if (r.value == 'false') {
-            this.$store.commit('SET_ACTIVE_EXAM_TYPE',13)
-            StaticJson.examTypes.forEach((r, index) => {
-                if (r.id == 1) {
-                  StaticJson.examTypes.splice(index, 1)
-                }
-              })
-          }
-        }
-      })*/
-      if (this.$auth.user.role === roles.admin) {
+      if (this.appAuth.user.role === UserRoles.admin) {
         await this.$store.dispatch('admin/callComplaintsUnreadCounts');
         await this.$store.dispatch('admin/callPendingApplicantsCount');
         await this.$store.dispatch('admin/callMessagesUnreadCounts');
       }
     } catch (e) {
       console.log(e);
-      showToastError(this.$bvToast);
+      this.showError();
     }
   },
 
@@ -348,11 +335,12 @@ export default {
     },
     closeEmployeeForm() {
       //remove edit id from url query
-      const query = this.$route.query;
+      const query = this.appRoute.query;
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete query[ROUTE_QUERY_ENUM.employeeItemId];
 
-      this.$router.push({
-        name: this.$route.name,
+      this.appRouter.push({
+        name: this.appRoute.name,
         query: {
           ...query,
           isOpenFormEmployee: 0,
@@ -362,17 +350,18 @@ export default {
     },
     async onFinishFormEmployee() {
       this.closeEmployeeForm();
-      await showToastSuccess(this.$bvToast);
+      this.showSuccess();
       this.$store.commit('admin/ON_FINISH_EMPLOYEE_FORM');
     },
 
     closeCategoryForm() {
       //remove edit id from url query
-      const query = this.$route.query;
+      const query = this.appRoute.query;
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete query[ROUTE_QUERY_ENUM.categoryItemId];
 
-      this.$router.push({
-        name: this.$route.name,
+      this.appRouter.push({
+        name: this.appRoute.name,
         query: {
           ...query,
           [ROUTE_QUERY_ENUM.isOpenFormCategory]: 0,
@@ -382,11 +371,12 @@ export default {
     },
     closeLawsForm() {
       //remove edit id from url query
-      const query = this.$route.query;
+      const query = this.appRoute.query;
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete query[ROUTE_QUERY_ENUM.lawsItemId];
 
-      this.$router.push({
-        name: this.$route.name,
+      this.appRouter.push({
+        name: this.appRoute.name,
         query: {
           ...query,
           [ROUTE_QUERY_ENUM.isOpenFormLaws]: 0,
@@ -396,17 +386,18 @@ export default {
     },
     async onFinishFormLaws() {
       this.closeLawsForm();
-      await showToastSuccess(this.$bvToast);
+      this.showSuccess();
       this.$store.commit('admin/ON_FINISH_LAWS_FORM');
     },
 
     closeLawMangeForm() {
       //remove edit id from url query
-      const query = this.$route.query;
+      const query = this.appRoute.query;
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete query[ROUTE_QUERY_ENUM.lawManageId];
 
-      this.$router.push({
-        name: this.$route.name,
+      this.appRouter.push({
+        name: this.appRoute.name,
         query: {
           ...query,
           [ROUTE_QUERY_ENUM.isOpenFormLawManage]: 0,
@@ -416,17 +407,18 @@ export default {
     },
     async onFinishFormManageLaw() {
       this.closeLawMangeForm();
-      await showToastSuccess(this.$bvToast);
+      this.showSuccess();
       this.$store.commit('admin/ON_FINISH_LAWS_FORM_MANAGE');
     },
 
     closeServiceMangeForm() {
       //remove edit id from url query
-      const query = this.$route.query;
+      const query = this.appRoute.query;
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete query[ROUTE_QUERY_ENUM.serviceManageId];
 
-      this.$router.push({
-        name: this.$route.name,
+      this.appRouter.push({
+        name: this.appRoute.name,
         query: {
           ...query,
           [ROUTE_QUERY_ENUM.isOpenFormServiceManage]: 0,
@@ -436,23 +428,23 @@ export default {
     },
     async onFinishFormManageService() {
       this.closeServiceMangeForm();
-      await showToastSuccess(this.$bvToast);
+      this.showSuccess();
       this.$store.commit('admin/ON_FINISH_SERVICE_FORM_MANAGE');
     },
 
     async onFinishFormCategory() {
       this.closeCategoryForm();
-      await showToastSuccess(this.$bvToast);
+      this.showSuccess();
       this.$store.commit('admin/ON_FINISH_CATEGORY_FORM');
     },
 
     closeSubjectForm() {
       //remove edit id from url query
-      const query = this.$route.query;
+      const query = this.appRoute.query;
       delete query.itemEditId;
 
-      this.$router.push({
-        name: this.$route.name,
+      this.appRouter.push({
+        name: this.appRoute.name,
         query: {
           ...query,
           isOpenFormSubject: 0,

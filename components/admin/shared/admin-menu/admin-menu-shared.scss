@@ -1,0 +1,70 @@
+@import '@/assets/scss/mixin';
+
+:root {
+  &.is-closed-admin-menu {
+    @include ipad-up() {
+      .admin-menu {
+        .m-wrapper {
+          width: 90px;
+          justify-content: center;
+          .m-logo {
+            margin-top: 51px;
+            margin-bottom: 54px;
+            width: 44px;
+            height: 25px;
+            img {
+              width: 44px;
+              height: 25px;
+            }
+          }
+
+          .m-list {
+            grid-template-columns: 72px;
+            padding: 0;
+
+            .m-item {
+              justify-content: center;
+              .m-item-child {
+                display: none;
+              }
+              .m-item-inner {
+                justify-content: center;
+              }
+              .m-icon {
+                margin: 0;
+              }
+              .m-label,
+              .m-item-toggle,
+              .m-add {
+                display: none;
+              }
+            }
+
+            .m-logout {
+              justify-content: center;
+              .m-icon {
+                margin: 0;
+              }
+              .m-label {
+                display: none;
+              }
+            }
+
+            .m-theme-toggle {
+              justify-content: center;
+              .m-label {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    @include ipad-down() {
+      .admin-menu {
+        right: -320px;
+      }
+    }
+  }
+}

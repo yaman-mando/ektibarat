@@ -1,6 +1,10 @@
 <template><div>test</div></template>
 <!-- <script lang="ts" setup>
 definePageMeta({
-  layout: '',
+  layout: 'admin-layout',
+});
+
+useHead({
+  title: 'Admin',
 });
 </script> -->
