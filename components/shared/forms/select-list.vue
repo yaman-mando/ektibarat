@@ -75,7 +75,7 @@ export default {
       default: false,
     },
     selectedItem: {
-      type: Object as PropType<string | number | null>,
+      type: [String, Number, null],
     },
     selectedItems: {
       type: Array,

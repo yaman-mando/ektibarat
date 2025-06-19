@@ -1,6 +1,8 @@
 import { process } from 'std-env';
 import { v4 as uuidv4 } from 'uuid';
 import domtoimage from 'dom-to-image';
+import type { VuexRootState } from '~/store';
+import type { Store } from 'vuex';
 
 export const getUuid = () => uuidv4();
 
@@ -374,4 +376,14 @@ export const takeScreenShut = async (elementId) => {
   downloadIcon.download = 'sreenshot.jpg';
 
   return canvas.toDataURL('image/jpeg');
+};
+
+export const toggleAdminMenu = ($store: Store<VuexRootState>) => {
+  const isClosed = $store.state.admin.isClosedAdminMenu;
+  $store.commit('admin/SET_IS_CLOSED_ADMIN_MENU', !isClosed);
+  if ($store.state.admin.isClosedAdminMenu) {
+    document.documentElement.classList.add('is-closed-admin-menu');
+  } else {
+    document.documentElement.classList.remove('is-closed-admin-menu');
+  }
 };
