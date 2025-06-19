@@ -514,13 +514,6 @@ import { GlobalTypes } from '~/main/constants/global-types';
 import { appEvents } from '~/main/shared/events/app.events';
 
 export default {
-  components: {
-    // AppButton,
-    // FormToggle,
-    // WebComplaintModal,
-    // AnswerSelect,
-    // WebAnswerHelpModal,
-  },
   inject: {
     questionAnimateConfig: {
       from: 'questionAnimateConfig',
