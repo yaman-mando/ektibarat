@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="21.835" viewBox="0 0 32 21.835">
+  <g id="bricks-brick-svgrepo-com" transform="translate(0 -55.714)">
+    <rect id="Rectangle_1916" data-name="Rectangle 1916" width="10.07" height="6.682" transform="translate(16.048 63.291)" fill="#ff9f99"/>
+    <rect id="Rectangle_1917" data-name="Rectangle 1917" width="10.071" height="6.682" transform="translate(10.965 56.515)" fill="#ffb7b2"/>
+    <rect id="Rectangle_1918" data-name="Rectangle 1918" width="10.07" height="6.682" transform="translate(5.883 63.291)" fill="#ff9f99"/>
+    <g id="Group_5178" data-name="Group 5178" transform="translate(0.8 70.067)">
+      <rect id="Rectangle_1919" data-name="Rectangle 1919" width="10.07" height="6.682" transform="translate(20.33)" fill="#ff877f"/>
+      <rect id="Rectangle_1920" data-name="Rectangle 1920" width="10.071" height="6.682" transform="translate(10.165)" fill="#ff877f"/>
+      <rect id="Rectangle_1921" data-name="Rectangle 1921" width="10.07" height="6.682" fill="#ff877f"/>
+    </g>
+    <g id="Group_5179" data-name="Group 5179" transform="translate(0 55.714)">
+      <path id="Path_4343" data-name="Path 4343" d="M30.4,69.267H26.9c0-.033.019-.061.019-.094V64.091a1.6,1.6,0,0,0-1.6-1.6h-3.5c0-.033.019-.061.019-.094V57.314a1.6,1.6,0,0,0-1.6-1.6H11.765a1.6,1.6,0,0,0-1.6,1.6V62.4c0,.034.017.061.019.094h-3.5a1.6,1.6,0,0,0-1.6,1.6v5.082c0,.034.017.061.019.094H1.6a1.6,1.6,0,0,0-1.6,1.6v5.082a1.6,1.6,0,0,0,1.6,1.6H30.4a1.6,1.6,0,0,0,1.6-1.6V70.867A1.6,1.6,0,0,0,30.4,69.267Zm-5.083-5.176v5.082h-8.47V64.091ZM11.765,57.314h8.471V62.4H11.765ZM6.683,64.091h8.47v5.082H6.683ZM10.07,75.95H1.6V70.868h8.47Zm10.165,0h-8.47V70.868h8.471V75.95Zm10.165,0H21.93V70.868H30.4Z" transform="translate(0 -55.714)" fill="#573a32"/>
+    </g>
+  </g>
+</svg>
