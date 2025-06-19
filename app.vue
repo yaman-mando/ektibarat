@@ -57,7 +57,7 @@ onMounted(() => {
   clearFirstRegisterDelaySub
     .pipe(mergeMap((val) => of(val).pipe(delay(8000))))
     .subscribe((userId) => {
-      localStorageStore.clearFirstRegister(userId);
+      localStorageStore.clearFirstRegister(userId); 
     });
 });
 

@@ -39,13 +39,15 @@
         class="fa fa-close wvs-close"
         @click="closeModal"
       ></i>
+      <client-only>
       <iframe
-        :src="'https://www.youtube.com/embed/uTcFE0fS2Wc' + '?autoplay=1'"
+        :src="youtubeEmbedUrl"
         frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
         referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen
       ></iframe>
+      </client-only>
     </lazy-prime-dialog>
   </div>
 </template>
@@ -65,6 +67,10 @@ const isOpenModal = ref(false);
 const promotionImageUrl = computed(() =>
   props.isTahsele ? '/images/th.webp' : '/images/no-th.webp'
 );
+ const youtubeEmbedUrl = computed(() => {
+     return 'https://www.youtube.com/embed/uTcFE0fS2Wc?autoplay=1&mute=1';
+  }
+ )
 
 //method
 const onClickImage = () => {

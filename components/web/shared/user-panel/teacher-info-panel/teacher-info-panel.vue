@@ -105,11 +105,12 @@
                       v-else-if="field.key === 'control'"
                       #body="{ data }"
                     >
-                      <div class="flex items-center justify-center gap-1">
+                      
                         <app-button
                           v-if="data.id"
                           size="md"
                           variant="outline"
+                          class="outline-btn action"
                           label="تحليل"
                           @click="toAnalytics(data.studentId)"
                         />
@@ -117,7 +118,9 @@
                           size="sm"
                           variant="clear"
                           colorType="warn"
+                          :noLabel="true"
                           label=""
+                          class="outline-btn trash"
                           iconStartClass="fa fa-trash"
                           @click="toDelete(data.id)"
                         />
@@ -125,13 +128,14 @@
                           v-if="data.phoneNumber"
                           label=""
                           variant="clear"
-                          class="whatsapp"
+                          :noLabel="true"
+                          class="outline-btn whatsapp"
                           iconStartClass="fa fab fa-whatsapp"
                           size="sm"
                           colorType="success"
                           @click="toWhatsApp(data.phoneNumber)"
                         />
-                      </div>
+                      
                     </template>
                   </prime-column>
                 </prime-data-table>

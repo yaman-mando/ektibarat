@@ -45,10 +45,6 @@ const globalStore = useGlobalStore();
 const router = useRouter();
 
 
-onMounted(() => {
-  console.log('mountedBlocker')
-});
-
 //method
 const closeModal = () => {
   globalStore.patchState({ showBlockModal: false });

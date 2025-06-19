@@ -57,7 +57,6 @@ export default {
     }
   },
   mounted() {
-    console.log('surveysIsMounted')
     if (typeof window !== 'undefined') {
       this.initSurvey()
     }

@@ -238,7 +238,7 @@ export default defineNuxtConfig({
       permissionsPolicy: {
         camera: [],
         'display-capture': [],
-        fullscreen: [],
+        fullscreen: ['*'],
         geolocation: [],
         microphone: [],
       },
