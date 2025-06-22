@@ -10,6 +10,7 @@ export {};
 declare module 'vue' {
   export interface GlobalComponents {
     //prime
+    'PrimeDatePicker': (typeof import('primevue/datepicker'))['default'];
     //table
     'PrimeDataTable': (typeof import('primevue/datatable'))['default'];
     'PrimeColumn': (typeof import('primevue/column'))['default'];

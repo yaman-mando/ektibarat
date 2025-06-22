@@ -1,112 +1,114 @@
 <template>
-  <!-- <client-only>
-    <div class="app-dashboard">
-      <!--      <mx-main-hub></mx-main-hub>-->
-      <client-only>
-        <!--        <mx-chat-hub />-->
-      </client-only>
-      <admin-menu />
-      <div
-        id="admin-layout"
-        class="app-nuxt"
-      >
-        <div class="select-global">
-          <span class="_title">التصنيف الرئيسي</span>
-          <select-list
-            v-model:selectedItem="selectedGlobalType"
-            name="التصنيف الرئيسي"
-            :options="globalList"
-            class="sec a"
-            :isMulti="false"
-            :showSelectedItem="true"
-          />
+  <client-only>
+    <vee-validate-provider>
+      <div class="app-dashboard">
+        <!--      <mx-main-hub></mx-main-hub>-->
+        <client-only>
+          <!--        <mx-chat-hub />-->
+        </client-only>
+        <admin-menu />
+        <div
+          id="admin-layout"
+          class="app-nuxt"
+        >
+          <div class="select-global">
+            <span class="_title">التصنيف الرئيسي</span>
+            <select-list
+              v-model:selectedItem="selectedGlobalType"
+              name="التصنيف الرئيسي"
+              :options="globalList"
+              class="sec a"
+              :isMulti="false"
+              :showSelectedItem="true"
+            />
+          </div>
+          <slot></slot>
         </div>
-        <slot></slot>
+
+        <!--    sidebar forms-->
+
+        <!--      TODO-admin sidebars-->
+        <!--      <template v-if="activeFormEmployee">-->
+        <!--        <mx-admin-custom-sidebar-->
+        <!--          :title="-->
+        <!--            appRoute.query[ROUTE_QUERY_ENUM.employeeItemId]-->
+        <!--              ? 'تعديل موظف'-->
+        <!--              : 'إضافة موظف'-->
+        <!--          "-->
+        <!--          :sideBarId="'employee-sidebar'"-->
+        <!--          @onHidden="closeEmployeeForm"-->
+        <!--        >-->
+        <!--          <mx-admin-employee-form @onFinish="onFinishFormEmployee" />-->
+        <!--        </mx-admin-custom-sidebar>-->
+        <!--      </template>-->
+
+        <!--      <template v-if="activeFormCategory">-->
+        <!--        <mx-admin-custom-sidebar-->
+        <!--          :title="-->
+        <!--            appRoute.query[ROUTE_QUERY_ENUM.categoryItemId]-->
+        <!--              ? 'تعديل التصنيف'-->
+        <!--              : 'إضافة تصنيف'-->
+        <!--          "-->
+        <!--          :sideBarId="'category-sidebar'"-->
+        <!--          @onHidden="closeCategoryForm"-->
+        <!--        >-->
+        <!--          <mx-admin-category-form @onFinish="onFinishFormCategory" />-->
+        <!--        </mx-admin-custom-sidebar>-->
+        <!--      </template>-->
+
+        <!--      <template v-if="activeFormLaws">-->
+        <!--        <mx-admin-custom-sidebar-->
+        <!--          :title="-->
+        <!--            appRoute.query[ROUTE_QUERY_ENUM.lawsItemId] ? 'تعديل' : 'إضافة'-->
+        <!--          "-->
+        <!--          :sideBarId="'laws-sidebar'"-->
+        <!--          @onHidden="closeLawsForm"-->
+        <!--        >-->
+        <!--          <laws-form @onFinish="onFinishFormLaws" />-->
+        <!--        </mx-admin-custom-sidebar>-->
+        <!--      </template>-->
+
+        <!--      <template v-if="activeFormLawManage">-->
+        <!--        <mx-admin-custom-sidebar-->
+        <!--          :title="-->
+        <!--            appRoute.query[ROUTE_QUERY_ENUM.lawManageId] ? 'تعديل' : 'إضافة'-->
+        <!--          "-->
+        <!--          :sideBarId="'law-manage-sidebar'"-->
+        <!--          @onHidden="closeLawMangeForm"-->
+        <!--        >-->
+        <!--          <law-manage-form @onFinish="onFinishFormManageLaw" />-->
+        <!--        </mx-admin-custom-sidebar>-->
+        <!--      </template>-->
+
+        <!--      <template v-if="activeFormServiceManage">-->
+        <!--        <mx-admin-custom-sidebar-->
+        <!--          :title="-->
+        <!--            appRoute.query[ROUTE_QUERY_ENUM.serviceManageId] ? 'تعديل' : 'إضافة'-->
+        <!--          "-->
+        <!--          :sideBarId="'service-manage-sidebar'"-->
+        <!--          @onHidden="closeServiceMangeForm"-->
+        <!--        >-->
+        <!--          <service-manage-form @onFinish="onFinishFormManageService" />-->
+        <!--        </mx-admin-custom-sidebar>-->
+        <!--      </template>-->
+
+        <!--      <template v-if="activeFormSubject">-->
+        <!--        <template-->
+        <!--          v-if="-->
+        <!--            $store.state.isSchool != 'false' &&-->
+        <!--            appAuth.user.role == UserRoles.admin-->
+        <!--          "-->
+        <!--        >-->
+        <!--          <mx-admin-add-subject-form-->
+        <!--            :isOpen="isOpenFormSubject"-->
+        <!--            @hideForm="closeSubjectForm"-->
+        <!--          />-->
+        <!--        </template>-->
+        <!--      </template>-->
+        <!--    end sidebar forms-->
       </div>
-
-      <!--    sidebar forms-->
-
-      <!--      TODO-admin sidebars-->
-      <!--      <template v-if="activeFormEmployee">-->
-      <!--        <mx-admin-custom-sidebar-->
-      <!--          :title="-->
-      <!--            appRoute.query[ROUTE_QUERY_ENUM.employeeItemId]-->
-      <!--              ? 'تعديل موظف'-->
-      <!--              : 'إضافة موظف'-->
-      <!--          "-->
-      <!--          :sideBarId="'employee-sidebar'"-->
-      <!--          @onHidden="closeEmployeeForm"-->
-      <!--        >-->
-      <!--          <mx-admin-employee-form @onFinish="onFinishFormEmployee" />-->
-      <!--        </mx-admin-custom-sidebar>-->
-      <!--      </template>-->
-
-      <!--      <template v-if="activeFormCategory">-->
-      <!--        <mx-admin-custom-sidebar-->
-      <!--          :title="-->
-      <!--            appRoute.query[ROUTE_QUERY_ENUM.categoryItemId]-->
-      <!--              ? 'تعديل التصنيف'-->
-      <!--              : 'إضافة تصنيف'-->
-      <!--          "-->
-      <!--          :sideBarId="'category-sidebar'"-->
-      <!--          @onHidden="closeCategoryForm"-->
-      <!--        >-->
-      <!--          <mx-admin-category-form @onFinish="onFinishFormCategory" />-->
-      <!--        </mx-admin-custom-sidebar>-->
-      <!--      </template>-->
-
-      <!--      <template v-if="activeFormLaws">-->
-      <!--        <mx-admin-custom-sidebar-->
-      <!--          :title="-->
-      <!--            appRoute.query[ROUTE_QUERY_ENUM.lawsItemId] ? 'تعديل' : 'إضافة'-->
-      <!--          "-->
-      <!--          :sideBarId="'laws-sidebar'"-->
-      <!--          @onHidden="closeLawsForm"-->
-      <!--        >-->
-      <!--          <laws-form @onFinish="onFinishFormLaws" />-->
-      <!--        </mx-admin-custom-sidebar>-->
-      <!--      </template>-->
-
-      <!--      <template v-if="activeFormLawManage">-->
-      <!--        <mx-admin-custom-sidebar-->
-      <!--          :title="-->
-      <!--            appRoute.query[ROUTE_QUERY_ENUM.lawManageId] ? 'تعديل' : 'إضافة'-->
-      <!--          "-->
-      <!--          :sideBarId="'law-manage-sidebar'"-->
-      <!--          @onHidden="closeLawMangeForm"-->
-      <!--        >-->
-      <!--          <law-manage-form @onFinish="onFinishFormManageLaw" />-->
-      <!--        </mx-admin-custom-sidebar>-->
-      <!--      </template>-->
-
-      <!--      <template v-if="activeFormServiceManage">-->
-      <!--        <mx-admin-custom-sidebar-->
-      <!--          :title="-->
-      <!--            appRoute.query[ROUTE_QUERY_ENUM.serviceManageId] ? 'تعديل' : 'إضافة'-->
-      <!--          "-->
-      <!--          :sideBarId="'service-manage-sidebar'"-->
-      <!--          @onHidden="closeServiceMangeForm"-->
-      <!--        >-->
-      <!--          <service-manage-form @onFinish="onFinishFormManageService" />-->
-      <!--        </mx-admin-custom-sidebar>-->
-      <!--      </template>-->
-
-      <!--      <template v-if="activeFormSubject">-->
-      <!--        <template-->
-      <!--          v-if="-->
-      <!--            $store.state.isSchool != 'false' &&-->
-      <!--            appAuth.user.role == UserRoles.admin-->
-      <!--          "-->
-      <!--        >-->
-      <!--          <mx-admin-add-subject-form-->
-      <!--            :isOpen="isOpenFormSubject"-->
-      <!--            @hideForm="closeSubjectForm"-->
-      <!--          />-->
-      <!--        </template>-->
-      <!--      </template>-->
-      <!--    end sidebar forms-->
-    </div>
-  </client-only> -->
+    </vee-validate-provider>
+  </client-only>
 </template>
 <script lang="ts">
 import { useStore } from 'vuex';
@@ -454,8 +456,8 @@ export default {
     },
   },
 };
-</script> -->
-<!-- <style lang="scss">
+</script>
+<style lang="scss">
 @import '@/assets/scss/style.scss';
 
 * {
@@ -518,4 +520,4 @@ html {
 body {
   --keyboard-zindex: 1050;
 }
-</style> -->
+</style>

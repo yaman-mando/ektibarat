@@ -98,8 +98,8 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
-      include: ['lamejs']
-    }
+      include: ['lamejs'],
+    },
   },
   modules: [
     '@pinia/nuxt',
@@ -116,6 +116,7 @@ export default defineNuxtConfig({
     components: {
       prefix: 'Prime',
       include: [
+        'DatePicker',
         //table
         'DataTable',
         'Column',

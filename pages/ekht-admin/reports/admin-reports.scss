@@ -1,0 +1,79 @@
+@import '@/assets/scss/mixin';
+
+.admin-reports-page {
+  .re-wrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid var(--gray-1a);
+  }
+
+  .trainings-report {
+    margin: 15px 0 50px;
+    .__title {
+      font-size: 20px;
+      color: var(--purple-8c);
+      font-weight: bold;
+    }
+    .__filter {
+      display: flex;
+      align-items: center;
+      column-gap: 15px;
+      margin-top: 15px;
+      .count-input {
+        box-shadow: none;
+        width: 200px;
+      }
+
+      @include normal-btn() {
+        color: white;
+        height: 38px;
+      }
+    }
+
+    .no-data {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+      span {
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+
+    .trainings-report {
+      thead {
+        tr {
+          text-align: center;
+          th {
+            vertical-align: middle;
+          }
+        }
+      }
+      tbody {
+        td {
+          text-align: center;
+          &.control {
+            display: flex;
+            min-width: 540px;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            .block {
+              background: var(--green-8c);
+              border: none;
+              margin-inline-end: 15px;
+              &.isBlocked {
+                background: var(--red-5e);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
