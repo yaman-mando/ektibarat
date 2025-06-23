@@ -240,11 +240,12 @@ export class RouteHelper {
   static userPanelSubscriptions() {
     return `/user-panel?page=subscriptionList`;
   }
-
+  static userPanelAnalytics() {
+    return `/user-panel?page=analytics`;
+  }
   static webPrices() {
     return `/${APP_ROUTES.web.prices.root}`;
   }
-
   static webExamQuestionDetailById(id) {
     return `/exam-questions/${id}`;
   }

@@ -124,6 +124,10 @@
                 <training-button :buttonStyle="TrainingButtonType.normal" />
               </div>
 
+              <div class="exams-btn">
+                <button @click="toUserDashboard">لوحة الطالب</button>
+              </div>
+
               <div class="action-list">
                 <template
                   v-for="item in listItemModel"
@@ -1655,6 +1659,12 @@ export default {
           page: UserPanelItemsRecord[UserPanelItems.exams],
         },
       });
+    },
+
+    toUserDashboard(){
+      this.appRouter.push({
+        path:'/user-dashboard/foundation'
+      })
     },
 
     checkNotification() {

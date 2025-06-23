@@ -88,6 +88,12 @@ export const APP_ROUTES = {
       show: 'show',
     },
   },
+  userDashboard:{
+    root:'user-dashboard',
+    foundations:{
+      root:'foundations'
+    }
+  }
 };
 
 export const EXAM_QUESTIONS_ROUTES = {
@@ -1178,6 +1184,17 @@ export const all_routers = [
     allowEmployee: true,
     allowUser: true,
     isAuth: false,
+  },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.foundations.root}`,
+    name: 'user-foundation',  
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowUser: false,
+    isPublic: false,
+    isAuth: true,
   },
 ];
 
