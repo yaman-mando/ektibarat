@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$colorMode === 'dark' ? 'dark' : '', 'min-h-screen flex flex-col']">
+  <div :class="[colorMode.preference === 'dark' ? 'dark' : '', 'min-h-screen flex flex-col']">
 
     <!-- sidebar button in mobile -->
     <button @click="isSidebarOpen = !isSidebarOpen"
@@ -10,8 +10,7 @@
     <div class="flex flex-1">
       <!-- Sidebar -->
       <transition name="slide">
-        <aside v-show="isSidebarOpen || isDesktop"
-          class="w-64 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 fixed md:relative z-40 h-full md:h-auto">
+        <aside v-show="isSidebarOpen || isDesktop" class="fixed md:relative z-40 h-full md:h-auto">
           <userSidebar />
         </aside>
       </transition>
@@ -22,28 +21,26 @@
         @click="isSidebarOpen = false"></div>
 
 
-      <div class="flex-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-4 ml-0 md:ml-64">
+      <div class="flex-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-[40px] py-[30px] ml-0">
 
 
         <div class="flex justify-between items-center flex-wrap gap-4 mb-6">
 
           <div class="flex items-center">
-              <slot name="top-right"></slot>
-            </div>
+            <slot name="top-right"></slot>
+          </div>
 
-          <div class="flex items-center just gap-4">
-            <div class="flex items-center gap-1">
-              <img src="/images/svg/star-orange.svg" alt="icon" class="w-5 h-5" />
-              <span>2,849</span>
+          <div class="flex items-center w-[300px] gap-x-[20px]">
+            <div class="flex items-center gap-x-[8px]">
+              <img src="/images/svg/star-orange.svg" alt="icon" class="w-[24px] h-auto" />
+              <span class="text-[20px] font-bold text-blue-f7">2,849</span>
             </div>
-            <div class="flex items-center gap-1">
-              <img src="/images/svg/fire.svg" alt="icon" class="w-5 h-5" />
-              <span>7</span>
+            <div class="flex items-center gap-x-[8px]">
+              <img src="/images/svg/fire.svg" alt="icon" class="w-[16px] h-auto" />
+              <span class="text-[20px] font-bold text-orange-39">7</span>
             </div>
-            <select class="p-2 border rounded bg-white dark:bg-gray-700 dark:text-white">
-              <option>قدرات</option>
-              <option>تحصيلي</option>
-            </select>
+            <appDropdown v-model="selectedGlobal" top-label="تغيير الاختبار" :options="globalOptions"
+              @select="handleSelectGlobal" />
           </div>
 
 
@@ -57,16 +54,18 @@
 
     <!-- dark light button -->
     <button @click="toggleDarkMode"
-      class="fixed bottom-4 left-4 bg-gray-700 text-white p-2 rounded-full shadow-md hover:bg-gray-600 z-50">
-      {{ $colorMode === 'dark' ? '🌙' : '☀️' }}
+      class="fixed bottom-4 left-4 bg-gray-700 text-white p-2 rounded-full shadow-md hover:bg-gray-600 z-50 cursor-pointer">
+      {{ colorMode.preference === 'dark' ? '🌙' : '☀️' }}
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useColorMode } from '@vueuse/core'
 import { ref, onMounted } from 'vue'
 import userSidebar from '@/components/user/userSidebar.vue'
+import appDropdown from '@/components/shared/app-dropdown.vue'
+import { useUserPanelStore } from '~/store/user-panel';
+import {globalSubList } from '~/main/modules/user-panel/data-access/user-panel.enum';
 
 useHead({
   htmlAttrs: {
@@ -75,15 +74,27 @@ useHead({
   },
 });
 
-const $colorMode = useColorMode()
+const colorMode = useColorMode()
+const userPanelStore = useUserPanelStore()
 const isSidebarOpen = ref(false)
 const isDesktop = ref(false)
 
-function toggleDarkMode() {
-  $colorMode.value = $colorMode.value === 'dark' ? 'light' : 'dark'
+
+//enums
+const globalOptions = globalSubList
+
+const selectedGlobal = ref(globalOptions[0])
+
+const handleSelectGlobal = (item) => {
+  selectedGlobal.value = item
+  userPanelStore.setGlobalType(item.value)
 }
 
-// تحديث حالة الجهاز (موبايل أو سطح مكتب)
+function toggleDarkMode() {
+  colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark'
+}
+
+
 onMounted(() => {
   const checkScreen = () => {
     isDesktop.value = window.innerWidth >= 768
@@ -92,6 +103,11 @@ onMounted(() => {
 
   checkScreen()
   window.addEventListener('resize', checkScreen)
+
+  if (import.meta.client) {
+    userPanelStore.loadGlobalTypeFromStorage()
+    selectedGlobal.value = globalOptions.find(opt => opt.value === userPanelStore.globalType) || globalOptions[0]
+  }
 })
 </script>
 
@@ -102,7 +118,7 @@ onMounted(() => {
 @import '@/assets/scss/main.scss';
 
 
-/* انتقال جانبي للقائمة */
+
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.3s ease;

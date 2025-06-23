@@ -1,79 +1,30 @@
 <template>
   <div class="web-header-container">
-    <header
-      v-if="windowSize.isMobileSize"
-      class="web-header hide-from-tablet"
-    >
+    <header v-if="windowSize.isMobileSize" class="web-header hide-from-tablet">
       <span @click="toggleMenu">
         <i class="em-icon-Group-3396"></i>
       </span>
       <nuxt-link to="/">
-        <nuxt-img
-          style="cursor: pointer"
-          width="126px"
-          height="40px"
-          src="/images/EkhtibaratLogoColor.webp"
-          alt="شعار اختبارات - منصة الاختبارات الإلكترونية"
-          title="شعار منصة اختبارات - اختبارات إلكترونية متنوعة"
-          loading="lazy"
-          format="webp"
-          quality="80"
-          class="logo"
-        />
+        <nuxt-img style="cursor: pointer" width="126px" height="40px" src="/images/EkhtibaratLogoColor.webp"
+          alt="شعار اختبارات - منصة الاختبارات الإلكترونية" title="شعار منصة اختبارات - اختبارات إلكترونية متنوعة"
+          loading="lazy" format="webp" quality="80" class="logo" />
       </nuxt-link>
 
-      <lazy-app-button
-        v-if="!isLoggedIn && !isLoadingProfile"
-        variant="clear"
-        label="الدخول"
-        size="sm"
-        :isDisabled="authState.loading.value"
-        :isLoading="authStore.state.isLoadingProfile"
-        @click="onLoginClick"
-      />
-      <div
-        v-else
-        class="actions"
-      >
+      <lazy-app-button v-if="!isLoggedIn && !isLoadingProfile" variant="clear" label="الدخول" size="sm"
+        :isDisabled="authState.loading.value" :isLoading="authStore.state.isLoadingProfile" @click="onLoginClick" />
+      <div v-else class="actions">
         <div class="drop-menu">
-          <div
-            class="profile"
-            @click="openList()"
-          >
-            <div
-              v-if="isLoggedIn"
-              data-toggle="tooltip"
-              data-placement="top"
-            >
-              <custom-image
-                :folderName="imagesFolderName.Users"
-                :url="userData.pictureUrl"
-                :size="imagesSize.xs"
-                :ext="imageExt.jpg"
-                width="40"
-                height="40"
-                radius="50%"
-              />
+          <div class="profile" @click="openList()">
+            <div v-if="isLoggedIn" data-toggle="tooltip" data-placement="top">
+              <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
+                :ext="imageExt.jpg" width="40" height="40" radius="50%" />
             </div>
           </div>
-          <div
-            v-if="showList"
-            ref="dropDown"
-            class="dropdown"
-            tabindex="-1"
-            @blur.self="hideList"
-          >
+          <div v-if="showList" ref="dropDown" class="dropdown" tabindex="-1" @blur.self="hideList">
             <div class="dropdown-menu">
               <div class="rw-info">
-                <custom-image
-                  :folderName="imagesFolderName.Users"
-                  :url="userData.pictureUrl"
-                  :size="imagesSize.xs"
-                  :ext="imageExt.jpg"
-                  width="76"
-                  height="76"
-                  radius="50%"
-                />
+                <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
+                  :ext="imageExt.jpg" width="76" height="76" radius="50%" />
                 <span class="full-name">
                   <template v-if="userData.firstName || userData.lastName">
                     {{ userData.firstName + ' ' + userData.lastName }}
@@ -81,60 +32,33 @@
                 </span>
               </div>
 
-              <custom-switch
-                v-model:active="selectedGlobalType"
-                :rightLabel="'قدرات'"
-                :leftLabel="'تحصيلي'"
-                :isSm="true"
-              />
+              <custom-switch v-model:active="selectedGlobalType" :rightLabel="'قدرات'" :leftLabel="'تحصيلي'"
+                :isSm="true" />
               <div class="am-actions">
                 <training-button :buttonStyle="TrainingButtonType.withRadius" />
               </div>
               <ul style="cursor: pointer">
                 <template v-for="item in listItemModel">
-                  <li
-                    v-if="allowShowItem(item)"
-                    :key="item.id"
-                    class="dropdown-item"
-                    :class="[
-                      { active: activeList === item.id },
-                      {
-                        'is-red':
-                          item.id === userPanelItems.teachers ||
-                          item.id === userPanelItems.teacherPanel,
-                      },
-                    ]"
-                    @click="goPanelPart(item.id)"
-                  >
-                    <img
-                      width="20"
-                      :src="`/images/icons/menu/${item.icon}.svg`"
-                      :alt="item.icon"
-                    />
+                  <li v-if="allowShowItem(item)" :key="item.id" class="dropdown-item" :class="[
+                    { active: activeList === item.id },
+                    {
+                      'is-red':
+                        item.id === userPanelItems.teachers ||
+                        item.id === userPanelItems.teacherPanel,
+                    },
+                  ]" @click="goPanelPart(item.id)">
+                    <img width="20" :src="`/images/icons/menu/${item.icon}.svg`" :alt="item.icon" />
                     <span class="text">{{ item.label }}</span>
-                    <span
-                      v-if="item.badgeLabel"
-                      class="r-part__badge"
-                    >
+                    <span v-if="item.badgeLabel" class="r-part__badge">
                       {{ item.badgeLabel }}
                     </span>
-                    <div
-                      v-if="item.id == 7 && notificationCount > 0"
-                      class="c-notification"
-                    >
+                    <div v-if="item.id == 7 && notificationCount > 0" class="c-notification">
                       <span>{{ notificationCount }}</span>
                     </div>
                   </li>
                 </template>
-                <li
-                  class="dropdown-item"
-                  @click="logout()"
-                >
-                  <img
-                    width="20"
-                    src="/images/icons/menu/signout.svg"
-                    alt="signout"
-                  />
+                <li class="dropdown-item" @click="logout()">
+                  <img width="20" src="/images/icons/menu/signout.svg" alt="signout" />
                   <span class="text logout">تسجيل خروج</span>
                 </li>
               </ul>
@@ -143,39 +67,23 @@
         </div>
       </div>
     </header>
-    <header
-      v-else
-      class="web-header hide-to-tablet"
-    >
+    <header v-else class="web-header hide-to-tablet">
       <div class="logo-items">
         <nuxt-link to="/">
-          <img
-            width="190px"
-            height="60px"
-            style="cursor: pointer"
-            src="/images/EkhtibaratLogoColor.webp"
-            alt="اختبارات"
-          />
+          <img width="190px" height="60px" style="cursor: pointer" src="/images/EkhtibaratLogoColor.webp"
+            alt="اختبارات" />
         </nuxt-link>
 
         <ul class="menu-items">
-          <li
-            @click="
-              toPath('/');
-              openSubMenu(null);
-            "
-          >
+          <li @click="
+            toPath('/');
+          openSubMenu(null);
+          ">
             الرئيسية
           </li>
           <li @click="openSubMenu(2)">
             المسارات
-            <div
-              v-if="activeSub == 2"
-              ref="subMenu"
-              class="sub-menu"
-              tabindex="-1"
-              @blur.prevent="hideSubMenu"
-            >
+            <div v-if="activeSub == 2" ref="subMenu" class="sub-menu" tabindex="-1" @blur.prevent="hideSubMenu">
               <nuxt-link :to="webPathKudratPathUtil()">
                 <span class="sub-item">القدرات</span>
               </nuxt-link>
@@ -193,12 +101,10 @@
             <li @click="openSubMenu(null)">الأسئلة الشائعة</li>
           </nuxt-link>
 
-          <li
-            @click="
-              openSubMenu(null);
-              toPath('/blog');
-            "
-          >
+          <li @click="
+            openSubMenu(null);
+          toPath('/blog');
+          ">
             المدونة
           </li>
           <nuxt-link :to="webPricesPathUtil()">
@@ -206,138 +112,68 @@
           </nuxt-link>
         </ul>
       </div>
-      <div
-        v-if="!isLoggedIn && !isLoadingProfile"
-        class="actions"
-      >
-        <button
-          class="normal-btn"
-          @click="onLoginClick"
-        >
+      <div v-if="!isLoggedIn && !isLoadingProfile" class="actions">
+        <button class="normal-btn" @click="onLoginClick">
           الدخول
         </button>
       </div>
-      <div
-        v-else
-        class="actions"
-      >
+      <div v-else class="actions">
         <div class="user-part">
-          <button
-            class="normal-btn"
-            @click="goPanelPart(userPanelItems.learningPanel)"
-          >
+          <button class="normal-btn" @click="goPanelPart(userPanelItems.learningPanel)">
             لوحتي التعليمية
           </button>
           <div class="drop-menu">
-            <div
-              class="profile"
-              @click="openList('sm')"
-            >
-              <div
-                v-if="userData && userData"
-                data-toggle="tooltip"
-                data-placement="top"
-              >
-                <custom-image
-                  :folderName="imagesFolderName.Users"
-                  :url="userData.pictureUrl"
-                  :size="imagesSize.xs"
-                  :ext="imageExt.jpg"
-                  width="40"
-                  height="40"
-                  radius="50%"
-                />
+            <div class="profile" @click="openList('sm')">
+              <div v-if="userData && userData" data-toggle="tooltip" data-placement="top">
+                <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
+                  :ext="imageExt.jpg" width="40" height="40" radius="50%" />
               </div>
-              <span
-                v-if="isLoggedIn"
-                class="name"
-              >
+              <span v-if="isLoggedIn" class="name">
                 <template v-if="userData.firstName">
                   {{ userData.firstName }}
                 </template>
               </span>
               <i class="fa fa-chevron-down"></i>
             </div>
-            <div
-              v-if="showList"
-              ref="dropDownSm"
-              class="dropdown"
-              tabindex="-1"
-              @blur.self="hideList"
-            >
+            <div v-if="showList" ref="dropDownSm" class="dropdown" tabindex="-1" @blur.self="hideList">
               <div class="dropdown-menu">
                 <div class="rw-info">
-                  <custom-image
-                    :folderName="imagesFolderName.Users"
-                    :url="userData.pictureUrl"
-                    :size="imagesSize.xs"
-                    :ext="imageExt.jpg"
-                    width="76"
-                    height="76"
-                    radius="50%"
-                  />
+                  <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
+                    :ext="imageExt.jpg" width="76" height="76" radius="50%" />
                   <span class="full-name">
                     <template v-if="userData.firstName || userData.lastName">
                       {{ userData.firstName + ' ' + userData.lastName }}
                     </template>
                   </span>
                 </div>
-                <nuxt-link
-                  v-if="isEmployee"
-                  :to="adminQuestionsListPath()"
-                >
+                <nuxt-link v-if="isEmployee" :to="adminQuestionsListPath()">
                   <span class="normal-btn">لوحة التحكم</span>
                 </nuxt-link>
                 <div class="am-actions">
-                  <training-button
-                    :buttonStyle="TrainingButtonType.withRadius"
-                  />
+                  <training-button :buttonStyle="TrainingButtonType.withRadius" />
                 </div>
                 <ul style="cursor: pointer">
                   <template v-for="item in listItemModel">
-                    <li
-                      v-if="allowShowItem(item)"
-                      :key="item.id"
-                      class="dropdown-item"
-                      :class="[
-                        { active: activeList === item.id },
-                        {
-                          'is-red':
-                            item.id === userPanelItems.teachers ||
-                            item.id === userPanelItems.teacherPanel,
-                        },
-                      ]"
-                      @click="goPanelPart(item.id)"
-                    >
-                      <img
-                        width="20"
-                        :src="`/images/icons/menu/${item.icon}.svg`"
-                        :alt="item.icon"
-                      />
+                    <li v-if="allowShowItem(item)" :key="item.id" class="dropdown-item" :class="[
+                      { active: activeList === item.id },
+                      {
+                        'is-red':
+                          item.id === userPanelItems.teachers ||
+                          item.id === userPanelItems.teacherPanel,
+                      },
+                    ]" @click="goPanelPart(item.id)">
+                      <img width="20" :src="`/images/icons/menu/${item.icon}.svg`" :alt="item.icon" />
                       <span class="text">{{ item.label }}</span>
-                      <span
-                        v-if="item.badgeLabel"
-                        class="r-part__badge"
-                      >
+                      <span v-if="item.badgeLabel" class="r-part__badge">
                         {{ item.badgeLabel }}
                       </span>
-                      <div
-                        v-if="item.id == 7 && notificationCount > 0"
-                        class="c-notification"
-                      >
+                      <div v-if="item.id == 7 && notificationCount > 0" class="c-notification">
                         <span>{{ notificationCount }}</span>
                       </div>
                     </li>
                   </template>
-                  <li
-                    class="dropdown-item"
-                    @click="logout()"
-                  >
-                    <img
-                      width="20"
-                      src="/images/icons/menu/signout.svg"
-                      alt="signout"
-                    />
+                  <li class="dropdown-item" @click="logout()">
+                    <img width="20" src="/images/icons/menu/signout.svg" alt="signout" />
                     <span class="text logout">تسجيل خروج</span>
                   </li>
                 </ul>
@@ -349,79 +185,37 @@
     </header>
 
     <client-only>
-      <div
-        class="rw-responsive-menu"
-        :class="{ 'is-open': openMenu }"
-      >
-        <div
-          ref="responsiveMenu"
-          class="responsive-menu"
-          :class="{ 'is-open': openMenu }"
-          tabindex="-1"
-          @blur="openMenu = false"
-        >
+      <div class="rw-responsive-menu" :class="{ 'is-open': openMenu }">
+        <div ref="responsiveMenu" class="responsive-menu" :class="{ 'is-open': openMenu }" tabindex="-1"
+          @blur="openMenu = false">
           <div class="menu-head">
-            <i
-              class="fa fa-close close-button"
-              @click="openMenu = false"
-            ></i>
+            <i class="fa fa-close close-button" @click="openMenu = false"></i>
             <div class="e-logo">
               <nuxt-link to="/">
-                <img
-                  width="126px"
-                  height="40px"
-                  src="/images/EkhtibaratLogoWhite.webp"
-                  alt="اختبارات"
-                />
+                <img width="126px" height="40px" src="/images/EkhtibaratLogoWhite.webp" alt="اختبارات" />
               </nuxt-link>
             </div>
           </div>
           <div class="menu">
-            <div
-              v-for="(item, index) of menu2"
-              :key="item.name"
-              class="menu-item"
-              :class="[
-                { active: currentRoute == item.href },
-                { 'is-open': activeCollapse.includes(index) },
-              ]"
-              @click="toPath(item.href)"
-            >
-              <div
-                class="menu-main"
-                @click="item.hasChild ? openCollapse(index) : ''"
-              >
+            <div v-for="(item, index) of menu2" :key="item.name" class="menu-item" :class="[
+              { active: currentRoute == item.href },
+              { 'is-open': activeCollapse.includes(index) },
+            ]" @click="toPath(item.href)">
+              <div class="menu-main" @click="item.hasChild ? openCollapse(index) : ''">
                 <div class="r-part">
-                  <i
-                    v-if="item.iconClass"
-                    :class="item.iconClass"
-                  ></i>
+                  <i v-if="item.iconClass" :class="item.iconClass"></i>
                   <span class="name">{{ item.name }}</span>
                 </div>
-                <div
-                  v-if="item.hasChild"
-                  class="l-part"
-                >
-                  <i
-                    class="fa"
-                    :class="
-                      activeCollapse.includes(index)
-                        ? 'fa-chevron-up'
-                        : 'fa-chevron-down'
-                    "
-                  ></i>
+                <div v-if="item.hasChild" class="l-part">
+                  <i class="fa" :class="activeCollapse.includes(index)
+                      ? 'fa-chevron-up'
+                      : 'fa-chevron-down'
+                    "></i>
                 </div>
               </div>
-              <div
-                v-if="item.hasChild && activeCollapse.includes(index)"
-                class="menu-child"
-              >
-                <div
-                  v-for="childItem of item.child"
-                  :key="childItem.href"
-                  class="child-item"
-                  @click="toPath(childItem.href)"
-                >
+              <div v-if="item.hasChild && activeCollapse.includes(index)" class="menu-child">
+                <div v-for="childItem of item.child" :key="childItem.href" class="child-item"
+                  @click="toPath(childItem.href)">
                   <span class="name">
                     {{ childItem.name }}
                   </span>
@@ -430,12 +224,8 @@
             </div>
           </div>
           <div class="pt-3 flex justify-center">
-            <custom-switch
-              v-model:active="selectedGlobalType"
-              :rightLabel="'قدرات'"
-              :leftLabel="'تحصيلي'"
-              :isSm="true"
-            />
+            <custom-switch v-model:active="selectedGlobalType" :rightLabel="'قدرات'" :leftLabel="'تحصيلي'"
+              :isSm="true" />
           </div>
         </div>
       </div>
@@ -726,6 +516,7 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
   background: white;
   box-shadow: 0 0 15px #00000033;
   z-index: 999;
+
   .web-header {
     padding: 20px 40px;
     display: flex;
@@ -777,6 +568,7 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
         column-gap: 25px;
         grid-template-columns: 145px minmax(30px, 1fr);
       }
+
       .profile {
         display: grid;
         align-items: center;
@@ -784,23 +576,27 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
         column-gap: 10px;
         grid-template-columns: 40px auto auto;
         cursor: pointer;
+
         .name {
           font-size: 18px;
           font-weight: bold;
           color: var(--purple-c2);
           text-align: center;
         }
+
         i {
           font-size: 16px;
           color: var(--purple-c2);
         }
       }
+
       .dropdown {
         outline: none;
         position: fixed;
         top: 80px;
         left: calc((100vw - 1370px) / 2);
         width: 280px;
+
         .dropdown-menu {
           background-color: #fff;
           width: 280px;
@@ -812,32 +608,38 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
           justify-content: normal;
           justify-items: center;
           row-gap: 15px;
+
           .normal-btn {
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
           }
+
           .rw-info {
             display: grid;
             row-gap: 5px;
             justify-items: center;
+
             .full-name {
               font-size: 18px;
               font-weight: bold;
               color: var(--purple-8c);
               text-align: center;
             }
+
             .mail {
               font-size: 14px;
               color: var(--gray-63);
               text-align: center;
             }
           }
+
           ul {
             width: 100%;
             padding: 0;
             margin: 0;
+
             li {
               display: grid;
               grid-template-columns: 20px auto;
@@ -847,6 +649,7 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
               padding: 10px 15px;
               border-top: 1px solid #a5a9b1;
               position: relative;
+
               .c-notification {
                 position: absolute;
                 right: 120px;
@@ -857,35 +660,43 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
                 align-items: center;
                 justify-content: center;
                 height: 20px;
+
                 span {
                   font-size: 13px;
                   color: white;
                   font-weight: bold;
                 }
               }
+
               &:last-child {
                 border-bottom: 1px solid #a5a9b1;
               }
+
               .text {
                 font-size: 16px;
                 color: var(--purple-8c);
                 line-height: 20px;
                 font-weight: 500;
               }
+
               &.is-red {
                 .text {
                   color: var(--red-5e);
                 }
               }
+
               &:active {
                 background-color: white;
               }
+
               &.active {
                 background: var(--purple-8c);
                 transform: scale(1.015);
+
                 .text {
                   color: white;
                 }
+
                 img {
                   filter: brightness(0) invert(1);
                 }
@@ -894,16 +705,19 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
           }
         }
       }
+
       .login {
         font-size: 13px;
         font-weight: bold;
         color: var(--purple-8c);
         cursor: pointer;
+
         @keyframes pulse {
           0% {
             box-shadow: 0 0 0 0 var(--purple-8d);
           }
         }
+
         &:hover,
         &:focus,
         &:active {
@@ -925,6 +739,7 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
       display: grid;
       row-gap: 20px;
       cursor: default;
+
       .sub-item {
         font-size: 16px;
         color: var(--purple-8c);
@@ -932,10 +747,12 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
         display: flex;
         align-items: center;
         cursor: pointer;
+
         &.not-active {
           pointer-events: none;
           color: var(--gray-63);
         }
+
         .note {
           color: var(--red-5e);
           font-weight: 500;
@@ -955,10 +772,12 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
 
     @include lg-down() {
       padding: 20px;
+
       .actions {
         .user-part {
           column-gap: 5px;
         }
+
         .dropdown {
           left: 10px;
         }
@@ -968,19 +787,23 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
     @include tablet-down() {
       padding: 15px 23px 15px 15px;
       height: 70px;
+
       i {
         font-size: 20px;
         color: var(--purple-8c);
         cursor: pointer;
         font-weight: bold;
       }
+
       img.logo {
         width: 126px;
       }
+
       .actions {
         .profile {
           grid-template-columns: 1fr;
         }
+
         .dropdown {
           left: 15px;
           top: 65px;
@@ -988,6 +811,7 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
       }
     }
   }
+
   .responsive-menu {
     position: fixed;
     transition: all 0.4s ease-in-out;
@@ -1000,15 +824,18 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
     width: 240px;
     height: 100%;
     top: 0;
+
     &.is-open {
       visibility: visible;
       transform: translateX(0) !important;
       opacity: 1;
     }
+
     .menu-head {
       width: 100%;
       padding: 20px;
       background: var(--purple-8c);
+
       .close-button {
         position: absolute;
         left: 15px;
@@ -1017,18 +844,22 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
         font-size: 12px;
         cursor: pointer;
       }
+
       .e-logo {
         display: flex;
         align-items: center;
         justify-content: center;
+
         img {
           width: 126px;
         }
       }
     }
+
     .menu {
       padding-top: 4px;
       display: grid;
+
       .menu-item {
         .menu-main {
           display: flex;
@@ -1036,20 +867,24 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
           justify-content: space-between;
           padding: 12px 15px;
           cursor: pointer;
+
           .r-part {
             display: grid;
             align-items: center;
             grid-template-columns: 14px auto;
             column-gap: 8px;
             color: var(--purple-8c);
+
             i {
               font-size: 13px;
             }
+
             .name {
               font-size: 12px;
               //font-family: 'DroidArabicKufi' !important;
             }
           }
+
           .l-part {
             i {
               color: var(--purple-8c);
@@ -1057,15 +892,19 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
             }
           }
         }
+
         .menu-child {
           background: white;
           padding-top: 3px;
+
           .child-item {
             cursor: pointer;
             padding: 0 15px 12px;
+
             &:last-child {
               padding-bottom: 0;
             }
+
             .name {
               font-size: 11px;
               //font-family: 'DroidArabicKufi' !important;
@@ -1073,18 +912,22 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
             }
           }
         }
+
         &.active,
         &.is-open {
           .menu-main {
             background: white;
+
             .r-part {
               i {
                 color: var(--purple-8c);
               }
+
               .name {
                 color: var(--purple-8c);
               }
             }
+
             .l-part {
               i {
                 color: var(--purple-8c);
@@ -1095,6 +938,7 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
       }
     }
   }
+
   .rw-responsive-menu {
     &::before {
       content: '';
@@ -1105,6 +949,7 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
       bottom: 0;
       right: -1000;
     }
+
     &.is-open::before {
       right: 0;
     }
@@ -1115,11 +960,13 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
     //grid-template-columns: 1fr 1fr;
     grid-gap: 10px;
     justify-content: center;
+
     .am-button {
       height: 40px;
       width: 120px;
       border-radius: 20px;
       justify-content: flex-start;
+
       ::v-deep {
         .app-button-icon {
           position: relative;
@@ -1127,6 +974,7 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
           font-size: 13px;
           margin-inline-start: 5px;
         }
+
         .app-button-label {
           margin-inline-start: 15px;
           font-size: 14px;

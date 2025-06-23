@@ -109,7 +109,12 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/eslint',
     '@vueuse/nuxt',
+    '@nuxtjs/color-mode',
+    '@nuxtjs/tailwindcss'
   ],
+   colorMode: {
+    classSuffix: '', 
+  },
   primevue: {
     usePrimeVue: true,
     autoImport: false,

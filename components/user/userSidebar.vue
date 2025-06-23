@@ -1,24 +1,23 @@
 <template>
-  <aside class="w-64 min-h-screen bg-white dark:bg-gray-900 shadow flex flex-col justify-between">
+  <aside
+    class="user-side-bar pt-[35px] pb-[25px] w-[260px] min-h-screen bg-white dark:bg-dark-37 shadow flex flex-col justify-between">
     <!-- logo -->
-    <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-      <img src="/images/EkhtibaratLogoColor.png" alt="شعار" class="w-40 mx-auto" />
+    <div>
+      <img src="/images/EkhtibaratLogoColor.png" alt="شعار" class="w-[190px] mx-auto block dark:hidden" />
+      <img src="/images/EkhtibaratLogoWhite.png" alt="شعار" class="w-[190px] mx-auto hidden dark:block" />
     </div>
 
     <!-- menu items -->
-    <nav class="flex-1 p-4 space-y-2">
-      <ul class="space-y-1">
+    <nav class="flex-1 p-[15px] mt-[35px]">
+      <ul class="space-y-1 gap-y-[10px] grid">
         <li v-for="item in menuItems" :key="item.name">
-          <router-link
-            :to="item.route"
-            class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-            active-class="bg-gray-100 dark:bg-gray-800 text-blue-600"
-          >
-            <img
-              :src="item.icon"
-              alt="icon"
-              class="w-5 h-5"
-            />
+          <router-link :to="item.route" :class="[
+            'text-[20px] h-[50px] flex items-center gap-2 font-medium p-2 transition dark:hover:text-dark-44 hover:bg-pink-ff',
+            route.path === item.route
+              ? 'bg-pink-ff border border-purple-e0 rounded-lg text-dark-44 dark:text-dark-44'
+              : 'text-dark-44 dark:text-white'
+          ]">
+            <img :src="item.icon" alt="icon" class="" />
             <span>{{ item.name }}</span>
           </router-link>
         </li>
@@ -26,22 +25,13 @@
     </nav>
 
     <!-- user list -->
-    <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+    <div class="px-[15px] dark:border-gray-700 flex items-center justify-between cursor-pointer">
       <div class="flex items-center gap-3">
-         <custom-image
-                :folderName="imagesFolderName.Users"
-                :url="userData?.pictureUrl"
-                :size="imagesSize.xs"
-                :ext="imageExt.jpg"
-                width="40"
-                height="40"
-                radius="50%"
-              />
-        <span class="text-sm text-gray-700 dark:text-gray-200 font-semibold">حسابي</span>
+        <custom-image :folderName="imagesFolderName.Users" :url="userData?.pictureUrl" :size="imagesSize.xs"
+          :ext="imageExt.jpg" width="40" height="40" radius="50%" />
+        <span class="text-[18px] font-bold text-purple-e0 dark:text-gray-200">حسابي</span>
       </div>
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
+      <i class="fa fa-chevron-left text-purple-e0 font-[16px]"></i>
     </div>
   </aside>
 </template>
@@ -51,6 +41,8 @@ import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.mode
 import { ImagesFolderName } from '~/main/constants/images-folder-name';
 import { ImageSize } from '~/main/constants/image-size';
 import { ImageExt } from '~/main/constants/image-ext';
+import { webUserPanelTraining } from '~/main/utils/web-routes.utils';
+import { RouteHelper } from '~/main/utils/route-helper';
 const menuItems = [
   {
     name: 'الرئيسية',
@@ -65,12 +57,12 @@ const menuItems = [
   {
     name: 'تدريب',
     icon: '/images/svg/user-panel/dumbbell-iron.svg',
-    route: '/dashboard/training',
+    route: webUserPanelTraining(),
   },
   {
     name: 'محاكي الاختبار',
     icon: '/images/svg/user-panel/studying-exam.svg',
-    route: '/dashboard/simulator',
+    route: RouteHelper.userPanelExam(),
   },
   {
     name: 'سجل التدريب',
@@ -80,17 +72,19 @@ const menuItems = [
   {
     name: 'تحليلاتي',
     icon: '/images/svg/user-panel/chart-bullish.svg',
-    route: '/dashboard/analytics',
+    route: RouteHelper.userPanelAnalytics(),
   },
   {
     name: 'الاشتراكات',
     icon: '/images/svg/user-panel/star.svg',
-    route: '/dashboard/subscriptions',
+    route: RouteHelper.userPanelSubscriptions(),
   },
 ];
 
 //composable
-const { data} = useAuth();
+const { data } = useAuth();
+const route = useRoute()
+
 
 //computed
 const userData = computed(() => data.value as UserInfoDataModel);
@@ -100,3 +94,9 @@ const imagesFolderName = ImagesFolderName;
 const imagesSize = ImageSize;
 const imageExt = ImageExt;
 </script>
+
+<style lang="scss" scoped>
+.user-side-bar {
+  box-shadow: -4px 0px 10px #00000029;
+}
+</style>
