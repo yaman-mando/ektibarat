@@ -1,14 +1,16 @@
 <template>
   <lazy-vee-validate-provider>
     <field
-      v-bind="attrs"
       ref="field_ref"
       v-slot="{ errors, handleChange, handleBlur }"
       v-model="valueModel"
       :name="inputId"
       :rules="rules"
     >
-      <div class="custom-input">
+      <div
+        v-bind="attrs"
+        class="custom-input"
+      >
         <div
           v-if="!hideLabel"
           class="a-input-label"
@@ -90,6 +92,9 @@
 import { Field } from 'vee-validate';
 import { isStringUtil } from '~/main/utils/is-string.util';
 
+defineOptions({
+  inheritAttrs: false,
+});
 const attrs = useAttrs();
 
 // Define props

@@ -45,6 +45,14 @@ export const dateUi = (date: string | Date | null) => {
   return fns_format({ date, format: appDateFormat.default });
 };
 
+export const dateDayName = (date) => {
+  if (!date) return '';
+
+  return format(parseISO(date), appDateFormat.dayNameOnly, {
+    locale: arLocale,
+  });
+};
+
 export const formatContentDate = (value: string | null) => {
   if (!value) return null;
   return dateUi(value);
