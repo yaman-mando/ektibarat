@@ -21,6 +21,8 @@ module.exports = {
 
       xl: '960px', //desktop start
 
+      'xl1200':'1200px',
+
       '2xl': '1400px',
     },
     extend: {
