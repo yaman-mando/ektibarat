@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "eslint --ext .js,.ts,.vue . && nuxt build",
+  "build": "nuxt build",
+    "start": "node .output/server/index.mjs",
     "dev-only": "nuxt dev --port 4000",
     "dev-only-512": "nuxt dev --port 4000 --max-old-space-size=512",
     "dev": "eslint --ext .js,.ts,.vue . && nuxt prepare && nuxt dev --port 4000",

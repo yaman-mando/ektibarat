@@ -93,7 +93,10 @@ export const APP_ROUTES = {
     foundations:{
       root:'foundations',
       lesson:'lesson'
-    }
+    },
+    prepare: {
+      path: 'prepare',
+    },
   }
 };
 
@@ -1127,6 +1130,36 @@ export const all_routers = [
     isAuth: true,
   },
   {
+    path: `/${APP_ROUTES.userDashboard.root}`,
+    name: 'user-dashboard',
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowUser: true,
+    isAuth: true,
+  },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.foundations.root}`,
+    name: 'foundation',
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowUser: true,
+    isAuth: true,
+  },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.prepare.path}`,
+    name: 'prepare',
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowUser: true,
+    isAuth: true,
+  },
+  {
     path: '/tracks',
     name: 'tracks',
     allowAdmin: true,
@@ -1188,7 +1221,7 @@ export const all_routers = [
   },
   {
     path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.foundations.root}`,
-    name: 'user-foundation',  
+    name: 'user-foundation',
     allowAdmin: true,
     allowStudent: true,
     allowTeacher: true,
