@@ -9,19 +9,19 @@
     <app-overlay v-if="examLoading" />
     <div class="w-full flex items-center justify-between">
       <h3 class="t-title">{{ texts.title }}</h3>
-      <app-button
-        v-if="!isExams"
-        :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"
-        class="btn-glow"
-        size="md"
-        :label="texts.btnText"
-        @click="checkAndStart"
-      />
+      <!--      <app-button-->
+      <!--        v-if="!isExams"-->
+      <!--        :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"-->
+      <!--        class="btn-glow"-->
+      <!--        size="md"-->
+      <!--        :label="texts.btnText"-->
+      <!--        @click="checkAndStart"-->
+      <!--      />-->
       <app-button
         v-if="selectedType != examTypes.exams"
         class="sr-ho-button"
         size="sm"
-        label="كيف أستخدمها؟"
+        label="شرح الاستخدام"
         colorType="success"
         @click="startTour(true)"
       />
@@ -158,12 +158,86 @@
           >
             <prime-accordion-header class="c-head">
               <div class="r-part">
-                <i class="ek-icon-sliders-solid"></i>
-                <span>خيارات متقدمة</span>
+                <!--                <i class="ek-icon-sliders-solid"></i>-->
+                <span class="r_tt">خصص تدريبك</span>
+                <span class="me-t">تحكم بالأسئلة التي تريد أن تتدرب عليها</span>
               </div>
             </prime-accordion-header>
             <prime-accordion-content>
               <div class="__bank">
+                <div class="select-items-wrapper">
+                  <div class="select-items-wrapper__st">
+                    <app-select-card-item
+                      title="أحدث 1000 سؤال"
+                      iconSvgPath="/images/svg/sparkles_icon.svg"
+                      label="تدرب على أحدث الأسئلة والتسريبات فقط"
+                      color="blue"
+                    />
+                    <div class="relative">
+                      <service-block
+                        v-if="!userServicesState.ROWNQUESTIONPRACTICE.isActive"
+                      />
+                      <app-select-card-item
+                        title="الأسئلة التي أخطأت فيها"
+                        iconSvgPath="/images/png/sub.png"
+                        label="تدرب على الأسئلة التي أخطأت فيها فقط"
+                        color="red"
+                        :isActive="advancedFilter.onlyWrongQuestions"
+                        :isDisabled="
+                          !userServicesState.ROWNQUESTIONPRACTICE.isActive
+                        "
+                        @click="
+                          () => (
+                            (advancedFilter.onlyWrongQuestions =
+                              !advancedFilter.onlyWrongQuestions),
+                            (form.onlyWrongQuestions = !form.onlyWrongQuestions)
+                          )
+                        "
+                      />
+                    </div>
+
+                    <div class="relative">
+                      <service-block
+                        v-if="!userServicesState.FAVORITEUSAGE.isActive"
+                      />
+                      <app-select-card-item
+                        title="الأسئلة المميزة بنجمة فقط"
+                        iconSvgPath="/images/svg/star-solid.svg"
+                        label="تدرب على الأسئلة التي ميزتها بنجمة فقط"
+                        color="yellow"
+                        :isActive="advancedFilter.onlyFlaggedQuestions"
+                        :isDisabled="!userServicesState.FAVORITEUSAGE.isActive"
+                        @click="
+                          () => (
+                            (advancedFilter.onlyFlaggedQuestions =
+                              !advancedFilter.onlyFlaggedQuestions),
+                            (form.onlyFlaggedQuestions =
+                              !form.onlyFlaggedQuestions)
+                          )
+                        "
+                      />
+                    </div>
+
+                    <div class="relative">
+                      <service-block
+                        v-if="!userServicesState.TAKFELATUSAGE.isActive"
+                      />
+                      <app-select-card-item
+                        title="أسئلة التقفيلات فقط"
+                        iconSvgPath="/images/svg/hundred-points.svg"
+                        label="تدرب على أسئلة التقفيلات فقط"
+                        color="green"
+                        :isActive="advancedFilter.onlyTakfelQuestions"
+                        :isDisabled="!userServicesState.TAKFELATUSAGE.isActive"
+                        @click="
+                          () =>
+                            (advancedFilter.onlyTakfelQuestions =
+                              !advancedFilter.onlyTakfelQuestions)
+                        "
+                      />
+                    </div>
+                  </div>
+                </div>
                 <div class="__full-filter">
                   <div
                     v-if="!isTahsele"
@@ -612,6 +686,7 @@ import { debounceUtil } from '~/main/utils/lodash.utils';
 import { RouteHelper } from '~/main/utils/route-helper';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import { appEvents } from '~/main/shared/events/app.events';
+import AppSelectCardItem from '~/components/web/shared/app-select-card-item.vue';
 
 const SIMULATE_START_DELAY = 600;
 const TOGGLE_DELAY_GAP = 500;
@@ -713,7 +788,7 @@ export class advancedFilterForm {
 
 //TODO-z add fcmClarityMixin
 export default {
-  components: { RangeSlider, EmCheckbox },
+  components: { AppSelectCardItem, RangeSlider, EmCheckbox },
   setup() {
     const blockModalRef =
       useTemplateRef<InstanceType<typeof ServiceBlockModal>>('block_modal_ref');
