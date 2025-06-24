@@ -15,13 +15,15 @@
         <span class="text-gray-500 dark:text-gray-300">لا توجد بيانات</span>
       </div>
 
-      <div v-else v-for="section in userPanelStore.lessonsCategories" :key="section.id" class="fade-in">
+      <div v-else v-for="section in userPanelStore.lessonsCategories" 
+      :key="section.id" 
+      class="fade-in">
 
 
         <h2 class="text-[24px] font-bold text-blue-d6 mb-[20px]">{{ section.title }}</h2>
 
         <div class="flex flex-wrap gap-[15px]">
-          <div v-for="child in section.children" :key="child.id" class="rounded-[8px] w-[300px] p-[17px_15px] bg-white dark:bg-dark-37 transition
+          <div @click="toLesson(child.categoryId)" v-for="child in section.children" :key="child.id" class="rounded-[8px] w-[300px] p-[17px_15px] bg-white dark:bg-dark-37 transition
                     hover:scale-[1.02] cursor-pointer group
                     shadow-custom dark:shadow-custom-dark
                     ">
@@ -66,7 +68,11 @@
 <script lang="ts" setup>
 import userPanelLayout from '~/layouts/user-panel-layout.vue';
 import type { lessonsCategoriesDataModel } from '~/main/modules/user-panel/data-access/user-panel.model';
+import { RouteHelper } from '~/main/utils/route-helper';
 import { useUserPanelStore } from '~/store/user-panel';
+
+//resourses
+const router = useRouter();
 
 //store
 const userPanelStore = useUserPanelStore()
@@ -84,6 +90,11 @@ function getStatus(item: lessonsCategoriesDataModel) {
 function getProgress(item: lessonsCategoriesDataModel) {
   if (!item.totalLessonsCount) return 0
   return Math.round((item.doneLessonsCount / item.totalLessonsCount) * 100)
+}
+
+
+function toLesson(id){
+  router.push(`/user-dashboard/foundation/lesson/${id}`)
 }
 
 //watch

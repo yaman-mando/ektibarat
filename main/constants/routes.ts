@@ -91,7 +91,8 @@ export const APP_ROUTES = {
   userDashboard:{
     root:'user-dashboard',
     foundations:{
-      root:'foundations'
+      root:'foundations',
+      lesson:'lesson'
     }
   }
 };
@@ -1188,6 +1189,17 @@ export const all_routers = [
   {
     path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.foundations.root}`,
     name: 'user-foundation',  
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowUser: false,
+    isPublic: false,
+    isAuth: true,
+  },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.foundations.root}/${APP_ROUTES.userDashboard.foundations.lesson}/:id`,
+    name: 'user-lesson',  
     allowAdmin: true,
     allowStudent: true,
     allowTeacher: true,
