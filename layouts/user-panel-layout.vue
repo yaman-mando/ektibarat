@@ -21,10 +21,11 @@
         @click="isSidebarOpen = false"></div>
 
 
-      <div class="flex-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-[40px] py-[30px] ml-0">
+      <div class="flex-1 bg-gray-fb dark:bg-gray-800 text-gray-900 dark:text-gray-100 
+      px-[15px] py-[20px] md:px-[40px] md:py-[30px] ml-0 max-h-[100vh] overflow-x-auto">
 
 
-        <div class="flex justify-between items-center flex-wrap gap-4 mb-6">
+        <div class="flex justify-between items-baseline flex-wrap gap-4 mb-6">
 
           <div class="flex items-center">
             <slot name="top-right"></slot>
