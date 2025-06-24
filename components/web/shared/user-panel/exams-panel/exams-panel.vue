@@ -9,14 +9,6 @@
     <app-overlay v-if="examLoading" />
     <div class="w-full flex items-center justify-between">
       <h3 class="t-title">{{ texts.title }}</h3>
-      <!--      <app-button-->
-      <!--        v-if="!isExams"-->
-      <!--        :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"-->
-      <!--        class="btn-glow"-->
-      <!--        size="md"-->
-      <!--        :label="texts.btnText"-->
-      <!--        @click="checkAndStart"-->
-      <!--      />-->
       <app-button
         v-if="selectedType != examTypes.exams"
         class="sr-ho-button"
@@ -237,203 +229,229 @@
                       />
                     </div>
                   </div>
-                </div>
-                <div class="__full-filter">
-                  <div
-                    v-if="!isTahsele"
-                    data-step="3"
-                    :data-disable-interaction="true"
-                    :data-title="trainingPanelTour.step3.title"
-                    :data-intro="trainingPanelTour.step3.content"
-                    class="__filter_bank"
-                  >
-                    <div class="c1-wq">
-                      <div class="__c1">
-                        <i class="fa fa-folder-open"></i>
-                        <span>بنوك الأسئلة</span>
-                        <service-lock
-                          v-if="!userServicesState.BANKUSAGE.isActive"
-                        />
-                      </div>
-                      <div
-                        v-if="userCurrentSub"
-                        class="c1-wq__qe"
-                      >
-                        <span class="c1-wq__la">
-                          تم إضافة أسئلة جديدة بتاريخ
-                        </span>
-                        <span class="c1-wq__la">
-                          {{ formatDate(userCurrentSub.lastUpdateDate) }}
-                        </span>
-                      </div>
-                    </div>
-                    <div class="__c2 relative">
-                      <service-block
-                        v-if="!userServicesState.BANKUSAGE.isActive"
-                      />
-                      <range-slider
-                        v-if="isCreated"
-                        v-model:minValue="advancedFilter.oBankMinValue"
-                        v-model:maxValue="advancedFilter.oBankMaxValue"
-                        :max="maxBank"
-                        :min="minBank"
-                        :minLabel="'أقدم'"
-                        :maxLabel="'أحدث'"
-                        :step="1"
-                        :rangeMargin="1"
-                        @onUpdateValue="UpdateBankValues"
-                      />
-                    </div>
-                  </div>
-                  <div class="__filter_level">
-                    <div class="__c1 qwe">
-                      <i class="fa fa-line-chart"></i>
-                      <span v-if="isTahsele">صعوبة الأسئلة (قريباً)</span>
-                      <span v-else>صعوبة الأسئلة</span>
-                      <service-lock
-                        v-if="!userServicesState.LEVELQUESTIONPRACTICE.isActive"
-                      />
-                    </div>
-                    <div class="__c2 relative">
-                      <service-block
-                        v-if="!userServicesState.LEVELQUESTIONPRACTICE.isActive"
-                      />
-                      <range-slider
-                        v-if="isCreated"
-                        v-model:minValue="advancedFilter.oLevelMinValue"
-                        v-model:maxValue="advancedFilter.oLevelMaxValue"
-                        :disableBoxes="true"
-                        :max="10"
-                        :min="0"
-                        :step="5"
-                        :rangeMargin="1"
-                        :isDisable="isTahsele"
-                        :minLabel="'أسهل'"
-                        :maxLabel="'أصعب'"
-                      />
-                    </div>
-                  </div>
-                  <div class="__options">
-                    <div class="flex items-baseline gap-2">
-                      <service-lock
-                        v-if="
-                          !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
-                          !userServicesState.FAVORITEUSAGE.isActive ||
-                          !userServicesState.TAKFELATUSAGE.isActive
-                        "
-                      />
-                      <span class="__t">تخصيص الأسئلة</span>
-                    </div>
-                    <div class="__groups">
-                      <div
-                        data-step="4"
-                        :data-disable-interaction="true"
-                        :data-title="trainingPanelTour.step4.title"
-                        :data-intro="trainingPanelTour.step4.content"
-                        class="__group wrong-question"
-                      >
-                        <div class="__c1">
-                          <div class="__r1">
-                            <i class="fa fa-times"></i>
-                            <span>التي أخطات فيها</span>
-                          </div>
-                          <div class="__r2">فقط التي لم تجب عليها</div>
-                        </div>
-                        <div class="__c2 relative">
-                          <service-block
-                            v-if="
-                              !userServicesState.ROWNQUESTIONPRACTICE.isActive
-                            "
-                          />
-                          <prime-toggle-switch
-                            :disabled="
-                              !userServicesState.ROWNQUESTIONPRACTICE.isActive
-                            "
-                            :modelValue="advancedFilter.onlyWrongQuestions"
-                            @update:modelValue="
-                              (val) => (
-                                (advancedFilter.onlyWrongQuestions = val),
-                                (form.onlyWrongQuestions = val)
-                              )
-                            "
-                          />
-                        </div>
-                      </div>
-                      <div
-                        data-step="5"
-                        :data-disable-interaction="true"
-                        :data-title="trainingPanelTour.step5.title"
-                        :data-intro="trainingPanelTour.step5.content"
-                        class="__group starred"
-                      >
-                        <div class="__c1">
-                          <div class="__r1">
-                            <i class="fa fa-star"></i>
-                            <span>المميزة بنجمة</span>
-                          </div>
-                          <div class="__r2">فقط التي ميزتها بنجمة</div>
-                        </div>
-                        <div class="__c2 relative">
-                          <service-block
-                            v-if="!userServicesState.FAVORITEUSAGE.isActive"
-                          />
-                          <prime-toggle-switch
-                            :disabled="
-                              !userServicesState.FAVORITEUSAGE.isActive
-                            "
-                            :modelValue="advancedFilter.onlyFlaggedQuestions"
-                            @update:modelValue="
-                              (val) => (
-                                (advancedFilter.onlyFlaggedQuestions = val),
-                                (form.onlyFlaggedQuestions = val)
-                              )
-                            "
-                          />
-                        </div>
-                      </div>
-                      <div
-                        v-if="!isTahsele"
-                        data-step="6"
-                        :data-disable-interaction="true"
-                        :data-title="trainingPanelTour.step6.title"
-                        :data-intro="trainingPanelTour.step6.content"
-                        class="__group takfel"
-                      >
-                        <div class="__c1">
-                          <div class="__r1">
-                            <i class="fa fa-lock"></i>
-                            <span>أسئلة التقفيلات</span>
-                          </div>
-                          <div class="__r2">فقط أسئلة التقفيلات</div>
-                        </div>
-                        <div class="__c2 relative">
-                          <service-block
-                            v-if="!userServicesState.TAKFELATUSAGE.isActive"
-                          />
-                          <prime-toggle-switch
-                            :disabled="
-                              !userServicesState.TAKFELATUSAGE.isActive
-                            "
-                            :modelValue="advancedFilter.onlyTakfelQuestions"
-                            @update:modelValue="
-                              (val) =>
-                                (advancedFilter.onlyTakfelQuestions = val)
-                            "
-                          />
-                        </div>
-                      </div>
-                    </div>
+                  <div class="relative">
+                    <service-block
+                      v-if="!userServicesState.LEVELQUESTIONPRACTICE.isActive"
+                    />
+                    <app-select-card-options
+                      title="مستوى الأسئلة"
+                      label="تحدى نفسك واختر المستوى الذي تريده لهذا التدريب"
+                      iconSvgPath="/images/svg/layer-group-solid.svg"
+                      :selectedValue="advancedFilter.oLevelMaxValue"
+                      :options="levelOptions"
+                      @select="
+                        (val) => (advancedFilter.oLevelMaxValue = Number(val))
+                      "
+                    />
                   </div>
                 </div>
-                <div class="__reset">
-                  <app-button
-                    variant="outline"
-                    colorType="warn"
-                    size="md"
-                    label="إعادة تعيين"
-                    @click="resetFilterBankValue()"
+                <div class="qu-count">
+                  <span class="la">عدد الأسئلة</span>
+                  <form-select
+                    v-model:selectedValues="form.questionCount"
+                    inputId="questionCount"
+                    class="w-[130px] h-[45px]"
+                    :list="questionCountOptions"
+                    :placeholder="'سؤال'"
+                    :isMulti="false"
                   />
                 </div>
+                <!--                <div class="__full-filter">-->
+                <!--                  <div-->
+                <!--                    v-if="!isTahsele"-->
+                <!--                    data-step="3"-->
+                <!--                    :data-disable-interaction="true"-->
+                <!--                    :data-title="trainingPanelTour.step3.title"-->
+                <!--                    :data-intro="trainingPanelTour.step3.content"-->
+                <!--                    class="__filter_bank"-->
+                <!--                  >-->
+                <!--                    <div class="c1-wq">-->
+                <!--                      <div class="__c1">-->
+                <!--                        <i class="fa fa-folder-open"></i>-->
+                <!--                        <span>بنوك الأسئلة</span>-->
+                <!--                        <service-lock-->
+                <!--                          v-if="!userServicesState.BANKUSAGE.isActive"-->
+                <!--                        />-->
+                <!--                      </div>-->
+                <!--                      <div-->
+                <!--                        v-if="userCurrentSub"-->
+                <!--                        class="c1-wq__qe"-->
+                <!--                      >-->
+                <!--                        <span class="c1-wq__la">-->
+                <!--                          تم إضافة أسئلة جديدة بتاريخ-->
+                <!--                        </span>-->
+                <!--                        <span class="c1-wq__la">-->
+                <!--                          {{ formatDate(userCurrentSub.lastUpdateDate) }}-->
+                <!--                        </span>-->
+                <!--                      </div>-->
+                <!--                    </div>-->
+                <!--                    <div class="__c2 relative">-->
+                <!--                      <service-block-->
+                <!--                        v-if="!userServicesState.BANKUSAGE.isActive"-->
+                <!--                      />-->
+                <!--                      <range-slider-->
+                <!--                        v-if="isCreated"-->
+                <!--                        v-model:minValue="advancedFilter.oBankMinValue"-->
+                <!--                        v-model:maxValue="advancedFilter.oBankMaxValue"-->
+                <!--                        :max="maxBank"-->
+                <!--                        :min="minBank"-->
+                <!--                        :minLabel="'أقدم'"-->
+                <!--                        :maxLabel="'أحدث'"-->
+                <!--                        :step="1"-->
+                <!--                        :rangeMargin="1"-->
+                <!--                        @onUpdateValue="UpdateBankValues"-->
+                <!--                      />-->
+                <!--                    </div>-->
+                <!--                  </div>-->
+                <!--                  <div class="__filter_level">-->
+                <!--                    <div class="__c1 qwe">-->
+                <!--                      <i class="fa fa-line-chart"></i>-->
+                <!--                      <span v-if="isTahsele">صعوبة الأسئلة (قريباً)</span>-->
+                <!--                      <span v-else>صعوبة الأسئلة</span>-->
+                <!--                      <service-lock-->
+                <!--                        v-if="!userServicesState.LEVELQUESTIONPRACTICE.isActive"-->
+                <!--                      />-->
+                <!--                    </div>-->
+                <!--                    <div class="__c2 relative">-->
+                <!--                      <service-block-->
+                <!--                        v-if="!userServicesState.LEVELQUESTIONPRACTICE.isActive"-->
+                <!--                      />-->
+                <!--                      <range-slider-->
+                <!--                        v-if="isCreated"-->
+                <!--                        v-model:minValue="advancedFilter.oLevelMinValue"-->
+                <!--                        v-model:maxValue="advancedFilter.oLevelMaxValue"-->
+                <!--                        :disableBoxes="true"-->
+                <!--                        :max="10"-->
+                <!--                        :min="0"-->
+                <!--                        :step="5"-->
+                <!--                        :rangeMargin="1"-->
+                <!--                        :isDisable="isTahsele"-->
+                <!--                        :minLabel="'أسهل'"-->
+                <!--                        :maxLabel="'أصعب'"-->
+                <!--                      />-->
+                <!--                    </div>-->
+                <!--                  </div>-->
+                <!--                  <div class="__options">-->
+                <!--                    <div class="flex items-baseline gap-2">-->
+                <!--                      <service-lock-->
+                <!--                        v-if="-->
+                <!--                          !userServicesState.ROWNQUESTIONPRACTICE.isActive ||-->
+                <!--                          !userServicesState.FAVORITEUSAGE.isActive ||-->
+                <!--                          !userServicesState.TAKFELATUSAGE.isActive-->
+                <!--                        "-->
+                <!--                      />-->
+                <!--                      <span class="__t">تخصيص الأسئلة</span>-->
+                <!--                    </div>-->
+                <!--                    <div class="__groups">-->
+                <!--                      <div-->
+                <!--                        data-step="4"-->
+                <!--                        :data-disable-interaction="true"-->
+                <!--                        :data-title="trainingPanelTour.step4.title"-->
+                <!--                        :data-intro="trainingPanelTour.step4.content"-->
+                <!--                        class="__group wrong-question"-->
+                <!--                      >-->
+                <!--                        <div class="__c1">-->
+                <!--                          <div class="__r1">-->
+                <!--                            <i class="fa fa-times"></i>-->
+                <!--                            <span>التي أخطات فيها</span>-->
+                <!--                          </div>-->
+                <!--                          <div class="__r2">فقط التي لم تجب عليها</div>-->
+                <!--                        </div>-->
+                <!--                        <div class="__c2 relative">-->
+                <!--                          <service-block-->
+                <!--                            v-if="-->
+                <!--                              !userServicesState.ROWNQUESTIONPRACTICE.isActive-->
+                <!--                            "-->
+                <!--                          />-->
+                <!--                          <prime-toggle-switch-->
+                <!--                            :disabled="-->
+                <!--                              !userServicesState.ROWNQUESTIONPRACTICE.isActive-->
+                <!--                            "-->
+                <!--                            :modelValue="advancedFilter.onlyWrongQuestions"-->
+                <!--                            @update:modelValue="-->
+                <!--                              (val) => (-->
+                <!--                                (advancedFilter.onlyWrongQuestions = val),-->
+                <!--                                (form.onlyWrongQuestions = val)-->
+                <!--                              )-->
+                <!--                            "-->
+                <!--                          />-->
+                <!--                        </div>-->
+                <!--                      </div>-->
+                <!--                      <div-->
+                <!--                        data-step="5"-->
+                <!--                        :data-disable-interaction="true"-->
+                <!--                        :data-title="trainingPanelTour.step5.title"-->
+                <!--                        :data-intro="trainingPanelTour.step5.content"-->
+                <!--                        class="__group starred"-->
+                <!--                      >-->
+                <!--                        <div class="__c1">-->
+                <!--                          <div class="__r1">-->
+                <!--                            <i class="fa fa-star"></i>-->
+                <!--                            <span>المميزة بنجمة</span>-->
+                <!--                          </div>-->
+                <!--                          <div class="__r2">فقط التي ميزتها بنجمة</div>-->
+                <!--                        </div>-->
+                <!--                        <div class="__c2 relative">-->
+                <!--                          <service-block-->
+                <!--                            v-if="!userServicesState.FAVORITEUSAGE.isActive"-->
+                <!--                          />-->
+                <!--                          <prime-toggle-switch-->
+                <!--                            :disabled="-->
+                <!--                              !userServicesState.FAVORITEUSAGE.isActive-->
+                <!--                            "-->
+                <!--                            :modelValue="advancedFilter.onlyFlaggedQuestions"-->
+                <!--                            @update:modelValue="-->
+                <!--                              (val) => (-->
+                <!--                                (advancedFilter.onlyFlaggedQuestions = val),-->
+                <!--                                (form.onlyFlaggedQuestions = val)-->
+                <!--                              )-->
+                <!--                            "-->
+                <!--                          />-->
+                <!--                        </div>-->
+                <!--                      </div>-->
+                <!--                      <div-->
+                <!--                        v-if="!isTahsele"-->
+                <!--                        data-step="6"-->
+                <!--                        :data-disable-interaction="true"-->
+                <!--                        :data-title="trainingPanelTour.step6.title"-->
+                <!--                        :data-intro="trainingPanelTour.step6.content"-->
+                <!--                        class="__group takfel"-->
+                <!--                      >-->
+                <!--                        <div class="__c1">-->
+                <!--                          <div class="__r1">-->
+                <!--                            <i class="fa fa-lock"></i>-->
+                <!--                            <span>أسئلة التقفيلات</span>-->
+                <!--                          </div>-->
+                <!--                          <div class="__r2">فقط أسئلة التقفيلات</div>-->
+                <!--                        </div>-->
+                <!--                        <div class="__c2 relative">-->
+                <!--                          <service-block-->
+                <!--                            v-if="!userServicesState.TAKFELATUSAGE.isActive"-->
+                <!--                          />-->
+                <!--                          <prime-toggle-switch-->
+                <!--                            :disabled="-->
+                <!--                              !userServicesState.TAKFELATUSAGE.isActive-->
+                <!--                            "-->
+                <!--                            :modelValue="advancedFilter.onlyTakfelQuestions"-->
+                <!--                            @update:modelValue="-->
+                <!--                              (val) =>-->
+                <!--                                (advancedFilter.onlyTakfelQuestions = val)-->
+                <!--                            "-->
+                <!--                          />-->
+                <!--                        </div>-->
+                <!--                      </div>-->
+                <!--                    </div>-->
+                <!--                  </div>-->
+                <!--                </div>-->
+                <!--                <div class="__reset">-->
+                <!--                  <app-button-->
+                <!--                    variant="outline"-->
+                <!--                    colorType="warn"-->
+                <!--                    size="md"-->
+                <!--                    label="إعادة تعيين"-->
+                <!--                    @click="resetFilterBankValue()"-->
+                <!--                  />-->
+                <!--                </div>-->
               </div>
             </prime-accordion-content>
           </prime-accordion-panel>
@@ -589,68 +607,93 @@
         />
       </div>
 
-      <div
-        v-else
-        :ref="trainingPanelTour.stepLast.ref"
-        class="rw-info training-case"
-        :class="{ all: activeSwitch }"
-        data-step="7"
-        :data-disable-interaction="true"
-        :data-position="isXlWindow ? 'right' : 'bottom'"
-        :data-title="trainingPanelTour.stepLast.title"
-        :data-intro="trainingPanelTour.stepLast.content"
-      >
-        <span class="i-title">{{ texts.infoTitle }}</span>
-        <template v-if="selectedLists.length > 0">
-          <div class="i-items">
-            <template v-if="categoryList && categoryList.length > 0">
-              <template
-                v-for="(card, index) of categoryList"
-                :key="`${card.label}_${index}`"
-              >
-                <div
-                  v-if="card.children.length > 0"
-                  class="i-item hide-to-tablet"
-                >
-                  <span class="i-label">{{ card.label }}</span>
-                  <span class="i-info">
-                    {{ getSelectPartCount(card.children) }}
-                  </span>
-                </div>
-              </template>
-            </template>
-            <div class="i-item">
-              <span class="i-label">عدد الأسئلة</span>
-              <span class="i-info">{{ getQuestionCount }}</span>
-            </div>
-            <div class="i-item">
-              <span class="i-label">{{ texts.timeText }}</span>
-              <span class="i-info">{{ getTotalTime }}</span>
-            </div>
-          </div>
-          <div
-            v-if="activeAdvanced && advancedText && advancedText != ''"
-            class="i-items"
-          >
-            <div class="i-item">
-              <span class="i-label">خيارات متقدمة</span>
-              <span class="i-info">
-                {{ advancedText }}
-              </span>
-            </div>
-          </div>
-        </template>
-        <span
-          v-else
-          class="i-no-selected-note"
-        >
-          {{ texts.noSelectedNote }}
-        </span>
+      <!--      <div-->
+      <!--        v-else-->
+      <!--        :ref="trainingPanelTour.stepLast.ref"-->
+      <!--        class="rw-info training-case"-->
+      <!--        :class="{ all: activeSwitch }"-->
+      <!--        data-step="7"-->
+      <!--        :data-disable-interaction="true"-->
+      <!--        :data-position="isXlWindow ? 'right' : 'bottom'"-->
+      <!--        :data-title="trainingPanelTour.stepLast.title"-->
+      <!--        :data-intro="trainingPanelTour.stepLast.content"-->
+      <!--      >-->
+      <!--        <span class="i-title">{{ texts.infoTitle }}</span>-->
+      <!--        <template v-if="selectedLists.length > 0">-->
+      <!--          <div class="i-items">-->
+      <!--            <template v-if="categoryList && categoryList.length > 0">-->
+      <!--              <template-->
+      <!--                v-for="(card, index) of categoryList"-->
+      <!--                :key="`${card.label}_${index}`"-->
+      <!--              >-->
+      <!--                <div-->
+      <!--                  v-if="card.children.length > 0"-->
+      <!--                  class="i-item hide-to-tablet"-->
+      <!--                >-->
+      <!--                  <span class="i-label">{{ card.label }}</span>-->
+      <!--                  <span class="i-info">-->
+      <!--                    {{ getSelectPartCount(card.children) }}-->
+      <!--                  </span>-->
+      <!--                </div>-->
+      <!--              </template>-->
+      <!--            </template>-->
+      <!--            <div class="i-item">-->
+      <!--              <span class="i-label">عدد الأسئلة</span>-->
+      <!--              <span class="i-info">{{ getQuestionCount }}</span>-->
+      <!--            </div>-->
+      <!--            <div class="i-item">-->
+      <!--              <span class="i-label">{{ texts.timeText }}</span>-->
+      <!--              <span class="i-info">{{ getTotalTime }}</span>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--          <div-->
+      <!--            v-if="activeAdvanced && advancedText && advancedText != ''"-->
+      <!--            class="i-items"-->
+      <!--          >-->
+      <!--            <div class="i-item">-->
+      <!--              <span class="i-label">خيارات متقدمة</span>-->
+      <!--              <span class="i-info">-->
+      <!--                {{ advancedText }}-->
+      <!--              </span>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--        </template>-->
+      <!--        <span-->
+      <!--          v-else-->
+      <!--          class="i-no-selected-note"-->
+      <!--        >-->
+      <!--          {{ texts.noSelectedNote }}-->
+      <!--        </span>-->
+      <!--        <app-button-->
+      <!--          class="!mt-3"-->
+      <!--          data-disable-interaction="false"-->
+      <!--          :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"-->
+      <!--          :label="texts.btnText"-->
+      <!--          @click="checkAndStart"-->
+      <!--        />-->
+      <!--      </div>-->
+    </div>
+    <div
+      class="pa-fo"
+      :style="{ width: usContentWidth }"
+    >
+      <div class="pa-fo__st">
+        <div class="pa-fo-met">
+          <img
+            src="/images/svg/Icons8_flat_clock.svg"
+            alt="icon"
+          />
+          <span>الزمن المتوقع</span>
+        </div>
+        <span class="pg-t">{{ getTotalTime }}</span>
+      </div>
+      <div class="pa-fo__en">
         <app-button
-          class="!mt-3"
-          data-disable-interaction="false"
+          v-if="!isExams"
           :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"
           :label="texts.btnText"
+          colorType="blue"
+          iconEndClass="fa fa-chevron-left"
           @click="checkAndStart"
         />
       </div>
@@ -763,6 +806,7 @@ export class examForm {
   onlyFlaggedQuestions = false;
   randomQuestionsSettings = [] as any[];
   questionsLevelsMin = 0;
+  questionCount: null | number = 10;
   questionsLevelsMax = 10;
   customerId: any | null = null;
   sessionId: any | null = null;
@@ -804,7 +848,64 @@ export default {
         class: 'zoom-wrapper',
       },
     });
+
+    const levelOptions = [
+      {
+        key: 0,
+        description: 'سهلة',
+      },
+      {
+        key: 5,
+        description: 'متوسطة',
+      },
+      {
+        key: 10,
+        description: 'صعبة',
+      },
+    ];
+
+    const questionCountOptions = [
+      {
+        id: 10,
+        label: '10',
+      },
+      {
+        id: 24,
+        label: '24',
+      },
+      {
+        id: 50,
+        label: '50',
+      },
+    ];
+
+    const usContentWidth = ref('0px');
+    onMounted(() => {
+      if (import.meta.client) {
+        nextTick(() => {
+          const el = document.getElementsByClassName('us-content')[0];
+          usContentWidth.value = window.getComputedStyle(el).width;
+        });
+
+        window.addEventListener('resize', () => {
+          const el = document.getElementsByClassName('us-content')[0];
+          if (el) {
+            usContentWidth.value = window.getComputedStyle(el).width;
+          }
+        });
+      }
+    });
+
+    const cssVars = computed(() => {
+      return {
+        '--us-content-width': usContentWidth.value,
+      };
+    });
     return {
+      usContentWidth,
+      cssVars,
+      questionCountOptions,
+      levelOptions,
       userServicesState: computed(
         () => subscriptionsStore.state.userServicesStateVal
       ),

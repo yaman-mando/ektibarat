@@ -13,7 +13,7 @@
     "preview": "nuxt preview --port 4000",
     "analyze": "nuxt analyze",
     "postinstall": "nuxt prepare",
-    "lint:fix": "eslint . --ext .js,.ts,.vue --fix",
+    "lint:fix": "eslint . --ext .js,.ts,.vue --fix --cache",
     "build-preview": "nuxt build && nuxt preview --port 4000"
   },
   "dependencies": {

@@ -94,6 +94,13 @@ useHead({
   },
 });
 
+const props = withDefaults(
+  defineProps<{
+    contentClass?: string;
+  }>(),
+  {}
+);
+
 const colorMode = useColorMode();
 const userPanelStore = useUserPanelStore();
 const isSidebarOpen = ref(false);
@@ -141,6 +148,9 @@ onMounted(() => {
   .us-content {
     max-height: 100vh;
     overflow-y: scroll;
+    @include tablet-down() {
+      padding: 10px 5px;
+    }
   }
 }
 

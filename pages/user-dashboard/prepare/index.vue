@@ -1,8 +1,8 @@
 <template>
-  <user-panel-layout>
+  <user-panel-layout contentClass="!pb-0">
     <template #top-right></template>
 
-    <div class="space-y-10 max-w-[1100px] mx-auto">
+    <div class="prepare-co space-y-10">
       <exams-panel :key="examPanelKey" />
       <!--      <app-loading-spinner-->
       <!--        v-if="userPanelStore.fetching.lessonsCategories"-->
