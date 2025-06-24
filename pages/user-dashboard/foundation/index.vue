@@ -1,5 +1,5 @@
 <template>
-  <userPanelLayout>
+  <user-panel-layout>
 
     <template #top-right>
 
@@ -7,21 +7,24 @@
 
     <div class="space-y-10">
 
-      <AppLoadingSpinner v-if="userPanelStore.fetching.lessonsCategories" text="جاري تحميل البيانات..." :showText="false"
+      <app-loading-spinner
+v-if="userPanelStore.fetching.lessonsCategories" text="جاري تحميل البيانات..." :showText="false"
         :showSpinner="false" :showSkeleton="true" :skeletonCount="16" />
 
-      <div v-else-if="!userPanelStore.lessonsCategories || userPanelStore.lessonsCategories.length === 0"
+      <div
+v-else-if="!userPanelStore.lessonsCategories || userPanelStore.lessonsCategories.length === 0"
         class="flex justify-center items-center py-10">
         <span class="text-gray-500 dark:text-gray-300">لا توجد بيانات</span>
       </div>
 
-      <div v-else v-for="section in userPanelStore.lessonsCategories" :key="section.id" class="fade-in">
+      <div v-for="section in userPanelStore.lessonsCategories" v-else :key="section.id" class="fade-in">
 
 
         <h2 class="text-[24px] font-bold text-blue-d6 mb-[20px]">{{ section.title }}</h2>
 
         <div class="flex flex-wrap gap-[15px]">
-          <div v-for="child in section.children" :key="child.id" class="rounded-[8px] w-[300px] p-[17px_15px] bg-white dark:bg-dark-37 transition
+          <div
+v-for="child in section.children" :key="child.id" class="rounded-[8px] w-[300px] p-[17px_15px] bg-white dark:bg-dark-37 transition
                     hover:scale-[1.02] cursor-pointer group
                     shadow-custom dark:shadow-custom-dark
                     ">
@@ -60,7 +63,7 @@
 
 
 
-  </userPanelLayout>
+  </user-panel-layout>
 </template>
 
 <script lang="ts" setup>

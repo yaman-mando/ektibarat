@@ -1,9 +1,10 @@
 @import '@/assets/scss/mixin';
 
 .exams-part {
+  --fo-height: 100px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  padding: 20px 33px;
+  padding: 20px 33px calc(var(--fo-height) + 20px) 33px;
   max-width: 100%;
 
   .btn-glow {
@@ -30,6 +31,9 @@
 
   .btn-glow:hover {
     transform: scale(1.03);
+  }
+
+  &__inner {
   }
 
   /* نبض */
@@ -101,6 +105,69 @@
     }
   }
 
+  .pa-fo {
+    height: var(--fo-height);
+    box-shadow: 0 0 10px #00000029;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 40px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    flex-direction: column;
+    @include ipad-up() {
+      flex-direction: row;
+    }
+
+    &__st {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      @include ipad-up() {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .pa-fo-met {
+        display: flex;
+        align-items: baseline;
+        justify-content: flex-start;
+        gap: 10px;
+        img {
+          width: 13px;
+          height: 13px;
+        }
+        span {
+          font-size: 16px;
+          color: var(--purple-8c);
+          font-weight: bold;
+        }
+      }
+      .pg-t {
+        font-size: 14px;
+        color: var(--dark-63);
+      }
+    }
+
+    &__en {
+      :deep(.app-button) {
+        width: 160px !important;
+        height: 40px !important;
+        border-radius: 20px;
+        .app-button-label {
+          font-size: 14px;
+        }
+        .app-button-icon {
+          font-size: 12px;
+          position: absolute;
+          inset-inline-end: 10px;
+        }
+      }
+    }
+  }
+
   .switch {
     display: flex;
     justify-content: center;
@@ -108,11 +175,11 @@
   }
   .rw-cards {
     margin-top: 15px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    -moz-column-gap: 22px;
     column-gap: 22px;
     row-gap: 15px;
-    justify-items: center;
+    justify-content: center;
     .card {
       border-radius: 15px;
       box-shadow: 0px 0px 15px #00000033;
@@ -512,13 +579,37 @@
     }
   }
 
+  .qu-count {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 30px;
+    ::v-deep {
+      .a-form-select .vue-treeselect__control {
+        height: 45px;
+      }
+    }
+
+    .la {
+      font-size: 16px;
+      color: #4b5363;
+    }
+  }
+
   .select-items-wrapper {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr;
+    @include ipad-up() {
+      grid-template-columns: 2fr 1fr;
+    }
     gap: 16px;
     &__st {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
+      @include ipad-up() {
+        grid-template-columns: 1fr 1fr;
+      }
       gap: 12px;
     }
   }
@@ -545,7 +636,7 @@
   }
 
   @include tablet-down() {
-    padding: 15px 13px 30px;
+    padding: 15px 13px calc(var(--fo-height) + 30px);
     .rw-cards {
       .card {
         max-width: 50%;

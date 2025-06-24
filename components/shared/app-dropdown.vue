@@ -1,6 +1,6 @@
 <template>
   <div ref="dropdownRef" class="dropdown-wrapper">
-    <button @click="toggleMenu" class="dropdown-button">
+    <button class="dropdown-button" @click="toggleMenu">
       <span>{{ selected?.label || 'اختر من القائمة' }}</span>
       <i class="fa fa-chevron-down"></i>
     </button>
@@ -13,8 +13,8 @@
       <div
         v-for="option in options"
         :key="option.value"
-        @click="selectOption(option)"
         class="dropdown-item"
+        @click="selectOption(option)"
       >
         <img v-if="option.icon" :src="option.icon" alt="icon" />
         <span class="dropdown-item-label">{{ option.label }}</span>

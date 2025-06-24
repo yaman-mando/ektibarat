@@ -15,12 +15,12 @@
      <template v-else>الدعم الفني</template>
     </h3>
     <h4
-      class="t-text"
       v-if="staticData && staticData.topText"
+      class="t-text"
     >
       {{ staticData.topText }}
     </h4>
-    <AppMessaging></AppMessaging>
+    <app-messaging/>
     <!--        <mx-admin-chat-page></mx-admin-chat-page>-->
     <!-- <mx-admin-test-messaging></mx-admin-test-messaging> -->
      </template>
@@ -31,7 +31,7 @@ import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
 
 export default {
-  name: 'chat',
+  name: 'Chat',
 
   setup() {
 
@@ -49,14 +49,14 @@ export default {
     }
   },
 
-  created() {
-    this.$store.dispatch('getChatPanelStatic');
-  },
-
   computed: {
     staticData() {
       return this.$store.state.chatStatic;
     },
+  },
+
+  created() {
+    this.$store.dispatch('getChatPanelStatic');
   },
 };
 

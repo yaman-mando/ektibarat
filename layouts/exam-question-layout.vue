@@ -64,6 +64,33 @@ export default {
     }
   },
 
+  computed: {
+    selectedSurveys() {
+      return this.$store.state.selectedSurveys
+    }
+  },
+
+  watch: {
+    selectedSurveys: {
+      immediate: true,
+      handler(newVal) {
+        if (this.openModalTimeoutId) {
+          clearTimeout(this.openModalTimeoutId);
+          this.openModalTimeoutId = null;
+        }
+
+        if (!newVal) return;
+
+        const waitTime = (newVal.timeInitialize || 0) * 1000;
+
+        this.openModalTimeoutId = setTimeout(() => {
+          this.openSurveysModal();
+          this.openModalTimeoutId = null;
+        }, waitTime);
+      },
+    },
+  },
+
   mounted() {
     this.initFooterClass();
   },
@@ -110,33 +137,6 @@ export default {
         this.$refs['modal_surveys_ref']?.showModal()
       }
     }
-  },
-
-  computed: {
-    selectedSurveys() {
-      return this.$store.state.selectedSurveys
-    }
-  },
-
-  watch: {
-    selectedSurveys: {
-      immediate: true,
-      handler(newVal) {
-        if (this.openModalTimeoutId) {
-          clearTimeout(this.openModalTimeoutId);
-          this.openModalTimeoutId = null;
-        }
-
-        if (!newVal) return;
-
-        const waitTime = (newVal.timeInitialize || 0) * 1000;
-
-        this.openModalTimeoutId = setTimeout(() => {
-          this.openSurveysModal();
-          this.openModalTimeoutId = null;
-        }, waitTime);
-      },
-    },
   }
 
 };

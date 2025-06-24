@@ -1,9 +1,7 @@
-import {
-  HubConnection,
-  HubConnectionBuilder,
-  LogLevel,
-} from '@microsoft/signalr';
+import type { HubConnection } from '@microsoft/signalr';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
+// eslint-disable-next-line import/no-mutable-exports
 export let chatHub: HubConnection | null = null;
 
 export const buildHub = (token: string): Promise<boolean> => {
@@ -16,7 +14,6 @@ export const buildHub = (token: string): Promise<boolean> => {
       .withAutomaticReconnect()
       .build();
 
-    
     chatHub.onclose((error) => {
       console.warn('🚫 الاتصال مغلق:', error);
     });
