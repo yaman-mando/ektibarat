@@ -1,37 +1,27 @@
 <template>
-  <div
-    id="user-panel-layout"
-    :class="[
-      colorMode.preference === 'dark' ? 'dark' : '',
-      'min-h-screen flex flex-col',
-    ]"
-  >
+  <div id="user-panel-layout" :class="[
+    colorMode.preference === 'dark' ? 'dark' : '',
+    'min-h-screen flex flex-col',
+  ]">
     <!-- sidebar button in mobile -->
-    <button
-      class="md:hidden fixed top-4 right-4 z-50 bg-gray-700 text-white p-2 rounded shadow-md"
-      @click="isSidebarOpen = !isSidebarOpen"
-    >
+    <button class="md:hidden fixed top-4 right-4 z-50 bg-gray-700 text-white p-2 rounded shadow-md"
+      @click="isSidebarOpen = !isSidebarOpen">
       ☰
     </button>
 
     <div class="flex flex-1">
       <!-- Sidebar -->
       <transition name="slide">
-        <aside
-          v-show="isSidebarOpen || isDesktop"
-          class="fixed md:relative z-40 h-full md:h-auto"
-        >
+        <aside v-show="isSidebarOpen || isDesktop" class="fixed md:relative z-40 h-full md:h-auto">
           <user-sidebar />
         </aside>
       </transition>
 
-      <div
-        v-if="isSidebarOpen && !isDesktop"
-        class="fixed inset-0 bg-black opacity-40 z-30"
-        @click="isSidebarOpen = false"
-      ></div>
+      <div v-if="isSidebarOpen && !isDesktop" class="fixed inset-0 bg-black opacity-40 z-30"
+        @click="isSidebarOpen = false"></div>
 
-      <div class="us-content flex-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-[40px] py-[30px] ml-0">
+      <div
+        class="us-content flex-1 bg-gray-fb dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-[40px] py-[30px] ml-0">
 
 
         <div class="flex justify-between items-baseline flex-wrap gap-4 mb-6">
@@ -42,27 +32,15 @@
 
           <div class="flex items-center w-[300px] gap-x-[20px]">
             <div class="flex items-center gap-x-[8px]">
-              <img
-                src="/images/svg/star-orange.svg"
-                alt="icon"
-                class="w-[24px] h-auto"
-              />
+              <img src="/images/svg/star-orange.svg" alt="icon" class="w-[24px] h-auto" />
               <span class="text-[20px] font-bold text-blue-f7">2,849</span>
             </div>
             <div class="flex items-center gap-x-[8px]">
-              <img
-                src="/images/svg/fire.svg"
-                alt="icon"
-                class="w-[16px] h-auto"
-              />
+              <img src="/images/svg/fire.svg" alt="icon" class="w-[16px] h-auto" />
               <span class="text-[20px] font-bold text-orange-39">7</span>
             </div>
-            <app-dropdown
-              v-model="selectedGlobal"
-              topLabel="تغيير الاختبار"
-              :options="globalOptions"
-              @select="handleSelectGlobal"
-            />
+            <app-dropdown v-model="selectedGlobal" topLabel="تغيير الاختبار" :options="globalOptions"
+              @select="handleSelectGlobal" />
           </div>
         </div>
 
@@ -73,8 +51,7 @@
     <!-- dark light button -->
     <button
       class="fixed bottom-4 left-4 bg-gray-700 text-white p-2 rounded-full shadow-md hover:bg-gray-600 z-50 cursor-pointer"
-      @click="toggleDarkMode"
-    >
+      @click="toggleDarkMode">
       {{ colorMode.preference === 'dark' ? '🌙' : '☀️' }}
     </button>
   </div>
@@ -148,6 +125,7 @@ onMounted(() => {
   .us-content {
     max-height: 100vh;
     overflow-y: scroll;
+
     @include tablet-down() {
       padding: 10px 5px;
     }
@@ -156,8 +134,7 @@ onMounted(() => {
 
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 0.3s ease;
-}
+  transition: transform 0.3s ease;}
 
 .slide-enter-from,
 .slide-leave-to {

@@ -1241,6 +1241,17 @@ export const all_routers = [
     isPublic: false,
     isAuth: true,
   },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.foundations}/${APP_ROUTES.userDashboard.foundations.lesson}/:id/:details`,
+    name: 'user-lesson-details',  
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowUser: false,
+    isPublic: false,
+    isAuth: true,
+  },
 ];
 
 export const needAuth = (route: RouteLocationNormalizedGeneric): boolean => {

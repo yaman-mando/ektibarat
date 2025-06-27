@@ -1,7 +1,7 @@
 <!-- LessonCard.vue -->
 <template>
     <div class="rounded-[8px] cursor-pointer p-[15px_17px] flex items-center justify-between h-[70px] border-[1px]"
-        :class="cardClass">
+        @click="status !== 'locked' ? toLessonDetails() : {}" :class="cardClass">
         <div class="flex items-center gap-x-[10px]">
             <span v-if="status === 'completed'"
                 class="flex items-center justify-center w-9 h-9 rounded-full bg-white text-green-8c text-[22px]">
@@ -43,6 +43,11 @@
 
 <script setup lang="ts">
 import Tooltip from '~/components/user/toolTip.vue'
+
+
+const router = useRouter()
+const route = useRoute()
+
 const props = defineProps<{
     lesson: {
         id: number
@@ -90,5 +95,14 @@ function formatTime(seconds: number) {
     const m = Math.floor(seconds / 60)
     const s = seconds % 60
     return `${m}:${s.toString().padStart(2, '0')}`
+}
+
+function toLessonDetails() {
+    console.log('t222')
+    const currentPath = route.fullPath.split('?')[0]
+    const detailsId = props.lesson.id
+
+    const newPath = `${currentPath}/${detailsId}`
+    router.push(newPath)
 }
 </script>

@@ -1,15 +1,19 @@
 import { GlobalSub } from "~/main/modules/user-panel/data-access/user-panel.enum"
-import type { lessonsCategoriesDataModel, lessonsModel } from "~/main/modules/user-panel/data-access/user-panel.model"
+import type {lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, similarVidModel } from "~/main/modules/user-panel/data-access/user-panel.model"
 
 
 interface UserPanelState {
     fetching: {
         lessonsCategories: boolean,
-        lessonsList:boolean
+        lessonsList:boolean,
+        lessonsDetails:boolean,
+        simillarVideos:boolean
     }
     globalType: number,
     lessonsCategories: lessonsCategoriesDataModel[] | null,
-    lessonsList:lessonsModel | null
+    lessonsList:lessonsModel | null,
+    lessonDetails:lessonDetailsModel | null,
+    simillarVideos:similarVidModel | null
 }
 
 
@@ -17,11 +21,15 @@ export const useUserPanelStore = defineStore('userPanel', {
   state: (): UserPanelState => ({
     fetching: {
       lessonsCategories: false,
-      lessonsList:false
+      lessonsList:false,
+      lessonsDetails:false,
+      simillarVideos:false,
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
-    lessonsList:null
+    lessonsList:null,
+    lessonDetails:null,
+    simillarVideos:null
   }),
 
   actions: {
@@ -69,6 +77,36 @@ export const useUserPanelStore = defineStore('userPanel', {
         this.fetching.lessonsList = false
       }
     },
+
+    async getLessonDetails(id):Promise<lessonDetailsModel | null> {
+      try {
+        this.fetching.lessonsDetails = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/lessons/${id}`)
+        this.lessonDetails = data
+        return data
+      } catch (e) {
+        console.error('خطأ في تحميل تفاصيل الدرس:', e)
+        return null
+      } finally {
+        this.fetching.lessonsDetails = false
+      }
+    },
+
+    async getVideoSimillar(id):Promise<similarVidModel | null> {
+      try {
+        this.fetching.simillarVideos = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/lessons/similar/${id}`)
+        this.simillarVideos = data
+        return data
+      } catch (e) {
+        console.error('خطأ في تحميل الفيديوهات المشابهة:', e)
+        return null
+      } finally {
+        this.fetching.simillarVideos = false
+      }
+    }
 
   },
 })

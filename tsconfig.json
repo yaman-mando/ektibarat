@@ -5,5 +5,10 @@
     "noImplicitAny": false,
     "noUnusedParameters": false,
     "noUnusedLocals": false
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "public/videos"
+  ]
 }

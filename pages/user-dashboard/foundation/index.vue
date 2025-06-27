@@ -7,19 +7,15 @@
 
     <div class="space-y-10">
 
-      <app-loading-spinner
-v-if="userPanelStore.fetching.lessonsCategories" text="جاري تحميل البيانات..." :showText="false"
-        :showSpinner="false" :showSkeleton="true" :skeletonCount="16" />
+      <app-loading-spinner v-if="userPanelStore.fetching.lessonsCategories" text="جاري تحميل البيانات..."
+        :showText="false" :showSpinner="false" :showSkeleton="true" :skeletonCount="16" />
 
-      <div
-v-else-if="!userPanelStore.lessonsCategories || userPanelStore.lessonsCategories.length === 0"
+      <div v-else-if="!userPanelStore.lessonsCategories || userPanelStore.lessonsCategories.length === 0"
         class="flex justify-center items-center py-10">
         <span class="text-gray-500 dark:text-gray-300">لا توجد بيانات</span>
       </div>
 
-      <div v-else v-for="section in userPanelStore.lessonsCategories" 
-      :key="section.id" 
-      class="fade-in">
+      <div v-else v-for="section in userPanelStore.lessonsCategories" :key="section.id" class="fade-in">
 
 
         <h2 class="text-[24px] font-bold text-blue-d6 mb-[20px]">{{ section.title }}</h2>
@@ -95,7 +91,7 @@ function getProgress(item: lessonsCategoriesDataModel) {
 }
 
 
-function toLesson(id){
+function toLesson(id) {
   router.push(`/user-dashboard/foundation/lesson/${id}`)
 }
 

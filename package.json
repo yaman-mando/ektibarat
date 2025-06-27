@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-  "build": "nuxt build",
+    "build": "nuxt build",
     "start": "node .output/server/index.mjs",
     "dev-only": "nuxt dev --port 4000",
     "dev-only-512": "nuxt dev --port 4000 --max-old-space-size=512",
@@ -51,6 +51,9 @@
     "ua-parser-js": "^2.0.3",
     "uuid": "^11.1.0",
     "vee-validate": "^4.15.0",
+    "video.js": "^8.23.3",
+    "videojs-sprite-thumbnails": "^2.2.3",
+    "videojs-vtt-thumbnails": "^0.0.13",
     "vue": "^3.5.13",
     "vue-advanced-chat": "https://github.com/antoine92190/vue-advanced-chat/tarball/next",
     "vue-advanced-cropper": "^2.8.9",

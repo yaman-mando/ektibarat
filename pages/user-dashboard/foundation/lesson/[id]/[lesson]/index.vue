@@ -1,0 +1,198 @@
+<template>
+    <userPanelLayout>
+        <div class="flex flex-col justify-center gap-y-[20px] xl1200:flex-row gap-x-[50px]">
+
+
+            <!-- Main Content -->
+            <main class="flex-1 xl1200:mt-[-60px]">
+                <!-- Video Section -->
+
+
+                <div class="flex items-center cursor-pointer gap-x-[8px] text-[16px] font-medium text-dark-2b dark:text-white"
+                    @click="goBack()">
+                    <i class="fa fa-chevron-right"></i>
+                    <span>رجوع للخلف</span>
+                </div>
+
+                <div class="py-[12px_20px]">
+                    <VideoPlayer src="/videos/master.m3u8" poster="/videos/poster.jpg"
+                        thumbnails="/videos/thumbnails.vtt" />
+                </div>
+
+                <!-- Contents -->
+                <section>
+                    <div class="flex items-center flex-wrap gap-y-[15px] justify-between">
+                        <div>
+                            <h1 class="text-[26px] font-bold text-purple-8c dark:text-white mb-[5px]">{{
+                                userPanelStore.lessonDetails?.lessonCategoryTitle }}</h1>
+                            <span class="text-[20px] font-medium text-gray-63 dark:text-white">
+                                {{ userPanelStore.lessonDetails?.title }}
+                                - {{ userPanelStore.lessonDetails?.shortDescription }}</span>
+                        </div>
+                        <div class="space-y-[8px]">
+                            <h1 class="text-[20px] font-bold text-gray-63 dark:text-white">هل استفدت من الدرس؟</h1>
+                            <div class="flex gap-x-[12px] items-center">
+                                <button @click="sendFeedback(true)" :disabled="loading" :class="buttonClasses
+                                    ">نعم،
+                                    استفدت</button>
+                                <button @click="sendFeedback(false)" :class="buttonClasses" :disabled="loading">لا،
+                                    لم أستفد</button>
+                            </div>
+                            <p v-if="successMessage" class="text-green-600 !text-center">{{ successMessage }}</p>
+                        </div>
+                    </div>
+                    <div class="mt-[13px] space-y-[11px]" v-if="userPanelStore.lessonDetails?.videoContents">
+                        <h3 class="text-[20px] font-bold text-gray-63 dark:text-white">محتويات المقطع</h3>
+                        <ul class="space-y-[8px]">
+                            <li v-for="content in userPanelStore.lessonDetails.videoContents" :key="content.id"
+                                class="flex items-center gap-x-[8px]">
+                                <span class="text-blue-d6 text-[20px]">
+                                    {{ formatTimestamp(content.from) }}
+                                </span>
+                                <span class="text-gray-2b text-[20px]">{{ content.title }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+
+
+            <!-- Sidebar -->
+            <aside class="w-full xl1200:w-1/3 space-y-4">
+                <LessonsListSideBar v-if="userPanelStore.simillarVideos"
+                    :section-title="userPanelStore.lessonDetails?.lessonCategoryTitle ?? 'لا يوجد'"
+                    :lessons="userPanelStore.simillarVideos"></LessonsListSideBar>
+            </aside>
+
+
+        </div>
+    </userPanelLayout>
+</template>
+
+<script setup lang="ts">
+import userPanelLayout from '~/layouts/user-panel-layout.vue';
+import { ref } from 'vue'
+import { useUserPanelStore } from '~/store/user-panel';
+import LessonsListSideBar from '~/components/user/lessonsListSideBar.vue';
+import axios from 'axios'
+
+
+const router = useRouter()
+const route = useRoute()
+const userPanelStore = useUserPanelStore()
+const { $axios } = useNuxtApp();
+
+const id = route.params.lesson
+
+
+await userPanelStore.getLessonDetails(id)
+await userPanelStore.getVideoSimillar(id)
+
+
+
+const loading = ref(false)
+const selected = ref<null | boolean>(null)
+const successMessage = ref('')
+const sendFeedback = async (benefited: boolean) => {
+    loading.value = true
+    successMessage.value = ''
+    selected.value = benefited
+
+    try {
+        const res = await $axios.put(`/lessonsUsers/${id}/setBenefited`, { benefited })
+        if (res.data.benefited === benefited) {
+            successMessage.value = 'تم إرسال رأيك بنجاح ✅'
+        } else {
+            successMessage.value = 'لم يتم التأكد من إرسال رأيك ❗'
+        }
+    } catch (err) {
+        successMessage.value = 'حدث خطأ أثناء الإرسال ❌'
+        selected.value = null
+    } finally {
+        loading.value = false
+    }
+}
+
+
+function goBack() {
+    const segments = route.fullPath.split('?')[0].split('/')
+    segments.pop()
+    const newPath = segments.join('/') || '/'
+    router.push(newPath)
+}
+
+const currentLesson = ref({
+    id: 1,
+    groupLawId: 1109,
+    lessonsCategoriesId: 3,
+    lessonCategoryTitle: 'المسائل الحسابية',
+    title: 'العمليات الحسابية',
+    shortDescription: 'العمليات الحسابية',
+    description: 'العمليات الحسابية',
+    iconUrl: 'string',
+    order: 1,
+    examId: null,
+    attachmentIds: [],
+    videoLink: 'https://www.youtube.com/watch?v=fwk8d_HRmZU',
+    type: 1,
+    periodTime: 1314,
+    videoContents: [
+        {
+            id: 1,
+            title: 'الجمع و الطرح',
+            from: 0,
+            to: 50
+        },
+        {
+            id: 2,
+            title: 'الضرب و القسمة',
+            from: 50,
+            to: 250
+        }
+    ]
+})
+
+const lessons = ref([
+    {
+        id: 1,
+        periodTime: 1314,
+        title: 'العمليات الحسابية',
+        order: 1,
+        videoLink: 'https://www.youtube.com/watch?v=fwk8d_HRmZU',
+        isWatched: true
+    },
+    {
+        id: 2,
+        periodTime: 1500,
+        title: 'الأعداد',
+        order: 2,
+        videoLink: 'https://www.youtube.com/watch?v=6xT5n7iKhX4',
+        isWatched: false
+    }
+])
+
+function formatTime(seconds: number): string {
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = seconds % 60
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
+}
+
+function formatTimestamp(seconds: number): string {
+    const m = Math.floor(seconds / 60)
+    const s = seconds % 60
+    return `${m}:${s.toString().padStart(2, '0')}`
+}
+
+
+const buttonClasses = computed(() => {
+    let base = 'border-gray-8f border-[1px] w-[140px] h-[32px] cursor-pointer rounded-[4px] text-[18px] font-medium text-gray-63'
+    if (loading.value) return `${base} opacity-50 pointer-events-none`
+    if (selected.value === true) return `${base} bg-green-600 text-white opacity-50 pointer-events-none`
+    if (selected.value === false) return `${base} bg-red-500 text-white opacity-50 pointer-events-none`
+    return `${base} bg-white`
+})
+</script>
+
+<style scoped>
+/* Tailwind CSS is used */
+</style>

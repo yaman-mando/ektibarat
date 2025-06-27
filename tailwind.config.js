@@ -109,6 +109,7 @@ module.exports = {
         'green-87': 'var(--green-87)',
         'green-da': 'var(--green-da)',
         'green-15': 'var(--green-15)',
+        'green-fa':'#ECFFFA',
         'yellow-16': 'var(--yellow-16)',
         'yellow-00': 'var(--yellow-00)',
         'yellow-30': 'var(--yellow-30)',
