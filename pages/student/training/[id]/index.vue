@@ -1360,7 +1360,7 @@ onMounted(async () => {
 
 //meta
 definePageMeta({
-  layout: 'exam-layout',
+  layout: 'training-layout',
   middleware: ['user-services-middleware'],
 });
 useHead({
