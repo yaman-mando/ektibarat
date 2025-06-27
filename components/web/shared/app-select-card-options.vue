@@ -15,7 +15,7 @@
         v-for="option of options"
         :key="option.key"
         class="option-item"
-        :class="[{ active: option.key == selectedValue }]"
+        :class="[{ active: isActive(option.key) }]"
         @click="emit('select', option.key)"
       >
         <span>{{ option.description }}</span>
@@ -30,7 +30,7 @@ const props = withDefaults(
     title: string;
     label: string;
     options: { key: string | number; description: string }[];
-    selectedValue: string | number | null;
+    selectedValues?: Array<string> | Array<number>;
   }>(),
   {}
 );
@@ -38,6 +38,12 @@ const props = withDefaults(
 const emit = defineEmits<{
   (e: 'select', val: string | number): void;
 }>();
+
+function isActive(key: string | number) {
+  if (!props.selectedValues) return false;
+
+  return props.selectedValues.some((val) => val == key);
+}
 </script>
 <style lang="scss" scoped>
 .sci-item {
