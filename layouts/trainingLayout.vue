@@ -85,7 +85,7 @@ html {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  overflow-y: auto;
+  //overflow-y: auto;
 
   .a-select-item {
     &.correct-answer,

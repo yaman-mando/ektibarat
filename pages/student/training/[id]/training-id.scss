@@ -1,6 +1,89 @@
 @import '@/assets/scss/mixin';
 
 .student-exam-details {
+  .st-h {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    justify-content: center;
+    padding: 25px 0;
+
+    > img {
+      width: 160px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+    }
+
+    .e-bu {
+      height: 40px !important;
+      width: 160px !important;
+      border-radius: 20px !important;
+      border-width: 1px !important;
+      .app-button-icon {
+        font-size: 20px;
+      }
+      .app-button-label {
+        font-size: 14px;
+      }
+    }
+
+    .ec-po {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+      }
+      span {
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--blue-f1);
+      }
+    }
+  }
+
+  .st-progress-w {
+    --radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 15px;
+    align-items: center;
+    .progress {
+      border-radius: var(--radius);
+      box-shadow: inset 2px 2px 4px #00000026;
+      .progress-bar {
+        border-radius: var(--radius);
+        background: linear-gradient(to right, #58cc02, #4e9818);
+      }
+    }
+    .st-res {
+      display: grid;
+      justify-content: flex-end;
+      grid-template-columns: repeat(3, min-content);
+      grid-gap: 10px;
+      .tp-sep {
+        width: 2px;
+        background: var(--gray-be);
+      }
+    }
+  }
+
+  .exam-part-article {
+    .exam-part-article-iw {
+      //box-shadow: 0 0 15px #00000033 !important;
+    }
+  }
+}
+
+.student-exam-details {
   width: 100%;
   height: 100%;
   position: relative;
@@ -14,6 +97,16 @@
     zoom: 0.9;
   }
   .sed-w {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    max-height: 100vh;
+    .sed-p1 {
+      padding-bottom: 10px !important;
+    }
+    .sed-p2 {
+      overflow-y: auto;
+      padding-bottom: 70px;
+    }
     @include web-desktop-up() {
       margin-bottom: 30px;
     }
