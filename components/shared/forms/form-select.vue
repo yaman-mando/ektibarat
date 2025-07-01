@@ -37,6 +37,7 @@
             noChildrenText="لايوجد عناصر اخرى"
             noOptionsText="لايوجد عناصر"
             noResultsText="لم يتم العثور على نتيجة"
+            :clearable="clearable"
             @close="onClose(vSlot)"
           >
             <template
@@ -104,6 +105,10 @@ export default {
   inheritAttrs: false,
 
   props: {
+    clearable: {
+      type: Boolean,
+      default: true,
+    },
     rules: {
       required: false,
       type: Object as PropType<any>,

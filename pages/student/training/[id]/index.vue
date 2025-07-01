@@ -10,177 +10,233 @@
         <template
           v-if="examDetail && currentQuestionDetailModel && currentAnswersModel"
         >
-          <div class="sed-w w-container">
-            <client-only>
-              <div
-                v-if="$isDev"
-                class="bg-red-100"
-              >
-                <lazy-prime-button
-                  size="small"
-                  @click="confirmContinueOrExitTrain"
-                >
-                  end
-                </lazy-prime-button>
-                <lazy-prime-button
-                  size="small"
-                  @click="prevQuestion"
-                >
-                  prev
-                </lazy-prime-button>
-                <lazy-prime-button
-                  size="small"
-                  @click="nextQuestion"
-                >
-                  next
-                </lazy-prime-button>
+          <div class="sed-w">
+            <div class="w-full flex flex-col sed-p1 w-container">
+              <div class="st-h">
+                <app-button
+                  class="e-bu"
+                  label="إنهاء التدريب"
+                  variant="outline"
+                  iconStartClass="ek-icon-exit-door"
+                  @click="exitPage"
+                />
+                <img
+                  alt="Ekhtibarat"
+                  src="/images/EkhtibaratLogoColor.webp"
+                />
+                <div class="ec-po">
+                  <img
+                    src="/images/svg/star-orange.svg"
+                    alt="star point"
+                  />
+                  <span>{{ Number(2988).toLocaleString() }}</span>
+                </div>
               </div>
-            </client-only>
-            <app-overlay v-if="loadingPage" />
-            <div class="t-hero-m">
-              <app-button
-                label="إنهاء"
-                variant="clear"
-                size="sm"
-                iconStartClass="ek-icon-exit-door"
-                @click="exitPage"
-              />
-              <lazy-app-train-part-answers-status
-                v-if="windowSize.isMobileSize && !!activePartModel"
-                ref="answer_status_ref"
-                class="w-mobile-only"
-                :isMobile="true"
-                :canRemoveAnswer="canRemoveAnswerModel"
-                :isLoadingRemoveAnswer="isLoadingRemoverAnswer"
-                :correctAnswerCount="correctAnswerCount"
-                :wrongAnswerCount="wrongAnswerCount"
-                :totalPointsCount="totalPointsCount"
-                :questionMinSecond="currentQuestionDetailModel.questionMinTime"
-                :questionMaxSecond="currentQuestionDetailModel.questionMaxTime"
-                :questionPointsSetting="activePartModel.pointsSettings"
-                :questionId="currentQuestionDetailModel.questionId"
-                :canShowLaw="
-                  currentQuestionDetailModel.isBelongToLaw &&
-                  userCurrentSub.trainingLawWatchingCount > 0
-                "
-                @showLawsAction="onShowLaws"
-                @removeAction="removeAnswersTry"
-                @showAnswerAction="onAnswerHelpAction"
-              />
+              <div class="st-progress-w">
+                <app-progress-bar
+                  :max="allQuestions.length"
+                  :value="allAnsweredQuestionCounts"
+                  :showLabel="false"
+                  :height="12"
+                />
+                <div class="st-res">
+                  <div
+                    class="flex items-center justify-center gap-1 text-green-8c"
+                  >
+                    <i
+                      class="fa-solid fa-check text-xs !flex items-center justify-center text-white rounded-[50%] w-[20px] h-[20px] bg-green-8c"
+                    ></i>
+                    <span class="">{{ correctAnswerCount }}</span>
+                  </div>
+                  <div class="tp-sep"></div>
+                  <div
+                    class="flex items-center justify-center gap-1 text-red-63"
+                  >
+                    <i
+                      class="fa-solid fa-xmark text-xs !flex items-center justify-center text-white rounded-[50%] w-[20px] h-[20px] bg-red-63"
+                    ></i>
+                    <span class="">{{ wrongAnswerCount }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <lazy-app-exam-part-article
-              v-if="
-                !!activePartModel?.isCategoryText &&
-                !!activeQuestionModel?.articleUi
-              "
-              :text="activeQuestionModel.articleUi"
-            />
-            <div class="aqs-w">
-              <lazy-app-exam-part-question-part
-                ref="examPartQuestionRef"
-                :mainTitle="questionTitleModel"
-                :isTrain="true"
-                :counterValue="currentQuestionPassedSecond"
-                :question="currentQuestionDetailModel"
-                :showFeature="true"
-              >
-                <lazy-app-answer-select
+            <div class="sed-p2">
+              <div class="w-container">
+                <!--            <client-only>-->
+                <!--              <div-->
+                <!--                v-if="$isDev"-->
+                <!--                class="bg-red-100"-->
+                <!--              >-->
+                <!--                <lazy-prime-button-->
+                <!--                  size="small"-->
+                <!--                  @click="confirmContinueOrExitTrain"-->
+                <!--                >-->
+                <!--                  end-->
+                <!--                </lazy-prime-button>-->
+                <!--                <lazy-prime-button-->
+                <!--                  size="small"-->
+                <!--                  @click="prevQuestion"-->
+                <!--                >-->
+                <!--                  prev-->
+                <!--                </lazy-prime-button>-->
+                <!--                <lazy-prime-button-->
+                <!--                  size="small"-->
+                <!--                  @click="nextQuestion"-->
+                <!--                >-->
+                <!--                  next-->
+                <!--                </lazy-prime-button>-->
+                <!--              </div>-->
+                <!--            </client-only>-->
+                <app-overlay v-if="loadingPage" />
+                <div class="t-hero-m">
+                  <app-button
+                    label="إنهاء"
+                    variant="clear"
+                    size="sm"
+                    iconStartClass="ek-icon-exit-door"
+                    @click="exitPage"
+                  />
+                  <!--              <app-train-part-answers-status-->
+                  <!--                v-if="windowSize.isMobileSize && !!activePartModel"-->
+                  <!--                ref="answer_status_ref"-->
+                  <!--                class="w-mobile-only"-->
+                  <!--                :isMobile="true"-->
+                  <!--                :canRemoveAnswer="canRemoveAnswerModel"-->
+                  <!--                :isLoadingRemoveAnswer="isLoadingRemoverAnswer"-->
+                  <!--                :correctAnswerCount="correctAnswerCount"-->
+                  <!--                :wrongAnswerCount="wrongAnswerCount"-->
+                  <!--                :totalPointsCount="totalPointsCount"-->
+                  <!--                :questionMinSecond="currentQuestionDetailModel.questionMinTime"-->
+                  <!--                :questionMaxSecond="currentQuestionDetailModel.questionMaxTime"-->
+                  <!--                :questionPointsSetting="activePartModel.pointsSettings"-->
+                  <!--                :questionId="currentQuestionDetailModel.questionId"-->
+                  <!--                :canShowLaw="-->
+                  <!--                  currentQuestionDetailModel.isBelongToLaw &&-->
+                  <!--                  userCurrentSub.trainingLawWatchingCount > 0-->
+                  <!--                "-->
+                  <!--                @showLawsAction="onShowLaws"-->
+                  <!--                @removeAction="removeAnswersTry"-->
+                  <!--                @showAnswerAction="onAnswerHelpAction"-->
+                  <!--              />-->
+                </div>
+                <app-exam-part-article
+                  v-if="
+                    !!activePartModel?.isCategoryText &&
+                    !!activeQuestionModel?.articleUi
+                  "
+                  :text="activeQuestionModel.articleUi"
+                />
+                <div class="aqs-w">
+                  <lazy-app-exam-part-question-part
+                    ref="examPartQuestionRef"
+                    :mainTitle="questionTitleModel"
+                    :isTrain="true"
+                    :counterValue="currentQuestionPassedSecond"
+                    :question="currentQuestionDetailModel"
+                    :showFeature="true"
+                  >
+                    <lazy-app-answer-select
+                      v-if="!!activeQuestionModel"
+                      :correctAnswerIdsList="viewCorrectAnswerIds"
+                      :disableImgModal="true"
+                      :selectedValue="currentQuestionAnswerId"
+                      :answers="currentAnswersModel"
+                      :questionState="activeQuestionModel.questionState"
+                      :isDisabled="
+                        activeQuestionModel.questionState !==
+                        questionStateEnum.initial
+                      "
+                      :showTakfeelat="
+                        activeQuestionModel.questionState !=
+                        questionStateEnum.initial
+                      "
+                      @onAnswerChange="onAnswerChange($event)"
+                    />
+                  </lazy-app-exam-part-question-part>
+                  <div class="tpa-w w-mobile-only">
+                    <lazy-app-train-part-actions
+                      ref="trainPartMobileRef"
+                      class="w-container"
+                      :isActiveNext="canSelectNextQuestion"
+                      :isActiveConfirm="canConfirmAnswerModel"
+                      @confirmAction="onSelectAnswer(currentQuestionAnswerId)"
+                      @nextAction="nextQuestion"
+                      @complainAction="onComplaint"
+                    />
+                  </div>
+                  <!--              <app-train-part-answers-status-->
+                  <!--                v-if="!windowSize.isMobileSize && !!activePartModel"-->
+                  <!--                ref="answer_status_ref"-->
+                  <!--                class="w-web-up-only"-->
+                  <!--                :canRemoveAnswer="canRemoveAnswerModel"-->
+                  <!--                :isLoadingRemoveAnswer="isLoadingRemoverAnswer"-->
+                  <!--                :correctAnswerCount="correctAnswerCount"-->
+                  <!--                :wrongAnswerCount="wrongAnswerCount"-->
+                  <!--                :totalPointsCount="totalPointsCount"-->
+                  <!--                :questionMinSecond="currentQuestionDetailModel.questionMinTime"-->
+                  <!--                :questionMaxSecond="currentQuestionDetailModel.questionMaxTime"-->
+                  <!--                :questionPointsSetting="activePartModel.pointsSettings"-->
+                  <!--                :questionId="currentQuestionDetailModel.questionId"-->
+                  <!--                :canShowLaw="-->
+                  <!--                  currentQuestionDetailModel.isBelongToLaw &&-->
+                  <!--                  userCurrentSub.trainingLawWatchingCount > 0-->
+                  <!--                "-->
+                  <!--                @removeAction="removeAnswersTry"-->
+                  <!--                @showAnswerAction="onAnswerHelpAction"-->
+                  <!--                @showLawsAction="onShowLaws"-->
+                  <!--              />-->
+                </div>
+
+                <lazy-train-part-mobile-actions
+                  :questionId="currentQuestionDetailModel.questionId"
+                  :canShowLaw="
+                    currentQuestionDetailModel.isBelongToLaw &&
+                    userCurrentSub.trainingLawWatchingCount > 0
+                  "
+                  :canRemoveAnswer="canRemoveAnswerModel"
+                  :isLoadingRemoveAnswer="isLoadingRemoverAnswer"
+                  @showLawsAction="onShowLaws"
+                  @removeAction="removeAnswersTry"
+                  @showAnswerAction="onAnswerHelpAction"
+                  @complaintAction="onComplaint"
+                />
+                <lazy-modal-answer-feedback
                   v-if="!!activeQuestionModel"
-                  :correctAnswerIdsList="viewCorrectAnswerIds"
-                  :disableImgModal="true"
-                  :selectedValue="currentQuestionAnswerId"
-                  :answers="currentAnswersModel"
-                  :questionState="activeQuestionModel.questionState"
-                  :isDisabled="
-                    activeQuestionModel.questionState !==
-                    questionStateEnum.initial
+                  v-model:isOpen="isOpenFeedbackModal"
+                  :isCorrect="
+                    activeQuestionModel.questionState ===
+                    questionStateEnum.correct
                   "
-                  :showTakfeelat="
-                    activeQuestionModel.questionState !=
-                    questionStateEnum.initial
-                  "
-                  @onAnswerChange="onAnswerChange($event)"
+                  :msg="feedbackMsg"
+                  :feedbackType="feedbackType"
+                  :mediaUrl="feedbackMediaUrl"
                 />
-              </lazy-app-exam-part-question-part>
-              <div class="tpa-w w-mobile-only">
-                <lazy-app-train-part-actions
-                  ref="trainPartMobileRef"
-                  class="w-container"
-                  :isActiveNext="canSelectNextQuestion"
-                  :isActiveConfirm="canConfirmAnswerModel"
-                  @confirmAction="onSelectAnswer(currentQuestionAnswerId)"
-                  @nextAction="nextQuestion"
-                  @complainAction="onComplaint"
+
+                <web-answer-help-modal
+                  v-model:isOpen="isOpenHelpAnswerModal"
+                  :htmlContent="
+                    currentQuestionDetailModel.feedbackInCorrectAnswer
+                  "
+                />
+                <web-complaint-modal
+                  v-model:isOpen="isOpenComplaintForm"
+                  :questionId="currentQuestionDetailModel.id"
+                  :examId="examDetail.id"
                 />
               </div>
-              <lazy-app-train-part-answers-status
-                v-if="!windowSize.isMobileSize && !!activePartModel"
-                ref="answer_status_ref"
-                class="w-web-up-only"
-                :canRemoveAnswer="canRemoveAnswerModel"
-                :isLoadingRemoveAnswer="isLoadingRemoverAnswer"
-                :correctAnswerCount="correctAnswerCount"
-                :wrongAnswerCount="wrongAnswerCount"
-                :totalPointsCount="totalPointsCount"
-                :questionMinSecond="currentQuestionDetailModel.questionMinTime"
-                :questionMaxSecond="currentQuestionDetailModel.questionMaxTime"
-                :questionPointsSetting="activePartModel.pointsSettings"
-                :questionId="currentQuestionDetailModel.questionId"
-                :canShowLaw="
-                  currentQuestionDetailModel.isBelongToLaw &&
-                  userCurrentSub.trainingLawWatchingCount > 0
-                "
-                @removeAction="removeAnswersTry"
-                @showAnswerAction="onAnswerHelpAction"
-                @showLawsAction="onShowLaws"
+            </div>
+            <div class="tpa-w w-web-up-only">
+              <lazy-app-train-part-actions
+                ref="trainPartWebRef"
+                class="w-container"
+                :isActiveNext="canSelectNextQuestion"
+                :isActiveConfirm="canConfirmAnswerModel"
+                @confirmAction="onSelectAnswer(currentQuestionAnswerId)"
+                @nextAction="nextQuestion"
+                @complainAction="onComplaint"
+                @endAction="exitPage"
               />
             </div>
-
-            <lazy-train-part-mobile-actions
-              :questionId="currentQuestionDetailModel.questionId"
-              :canShowLaw="
-                currentQuestionDetailModel.isBelongToLaw &&
-                userCurrentSub.trainingLawWatchingCount > 0
-              "
-              :canRemoveAnswer="canRemoveAnswerModel"
-              :isLoadingRemoveAnswer="isLoadingRemoverAnswer"
-              @showLawsAction="onShowLaws"
-              @removeAction="removeAnswersTry"
-              @showAnswerAction="onAnswerHelpAction"
-              @complaintAction="onComplaint"
-            />
-            <lazy-modal-answer-feedback
-              v-if="!!activeQuestionModel"
-              v-model:isOpen="isOpenFeedbackModal"
-              :isCorrect="
-                activeQuestionModel.questionState === questionStateEnum.correct
-              "
-              :msg="feedbackMsg"
-              :feedbackType="feedbackType"
-              :mediaUrl="feedbackMediaUrl"
-            />
-
-            <web-answer-help-modal
-              v-model:isOpen="isOpenHelpAnswerModal"
-              :htmlContent="currentQuestionDetailModel.feedbackInCorrectAnswer"
-            />
-            <web-complaint-modal
-              v-model:isOpen="isOpenComplaintForm"
-              :questionId="currentQuestionDetailModel.id"
-              :examId="examDetail.id"
-            />
-          </div>
-          <div class="tpa-w w-web-up-only">
-            <lazy-app-train-part-actions
-              ref="trainPartWebRef"
-              class="w-container"
-              :isActiveNext="canSelectNextQuestion"
-              :isActiveConfirm="canConfirmAnswerModel"
-              @confirmAction="onSelectAnswer(currentQuestionAnswerId)"
-              @nextAction="nextQuestion"
-              @complainAction="onComplaint"
-              @endAction="exitPage"
-            />
           </div>
           <exam-confirm-exit ref="confirm_exit_ref" />
           <lazy-web-train-end-modal
@@ -221,6 +277,7 @@ import type {
   StudentsExamAnalyzeDataModel,
   StudentsExamCustomFromTagsDTODataModel,
   StudentsExamDataModel,
+  StudentsExamPartDataModel,
   StudentsExamPartQuestionDataModel,
   StudentsExamRemoveAnswerDTODataModel,
 } from '~/main/modules/students-exam/data-access/models/students-exam.model';
@@ -251,12 +308,14 @@ import { APP_CONFIG } from 'public/constants/app-config';
 import { TRAIN_MODAL_WARN_CASE } from '~/main/constants/train-modal-warn-case.enum';
 import { useTypedLazyRequest } from '~/composables/useTypedLazyRequest';
 import { firstValueFrom, of } from 'rxjs';
+import { useStore } from 'vuex';
 
 const $isDev = !IS_PRODUCTION_APP;
 //composable
 const router = useRouter();
 const route = useRoute();
 const toastMessage = useToastMessage();
+const store = useStore();
 const globalStore = useGlobalStore();
 const subscriptionsStore = useSubscriptionsStore();
 const windowSize = useWindowSize();
@@ -304,6 +363,7 @@ const examPartsPointsSettingsRecord = reactive<
 >({});
 const answerUnderMinTimeCount = ref<number>(0);
 const confirmExitRef = useTemplateRef('confirm_exit_ref');
+//@ts-expect-error ignore ref access value
 const answerStatusRef = useTemplateRef('answer_status_ref');
 const questionWarnModalRefProp = useTemplateRef('questionWarnModalRef');
 const warnModal = useTemplateRef('warnModalRef');
@@ -619,6 +679,28 @@ const userCurrentSub = computed(
 );
 
 //method
+function getAllQuestionsInExam(
+  exam: StudentsExamDataModel
+): StudentsExamPartQuestionDataModel[] {
+  const allQuestions: StudentsExamPartQuestionDataModel[] = [];
+
+  function collectQuestionsInPart(part: StudentsExamPartDataModel): void {
+    if (part.studentsQuestion.length) {
+      allQuestions.push(...part.studentsQuestion);
+    }
+
+    if (part.children.length) {
+      part.children.forEach((child) => collectQuestionsInPart(child));
+    }
+  }
+
+  if (exam.examParts.length) {
+    exam.examParts.forEach((part) => collectQuestionsInPart(part));
+  }
+
+  return allQuestions;
+}
+
 const getCurrentQuestionStorageState = () => {
   return trainingStorageState.value.questionsState[
     currentQuestionDetailModel.value!.id
@@ -629,7 +711,7 @@ const initPage = async () => {
   try {
     isLoadingPage.value = true;
     await globalStore.getLocalesJsonStatic();
-    let currentExam = studentsExamStore.state.detail;
+    let currentExam = store.state.student.currentExamTrainPageData;
     if (!currentExam) {
       const examDetailRes = await studentsExamStore.getById(
         route.params.id as string
@@ -749,6 +831,24 @@ const initPage = async () => {
     navigateTo(webErrorPathUtil());
   }
 };
+
+const allQuestions = computed(() => {
+  const detail = examDetail.value;
+  if (detail) {
+    return getAllQuestionsInExam(detail);
+  }
+  return [];
+});
+
+const allAnsweredQuestionCounts = computed(() => {
+  const questions = allQuestions.value;
+  if (questions.length) {
+    return questions.filter(
+      (q) => q.questionState !== QuestionStateEnum.initial
+    ).length;
+  }
+  return 0;
+});
 
 const onComplaint = () => {
   isOpenComplaintForm.value = true;
@@ -1301,16 +1401,16 @@ onBeforeRouteLeave(async (to, from, next) => {
 
   if (skipRouteLeave.value) {
     await beforePageUnload();
-    const analyticsId = await checkAvailableAnalytics();
-    if (analyticsId) {
-      const targetPath = `/student/analytics/${analyticsId}`;
-      if (to.fullPath === targetPath) {
-        confirmNavigate.value = true;
-        return next();
-      }
-      confirmNavigate.value = true;
-      return next({ path: targetPath });
-    }
+    // const analyticsId = await checkAvailableAnalytics();
+    // if (analyticsId) {
+    //   const targetPath = `/student/analytics/${analyticsId}`;
+    //   if (to.fullPath === targetPath) {
+    //     confirmNavigate.value = true;
+    //     return next();
+    //   }
+    //   confirmNavigate.value = true;
+    //   return next({ path: targetPath });
+    // }
     confirmNavigate.value = true;
     return next();
   }
@@ -1332,11 +1432,11 @@ onBeforeRouteLeave(async (to, from, next) => {
     }
 
     await beforePageUnload();
-    const analyticsId = await checkAvailableAnalytics();
-    if (analyticsId) {
-      confirmNavigate.value = true;
-      return { proceed: true, path: `/student/analytics/${analyticsId}` };
-    }
+    // const analyticsId = await checkAvailableAnalytics();
+    // if (analyticsId) {
+    //   confirmNavigate.value = true;
+    //   return { proceed: true, path: `/student/analytics/${analyticsId}` };
+    // }
     confirmNavigate.value = true;
     return { proceed: true };
   };
@@ -1358,16 +1458,20 @@ onMounted(async () => {
   }
 });
 
+const pageTitle = computed(() => {
+  return `${getMetaTitle(examDetail.value?.title ?? '')} - ${allQuestions.value.length}`;
+});
+
 //meta
 definePageMeta({
-  layout: 'exam-layout',
+  layout: 'training-layout',
   middleware: ['user-services-middleware'],
 });
 useHead({
-  title: getMetaTitle(examDetail.value?.title ?? ''),
+  title: pageTitle,
   htmlAttrs: {
     dir: 'rtl',
-    class: 'app-light no-menu zoom-wrapper',
+    class: 'app-light no-menu',
   },
 });
 </script>

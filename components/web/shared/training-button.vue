@@ -22,6 +22,7 @@ import {
   UserPanelItems,
   UserPanelItemsRecord,
 } from '~/main/constants/user-panel-items';
+import { webUserPanelTraining } from '~/main/utils/web-routes.utils';
 
 //props
 withDefaults(
@@ -38,12 +39,7 @@ const router = useRouter();
 
 //methods
 const goTraining = () => {
-  router.push({
-    path: '/user-panel',
-    query: {
-      page: UserPanelItemsRecord[UserPanelItems.trainings],
-    },
-  });
+  router.push(webUserPanelTraining());
 };
 </script>
 <style lang="scss" scoped>

@@ -59,7 +59,6 @@ export const useStudentsExamStore = defineStore('students-exam-store', () => {
   };
 
   return {
-    state,
     patchState,
     //actions
     getById,

@@ -20,7 +20,8 @@ export const webAuthGoogleSignIn = () => '/auth/signin-google';
 export const webAuthAppleSignIn = () => '/auth/signin-apple';
 export const webPricesPathUtil = () => '/prices';
 export const webGeneralSelectionPathUtil = () => '/general-selection';
-export const webUserPanelTraining = () => `/user-panel?page=trainings`;
+export const webUserPanelTraining = () =>
+  `/user-dashboard/prepare?page=trainings`;
 export const webUserPanelSubscriptions = () =>
   '/user-panel?page=subscriptionList';
 export const webUserPanelTrainingWithQuery = (

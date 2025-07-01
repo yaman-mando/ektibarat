@@ -1,4 +1,5 @@
 import type { Module } from 'vuex';
+import type { StudentsExamDataModel } from '~/main/modules/students-exam/data-access/models/students-exam.model';
 
 const fetchingKeysStudent = {
   profile: 'profile',
@@ -92,7 +93,7 @@ export const StudentVuexStore: Module<VuexStudentState> = {
       examsWizardFilterResult: null,
       examWizardDetails: null,
       examSuggestions: null,
-      currentExamTrainPageData: null,
+      currentExamTrainPageData: null as StudentsExamDataModel | null,
       reviewQuestions: null,
       studentAnalytics: null,
       studentAnalyticsChart: null,

@@ -159,12 +159,22 @@
               <div class="__bank">
                 <div class="select-items-wrapper">
                   <div class="select-items-wrapper__st">
-                    <app-select-card-item
-                      title="أحدث 1000 سؤال"
-                      iconSvgPath="/images/svg/sparkles_icon.svg"
-                      label="تدرب على أحدث الأسئلة والتسريبات فقط"
-                      color="blue"
-                    />
+                    <div class="relative">
+                      <service-block
+                        v-if="!userServicesState.BANKUSAGE.isActive"
+                      />
+                      <app-select-card-item
+                        title="أحدث 1000 سؤال"
+                        iconSvgPath="/images/svg/sparkles_icon.svg"
+                        label="تدرب على أحدث الأسئلة والتسريبات فقط"
+                        color="blue"
+                        :isActive="isRecentQuestionActive"
+                        :isDisabled="
+                          !userServicesState.ROWNQUESTIONPRACTICE.isActive
+                        "
+                        @click="onRecentSelect"
+                      />
+                    </div>
                     <div class="relative">
                       <service-block
                         v-if="!userServicesState.ROWNQUESTIONPRACTICE.isActive"
@@ -237,11 +247,9 @@
                       title="مستوى الأسئلة"
                       label="تحدى نفسك واختر المستوى الذي تريده لهذا التدريب"
                       iconSvgPath="/images/svg/layer-group-solid.svg"
-                      :selectedValue="advancedFilter.oLevelMaxValue"
+                      :selectedValues="selectedDifficultValues"
                       :options="levelOptions"
-                      @select="
-                        (val) => (advancedFilter.oLevelMaxValue = Number(val))
-                      "
+                      @select="onSelectDifficult($event)"
                     />
                   </div>
                 </div>
@@ -254,6 +262,7 @@
                     :list="questionCountOptions"
                     :placeholder="'سؤال'"
                     :isMulti="false"
+                    :clearable="false"
                   />
                 </div>
                 <!--                <div class="__full-filter">-->
@@ -830,6 +839,12 @@ export class advancedFilterForm {
   onlyTakfelQuestions = false;
 }
 
+const levelOptionsEnum = Object.freeze({
+  easy: 0,
+  middle: 5,
+  hard: 10,
+});
+
 //TODO-z add fcmClarityMixin
 export default {
   components: { AppSelectCardItem, RangeSlider, EmCheckbox },
@@ -851,15 +866,15 @@ export default {
 
     const levelOptions = [
       {
-        key: 0,
+        key: levelOptionsEnum.easy,
         description: 'سهلة',
       },
       {
-        key: 5,
+        key: levelOptionsEnum.middle,
         description: 'متوسطة',
       },
       {
-        key: 10,
+        key: levelOptionsEnum.hard,
         description: 'صعبة',
       },
     ];
@@ -927,6 +942,11 @@ export default {
   },
   data() {
     return {
+      selectedDifficultValues: [
+        levelOptionsEnum.easy,
+        levelOptionsEnum.hard,
+      ] as any[],
+      isRecentQuestionActive: false,
       cards: mockData,
       selectedCard: [] as any[],
       activeSwitch: false,
@@ -966,6 +986,39 @@ export default {
   },
 
   methods: {
+    onSelectDifficult(val: string | number) {
+      const set = new Set(this.selectedDifficultValues);
+      if (set.size === 2 && !set.has(val)) return;
+
+      if (set.has(val)) {
+        set.delete(val);
+      } else {
+        set.add(val);
+      }
+
+      this.selectedDifficultValues = Array.from(set);
+      this.selectedDifficultValues.sort((a, b) => a - b);
+      const val1 = this.selectedDifficultValues[0];
+      const val2 = this.selectedDifficultValues[1];
+      const min =
+        val1 >= 0 && val2 >= 0 ? val1 : (val1 ?? levelOptionsEnum.easy);
+      const max =
+        val1 >= 0 && val2 >= 0 ? val2 : (val1 ?? levelOptionsEnum.hard);
+      this.advancedFilter.oLevelMinValue = min;
+      this.advancedFilter.oLevelMaxValue = max;
+    },
+    onRecentSelect() {
+      this.isRecentQuestionActive = !this.isRecentQuestionActive;
+
+      if (this.isRecentQuestionActive) {
+        this.advancedFilter.oBankMinValue =
+          this.advancedFilter.oBankMaxValue - 9;
+        this.UpdateBankValues();
+      } else {
+        this.advancedFilter.oBankMinValue = 1;
+        this.form.tagsIds = [];
+      }
+    },
     async selectPrimaryCat() {
       try {
         this.selectedCard = [];
@@ -1302,7 +1355,7 @@ export default {
     formatDate(date) {
       return dateUi(new Date(date));
     },
-    UpdateBankValues(e) {
+    UpdateBankValues(e?) {
       //this.advancedFilter.oBankMinValue = e.minValue;
       //this.advancedFilter.oBankMaxValue = e.maxValue;
       this.form.tagsIds = [];
@@ -1440,7 +1493,7 @@ export default {
         list.push({
           categoryId: k.id,
           questionLevel: 0,
-          questionsCount: k.defaultQuestionsCount,
+          questionsCount: this.form.questionCount,
         });
       });
       return list;
