@@ -99,9 +99,9 @@ export default {
 <style lang="scss">
 .a-delete-modal {
   background-color: var(--modal-bg);
-  width: 340px !important;
+  width: 370px !important;
   height: auto;
-  max-width: 90vw;
+  max-width: 98vw;
   margin: auto;
   border-radius: 15px;
   .a-wrapper {
