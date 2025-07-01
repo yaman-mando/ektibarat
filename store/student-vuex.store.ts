@@ -21,7 +21,7 @@ const fetchingKeysStudent = {
   complaintRequest: 'complaintRequest',
   removeAnswerHelp: 'removeAnswerHelp',
   studentAnalytics: 'studentAnalytics',
-  studentAnalyticsChart: 'studentAnalyticsChart',
+  studentAnalyticsChart: 'studentAnalyticsChart'
 };
 
 export type VuexStudentState = {
@@ -57,7 +57,7 @@ export type VuexStudentState = {
   reviewQuestions: any | null;
   studentAnalytics: any | null;
   studentAnalyticsChart: any | null;
-  selectedStudentIdForTeacher: number | null;
+  selectedStudentIdForTeacher: number | null
 };
 
 export const StudentVuexStore: Module<VuexStudentState> = {
@@ -80,7 +80,7 @@ export const StudentVuexStore: Module<VuexStudentState> = {
         challengeDetail: false,
         trainReview: false,
         complaintRequest: false,
-        removeAnswerHelp: false,
+        removeAnswerHelp: false
       },
       profile: null,
       isOpenMenu: false,
@@ -96,7 +96,7 @@ export const StudentVuexStore: Module<VuexStudentState> = {
       reviewQuestions: null,
       studentAnalytics: null,
       studentAnalyticsChart: null,
-      selectedStudentIdForTeacher: null,
+      selectedStudentIdForTeacher: null
     };
   },
   mutations: {
@@ -748,5 +748,7 @@ export const StudentVuexStore: Module<VuexStudentState> = {
       });
       return response;
     },
+
+  
   },
 };

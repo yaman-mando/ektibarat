@@ -63,6 +63,7 @@ export const fetchingKeysAdmin = {
   lawsPackagesList: 'lawsPackagesList',
   competitionResults: 'competitionResults',
   teachersResults: 'teachersResults',
+  lessionCategories: 'lessionCategories'
 };
 
 export type VuexAdminState = {
@@ -120,6 +121,7 @@ export type VuexAdminState = {
     partnerships: boolean;
     lawsPackagesList: boolean;
     teachersResults: boolean;
+    lessionCategories: boolean
   };
   employeeList: any | null;
   categoryList: any | null;
@@ -155,6 +157,9 @@ export type VuexAdminState = {
   lawsPackageList: any | null;
   competitionResults: any | null;
   teachersResults: any | null;
+  lessonCategories: any | null;
+  lessonCategoriesForAdmin: any | null;
+  lessonCategoriesForStudent: any | null;
 };
 
 export const adminVuexStore: Module<VuexAdminState> = {
@@ -215,6 +220,7 @@ export const adminVuexStore: Module<VuexAdminState> = {
         partnerships: false,
         lawsPackagesList: false,
         teachersResults: false,
+        lessionCategories: false
       },
       employeeList: null,
       categoryList: null,
@@ -250,6 +256,10 @@ export const adminVuexStore: Module<VuexAdminState> = {
       lawsPackageList: null,
       competitionResults: null,
       teachersResults: null,
+      lessonCategories: null,
+      lessonCategoriesForAdmin: null,
+      lessonCategoriesForStudent: null
+
     };
   },
   mutations: {
@@ -554,6 +564,15 @@ export const adminVuexStore: Module<VuexAdminState> = {
 
     SET_TEACHERS_RESULTS(state, payload) {
       state.teachersResults = payload;
+    },
+    SET_LESSONS_CATEGORIES(state, payload) {
+      state.lessonCategories = payload
+    },
+    SET_LESSONS_CATEGORIES_FOR_ADMIN(state, payload) {
+      state.lessonCategoriesForAdmin = payload
+    },
+    SET_LESSONS_CATEGORIES_FOR_STUDENT(state, payload) {
+      state.lessonCategoriesForStudent = payload
     },
   },
   actions: {
@@ -2558,6 +2577,110 @@ export const adminVuexStore: Module<VuexAdminState> = {
         });
       }
     },
+
+    async callLessonCategoriesList({ commit }, payload) {
+      const { $axios } = useNuxtApp();
+
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: true,
+      });
+      const { data: response } = await $axios.get(`/lessonsCategories/all`);
+      commit('SET_LESSONS_CATEGORIES', response);
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: false,
+      });
+      return response;
+    },
+
+    async callLessonCategoriesForAdmin({ commit }, payload) {
+      const { $axios } = useNuxtApp();
+
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: true,
+      });
+
+      const { id, skipCommit = false } = payload;
+
+      const { data: response } = await $axios.get(`/lessonsCategories/listForAdmin/${id}`);
+
+      if (!skipCommit) {
+        commit('SET_LESSONS_CATEGORIES_FOR_ADMIN', response);
+      }
+
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: false,
+      });
+
+      return response;
+    },
+
+
+    async callLessonCategoriesForStudent({ commit }, payload) {
+      const { $axios } = useNuxtApp();
+
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: true,
+      });
+      const { data: response } = await $axios.get(`/lessonsCategories/listForStudent/${payload.id}`);
+      commit('SET_LESSONS_CATEGORIES_FOR_STUDENT', response);
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: false,
+      });
+      return response;
+    },
+
+    async callLessonCategoryAdd({ commit }, payload) {
+      const { $axios } = useNuxtApp();
+
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: true,
+      });
+      const { data: response } = await $axios.post(`/lessonsCategories`, payload);
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: false,
+      });
+      return response;
+    },
+
+    async callLessonCategoryGet({ commit }, payload) {
+      const { $axios } = useNuxtApp();
+
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: true,
+      });
+      const { data: response } = await $axios.get(`/lessonsCategories/${payload.id}`);
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: false,
+      });
+      return response;
+    },
+
+    async callLessonCategoryDelete({ commit }, payload) {
+      const { $axios } = useNuxtApp();
+
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: true,
+      });
+      const { data: response } = await $axios.delete(`/lessonsCategories/${payload.id}`);
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: false,
+      });
+      return response;
+    },
+
+    async callLessonCategoryEdit({ commit }, payload) {
+      const { $axios } = useNuxtApp();
+
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: true,
+      });
+      
+      const { data: response } = await $axios.put(`/lessonsCategories/${payload.id}`, payload.data);
+      commit('SET_FETCHING_STUDENT', {
+        [fetchingKeysAdmin.lessionCategories]: false,
+      });
+      //return response;
+    }
   },
   modules: {
     services: servicesVuexStore,

@@ -1,57 +1,52 @@
 <template>
-<userPanelLayout>
+  <userPanelLayout>
 
-     <template #top-right>
-           
+    <template #top-right>
+
     </template>
 
-<div class="flex flex-col xl1200:flex-row gap-[50px]" v-if="userPanelStore.lessonsList">
-     <div class="flex-1 xl1200:mt-[-60px]">
-      <div class="grid h-[110px] gap-y-2px bg-gradient-to-r from-[#24A7F1] to-[#0266D6] text-white p-[15px_20px] rounded-[8px] mb-[30px]">
-        <div @click="toFoundation()" class="flex items-center justify-baseline gap-x-[8px] cursor-pointer opacity-50 w-fit">
+    <div class="flex flex-col xl1200:flex-row gap-[50px]" v-if="userPanelStore.lessonsList">
+      <div class="flex-1 xl1200:mt-[-60px]">
+        <div
+          class="grid h-[110px] gap-y-2px bg-gradient-to-r from-[#24A7F1] to-[#0266D6] text-white p-[15px_20px] rounded-[8px] mb-[30px]">
+          <div @click="toFoundation()"
+            class="flex items-center justify-baseline gap-x-[8px] cursor-pointer opacity-50 w-fit">
             <i class="fa fa-chevron-right text-white text-[16px]"></i>
             <span class="text-white font-medium text-[16px]">رجوع للخلف</span>
+          </div>
+          <div class="flex justify-between">
+            <h2 class="text-lg font-bold">{{ userPanelStore.lessonsList?.title }}</h2>
+          </div>
+          <div class="flex items-center gap-x-[23px] justify-between">
+            <div class="w-full h-[8px] bg-white/30 rounded-[8px] mt-2">
+              <div v-if="doneCount && totalCount" class="h-full bg-white rounded"
+                :style="{ width: `${(doneCount / totalCount) * 100}%` }"></div>
+            </div>
+            <span>{{ doneCount }}/{{ totalCount }}</span>
+          </div>
         </div>
-        <div class="flex justify-between">
-          <h2 class="text-lg font-bold">{{ userPanelStore.lessonsList?.title }}</h2>
-        </div>
-        <div class="flex items-center gap-x-[23px] justify-between">
-        <div class="w-full h-[8px] bg-white/30 rounded-[8px] mt-2">
-          <div
-            v-if="doneCount && totalCount"
-            class="h-full bg-white rounded"
-            :style="{ width: `${(doneCount / totalCount) * 100}%` }"
-          ></div>
-        </div>
-        <span>{{ doneCount }}/{{ totalCount }}</span>
+
+
+        <div class="space-y-[15px]">
+          <template v-for="(group, index) in lessonGroups" :key="index">
+            <div v-if="group.length === 1">
+              <lessonCard :lesson="group[0]" :status="getStatus(group[0])" />
+            </div>
+            <div v-else class="flex flex-wrap gap-[15px]">
+              <lessonCard v-for="lesson in group" :key="lesson.id" :lesson="lesson" :status="getStatus(lesson)"
+                class="flex-1" />
+            </div>
+          </template>
         </div>
       </div>
 
-      <!-- قائمة الدروس -->
-      <div class="space-y-[15px]">
-        <template v-for="(group, index) in lessonGroups" :key="index">
-          <div v-if="group.length === 1">
-            <lessonCard :lesson="group[0]" :status="getStatus(group[0])" />
-          </div>
-          <div v-else class="flex flex-wrap gap-[15px]">
-            <lessonCard 
-            v-for="lesson in group" 
-            :key="lesson.id" 
-            :lesson="lesson" 
-            :status="getStatus(lesson)" 
-            class="flex-1" />
-          </div>
-        </template>
+      <div class="w-full xl1200:w-[310px]">
+        <dailyChallenges />
       </div>
     </div>
 
-    <div class="w-full xl1200:w-[310px]">
-      <dailyChallenges />
-    </div>
-</div>
 
-
-</userPanelLayout>
+  </userPanelLayout>
 
 </template>
 
@@ -165,8 +160,8 @@ const sortedLessons = computed(() => {
   return userPanelStore.lessonsList?.lessons.sort((a, b) => a.order - b.order)
 })
 
-const doneCount = computed(() => userPanelStore.lessonsList?.doneLessonsCount??null)
-const totalCount = computed(() => userPanelStore.lessonsList?.totalLessonsCount??null)
+const doneCount = computed(() => userPanelStore.lessonsList?.doneLessonsCount ?? null)
+const totalCount = computed(() => userPanelStore.lessonsList?.totalLessonsCount ?? null)
 
 function getStatus(lesson: lessonObj) {
   const index = sortedLessons.value?.findIndex(l => l.id === lesson.id)
@@ -177,16 +172,16 @@ function getStatus(lesson: lessonObj) {
 }
 
 
-const toFoundation = ()=>{
-     router.push(`/user-dashboard/foundation`)
+const toFoundation = () => {
+  router.push(`/user-dashboard/foundation`)
 }
 
-// تقسيم العناصر ذات type=2 و type=3 إذا كانت متتابعة
+
 const lessonGroups = computed(() => {
   const groups: any[][] = []
   const lessons = sortedLessons.value
   let i = 0
-  if(!lessons) return groups
+  if (!lessons) return groups
   while (i < lessons.length) {
     const curr = lessons[i]
     const next = lessons[i + 1]

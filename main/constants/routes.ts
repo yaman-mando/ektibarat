@@ -87,6 +87,9 @@ export const APP_ROUTES = {
       root: 'surveys',
       show: 'show',
     },
+    lessonsCategory:{
+      root:'lessonsCategory',
+    }
   },
   userDashboard:{
     root:'user-dashboard',
@@ -720,6 +723,16 @@ export const all_routers = [
   {
     path: `/${APP_ROUTES.admin.root}/partnerships`,
     name: `partnerships-manage`,
+    allowAdmin: true,
+    allowStudent: false,
+    allowTeacher: false,
+    allowEmployee: false,
+    allowUser: false,
+    isAuth: true,
+  },
+  {
+    path: `/${APP_ROUTES.admin.root}/${APP_ROUTES.admin.lessonsCategory.root}`,
+    name: `lessonsCategory`,
     allowAdmin: true,
     allowStudent: false,
     allowTeacher: false,

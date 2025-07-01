@@ -396,6 +396,12 @@ const MENU_ITEMS = [
     icon: 'em-icon-Group-3004',
     path: RouteHelper.adminSocialMedia(),
   },
+  {
+    id: 'lessonsCategory',
+    label: 'تصنيفات الدروس',
+    icon: 'em-icon-tags',
+    path: `/${main_routers.adminRoute}/lessonsCategory`,
+  },
 ];
 
 export default {

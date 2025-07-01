@@ -479,7 +479,6 @@ export const vuexStore = createStore<VuexRootState>({
           payload,
           axiosConfig
         );
-        console.log(response);
       } catch (error) {
         console.error('Capture failed:', error);
       }
