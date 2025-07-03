@@ -4,7 +4,10 @@
     :bindTrigger="bindTrigger"
   ></slot>
 
-  <lazy-prime-popover ref="popover_ref">
+  <lazy-prime-popover
+    ref="popover_ref"
+    :class="popoverClass"
+  >
     <slot name="content"></slot>
   </lazy-prime-popover>
 </template>
@@ -13,6 +16,7 @@
 const props = withDefaults(
   defineProps<{
     triggerEvent?: 'hover' | 'click' | 'both';
+    popoverClass?: string;
     isDisabled?: boolean;
   }>(),
   {

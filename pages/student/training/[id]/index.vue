@@ -127,7 +127,7 @@
                   :text="activeQuestionModel.articleUi"
                 />
                 <div class="aqs-w">
-                  <lazy-app-exam-part-question-part
+                  <app-exam-part-question-part
                     ref="examPartQuestionRef"
                     :mainTitle="questionTitleModel"
                     :isTrain="true"
@@ -135,7 +135,7 @@
                     :question="currentQuestionDetailModel"
                     :showFeature="true"
                   >
-                    <lazy-app-answer-select
+                    <app-answer-select
                       v-if="!!activeQuestionModel"
                       :correctAnswerIdsList="viewCorrectAnswerIds"
                       :disableImgModal="true"
@@ -152,9 +152,9 @@
                       "
                       @onAnswerChange="onAnswerChange($event)"
                     />
-                  </lazy-app-exam-part-question-part>
+                  </app-exam-part-question-part>
                   <div class="tpa-w w-mobile-only">
-                    <lazy-app-train-part-actions
+                    <app-train-part-actions
                       ref="trainPartMobileRef"
                       class="w-container"
                       :isActiveNext="canSelectNextQuestion"
@@ -226,15 +226,23 @@
               </div>
             </div>
             <div class="tpa-w w-web-up-only">
-              <lazy-app-train-part-actions
+              <app-train-part-actions
                 ref="trainPartWebRef"
                 class="w-container"
                 :isActiveNext="canSelectNextQuestion"
                 :isActiveConfirm="canConfirmAnswerModel"
+                :questionId="currentQuestionDetailModel.questionId"
+                :canShowLaw="
+                  currentQuestionDetailModel.isBelongToLaw &&
+                  userCurrentSub.trainingLawWatchingCount > 0
+                "
                 @confirmAction="onSelectAnswer(currentQuestionAnswerId)"
                 @nextAction="nextQuestion"
                 @complainAction="onComplaint"
                 @endAction="exitPage"
+                @showLawsAction="onShowLaws"
+                @removeAction="removeAnswersTry"
+                @showAnswerAction="onAnswerHelpAction"
               />
             </div>
           </div>

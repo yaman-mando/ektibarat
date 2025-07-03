@@ -1,20 +1,26 @@
 <template>
   <div
-class="exam-question relative" :class="[
-    isTrain ? 'is-train' : 'is-exam',
-    { 'is-media-question': isMediaQuestionModel },
-    { 'is-text-question': questionTypeModel == questionTypeEnum.text },
-    { hasReviewTime: hasReviewTime },
-  ]">
+    class="exam-question relative"
+    :class="[
+      isTrain ? 'is-train' : 'is-exam',
+      { 'is-media-question': isMediaQuestionModel },
+      { 'is-text-question': questionTypeModel == questionTypeEnum.text },
+      { hasReviewTime: hasReviewTime },
+    ]"
+  >
     <lazy-app-overlay v-if="isReview && isLoadingReview" />
     <div
-class="block w-full exam-question-wrapper" :class="[
-      { hasTags: withTags },
-      { 'is-seo': isSeo },
-      { 'is-animation': isAnimation },
-    ]">
+      class="block w-full exam-question-wrapper"
+      :class="[
+        { hasTags: withTags },
+        { 'is-seo': isSeo },
+        { 'is-animation': isAnimation },
+      ]"
+    >
       <div class="exq-i">
-        <div class="flex items-center gap-2 text-white text-[16px] xl:text-[30px] q-label">
+        <div
+          class="flex items-center gap-2 text-white text-[16px] xl:text-[30px] q-label"
+        >
           <template v-if="questionNumber">
             <span>{{ staticLocales.trainPage.questionLabel }}:</span>
             <span>({{ questionNumber }})</span>
@@ -28,27 +34,34 @@ class="block w-full exam-question-wrapper" :class="[
           <template v-if="isReview">
             <div class="flex items-center gap-4">
               <i
-class="fa-solid fa-image text-white text-[16px] xl:text-[30px] cursor-pointer"
-                @click="navToQuestionToday()"></i>
+                class="fa-solid fa-image text-white text-[16px] xl:text-[30px] cursor-pointer"
+                @click="navToQuestionToday()"
+              ></i>
               <i
-class="fa-solid fa-gem text-white text-[16px] xl:text-[30px] cursor-pointer"
-                @click="onClickRecord(questionModel.questionGuid)"></i>
+                class="fa-solid fa-gem text-white text-[16px] xl:text-[30px] cursor-pointer"
+                @click="onClickRecord(questionModel.questionGuid)"
+              ></i>
               <i
-class="fa-solid fa-trash text-danger text-[16px] xl:text-[30px] cursor-pointer"
-                @click="onDelete(questionModel.id)"></i>
+                class="fa-solid fa-trash text-danger text-[16px] xl:text-[30px] cursor-pointer"
+                @click="onDelete(questionModel.id)"
+              ></i>
               <i
-class="fa-solid fa-pie-chart text-white text-[16px] xl:text-[30px] cursor-pointer"
-                @click="showAnalytics"></i>
+                class="fa-solid fa-pie-chart text-white text-[16px] xl:text-[30px] cursor-pointer"
+                @click="showAnalytics"
+              ></i>
               <i
-class="fa-solid fa-eye text-white text-[16px] xl:text-[30px] cursor-pointer"
-                @click="navToQuestionDetail()"></i>
+                class="fa-solid fa-eye text-white text-[16px] xl:text-[30px] cursor-pointer"
+                @click="navToQuestionDetail()"
+              ></i>
               <nuxt-link
-:to="{
-                path: routeHelper.adminQuestionEditWithFilter(
-                  questionModel.id,
-                  filterData
-                ),
-              }" class="flex items-baseline gap-2 text-white text-[16px] xl:text-[30px]">
+                :to="{
+                  path: routeHelper.adminQuestionEditWithFilter(
+                    questionModel.id,
+                    filterData
+                  ),
+                }"
+                class="flex items-baseline gap-2 text-white text-[16px] xl:text-[30px]"
+              >
                 <i class="fa-solid fa-edit"></i>
               </nuxt-link>
               <!--            <nuxt-link
@@ -59,72 +72,137 @@ class="fa-solid fa-eye text-white text-[16px] xl:text-[30px] cursor-pointer"
                 </nuxt-link>-->
               <div class="flex items-center !gap-">
                 <lazy-prime-toggle-switch
-v-model="questionModel.isChecked" inputId="review-check"
-                  @update:modelValue="onReviewAction" />
+                  v-model="questionModel.isChecked"
+                  inputId="review-check"
+                  @update:modelValue="onReviewAction"
+                />
                 <label for="review-check">تم التدقيق</label>
               </div>
 
-              <lazy-prime-checkbox :value="isChecked" @change="onSelect" />
+              <lazy-prime-checkbox
+                :value="isChecked"
+                @change="onSelect"
+              />
             </div>
           </template>
           <template v-else>
-            <div v-if="hasComplainAction" style="display: flex; column-gap: 10px; align-items: center">
-              <div v-if="hasOnlyEdit" class="flex items-center gap-4">
+            <div
+              v-if="hasComplainAction"
+              style="display: flex; column-gap: 10px; align-items: center"
+            >
+              <div
+                v-if="hasOnlyEdit"
+                class="flex items-center gap-4"
+              >
                 <nuxt-link
-target="_blank" :to="{
-                  path: routeHelper.adminQuestionEditWithFilter(
-                    questionModel.questionId,
-                    filterData
-                  ),
-                }" class="flex items-baseline gap-2 text-white text-[16px] xl:text-[30px]">
+                  target="_blank"
+                  :to="{
+                    path: routeHelper.adminQuestionEditWithFilter(
+                      questionModel.questionId,
+                      filterData
+                    ),
+                  }"
+                  class="flex items-baseline gap-2 text-white text-[16px] xl:text-[30px]"
+                >
                   <i class="fa-solid fa-edit"></i>
                 </nuxt-link>
               </div>
               <img
-class="cursor-pointer comp-img" alt="complain" src="/images/icons/warn-gray.svg"
-                @click="showComplainForm" />
+                class="cursor-pointer comp-img"
+                alt="complain"
+                src="/images/icons/warn-gray.svg"
+                @click="showComplainForm"
+              />
             </div>
             <template v-else>
-              <div v-if="isSeo" style="flex: 1">
+              <div
+                v-if="isSeo"
+                style="flex: 1"
+              >
                 <client-only>
                   <nuxt-img
-v-if="!windowSize.isMobileSize" width="163" height="45" src="/images/ekhtibara-logo-ar.png"
+                    v-if="!windowSize.isMobileSize"
+                    width="163"
+                    height="45"
+                    src="/images/ekhtibara-logo-ar.png"
                     alt="شعار اختبارات - منصة الاختبارات الإلكترونية"
-                    title="شعار منصة اختبارات - اختبارات إلكترونية متنوعة" loading="lazy" format="webp" quality="80"
-                    preload fetchpriority="high" decoding="async" style="width: 163px; height: auto" />
+                    title="شعار منصة اختبارات - اختبارات إلكترونية متنوعة"
+                    loading="lazy"
+                    format="webp"
+                    quality="80"
+                    preload
+                    fetchpriority="high"
+                    decoding="async"
+                    style="width: 163px; height: auto"
+                  />
                 </client-only>
               </div>
-              <div v-else class="flex items-center justify-end">
+              <div
+                v-else
+                class="flex items-center justify-end"
+              >
                 <div
-v-if="showFeature" v-prime-tooltip="'عند إضافة سؤال إلى المفضلة يمكنك إعادة التدريب به واختيار الأسئلة المعلمة بنجمة'
-                  " class="__q-feature" :class="[{ 'is-featured': isFeatured }]" @click="onFeatureClick">
+                  v-if="showFeature"
+                  v-prime-tooltip="
+                    'عند إضافة سؤال إلى المفضلة يمكنك إعادة التدريب به واختيار الأسئلة المعلمة بنجمة'
+                  "
+                  class="__q-feature"
+                  :class="[{ 'is-featured': isFeatured }]"
+                  @click="onFeatureClick"
+                >
                   <div class="__q-fe-w">
                     <i class="fa fa-star"></i>
-                    <span>{{ isFeatured ? 'مميز' : 'تمييز' }}</span>
+                    <span>{{ isFeatured ? 'مميز' : 'تمييز بنجمة' }}</span>
                   </div>
                 </div>
-                <div v-if="!hideCounter" class="cd-co-w">
+                <div
+                  v-if="!hideCounter"
+                  class="cd-co-w"
+                >
                   <i class="ek-icon-Icon-material-update"></i>
                   <span class="cd-co">{{ counterModel }}</span>
                 </div>
-                <div v-if="showFlag" class="__q-flag" :class="[{ 'is-flagged': isFlagged }]" @click="onFlagClick">
+                <div
+                  v-if="showFlag"
+                  class="__q-flag"
+                  :class="[{ 'is-flagged': isFlagged }]"
+                  @click="onFlagClick"
+                >
                   <div class="__q-fw">
                     <i class="ek-icon-flag"></i>
                     <span>مراجعة</span>
                   </div>
                 </div>
-                <app-button v-if="isSelectMode" label="اختيار السؤال" size="sm" @click="onSelect" />
+                <app-button
+                  v-if="isSelectMode"
+                  label="اختيار السؤال"
+                  size="sm"
+                  @click="onSelect"
+                />
               </div>
             </template>
           </template>
           <template v-if="showTopAction">
             <div class="seo-title">
               <app-button
-class="outline-btn" variant="outline" colorType="success" label="طريقة الحل"
-                @click.stop="openAnswerHelpModal" />
+                class="outline-btn"
+                variant="outline"
+                colorType="success"
+                label="طريقة الحل"
+                @click.stop="openAnswerHelpModal"
+              />
               <client-only>
-                <div style="cursor: pointer" class="warning-square" @click.stop="isOpenComplaintForm = true">
-                  <img width="28" height="25" src="/images/png/warning-red.png" alt="اختبارات" />
+                <div
+                  style="cursor: pointer"
+                  class="warning-square"
+                  @click.stop="isOpenComplaintForm = true"
+                >
+                  <img
+                    width="28"
+                    height="25"
+                    src="/images/png/warning-red.png"
+                    alt="اختبارات"
+                  />
                 </div>
               </client-only>
             </div>
@@ -132,40 +210,80 @@ class="outline-btn" variant="outline" colorType="success" label="طريقة ال
         </template>
       </div>
 
-      <div v-if="withCat || withLaws" class="rw-cat-laws">
-        <div v-if="withCat" class="cat-part">
+      <div
+        v-if="withCat || withLaws"
+        class="rw-cat-laws"
+      >
+        <div
+          v-if="withCat"
+          class="cat-part"
+        >
           <span class="title">الأقسام:</span>
           <lazy-select-list
-ref="catQuestionList" name="أختر قسم" :showSelectedItem="true" :erasable="true"
-            :options="catOptions" :selectedItem="selectedCat" @update:selectedItem="onSelectedCat" />
-          <div v-if="catList && catList.length > 0" class="cat-items">
+            ref="catQuestionList"
+            name="أختر قسم"
+            :showSelectedItem="true"
+            :erasable="true"
+            :options="catOptions"
+            :selectedItem="selectedCat"
+            @update:selectedItem="onSelectedCat"
+          />
+          <div
+            v-if="catList && catList.length > 0"
+            class="cat-items"
+          >
             <div
-v-for="cat of catList" :key="cat.id" class="cat-item" :class="{
-              active: questionModel.categories.some((k) => k.id == cat.id),
-            }" @click="selectCat(cat.id)">
+              v-for="cat of catList"
+              :key="cat.id"
+              class="cat-item"
+              :class="{
+                active: questionModel.categories.some((k) => k.id == cat.id),
+              }"
+              @click="selectCat(cat.id)"
+            >
               {{ cat.label }}
             </div>
           </div>
         </div>
-        <div v-if="withLaws" class="cl-laws">
-          <div v-for="law of questionModel.categoriesGroupsWithLaws" :key="law.title" class="law-item">
+        <div
+          v-if="withLaws"
+          class="cl-laws"
+        >
+          <div
+            v-for="law of questionModel.categoriesGroupsWithLaws"
+            :key="law.title"
+            class="law-item"
+          >
             <span>{{ law.title }}</span>
           </div>
         </div>
       </div>
-      <div v-if="withTags" class="tag-group">
+      <div
+        v-if="withTags"
+        class="tag-group"
+      >
         <hr class="tag-line" />
         <div class="tag-items">
           <span class="title">التاغات:</span>
-          <template v-for="tag of tagsOptions" :key="tag.id">
+          <template
+            v-for="tag of tagsOptions"
+            :key="tag.id"
+          >
             <div
-v-if="questionModel.tagsIds.some((k) => k == tag.id)" class="tag-item" :class="{
-              active: questionModel.tagsIds.some((k) => k == tag.id),
-            }" @click="selectTag(tag.id)">
+              v-if="questionModel.tagsIds.some((k) => k == tag.id)"
+              class="tag-item"
+              :class="{
+                active: questionModel.tagsIds.some((k) => k == tag.id),
+              }"
+              @click="selectTag(tag.id)"
+            >
               {{ tag.label }}
             </div>
           </template>
-          <button class="showTagBtn" @click="openTagsModal">
+          <button
+            class="showTagBtn"
+            @click="openTagsModal"
+          >
             عرض الكل
           </button>
         </div>
@@ -173,74 +291,139 @@ v-if="questionModel.tagsIds.some((k) => k == tag.id)" class="tag-item" :class="{
       </div>
       <div class="asd-wrap">
         <div
-class="asd-w" :class="{
-          withBg: withBg,
-          withCompare: compareDataModal,
-        }">
+          class="asd-w"
+          :class="{
+            withBg: withBg,
+            withCompare: compareDataModal,
+          }"
+        >
           <div
-v-if="isAnimation || (withBg && !windowSize.isMobileSize)"
-            class="flex justify-center absolute" style="width: 100%;height: 100%;">
+            v-if="isAnimation || (withBg && !windowSize.isMobileSize)"
+            class="flex justify-center absolute"
+            style="width: 100%; height: 100%"
+          >
             <nuxt-img
-width="auto" height="100%" src="/images/ekhtibaratLogo-2.png"
-              alt="شعار اختبارات - منصة الاختبارات الإلكترونية" title="شعار منصة اختبارات - اختبارات إلكترونية متنوعة"
-              loading="lazy" format="webp" quality="80" class="bg-logo" />
+              width="auto"
+              height="100%"
+              src="/images/ekhtibaratLogo-2.png"
+              alt="شعار اختبارات - منصة الاختبارات الإلكترونية"
+              title="شعار منصة اختبارات - اختبارات إلكترونية متنوعة"
+              loading="lazy"
+              format="webp"
+              quality="80"
+              class="bg-logo"
+            />
           </div>
           <slot name="mainContent"></slot>
-          <div v-if="compareDataModal" class="w-full block">
+          <div
+            v-if="compareDataModal"
+            class="w-full block"
+          >
             <div class="s-title">
               <div class="aq-compare-wrapper">
                 <div class="aq-compare-wrapper__hero">
-                  <lazy-app-math-text-html :key="questionTitleModal" :noPopover="true" :text="questionTitleModal" />
-                  <div v-if="isMediaQuestionModel" class="aq-compare-wrapper__media">
+                  <lazy-app-math-text-html
+                    :key="questionTitleModal"
+                    :noPopover="true"
+                    :text="questionTitleModal"
+                  />
+                  <div
+                    v-if="isMediaQuestionModel"
+                    class="aq-compare-wrapper__media"
+                  >
                     <lazy-app-view-media-files
-v-if="isPhotoQuestion" :url="questionModel.contentUrl"
-                      :requestType="pictureTypesEnum.questions" :mediaType="questionTypeEnum.photo"
-                      :defaultType="questionTypeEnum.photo" :defaultUrl="questionModel.contentUrl" radius="5"
-                      :withModal="true" />
+                      v-if="isPhotoQuestion"
+                      :url="questionModel.contentUrl"
+                      :requestType="pictureTypesEnum.questions"
+                      :mediaType="questionTypeEnum.photo"
+                      :defaultType="questionTypeEnum.photo"
+                      :defaultUrl="questionModel.contentUrl"
+                      radius="5"
+                      :withModal="true"
+                    />
                   </div>
                 </div>
                 <lazy-app-math-text-html
-v-if="compareDataModal" :key="compareDataModal" class="s-compare-c"
-                  :isCompare="true" :noPopover="true" :text="compareDataModal" />
+                  v-if="compareDataModal"
+                  :key="compareDataModal"
+                  class="s-compare-c"
+                  :isCompare="true"
+                  :noPopover="true"
+                  :text="compareDataModal"
+                />
               </div>
             </div>
           </div>
           <template v-else>
             <span class="s-title">
-              <lazy-app-math-text-html :key="questionTitleModal" :noPopover="true" :text="questionTitleModal" />
+              <lazy-app-math-text-html
+                :key="questionTitleModal"
+                :noPopover="true"
+                :text="questionTitleModal"
+              />
             </span>
 
-            <span v-if="questionDescriptionModel" class="s-desc">
-              <lazy-app-math-text-html :noPopover="true" :text="questionDescriptionModel" />
+            <span
+              v-if="questionDescriptionModel"
+              class="s-desc"
+            >
+              <lazy-app-math-text-html
+                :noPopover="true"
+                :text="questionDescriptionModel"
+              />
             </span>
 
             <div class="aq-ww">
-              <div v-if="isMediaQuestionModel" class="aq-content">
+              <div
+                v-if="isMediaQuestionModel"
+                class="aq-content"
+              >
                 <lazy-app-view-media-files
-v-if="isPhotoQuestion" :url="questionModel.contentUrl"
-                  :requestType="pictureTypesEnum.questions" :mediaType="questionTypeEnum.photo"
-                  :defaultType="questionTypeEnum.photo" :defaultUrl="questionModel.contentUrl" radius="5"
-                  :withModal="true" />
+                  v-if="isPhotoQuestion"
+                  :url="questionModel.contentUrl"
+                  :requestType="pictureTypesEnum.questions"
+                  :mediaType="questionTypeEnum.photo"
+                  :defaultType="questionTypeEnum.photo"
+                  :defaultUrl="questionModel.contentUrl"
+                  radius="5"
+                  :withModal="true"
+                />
                 <lazy-app-view-media-files
-v-if="isVideoQuestion" :url="questionModel.contentUrl"
-                  :requestType="pictureTypesEnum.questions" :mediaType="questionTypeEnum.video"
-                  :defaultType="questionTypeEnum.video" :defaultUrl="questionModel.contentUrl" radius="5" />
+                  v-if="isVideoQuestion"
+                  :url="questionModel.contentUrl"
+                  :requestType="pictureTypesEnum.questions"
+                  :mediaType="questionTypeEnum.video"
+                  :defaultType="questionTypeEnum.video"
+                  :defaultUrl="questionModel.contentUrl"
+                  radius="5"
+                />
                 <lazy-app-view-media-files
-v-if="isAudioQuestion" :url="questionModel.contentUrl"
-                  :requestType="pictureTypesEnum.questions" :mediaType="questionTypeEnum.audio"
-                  :defaultType="questionTypeEnum.audio" :defaultUrl="questionModel.contentUrl" radius="5" />
+                  v-if="isAudioQuestion"
+                  :url="questionModel.contentUrl"
+                  :requestType="pictureTypesEnum.questions"
+                  :mediaType="questionTypeEnum.audio"
+                  :defaultType="questionTypeEnum.audio"
+                  :defaultUrl="questionModel.contentUrl"
+                  radius="5"
+                />
               </div>
             </div>
           </template>
 
-          <div v-if="hasReviewTime" class="s-time-w">
+          <div
+            v-if="hasReviewTime"
+            class="s-time-w"
+          >
             <div class="st-i">
               <span>{{ staticLocales.trainPage.answerTime }}:</span>
               <span>
                 {{ dateHelper.convertSecondsToLabel_mm_ss(studentTimeTaken) }}
               </span>
             </div>
-            <div v-if="!pointsCount" class="st-i">
+            <div
+              v-if="!pointsCount"
+              class="st-i"
+            >
               <span>{{ staticLocales.trainPage.average }}:</span>
               <span>
                 {{
@@ -249,14 +432,20 @@ v-if="isAudioQuestion" :url="questionModel.contentUrl"
               </span>
             </div>
 
-            <div v-else class="st-i">
+            <div
+              v-else
+              class="st-i"
+            >
               <span>{{ staticLocales.trainPage.pointsCount }}:</span>
               <span>
                 {{ pointsCount }}
               </span>
             </div>
 
-            <div v-if="showHelpType" class="st-i">
+            <div
+              v-if="showHelpType"
+              class="st-i"
+            >
               <span>{{ staticLocales.trainPage.helpType }}:</span>
               <span>
                 {{ answerHelpType[questionModel.answerType] }}
@@ -265,7 +454,11 @@ v-if="isAudioQuestion" :url="questionModel.contentUrl"
           </div>
 
           <template v-if="questionAnimateConfigModel.showClockTicking">
-            <img class="clock-image" src="/images/clock-ticking.gif" alt="clock image" />
+            <img
+              class="clock-image"
+              src="/images/clock-ticking.gif"
+              alt="clock image"
+            />
           </template>
         </div>
         <div class="a-answer-w">
@@ -274,21 +467,35 @@ v-if="isAudioQuestion" :url="questionModel.contentUrl"
       </div>
     </div>
     <lazy-web-complaint-modal
-v-if="hasComplainAction" v-model:isOpen="isOpenComplaintForm"
-      :questionId="questionModel.id" :examId="examId" />
+      v-if="hasComplainAction"
+      v-model:isOpen="isOpenComplaintForm"
+      :questionId="questionModel.id"
+      :examId="examId"
+    />
 
     <lazy-web-complaint-modal
-v-if="isSeo" v-model:isOpen="isOpenComplaintForm" :isSeo="true"
-      :questionId="questionModel.questionGuid" />
+      v-if="isSeo"
+      v-model:isOpen="isOpenComplaintForm"
+      :isSeo="true"
+      :questionId="questionModel.questionGuid"
+    />
 
     <lazy-admin-tags-modal
-v-if="withTags" v-model:isOpen="isOpenModalTags" :tagsList="tagsOptions"
-      :selectedTags="questionModel.tagsIds" :modalId="questionModel.id" @selectTag="selectTag" />
+      v-if="withTags"
+      v-model:isOpen="isOpenModalTags"
+      :tagsList="tagsOptions"
+      :selectedTags="questionModel.tagsIds"
+      :modalId="questionModel.id"
+      @selectTag="selectTag"
+    />
 
     <lazy-web-answer-help-modal
-ref="answerHelpModalRef" v-model:isOpen="isOpenHelpAnswerModal"
-      :isTahsele="isSeo ? isTahsele : false" :htmlContent="questionModel.feedbackInCorrectAnswer"
-      @toTraining="appEvents.emitToTraining()" />
+      ref="answerHelpModalRef"
+      v-model:isOpen="isOpenHelpAnswerModal"
+      :isTahsele="isSeo ? isTahsele : false"
+      :htmlContent="questionModel.feedbackInCorrectAnswer"
+      @toTraining="appEvents.emitToTraining()"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -715,7 +922,8 @@ export default {
       height: auto;
       padding: 5px;
 
-      @include web-desktop-up() {}
+      @include web-desktop-up() {
+      }
     }
   }
 }
@@ -832,7 +1040,6 @@ export default {
     padding: 10px;
 
     ::v-deep {
-
       strong,
       math,
       mstyle,
@@ -1246,7 +1453,7 @@ export default {
         border-radius: 8px;
         width: 150px;
         height: 48px;
-        border-width: 1px !important;  
+        border-width: 1px !important;
         font-size: 20px;
         font-weight: 500;
       }
@@ -1274,7 +1481,7 @@ export default {
           height: 30px;
           padding: 0;
 
-         ::v-deep span {
+          ::v-deep span {
             font-size: 14px !important;
           }
         }
