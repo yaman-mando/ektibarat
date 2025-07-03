@@ -87,7 +87,11 @@
 <script setup lang="ts">
 import { useStore } from 'vuex';
 import { useGlobalStore } from '~/main/useGlobalStore';
-import { removeScript, sleepUtil } from '~/main/utils/shared-utils';
+import {
+  IS_PRODUCTION_APP,
+  removeScript,
+  sleepUtil,
+} from '~/main/utils/shared-utils';
 import {
   UserPanelItems,
   UserPanelItemsRecord,
@@ -109,7 +113,7 @@ const headers = {
 
 //refs
 const modalSurveysRef = useTemplateRef('modal_surveys_ref');
-const openModalTimeoutId = ref<any>(null)
+const openModalTimeoutId = ref<any>(null);
 const extraScript = computed(() => {
   const scripts: any[] = [];
 
@@ -156,7 +160,7 @@ useHead({
       content: 'اختبارات',
     },
   ],
-  script: extraScript.value,
+  script: IS_PRODUCTION_APP ? extraScript : [],
 });
 
 //data
@@ -171,7 +175,6 @@ onBeforeMount(() => {
   document?.getElementById('web-footer')?.classList.remove('is-user-panel');
   removeScript(ScriptsIdEnum.appleId);
 });
-
 
 //method
 const toggleContactMenu = async () => {
@@ -222,34 +225,31 @@ const navToSocial = async (type: 'chat' | 'whatsapp' | 'telegram') => {
   isInternalbtn.value = false;
 };
 
-
-const openSurveysModal = ()=> {
+const openSurveysModal = () => {
   if (import.meta.client) {
-    modalSurveysRef.value?.showModal()
+    modalSurveysRef.value?.showModal();
   }
-}
+};
 
+const selectedSurveys = computed(() => store.state.selectedSurveys);
 
-
-const selectedSurveys = computed(() => store.state.selectedSurveys)
-
-watch(()=>
-  selectedSurveys,
+watch(
+  () => selectedSurveys,
   (newVal) => {
     if (openModalTimeoutId.value) {
-      clearTimeout(openModalTimeoutId.value)
-      openModalTimeoutId.value = null
+      clearTimeout(openModalTimeoutId.value);
+      openModalTimeoutId.value = null;
     }
 
-    if (!newVal) return
-    const waitTime = (newVal.value?.timeInitialize || 0) * 1000
+    if (!newVal) return;
+    const waitTime = (newVal.value?.timeInitialize || 0) * 1000;
     openModalTimeoutId.value = setTimeout(() => {
-      openSurveysModal()
-      openModalTimeoutId.value = null
-    }, waitTime)
+      openSurveysModal();
+      openModalTimeoutId.value = null;
+    }, waitTime);
   },
-  { immediate: true,deep:true }
-)
+  { immediate: true, deep: true }
+);
 
 //watch
 watch(

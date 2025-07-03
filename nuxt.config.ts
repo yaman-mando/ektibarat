@@ -64,7 +64,7 @@ const appFonts: LinkWithoutEvents[] = [
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
- ssr: true,
+  ssr: true,
   nitro: {
     preset: 'node-server',
   },
@@ -98,7 +98,7 @@ export default defineNuxtConfig({
     },
   ],
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
@@ -114,10 +114,10 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@vueuse/nuxt',
     '@nuxtjs/color-mode',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
   ],
-   colorMode: {
-    classSuffix: '', 
+  colorMode: {
+    classSuffix: '',
   },
   primevue: {
     usePrimeVue: true,
@@ -178,7 +178,7 @@ export default defineNuxtConfig({
     '~/plugins/shared/font-awesome-plugin.client.ts',
     '~/plugins/shared/lamejs-plugin.client.ts',
     '~/plugins/shared/videojs.client.ts',
-    '~/plugins/shared/toast.client.ts'
+    '~/plugins/shared/toast.client.ts',
   ],
   app: {
     head: {
