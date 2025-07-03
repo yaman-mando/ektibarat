@@ -98,7 +98,6 @@ function formatTime(seconds: number) {
 }
 
 function toLessonDetails() {
-    console.log('t222')
     const currentPath = route.fullPath.split('?')[0]
     const detailsId = props.lesson.id
 

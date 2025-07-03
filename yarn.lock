@@ -9429,6 +9429,11 @@ vue3-apexcharts@^1.8.0:
   resolved "https://registry.yarnpkg.com/vue3-apexcharts/-/vue3-apexcharts-1.8.0.tgz#1984648d966aa91bc4dc3e87fa847f5289f7f1cf"
   integrity sha512-5tSD4mXTBbIJ9ir+58qHE6oNtIe0RNgqIRYMKpcsIaxkKtwUww4JhvPkpUFlmiW4OJbbdklgjleXq1lfcM4gdA==
 
+vue3-circle-progress@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/vue3-circle-progress/-/vue3-circle-progress-1.0.7.tgz#43a7427e5dcb144714c1df11bf2a15a73d5b98c4"
+  integrity sha512-Z916xKQhuEcaOvwIfCFUX9r/gPUNd40G2aJbROcRtotm5FE4dZPP4S4iDEISexE9XMF813swkdc5VzCdFxfE8g==
+
 vue3-treeselect@^0.1.10:
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/vue3-treeselect/-/vue3-treeselect-0.1.10.tgz#d464ac780a55bc0357f49a345851a32705ba7111"

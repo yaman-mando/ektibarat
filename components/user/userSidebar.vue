@@ -104,6 +104,11 @@ const menuItems = [
     route: '/dashboard/history',
   },
   {
+    name: 'خطواتي',
+    icon: '/images/svg/user-panel/star.svg',
+    route: '/user-dashboard/steps',
+  },
+  {
     name: 'تحليلاتي',
     icon: '/images/svg/user-panel/chart-bullish.svg',
     route: RouteHelper.userPanelAnalytics(),

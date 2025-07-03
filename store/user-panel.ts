@@ -1,5 +1,6 @@
 import { GlobalSub } from "~/main/modules/user-panel/data-access/user-panel.enum"
-import type {lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, similarVidModel } from "~/main/modules/user-panel/data-access/user-panel.model"
+import type {lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, similarVidModel, studentStages } from "~/main/modules/user-panel/data-access/user-panel.model"
+import { mockStudentStages } from "~/pages/mocks/user-mocks"
 
 
 interface UserPanelState {
@@ -7,13 +8,15 @@ interface UserPanelState {
         lessonsCategories: boolean,
         lessonsList:boolean,
         lessonsDetails:boolean,
-        simillarVideos:boolean
+        simillarVideos:boolean,
+        studentStages:boolean
     }
     globalType: number,
     lessonsCategories: lessonsCategoriesDataModel[] | null,
     lessonsList:lessonsModel | null,
     lessonDetails:lessonDetailsModel | null,
-    simillarVideos:similarVidModel | null
+    simillarVideos:similarVidModel | null,
+    studentStages:studentStages | null
 }
 
 
@@ -24,12 +27,14 @@ export const useUserPanelStore = defineStore('userPanel', {
       lessonsList:false,
       lessonsDetails:false,
       simillarVideos:false,
+      studentStages:false
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
     lessonsList:null,
     lessonDetails:null,
-    simillarVideos:null
+    simillarVideos:null,
+    studentStages:null
   }),
 
   actions: {
@@ -106,6 +111,22 @@ export const useUserPanelStore = defineStore('userPanel', {
       } finally {
         this.fetching.simillarVideos = false
       }
+    },
+
+    async getStudentStages():Promise<studentStages | null>{
+      try {
+        this.fetching.studentStages = true
+        const { $axios } = useNuxtApp()
+        const data = mockStudentStages
+        this.studentStages = data
+        return data
+      } catch (e) {
+        console.error('خطأ في تحميل المراحل', e)
+        return null
+      } finally {
+        this.fetching.studentStages = false
+      }
+
     }
 
   },

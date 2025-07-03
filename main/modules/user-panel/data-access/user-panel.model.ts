@@ -68,3 +68,42 @@ export type similarVidObj = {
 }
 
 export type similarVidModel = similarVidObj[]
+
+
+export type stepCategoryInfo = {
+  categoryId: number | null;
+  categoryName: string | null;
+  numberQuestion: number;
+  numberQuestionComplte: number;
+  time: number;
+  isWrong: boolean;
+}
+
+export type step = {
+  id: number;
+  title: string;
+  status: number;
+  image_path: string | null;
+  categoryInfo: stepCategoryInfo;
+  text_before?: string;
+  text_after?: string;
+}
+
+export type stage= {
+  phase_name: string;
+  phase_id: number;
+  total_steps: number;
+  completed_steps: number;
+  total_time_remaining: number;
+  color_1: string;
+  color_2: string;
+  steps: step[];
+}
+
+export type studentStages = {
+  active_step_id: number;
+  active_phase_id: number;
+  show_modal_need_help: boolean;
+  stages: stage[];
+}
+
