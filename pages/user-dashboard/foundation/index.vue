@@ -66,7 +66,6 @@
 <script lang="ts" setup>
 import userPanelLayout from '~/layouts/user-panel-layout.vue';
 import type { lessonsCategoriesDataModel } from '~/main/modules/user-panel/data-access/user-panel.model';
-import { RouteHelper } from '~/main/utils/route-helper';
 import { useUserPanelStore } from '~/store/user-panel';
 
 //resourses

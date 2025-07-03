@@ -74,7 +74,6 @@ import userPanelLayout from '~/layouts/user-panel-layout.vue';
 import { ref } from 'vue'
 import { useUserPanelStore } from '~/store/user-panel';
 import LessonsListSideBar from '~/components/user/lessonsListSideBar.vue';
-import axios from 'axios'
 
 
 const router = useRouter()

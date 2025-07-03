@@ -1,22 +1,26 @@
 import { GlobalSub } from "~/main/modules/user-panel/data-access/user-panel.enum"
-import type {lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, similarVidModel, studentStages } from "~/main/modules/user-panel/data-access/user-panel.model"
-import { mockStudentStages } from "~/pages/mocks/user-mocks"
+import type { categoriesListForModal, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, similarVidModel, stepCategoryInfo, studentStages } from "~/main/modules/user-panel/data-access/user-panel.model"
+import { mockCategoriesForModal, mockCategoryInfo, mockStudentStages } from "~/pages/mocks/user-mocks"
 
 
 interface UserPanelState {
-    fetching: {
-        lessonsCategories: boolean,
-        lessonsList:boolean,
-        lessonsDetails:boolean,
-        simillarVideos:boolean,
-        studentStages:boolean
-    }
-    globalType: number,
-    lessonsCategories: lessonsCategoriesDataModel[] | null,
-    lessonsList:lessonsModel | null,
-    lessonDetails:lessonDetailsModel | null,
-    simillarVideos:similarVidModel | null,
-    studentStages:studentStages | null
+  fetching: {
+    lessonsCategories: boolean,
+    lessonsList: boolean,
+    lessonsDetails: boolean,
+    simillarVideos: boolean,
+    studentStages: boolean,
+    categoriesListForModal: boolean
+    categoryInfo: boolean
+  }
+  globalType: number,
+  lessonsCategories: lessonsCategoriesDataModel[] | null,
+  lessonsList: lessonsModel | null,
+  lessonDetails: lessonDetailsModel | null,
+  simillarVideos: similarVidModel | null,
+  studentStages: studentStages | null,
+  categoriesListForModal: categoriesListForModal | null,
+  categoryInfo: stepCategoryInfo | null
 }
 
 
@@ -24,17 +28,21 @@ export const useUserPanelStore = defineStore('userPanel', {
   state: (): UserPanelState => ({
     fetching: {
       lessonsCategories: false,
-      lessonsList:false,
-      lessonsDetails:false,
-      simillarVideos:false,
-      studentStages:false
+      lessonsList: false,
+      lessonsDetails: false,
+      simillarVideos: false,
+      studentStages: false,
+      categoriesListForModal: false,
+      categoryInfo: false
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
-    lessonsList:null,
-    lessonDetails:null,
-    simillarVideos:null,
-    studentStages:null
+    lessonsList: null,
+    lessonDetails: null,
+    simillarVideos: null,
+    studentStages: null,
+    categoriesListForModal: null,
+    categoryInfo: null
   }),
 
   actions: {
@@ -83,7 +91,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       }
     },
 
-    async getLessonDetails(id):Promise<lessonDetailsModel | null> {
+    async getLessonDetails(id): Promise<lessonDetailsModel | null> {
       try {
         this.fetching.lessonsDetails = true
         const { $axios } = useNuxtApp()
@@ -98,7 +106,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       }
     },
 
-    async getVideoSimillar(id):Promise<similarVidModel | null> {
+    async getVideoSimillar(id): Promise<similarVidModel | null> {
       try {
         this.fetching.simillarVideos = true
         const { $axios } = useNuxtApp()
@@ -113,7 +121,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       }
     },
 
-    async getStudentStages():Promise<studentStages | null>{
+    async getStudentStages(): Promise<studentStages | null> {
       try {
         this.fetching.studentStages = true
         const { $axios } = useNuxtApp()
@@ -125,6 +133,51 @@ export const useUserPanelStore = defineStore('userPanel', {
         return null
       } finally {
         this.fetching.studentStages = false
+      }
+
+    },
+
+    async getCategoriesListForUser(): Promise<categoriesListForModal | null> {
+      try {
+        this.fetching.categoriesListForModal = true
+        const { $axios } = useNuxtApp()
+        const data = mockCategoriesForModal
+        this.categoriesListForModal = data
+        return data
+      } catch (e) {
+        console.error('خطأ في تحميل التصنيفات', e)
+        return null
+      } finally {
+        this.fetching.categoriesListForModal = false
+      }
+
+    },
+
+
+    async getCategoryInfo(id: Number, stepId: Number): Promise<stepCategoryInfo | null> {
+      try {
+        this.fetching.categoryInfo = true
+        const { $axios } = useNuxtApp()
+        const data = mockCategoryInfo
+
+        if (!this.studentStages) return data
+        for (const stage of this.studentStages?.stages) {
+          const step = stage.steps.find(s => s.id === stepId);
+          if (step) {
+            step.categoryInfo = data;
+            this.categoryInfo = data;
+            return data;
+          }
+        }
+
+
+        console.warn(`لم يتم العثور على stepId: ${stepId}`)
+        return data
+      } catch (e) {
+        console.error('خطأ في تحميل بيانات التصنيف', e)
+        return null
+      } finally {
+        this.fetching.categoryInfo = false
       }
 
     }

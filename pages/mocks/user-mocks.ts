@@ -1,11 +1,11 @@
 // ~/mocks/mockData.ts
 
-import type { studentStages } from "~/main/modules/user-panel/data-access/user-panel.model";
+import type { categoriesListForModal, stepCategoryInfo, studentStages } from "~/main/modules/user-panel/data-access/user-panel.model";
 
 export const mockStudentStages: studentStages = {
   "active_step_id": 11,
   "active_phase_id": 2,
-  "show_modal_need_help": false,
+  "show_modal_need_help": true,
   "stages": [
     {
       "phase_name": "مرحلة التعارف",
@@ -73,7 +73,7 @@ export const mockStudentStages: studentStages = {
             "categoryId": 101,
             "categoryName": "التحليل البياني",
             "numberQuestion": 140,
-            "numberQuestionComplte": 0,
+            "numberQuestionComplte": 30,
             "time": 1655,
             "isWrong": false
           },
@@ -238,14 +238,7 @@ export const mockStudentStages: studentStages = {
           "title": "خطوة 3: تدريب المسائل الحسابية",
           "status": 1,
           "image_path": null,
-          "categoryInfo": {
-            "categoryId": 101,
-            "categoryName": "المسائل الحسابية",
-            "numberQuestion": 200,
-            "numberQuestionComplte": 150,
-            "time": 2000,
-            "isWrong": false
-          }
+          "categoryInfo": null
         },
         {
           "id": 14,
@@ -294,3 +287,39 @@ export const mockStudentStages: studentStages = {
 
   ]
 };
+
+
+
+export const mockCategoriesForModal: categoriesListForModal =
+  [
+    {
+      name: 'القسم الكمي',
+      children: [
+        { id: 101, label: 'المسائل الحسابية', disabled: false },
+        { id: 102, label: 'المسائل الهندسية', disabled: false },
+        { id: 103, label: 'المسائل الجبرية', disabled: false },
+        { id: 104, label: 'التحليل والإحصاء', disabled: true },
+      ],
+    },
+    {
+      name: 'القسم اللفظي',
+      children: [
+        { id: 201, label: 'الخطأ السياقي', disabled: false },
+        { id: 202, label: 'إكمال الجمل', disabled: false },
+        { id: 203, label: 'المسائل الجبرية', disabled: false },
+        { id: 204, label: 'التحليل والإحصاء', disabled: false },
+        { id: 205, label: 'الخطأ السياقي', disabled: false },
+        { id: 206, label: 'إكمال الجمل', disabled: false },
+      ],
+    },
+  ];
+
+
+export const mockCategoryInfo: stepCategoryInfo = {
+  "categoryId": 101,
+  "categoryName": "تجريب المسائل الهندسية",
+  "numberQuestion": 188,
+  "numberQuestionComplte": 140,
+  "time": 1412,
+  "isWrong": true
+}

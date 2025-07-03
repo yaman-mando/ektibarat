@@ -42,11 +42,6 @@
 
 
                 <!-- steps -->
-
-
-
-
-
                 <!-- scroll element -->
                 <div ref="scrollContainer" class="overflow-y-auto pr-2 hide-scrollbar"
                     style="max-height: calc(100vh - 171px);">
@@ -59,7 +54,7 @@
                             </span>
                             <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
                         </div>
-                        <spiralButton :steps="stage.steps" />
+                        <spiralButton :show-help-modal="props?.show_modal_need_help??false" :steps="stage.steps" />
                     </div>
                 </div>
 

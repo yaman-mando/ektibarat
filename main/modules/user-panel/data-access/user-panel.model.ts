@@ -84,7 +84,7 @@ export type step = {
   title: string;
   status: number;
   image_path: string | null;
-  categoryInfo: stepCategoryInfo;
+  categoryInfo: stepCategoryInfo | null;
   text_before?: string;
   text_after?: string;
 }
@@ -107,3 +107,9 @@ export type studentStages = {
   stages: stage[];
 }
 
+
+export type categoriesListForModal = {
+  name: string,
+  children:{id:number,label:string,disabled:boolean}[]
+}[]
+  
