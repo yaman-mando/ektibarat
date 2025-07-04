@@ -33,7 +33,7 @@
         </div>
 
         <!-- Categories list -->
-        <div class="flex md:flex-wrap gap-[10px] justify-center items-center">
+        <div class="flex flex-col md:flex-row md:flex-wrap gap-[10px] justify-center items-center">
           <template v-if="categoriesList" v-for="(card, index) in categoriesList" :key="`card_${index}`">
             <div v-if="card.children.length > 0" class="card w-full md:max-w-[390px]">
               <!-- Category title -->
