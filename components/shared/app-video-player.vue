@@ -72,7 +72,7 @@ export default {
         ],
         tracks: [
           {
-            src: '/videos/chapters.vtt',
+            src: '/videos/vtt/chapters.vtt',
             kind: 'chapters',
             srclang: 'ar',
             label: 'الاقسام',
