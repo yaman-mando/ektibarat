@@ -1,8 +1,11 @@
-import videojs from 'video.js'
-import 'videojs-vtt-thumbnails'
+import videojs from 'video.js';
+import 'videojs-vtt-thumbnails';
+import 'videojs-chapter-thumbnails';
+import { defineNuxtPlugin } from '#app';
 
-// التسجيل اليدوي في حال فشل التسجيل التلقائي
-// @ts-ignore
-if (!videojs.getPlugin?.('vttThumbnails')) {
-  // يتم التسجيل تلقائيًا فقط بمجرد الاستيراد
-}
+export default defineNuxtPlugin((nuxtApp) => {
+  console.log(videojs);
+  window['videojs'] = videojs;
+  if (!videojs.getPlugin?.('vttThumbnails')) {
+  }
+});
