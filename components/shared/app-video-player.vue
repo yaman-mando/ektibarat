@@ -6,14 +6,12 @@
       crossorigin="anonymous"
       playsinline
       controls
-      :sources="videoSource.sources"
+      :sources="[currentSource]"
       :poster="videoSource.poster"
       :tracks="videoSource.tracks"
       :height="600"
       :volume="0.4"
       :children="[
-        // custom Video.js children component
-        // https://videojs.com/guides/options/#children
         'mediaLoader',
         'posterImage',
         'bigPlayButton',
@@ -22,11 +20,28 @@
         'textTrackDisplay',
       ]"
       :controlBar="{
-        // custom Video.js control bar component
-        // https://videojs.com/guides/options/#componentname
         volumePanel: true,
       }"
       @ready="onPlayerReady"
+    >
+      <template #default="{ player, state }">
+        <div class="custom-player-controls relative">
+          <app-button
+            :label="state.playing ? 'Pause' : 'Play'"
+            @click="state.playing ? player.pause() : player.play()"
+          />
+          <app-button
+            :label="state.muted ? 'UnMute' : 'Mute'"
+            @click="player.muted(!state.muted)"
+          />
+          <!-- more custom controls elements ... -->
+        </div>
+      </template>
+    </video-player>
+    <!-- Button to cycle through sources -->
+    <app-button
+      :label="`Switch to ${nextQualityLabel}`"
+      @click="switchSource"
     />
   </div>
 </template>
@@ -36,9 +51,6 @@ import { VideoPlayer } from '@videojs-player/vue';
 import 'video.js/dist/video-js.css';
 import '@videojs/http-streaming';
 import 'videojs-hls-quality-selector';
-// custom Video.js CSS theme
-// https://github.com/videojs/themes
-// import '@videojs/themes/dist/forest/index.css';
 
 export default {
   components: {
@@ -77,25 +89,51 @@ export default {
             srclang: 'ar',
             label: 'الاقسام',
           },
-        ] as Array<any>,
+        ],
       },
+      currentSourceIndex: 0, // Track the current source index
+      player: null as any, // Store the Video.js player instance
     };
   },
+  computed: {
+    currentSource() {
+      // Return the currently selected source
+      return this.videoSource.sources[this.currentSourceIndex];
+    },
+    nextQualityLabel() {
+      // Show the label of the next source for the button
+      const nextIndex =
+        (this.currentSourceIndex + 1) % this.videoSource.sources.length;
+      return this.videoSource.sources[nextIndex].label;
+    },
+  },
   methods: {
-    onPlayerReady(el) {
-      const player = el.target.player;
-      console.log(player);
-      const qualityLevels = player.qualityLevels();
+    onPlayerReady(event) {
+      this.player = event.target.player; // Store player instance
+      const qualityLevels = this.player.qualityLevels();
       console.log(qualityLevels);
-      // qualityLevels.addQualityLevel({
-      //   id: '1',
-      // });
+      // Optionally configure quality levels if needed
       this.videoSource.sources.forEach((source, index) => {
         qualityLevels.addQualityLevel({
           id: index.toString(),
           label: source.label,
         });
       });
+    },
+    switchSource() {
+      // Cycle to the next source
+      this.currentSourceIndex =
+        (this.currentSourceIndex + 1) % this.videoSource.sources.length;
+      const newSource = this.videoSource.sources[this.currentSourceIndex];
+
+      // Update the player's source
+      if (this.player) {
+        const currentTime = this.player.currentTime(); // Save current playback time
+        this.player.src(newSource); // Set new source
+        this.player.load(); // Reload the player
+        this.player.currentTime(currentTime); // Restore playback time
+        this.player.play(); // Resume playback
+      }
     },
   },
 };
@@ -104,9 +142,9 @@ export default {
 <style lang="scss" scoped>
 .apv-w {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  justify-self: center;
   border: 1px solid var(--purple-8c);
   border-radius: 15px;
   overflow: hidden;
