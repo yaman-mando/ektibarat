@@ -124,7 +124,6 @@ class ChapterMarkers extends Component {
     this.el().innerHTML = '';
 
     this.chapters.forEach((chapter) => {
-      console.log(chapter);
       const left = (chapter.startTime / duration) * 100;
       const width = ((chapter.endTime - chapter.startTime) / duration) * 100;
 
@@ -132,7 +131,13 @@ class ChapterMarkers extends Component {
       marker.className = 'vjs-chapter-marker';
       marker.style.left = `${left}%`;
       marker.style.width = `${width}%`;
-      marker.title = chapter.text;
+      marker.title = ''; // clear default tooltip
+
+      const label = document.createElement('div');
+      label.className = 'vjs-chapter-label';
+      label.textContent = chapter.text;
+
+      marker.appendChild(label);
 
       marker.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -339,6 +344,13 @@ function updateQualitySelector() {
     }
   }
 
+  //bar
+  //:deep(.vjs-control-bar) {
+  //  height: 60px !important;
+  //  padding-bottom: 20px;
+  //  align-items: flex-start;
+  //}
+
   //chapter markers
   :deep(.vjs-progress-holder) {
     position: relative;
@@ -349,7 +361,7 @@ function updateQualitySelector() {
       bottom: 0;
       left: 0;
       right: 0;
-      pointer-events: none; // Allow native seeking
+      pointer-events: none;
 
       .vjs-chapter-marker {
         position: absolute;
@@ -361,8 +373,42 @@ function updateQualitySelector() {
         border-left: 1px solid white;
         border-right: 1px solid white;
 
+        &::before {
+          content: '';
+          position: absolute;
+          top: -20px;
+          bottom: -50px; // Extend below
+          left: -10px;
+          right: -10px;
+          pointer-events: auto;
+        }
+
         &:hover {
           background-color: rgba(255, 255, 255, 0.6);
+
+          .vjs-chapter-label {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .vjs-chapter-label {
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translate(-50%, 5px);
+          white-space: nowrap;
+          background-color: rgba(0, 0, 0, 0.85);
+          color: #fff;
+          padding: 4px 8px;
+          font-size: 12px;
+          border-radius: 4px;
+          pointer-events: none;
+          opacity: 0;
+          transition:
+            opacity 0.2s ease,
+            transform 0.2s ease;
+          z-index: 10;
         }
       }
     }
