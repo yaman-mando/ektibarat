@@ -387,3 +387,33 @@ export const toggleAdminMenu = ($store: Store<VuexRootState>) => {
     document.documentElement.classList.remove('is-closed-admin-menu');
   }
 };
+
+export function parseVTTChapters(vttText: string) {
+  const lines = vttText.split('\n');
+  const chapters: any[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line.includes('-->')) {
+      const times = line.split('-->');
+      const start = parseTime(times[0].trim());
+      const end = parseTime(times[1].trim());
+      const text = lines[i + 1]?.trim() || '';
+      chapters.push({ startTime: start, endTime: end, text });
+    }
+  }
+
+  return chapters;
+}
+
+function parseTime(timeStr: string) {
+  const parts = timeStr.split(':');
+  const [h, m, s] = parts.length === 3 ? parts : ['00', ...parts];
+  const [secs, ms = '0'] = s.split('.');
+  return (
+    parseInt(h) * 3600 +
+    parseInt(m) * 60 +
+    parseInt(secs) +
+    parseFloat(`0.${ms}`)
+  );
+}

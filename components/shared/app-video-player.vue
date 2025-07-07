@@ -36,6 +36,7 @@ import 'video.js/dist/video-js.css';
 import 'videojs-hls-quality-selector';
 import vttThumbnails from 'videojs-vtt-thumbnails';
 import 'videojs-vtt-thumbnails/dist/videojs-vtt-thumbnails.css';
+import { parseVTTChapters } from '~/main/utils/shared-utils';
 
 // Register the plugin before using it
 videojs.registerPlugin('vttThumbnails', vttThumbnails);
@@ -97,6 +98,54 @@ class QualitySelector extends Component {
 
 videojs.registerComponent('QualitySelector', QualitySelector);
 
+//chapters markers
+// const SeekBar = videojs.getComponent('SeekBar');
+
+class ChapterMarkers extends Component {
+  chapters: any[] = [];
+
+  constructor(player: any, options: any) {
+    super(player, options);
+    this.chapters = options.chapters || [];
+    this.renderMarkers();
+  }
+
+  override createEl() {
+    return videojs.dom.createEl('div', {
+      className: 'vjs-chapter-markers-overlay',
+    });
+  }
+
+  renderMarkers() {
+    const duration = this.player_.duration();
+    if (!duration || this.chapters.length === 0) return;
+
+    // Clear any previous markers
+    this.el().innerHTML = '';
+
+    this.chapters.forEach((chapter) => {
+      console.log(chapter);
+      const left = (chapter.startTime / duration) * 100;
+      const width = ((chapter.endTime - chapter.startTime) / duration) * 100;
+
+      const marker = document.createElement('div');
+      marker.className = 'vjs-chapter-marker';
+      marker.style.left = `${left}%`;
+      marker.style.width = `${width}%`;
+      marker.title = chapter.text;
+
+      marker.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.player_.currentTime(chapter.startTime);
+      });
+
+      this.el().appendChild(marker);
+    });
+  }
+}
+
+videojs.registerComponent('ChapterMarkers', ChapterMarkers);
+
 const videoSource = reactive({
   poster: '/images/poster/elephants-dream.jpg',
   sources: [
@@ -137,8 +186,29 @@ const currentSource = computed(
 );
 let player = null as any;
 
-function onPlayerReady(event: { target: { player: any } }) {
+async function onPlayerReady(event: { target: { player: any } }) {
   player = event.target.player;
+
+  // Fetch and parse chapter VTT
+  const response = await fetch('/videos/vtt/chapters.vtt');
+  const text = await response.text();
+  const chapters = parseVTTChapters(text);
+
+  // Add ChapterMarkers overlay
+  const progressControl = player.controlBar.getChild('progressControl');
+  const progressHolder = progressControl
+    ?.el()
+    .querySelector('.vjs-progress-holder');
+
+  if (
+    progressHolder &&
+    !progressHolder.querySelector('.vjs-chapter-markers-overlay')
+  ) {
+    const markersComp = player.addChild('ChapterMarkers', { chapters });
+
+    // Mount it inside the real progress bar
+    progressHolder.appendChild(markersComp.el());
+  }
 
   // Add custom quality selector to control bar
   const controlBar = player.getChild('controlBar');
@@ -265,6 +335,35 @@ function updateQualitySelector() {
 
       .vjs-quality-selector-select:hover {
         background-color: var(--purple-9c);
+      }
+    }
+  }
+
+  //chapter markers
+  :deep(.vjs-progress-holder) {
+    position: relative;
+
+    .vjs-chapter-markers-overlay {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      pointer-events: none; // Allow native seeking
+
+      .vjs-chapter-marker {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.3);
+        pointer-events: auto;
+        cursor: pointer;
+        border-left: 1px solid white;
+        border-right: 1px solid white;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.6);
+        }
       }
     }
   }
