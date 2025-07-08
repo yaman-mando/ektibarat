@@ -103,11 +103,13 @@ videojs.registerComponent('QualitySelector', QualitySelector);
 
 class ChapterMarkers extends Component {
   chapters: any[] = [];
+  labelEl!: HTMLDivElement;
 
   constructor(player: any, options: any) {
     super(player, options);
     this.chapters = options.chapters || [];
     this.renderMarkers();
+    this.createFloatingLabel();
   }
 
   override createEl() {
@@ -116,12 +118,19 @@ class ChapterMarkers extends Component {
     });
   }
 
+  createFloatingLabel() {
+    this.labelEl = document.createElement('div');
+    this.labelEl.className = 'vjs-floating-label';
+    this.labelEl.style.display = 'none';
+    this.el().appendChild(this.labelEl);
+  }
+
   renderMarkers() {
     const duration = this.player_.duration();
     if (!duration || this.chapters.length === 0) return;
 
-    // Clear any previous markers
     this.el().innerHTML = '';
+    this.createFloatingLabel(); // recreate in case of reset
 
     this.chapters.forEach((chapter) => {
       const left = (chapter.startTime / duration) * 100;
@@ -129,15 +138,9 @@ class ChapterMarkers extends Component {
 
       const marker = document.createElement('div');
       marker.className = 'vjs-chapter-marker';
+      marker.dataset.label = chapter.text;
       marker.style.left = `${left}%`;
       marker.style.width = `${width}%`;
-      marker.title = ''; // clear default tooltip
-
-      const label = document.createElement('div');
-      label.className = 'vjs-chapter-label';
-      label.textContent = chapter.text;
-
-      marker.appendChild(label);
 
       marker.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -146,6 +149,26 @@ class ChapterMarkers extends Component {
 
       this.el().appendChild(marker);
     });
+
+    // Attach mouse tracking
+    this.el().addEventListener('mousemove', (e) => this.onMouseMove(e));
+    this.el().addEventListener('mouseleave', () => {
+      this.labelEl.style.display = 'none';
+    });
+  }
+
+  onMouseMove(e: MouseEvent) {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('vjs-chapter-marker')) {
+      const markerRect = target.getBoundingClientRect();
+      const containerRect = this.el().getBoundingClientRect();
+
+      this.labelEl.textContent = target.dataset.label || '';
+      this.labelEl.style.left = `${markerRect.left - containerRect.left + markerRect.width / 2}px`;
+      this.labelEl.style.display = 'block';
+    } else {
+      this.labelEl.style.display = 'none';
+    }
   }
 }
 
@@ -306,6 +329,7 @@ function updateQualitySelector() {
   border: 1px solid var(--purple-8c);
   border-radius: 15px;
   overflow: hidden;
+  padding-bottom: 20px;
   box-shadow: var(--shadow-light-1);
 
   :deep(.video-js) {
@@ -344,12 +368,21 @@ function updateQualitySelector() {
     }
   }
 
-  //bar
-  //:deep(.vjs-control-bar) {
-  //  height: 60px !important;
-  //  padding-bottom: 20px;
-  //  align-items: flex-start;
-  //}
+  :deep(.vjs-floating-label) {
+    overflow: hidden;
+    position: absolute;
+    top: 100%;
+    transform: translate(-50%, 10px);
+    white-space: nowrap;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.2s ease;
+  }
 
   //chapter markers
   :deep(.vjs-progress-holder) {
