@@ -177,7 +177,6 @@ export default defineNuxtConfig({
     '~/plugins/shared/gtag-plugin.client.ts',
     '~/plugins/shared/font-awesome-plugin.client.ts',
     '~/plugins/shared/lamejs-plugin.client.ts',
-    '~/plugins/shared/videojs.client.ts',
     '~/plugins/shared/toast.client.ts',
   ],
   app: {
