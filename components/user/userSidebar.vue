@@ -111,7 +111,7 @@ const menuItems = [
   {
     name: 'تحليلاتي',
     icon: '/images/svg/user-panel/chart-bullish.svg',
-    route: RouteHelper.userPanelAnalytics(),
+    route: '/user-dashboard/analytics',
   },
   {
     name: 'الاشتراكات',

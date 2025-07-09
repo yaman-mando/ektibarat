@@ -1448,7 +1448,7 @@ onBeforeRouteLeave(async (to, from, next) => {
     confirmNavigate.value = true;
     return { proceed: true };
   };
-  const data = await firstValueFrom(
+  const data:any = await firstValueFrom(
     confirmExitRef.value?.onActionSub ?? of(true)
   );
   const result = await onActionHandler(data);

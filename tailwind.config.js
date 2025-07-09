@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   darkMode: 'class',
   watcher: {
@@ -10,6 +12,11 @@ module.exports = {
     './pages/**/*.{vue,js,html}',
     './plugins/**/*.{js,ts}',
     './nuxt.config.{js,ts}',
+  ],
+   plugins: [
+    plugin(function({ addVariant }) {
+      addVariant('max-sm', '@media (max-width: 640px)')
+    })
   ],
   theme: {
     screens: {
@@ -110,6 +117,7 @@ module.exports = {
         'green-da': 'var(--green-da)',
         'green-15': 'var(--green-15)',
         'green-fa':'#ECFFFA',
+        'green-66':'#25D366',
         'yellow-16': 'var(--yellow-16)',
         'yellow-00': 'var(--yellow-00)',
         'yellow-30': 'var(--yellow-30)',

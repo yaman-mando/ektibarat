@@ -54,7 +54,7 @@
                             </span>
                             <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
                         </div>
-                        <spiralButton :show-help-modal="props?.show_modal_need_help??false" :steps="stage.steps" />
+                        <spiralButton :show-help-modal="props?.show_modal_need_help ?? false" :steps="stage.steps" />
                     </div>
                 </div>
 
@@ -92,28 +92,7 @@ const activePhase = ref(props?.stages.find(p => p.phase_id === props.active_phas
 const scrollContainer = <any>ref(null);
 const stageRefs = new Map();
 const currentStep = computed(() => activePhase.value?.steps.find(s => s.id === props?.active_step_id));
-const needsCategorySelection = computed(() => !currentStep.value?.categoryInfo?.categoryId);
 
-
-const challenges = [
-    'حل 5 أسئلة من المرحلة الحالية',
-    'مراجعة الأخطاء السابقة',
-    'الاستمرار لمدة 10 دقائق',
-];
-
-const remainingQuestions = (step) => {
-    const info = step.categoryInfo;
-    return info ? info.numberQuestion - info.numberQuestionComplte : 0;
-};
-
-const onStepClick = (step) => {
-    if (!step.status || step.status === 0) return;
-    if (step.categoryInfo?.categoryId === null) {
-        showHelpModal.value = true;
-    } else if (props?.show_modal_need_help && step.categoryInfo?.isWrong) {
-        showHelpModal.value = true;
-    }
-};
 
 function formatTime(seconds: number) {
     const m = Math.floor(seconds / 60)
@@ -129,7 +108,7 @@ const updateActivePhaseOnScroll = () => {
         const rect = el.getBoundingClientRect();
         const containerRect = scrollContainer.value.getBoundingClientRect();
 
-        // ✅ أضف offset هنا (مثلاً 90px)
+
         const offset = -200;
         const adjustedTop = rect.top - containerRect.top - offset;
 

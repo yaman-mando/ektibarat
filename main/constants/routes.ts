@@ -100,6 +100,13 @@ export const APP_ROUTES = {
     prepare: {
       path: 'prepare',
     },
+    steps: {
+      root: 'steps',
+    },
+    analytics:{
+      root:'analytics'
+    }
+
   }
 };
 
@@ -1265,7 +1272,30 @@ export const all_routers = [
     isPublic: false,
     isAuth: true,
   },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.steps.root}`,
+    name: 'user-steps',  
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowUser: false,
+    isPublic: false,
+    isAuth: true,
+  },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}`,
+    name: 'user-analytics',  
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowUser: false,
+    isPublic: false,
+    isAuth: true,
+  },
 ];
+
 
 export const needAuth = (route: RouteLocationNormalizedGeneric): boolean => {
   const currentRouter = all_routers.filter(
