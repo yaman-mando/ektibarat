@@ -20,23 +20,27 @@
         <div class="flex gap-[3px] sm:gap-[12px] items-center">
           <!-- advices -->
           <button style="background: linear-gradient(95.1deg, #24A7F1 0.47%, #0266D6 100%);"
-            class="flex items-center justify-center gap-[15px] w-[147px] h-[44px] text-white font-medium text-[16px] rounded-[8px] cursor-pointer">
+            class="flex items-center justify-center gap-[15px] w-[147px] h-[44px] text-white font-medium text-[16px] rounded-[8px] cursor-pointer"
+            @click="scrollToRecommendations()">
             <i class="fa-solid fa-lightbulb"></i>
             <span>التوصيات</span>
           </button>
           <!-- watsapp -->
-          <button
-            class="flex items-center justify-center w-[96px] h-[44px] bg-green-66 gap-[5px] text-white font-medium text-[16px] rounded-[8px] cursor-pointer">
-            <i class="fa-brands fa-whatsapp"></i>
-            <span>رسالة</span>
-          </button>
+          <a href="https://wa.me/966501234567" target="_blank" rel="noopener noreferrer">
+            <button
+              class="flex items-center justify-center w-[96px] h-[44px] bg-green-66 gap-[5px] text-white font-medium text-[16px] rounded-[8px] cursor-pointer">
+              <i class="fa-brands fa-whatsapp"></i>
+              <span>رسالة</span>
+            </button>
+          </a>
           <!-- phone -->
-          <button
-            class="flex items-center justify-center w-[98px] h-[44px] gap-[5px] text-red-5e border border-red-5e bg-transparent font-medium text-[16px] rounded-[8px] cursor-pointer">
-            <i class="fa-solid fa-phone"></i>
-            <span>اتصال</span>
-          </button>
-
+          <a href="tel:+966501234567">
+            <button
+              class="flex items-center justify-center w-[98px] h-[44px] gap-[5px] text-red-5e border border-red-5e bg-transparent font-medium text-[16px] rounded-[8px] cursor-pointer">
+              <i class="fa-solid fa-phone"></i>
+              <span>اتصال</span>
+            </button>
+          </a>
         </div>
       </div>
 
@@ -48,8 +52,7 @@
         <div class="flex flex-1/3 flex-col gap-y-[20px] w-full  2xl:min-w-[340px]">
 
           <!-- rate square -->
-          <div
-            class="h-[160px] bg-white shadow-custom rounded-[8px] border border-[#BCCCDB] p-[15px] grid justify-items-center relative">
+          <div class="h-[160px] bg-white shadow-custom rounded-[8px] p-[15px] grid justify-items-center relative">
             <div class="absolute right-[15px] top-[20px]">
               <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_608_900)">
@@ -140,7 +143,7 @@
                   <span class="text-[26px] 2xl:text-[30px]">%</span>
                 </span>
                 <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">
-                  {{ formatTime(planGrades.totalTimeDone) }} | {{ formatTime(planGrades.totalTime) }}
+                  {{ formatTime(planGrades.timeDone) }} | {{ formatTime(planGrades.timeRequired) }}
                 </span>
               </div>
             </div>
@@ -150,16 +153,17 @@
               <div style="box-shadow: 2px 2px 4px 0px #00000026 inset" class="relative h-[20px] bg-[#F0F0F0]">
                 <!-- Green bar -->
                 <div style="background: linear-gradient(90deg, #58CC02 0%, #4E9818 100%)"
-                  class="absolute top-0 bottom-0 right-0" :style="{ width: `${doneRatio}%` }"></div>
+                  class="absolute top-0 bottom-0 right-0" :style="{ width: `${planGrades.percentageDone}%` }"></div>
 
                 <!-- Orange bar -->
                 <div style="background: linear-gradient(90deg, #FDC830 0%, #CE9800 100%)"
                   class="absolute top-0 bottom-0"
-                  :style="{ width: `${requiredRatio - doneRatio}%`, right: `${doneRatio}%` }"></div>
+                  :style="{ width: `${planGrades.percentageRequired - planGrades.percentageDone}%`, right: `${planGrades.percentageDone}%` }">
+                </div>
               </div>
 
               <!-- "You are here" indicator -->
-              <div :style="{ right: `calc(${doneRatio}% - 20px)` }"
+              <div :style="{ right: `calc(${planGrades.percentageDone}% - 30px)` }"
                 class="absolute -top-[10px] h-[27px] grid gap-y-[5px] justify-items-center w-[40px]">
                 <div class="text-[10px] 2xl:text-[12px] text-black font-medium">أنت هنا</div>
                 <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -168,7 +172,7 @@
               </div>
 
               <!-- Target indicator -->
-              <div :style="{ right: `calc(${requiredRatio}% - 35px)` }"
+              <div :style="{ right: `calc(${planGrades.percentageRequired}% - 45px)` }"
                 class="absolute bottom-0 h-[27px] grid gap-y-[5px] justify-items-center w-[80px]">
                 <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M8 0L16 14H0L8 0Z" fill="#EAB316" />
@@ -184,8 +188,8 @@
                 </div>
                 <div class="flex flex-col items-center text-[12px] 2xl:text-[14px] font-medium text-gray-8f">
                   <span>آخر الشهر</span>
-                  <span>{{ formatTime(planGrades.lastMonth.totalTimeDone) }} | {{
-                    formatTime(planGrades.lastMonth.totalTimeRequired) }}</span>
+                  <span>{{ formatTime(planGrades.lastMonth.timeDone) }} | {{
+                    formatTime(planGrades.lastMonth.timeRequired) }}</span>
                 </div>
               </div>
               <div class="flex items-center gap-x-[8px] text-right pr-[5px] border-r-[3px] border-r-purple-e0">
@@ -193,8 +197,8 @@
                 </div>
                 <div class="flex flex-col items-center text-[12px] 2xl:text-[14px] font-medium text-gray-8f">
                   <span>آخر أسبوع</span>
-                  <span>{{ formatTime(planGrades.lastWeek.totalTimeDone) }} | {{
-                    formatTime(planGrades.lastWeek.totalTimeRequired) }}</span>
+                  <span>{{ formatTime(planGrades.lastWeek.timeDone) }} | {{
+                    formatTime(planGrades.lastWeek.timeRequired) }}</span>
                 </div>
               </div>
             </div>
@@ -321,11 +325,12 @@
         <accordionGroup>
           <disclosureGroup v-for="(item, index) in items" :key="index" :defaultOpen="true" :onlyOneOpen="false"
             :index="index">
-            <!-- الهيدر -->
+            <!-- head -->
             <template #right>
               <div class="flex justify-between w-[705px] max-w-[90vw] items-center justify-self-center p-2">
                 <div class="flex gap-x-[5px] items-center">
-                  <i :class="item.icon" class="rounded-full bg-[#E3F0FF] p-[8px]"></i>
+
+                  <img src="/images/svg/calculator.svg" alt="icon" />
                   <span class="text-[18px] font-bold text-orange-39">{{ item.categoryName }}</span>
                 </div>
                 <div class="text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
@@ -348,11 +353,11 @@
               </div>
             </template>
 
-            <!-- الجدول المخصص -->
+            <!-- table -->
             <div class="space-y-2">
               <!-- Header -->
               <div class="h-[70px] w-full flex items-center">
-                <!-- القسم الأول -->
+                <!-- first part -->
                 <div class="bg-[#F5F7FA] h-[100%] flex-[70%] flex items-center border border-[#BCCCDB] rounded-[8px] px-[15px] 
                             text-purple-78 text-[16px] font-bold">
                   <div class="w-[40%]">القسم</div>
@@ -369,10 +374,10 @@
                   <div class="w-[20%] text-center">مدة التدريب</div>
                 </div>
 
-                <!-- فاصل -->
+                
                 <div class="w-[15px]"></div>
 
-                <!-- القسم الثاني -->
+                <!-- second part -->
                 <div class="bg-[#F5F7FA] h-[100%] flex flex-[30%] items-center border border-[#BCCCDB] rounded-[8px] px-[15px] 
                             text-purple-78 text-[16px] font-bold">
                   <div class="w-[55%] text-center">التقييم العام</div>
@@ -380,9 +385,9 @@
                 </div>
               </div>
 
-              <!-- الصفوف -->
+              <!-- data -->
               <div v-for="(child, i) in item.details" :key="i" :class="['h-[60px] flex items-center']">
-                <!-- القسم الأول -->
+                <!-- first part -->
                 <div class="flex flex-[70%] h-[100%] items-center rounded-[8px] border border-[#BCCCDB] px-[15px]"
                   :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
                   <div class="w-[40%] text-gray-63 font-medium">{{ child.categoryName }}</div>
@@ -401,10 +406,10 @@
                   </div>
                 </div>
 
-                <!-- فاصل -->
+                
                 <div class="w-[15px]"></div>
 
-                <!-- القسم الثاني -->
+                <!-- second part -->
                 <div class="flex flex-[30%] h-[100%] items-center rounded-[8px] border border-[#BCCCDB]"
                   :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
                   <div class="w-[55%] h-[100%] flex justify-center items-center">
@@ -439,6 +444,9 @@
         </accordionGroup>
       </div>
 
+      <!-- advices part -->
+      <advicesSquare />
+
       <!-- subscribe modal -->
       <SubscribeModal v-if="showSubscribeModal" @update:show="($event) => { showSubscribeModal = $event }"
         :show="showSubscribeModal" />
@@ -452,6 +460,7 @@ import { ref } from 'vue'
 import disclosureGroup from '~/components/user/disclosureGroup.vue'
 import accordionGroup from '~/components/user/accordionGroup.vue'
 import rateProgressBar from '~/components/user/rateProgressBar.vue'
+import advicesSquare from '~/components/user/advicesSquare.vue'
 import { useApexChartService } from '~/main/services/useApexChartService';
 
 const apexChartService = useApexChartService();
@@ -482,43 +491,38 @@ const rawCategories = [
   { categoryId: 8, categoryName: 'إكمال الجمل', parentId: 2 },
 ]
 
-//plane data
-const planGrades =
-{
-  "totalPercentage": 69,
-  "totalTime": 560,
-  "totalTimeRequired": 380,
-  "totalTimeDone": 280,
-  "startTraining": "2025/06/25",
-  "examDate": "2025/09/18",
-  "lastWeek": {
-    "percentage": 81,
-    "totalTimeDone": 79,
-    "totalTimeRequired": 99
+
+const planGrades = {
+  totalPercentage: 81,
+  percentageRequired: 70,
+  percentageDone: 51,
+  timeRequired: 176,
+  timeDone: 150,
+  startTraining: '2025/06/25',
+  examDate: '2025/09/18',
+  lastWeek: {
+    percentage: 92,
+    timeRequired: 176,
+    timeDone: 150,
   },
-  "lastMonth": {
-    "percentage": 92,
-    "totalTimeDone": 95,
-    "totalTimeRequired": 104
+  lastMonth: {
+    percentage: 81,
+    timeRequired: 176,
+    timeDone: 150,
   }
 }
 
-
-const doneRatio = computed(() => (planGrades.totalTimeDone / planGrades.totalTime) * 100);
-const requiredRatio = computed(() => (planGrades.totalTimeRequired / planGrades.totalTime) * 100);
-
 const level = computed(() => {
-  const diff = planGrades.totalTimeDone - planGrades.totalTimeRequired;
-  const threshold = planGrades.totalTimeRequired * 0.07;
-  if (diff >= 0) return 'جيد';
-  if (Math.abs(diff) <= threshold) return 'متوسط';
+  if (planGrades.percentageDone >= 95) return 'ممتاز';
+  if (planGrades.percentageDone >= 80) return 'جيد';
+  if (planGrades.percentageDone >= 50) return 'متوسط';
   return 'ضعيف';
 });
 
 
 const levelColor = computed(() => {
   switch (level.value) {
-    case 'جيد':
+    case 'جيد': case 'ممتاز':
       return '#58CC02';
     case 'متوسط':
       return '#EAB316';
@@ -766,6 +770,13 @@ function fetchChartData() {
 
 function openSubscribeModal() {
   showSubscribeModal.value = true
+}
+
+function scrollToRecommendations() {
+  const target = document.getElementById("recommendations");
+  if (target) {
+    target.scrollIntoView({ behavior: "smooth" });
+  }
 }
 
 onMounted(() => {

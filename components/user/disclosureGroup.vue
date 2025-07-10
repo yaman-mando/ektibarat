@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-[8px] border border-[#BCCCDB] shadow-custom overflow-hidden"
+    class="rounded-[8px] shadow-custom overflow-hidden"
   >
     <!-- Header -->
     <button

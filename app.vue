@@ -1,9 +1,9 @@
 <template>
   <nuxt-route-announcer />
   <nuxt-layout>
-    <client-only>
+    <!-- <client-only>
       <app-video-player class="!m-4" />
-    </client-only>
+    </client-only> -->
     <nuxt-page />
   </nuxt-layout>
   <lazy-hello-modal ref="hello_modal_ref" />
