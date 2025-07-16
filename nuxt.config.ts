@@ -178,6 +178,7 @@ export default defineNuxtConfig({
     '~/plugins/shared/font-awesome-plugin.client.ts',
     '~/plugins/shared/lamejs-plugin.client.ts',
     '~/plugins/shared/toast.client.ts',
+    '~/plugins/shared/vue-select.client.ts',
   ],
   app: {
     head: {
