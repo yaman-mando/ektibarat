@@ -139,6 +139,7 @@
           v-if="selectedType == examTypes.trainings"
           id="bank-training-collapse"
           :ref="trainingPanelTour.step2.ref"
+          :value="examTypes.trainings"
           data-step="2"
           :data-disable-interaction="true"
           :data-title="isXlWindow ? trainingPanelTour.step2.title : null"
@@ -263,6 +264,7 @@
                     :placeholder="'سؤال'"
                     :isMulti="false"
                     :clearable="false"
+                    :searchable="false"
                   />
                 </div>
                 <!--                <div class="__full-filter">-->
@@ -469,6 +471,7 @@
         <prime-accordion
           v-if="isExams && !isTahsele"
           id="bank-exam-collapse"
+          value="exams"
         >
           <prime-accordion-panel
             value="exams"
@@ -942,10 +945,7 @@ export default {
   },
   data() {
     return {
-      selectedDifficultValues: [
-        levelOptionsEnum.easy,
-        levelOptionsEnum.hard,
-      ] as any[],
+      selectedDifficultValues: [] as any[],
       isRecentQuestionActive: false,
       cards: mockData,
       selectedCard: [] as any[],
@@ -1867,17 +1867,32 @@ export default {
         this.selectedLists,
         'defaultQuestionsCount'
       );
+
+      let totalMinutes;
       if (
         this.isExams ||
         !this.activeAdvanced ||
         !this.isActiveAdvancedFilter
       ) {
-        return minutesToHHMM(realMinutes);
+        totalMinutes = realMinutes;
       } else {
         if (realQuestionCount <= this.customQuestionsCount) {
-          return minutesToHHMM(realMinutes);
+          totalMinutes = realMinutes;
         } else {
-          return minutesToHHMM(Number(this.customQuestionsCount));
+          totalMinutes = Number(this.customQuestionsCount);
+        }
+      }
+
+      if (totalMinutes < 60) {
+        return `${totalMinutes} دقيقة`;
+      } else {
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        if (minutes === 0) {
+          return `${hours} ساعة`;
+        } else {
+          return `${hours} ساعة و ${minutes} دقيقة`;
         }
       }
     },
