@@ -32,7 +32,7 @@
             :options="list"
             :flat="isMulti"
             :placeholder="placeholder"
-            :searchable="true"
+            :searchable="searchable"
             :sortValueBy="'LEVEL'"
             noChildrenText="لايوجد عناصر اخرى"
             noOptionsText="لايوجد عناصر"
@@ -105,6 +105,10 @@ export default {
   inheritAttrs: false,
 
   props: {
+    searchable: {
+      type: Boolean,
+      default: true,
+    },
     clearable: {
       type: Boolean,
       default: true,
