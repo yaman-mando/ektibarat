@@ -60,7 +60,7 @@
                   'w-full',
                   'text-right',
                   'rtl',
-                  errors.cityId ? 'border border-red-500 rounded' : ''
+                  errors.schoolId ? 'border border-red-500 rounded' : ''
                 ]" dir="rtl" />
             </div>
           </client-only>

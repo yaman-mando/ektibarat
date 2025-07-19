@@ -24,13 +24,15 @@
         class="us-content flex-1 bg-gray-fb dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-[40px] py-[30px] ml-0">
 
 
-        <div class="flex justify-between items-baseline flex-wrap gap-4 mb-6">
+        <div v-if="hasLInfo || hasRInfo" class="flex justify-between items-baseline flex-wrap gap-4 mb-6">
 
-          <div class="flex items-center">
+          <!-- right info -->
+          <div v-if="hasRInfo" class="flex items-center">
             <slot name="top-right"></slot>
           </div>
 
-          <div class="flex items-center w-[300px] gap-x-[20px]">
+          <!-- left info -->
+          <div v-if="hasLInfo" class="flex items-center w-[300px] gap-x-[20px]">
             <div class="flex items-center gap-x-[8px]">
               <img src="/images/svg/star-orange.svg" alt="icon" class="w-[24px] h-auto" />
               <span class="text-[20px] font-bold text-blue-f7">2,849</span>
@@ -74,8 +76,14 @@ useHead({
 const props = withDefaults(
   defineProps<{
     contentClass?: string;
+    hasRInfo?: boolean;
+    hasLInfo?: boolean;
   }>(),
-  {}
+  {
+    contentClass: '',
+    hasRInfo: true,
+    hasLInfo: true,
+  }
 );
 
 const colorMode = useColorMode();
@@ -116,10 +124,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/shared/sidebar-filter.scss';
-@import '@/assets/scss/style.scss';
+@import '/assets/scss/shared/sidebar-filter.scss';
+@import '/assets/scss/style.scss';
 @import '@/assets/font-icons/ek-icon-v1.0/style.css';
-@import '@/assets/scss/main.scss';
+@import '/assets/scss/main.scss';
 
 #user-panel-layout {
   .us-content {

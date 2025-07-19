@@ -6,7 +6,7 @@
     :dismissableMask="false"
     class="cropper-modal w-[500px]"
     :showHeader="true"
-    :closable="false"
+    :closable="true"
     @hide="close()"
   >
     <cropper

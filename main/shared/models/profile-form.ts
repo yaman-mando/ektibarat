@@ -4,13 +4,15 @@ export class profileForm {
   lastName = null as null | string;
   userName = null as null | string;
   identityNumber = null;
-  grades = [];
-  email = null as null | string;
+  grades = null as [] | string | null | any;
+  email = null as null | string | any;
   emailConfirmed = false;
-  phoneNumber: string | null = null as null | string;
+  phoneNumber = null as null | string | any;
   phoneNumberConfirmed = false;
-  whatsAppNumber = null as null | string;
+  whatsAppNumber = null as null | string | any;
   whatsAppConfirm = null as null | string;
   pictureUrl = null as null | string;
   sex = null;
+  cityId = null as null | number | any;
+  schoolId=null as null | number | any;
 }
