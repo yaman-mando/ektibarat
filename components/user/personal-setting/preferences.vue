@@ -1,5 +1,5 @@
 <template>
-    <div class="px-[25px]">
+    <div class="px-[25px] hidden md:block">
         <h2 class="text-[24px] font-bold text-gray-63 dark:text-gray-100 mb-4">التفضيلات</h2>
 
         <!-- Sound & Motivation Toggles -->
@@ -34,9 +34,61 @@
 
         <!-- Save Button -->
         <div class="text-left mt-[30px]">
-            <button
-                :disabled="!hasChanges()"
+            <button :disabled="!hasChanges()"
                 class=" bg-purple-78 disabled:opacity-50 text-white w-[140px] h-[44px] rounded-[8px] hover:bg-primary-dark cursor-pointer"
+                @click="saveChanges">
+                حفظ
+            </button>
+        </div>
+
+        <!-- Unsaved Changes Modal -->
+        <ConfirmDialog v-model:visible="showConfirmExit" :title="'تنبيه'"
+            :message="'هل ترغب بحفظ التعديلات قبل الخروج؟'" :confirmText="'نعم، احفظ'" :cancelText="'لا، تجاهل'"
+            :onConfirm="saveChanges" :onCancel="discardChanges" />
+    </div>
+
+    <!-- mobile -->
+    <div class="px-[15px] py-[20px] block md:hidden">
+        <h2 class="text-[24px] font-bold text-gray-63 dark:text-gray-100 mb-4">التفضيلات</h2>
+
+        <!-- Sound & Motivation Toggles -->
+        <div class="mb-[30px] shadow-custom rounded-[8px]">
+            <div class="flex items-center justify-between h-[62px] px-[15px]">
+                <span class="text-dark-2b text-[18px] font-medium dark:text-gray-300">المؤثرات الصوتية</span>
+                <input type="checkbox" v-model="form.soundEffects" class="toggle-switch">
+            </div>
+            <hr class="border-gray-300 dark:border-gray-700">
+            <div class="flex items-center justify-between h-[62px] px-[15px]">
+                <span class="text-dark-2b text-[18px] font-medium dark:text-gray-300">الرسائل التحفيزية</span>
+                <input type="checkbox" v-model="form.motivationalMessages" class="toggle-switch">
+            </div>
+        </div>
+
+        <!-- Notification Options -->
+        <h2 class="text-[24px] font-bold text-gray-63 dark:text-gray-100 mb-4">خصائص الإشعارات</h2>
+        <div class="shadow-custom rounded-[8px]">
+            <div v-for="(label, key) in notificationLabels" :key="key">
+                <div class="flex items-center justify-between h-[62px] px-[15px]">
+                    <span class="text-dark-2b text-[18px] font-medium dark:text-gray-300">{{ label }}</span>
+                    <div class="flex gap-[12px]">
+                        <!-- Email Button -->
+                        <button :class="getBtnClass(getEmailState(form[key]), 'email')" @click="toggleEmail(key)">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                        <!-- WhatsApp Button -->
+                        <button :class="getBtnClass(getWhatsAppState(form[key]))" @click="toggleWhatsApp(key)">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                    </div>
+                </div>
+                <hr class="border-gray-300 dark:border-gray-700">
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="w-full text-left mt-[30px]">
+            <button :disabled="!hasChanges()"
+                class=" bg-purple-78 disabled:opacity-50 text-white w-full h-[44px] rounded-[8px] hover:bg-primary-dark cursor-pointer"
                 @click="saveChanges">
                 حفظ
             </button>

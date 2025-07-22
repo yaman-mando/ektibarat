@@ -1,15 +1,17 @@
 <template>
 
-    <user-panel-layout :has-l-info="false" :has-r-info="false">
+    <user-panel-layout :has-l-info="false" :has-r-info="false" :no-spaces="!isDesktop" :has-prev="!isDesktop"
+        :page-name="selectedName">
 
-        <div class="flex flex-wrap 2xl:flex-nowrap p-6 gap-[20px]">
+        <div class="flex flex-wrap 2xl:flex-nowrap p-6 gap-[20px]" :class="{ '!p-0': !isDesktop }">
 
-            
-                <main class="bg-white rounded-[8px] flex-2/3 sm:min-w-[500px] shadow-custom py-[30px] h-fit">
+
+            <main class="bg-white rounded-[8px] flex-2/3 sm:min-w-[400px] shadow-custom py-[30px] h-fit"
+                :class="{ '!py-0 !rounded-none !shadow-none': !isDesktop }">
                 <component :is="currentComponent" />
-                </main>
+            </main>
 
-            <aside class="2xl:max-w-[330px] flex-1/3 min-w-[250px] flex flex-col gap-[15px]">
+            <aside v-if="isDesktop" class="2xl:max-w-[330px] flex-1/3 min-w-[250px] flex flex-col gap-[15px]">
 
 
                 <div class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-[250px]">
@@ -30,12 +32,10 @@
                 <div class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-[250px]">
                     <h2 class="text-purple-e0 font-bold text-[24px] mb-[10px]">المساعدة</h2>
                     <ul class="space-y-[10px]">
-                        <li v-for="item in helpItems" :key="item.key" @click="selectedSection = item.key" :class="[
-                            'cursor-pointer px-3 py-2 rounded transition h-[50px] content-center',
-                            selectedSection === item.key
-                                ? 'bg-gray-fa font-bold'
-                                : 'hover:bg-gray-50 text-dark-63 font-medium'
-                        ]">
+                        <li v-for="item in helpItems" :key="item.key"
+                            @click="item.link ? toPage(item.link) : selectedSection = item.key" :class="['cursor-pointer px-3 py-2 rounded transition h-[50px] content-center',
+                                selectedSection === item.key ? 'bg-gray-fa font-bold' : 'hover:bg-gray-50 text-dark-63 font-medium'
+                            ]">
                             {{ item.label }}
                         </li>
                     </ul>
@@ -43,6 +43,7 @@
 
 
                 <button
+                    @click="logout"
                     class="bg-white text-red-500 hover:bg-red-50 transition shadow px-4 py-3 rounded-lg font-semibold cursor-pointer">
                     تسجيل الخروج
                 </button>
@@ -62,6 +63,7 @@ import support from '~/components/user/personal-setting/support.vue';
 import contactUs from '~/components/user/personal-setting/contactUs.vue';
 
 //use
+const {signOut} = useAuth()
 const router = useRouter()
 const route = useRoute()
 
@@ -74,9 +76,9 @@ const accountItems = [
 ]
 
 const helpItems = [
-    { key: 'faq', label: 'الأسئلة الشائعة' },
-    { key: 'support', label: 'الدعم الفني' },
-    { key: 'contact', label: 'اتصل بنا' },
+    { key: 'faq', label: 'الأسئلة الشائعة', link: null },
+    { key: 'support', label: 'الدعم الفني', link: '/user-panel?page=chat' },
+    { key: 'contact', label: 'اتصل بنا', link: '/contact-us' },
 ]
 
 const validSections: any = [
@@ -89,6 +91,7 @@ const grades = [{ id: 10, label: 'الأول الثانوي' }, { id: 11, label:
 
 //data
 const selectedSection = <any>ref('info')
+const isDesktop = ref(false);
 
 //computed
 const currentComponent = computed(() => {
@@ -103,11 +106,36 @@ const currentComponent = computed(() => {
     }
 })
 
+const selectedName = computed(() => {
+    if (!selectedSection.value) return 'لا يوجد'
+    if (accountItems.some(k => k.key === selectedSection.value)) {
+        return accountItems.filter(k => k.key === selectedSection.value)[0].label
+    }
+    if (helpItems.some(k => k.key === selectedSection.value)) {
+        return helpItems.filter(k => k.key === selectedSection.value)[0].label
+    }
+    return 'لا يوجد'
+
+})
+
+const logout = async () => {
+  await signOut({ callbackUrl: '/' });
+  document.getElementById('web-footer')?.classList.remove('is-user-panel');
+};
+
 //watched
 watch(selectedSection, (newVal) => {
     router.replace({ query: { ...route.query, section: newVal } })
 })
 
+const toPage = (link) => {
+    try {
+        router.push(link)
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
 
 watch(() => route.query.section, (newVal) => {
     if (validSections.includes(newVal)) {
@@ -121,6 +149,12 @@ onMounted(() => {
     if (validSections.includes(querySection)) {
         selectedSection.value = querySection
     }
+    const checkScreen = () => {
+        isDesktop.value = window.innerWidth >= 768;
+    };
+
+    checkScreen();
+    window.addEventListener('resize', checkScreen);
 })
 
 </script>

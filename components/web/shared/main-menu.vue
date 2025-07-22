@@ -5,29 +5,25 @@
         <i class="em-icon-Group-3396"></i>
       </span>
       <nuxt-link to="/">
-        <nuxt-img
-style="cursor: pointer" width="126px" height="40px" src="/images/EkhtibaratLogoColor.webp"
+        <nuxt-img style="cursor: pointer" width="126px" height="40px" src="/images/EkhtibaratLogoColor.webp"
           alt="شعار اختبارات - منصة الاختبارات الإلكترونية" title="شعار منصة اختبارات - اختبارات إلكترونية متنوعة"
           loading="lazy" format="webp" quality="80" class="logo" />
       </nuxt-link>
 
-      <lazy-app-button
-v-if="!isLoggedIn && !isLoadingProfile" variant="clear" label="الدخول" size="sm"
+      <lazy-app-button v-if="!isLoggedIn && !isLoadingProfile" variant="clear" label="الدخول" size="sm"
         :isDisabled="authState.loading.value" :isLoading="authStore.state.isLoadingProfile" @click="onLoginClick" />
       <div v-else class="actions">
         <div class="drop-menu">
           <div class="profile" @click="openList()">
             <div v-if="isLoggedIn" data-toggle="tooltip" data-placement="top">
-              <custom-image
-:folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
+              <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
                 :ext="imageExt.jpg" width="40" height="40" radius="50%" />
             </div>
           </div>
           <div v-if="showList" ref="dropDown" class="dropdown" tabindex="-1" @blur.self="hideList">
             <div class="dropdown-menu">
               <div class="rw-info">
-                <custom-image
-:folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
+                <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
                   :ext="imageExt.jpg" width="76" height="76" radius="50%" />
                 <span class="full-name">
                   <template v-if="userData.firstName || userData.lastName">
@@ -36,16 +32,19 @@ v-if="!isLoggedIn && !isLoadingProfile" variant="clear" label="الدخول" siz
                 </span>
               </div>
 
-              <custom-switch
-v-model:active="selectedGlobalType" :rightLabel="'قدرات'" :leftLabel="'تحصيلي'"
+              <custom-switch v-model:active="selectedGlobalType" :rightLabel="'قدرات'" :leftLabel="'تحصيلي'"
                 :isSm="true" />
+
+              <div class="exams-btn">
+                <button @click="toUserDashboard">لوحة الطالب</button>
+              </div>
+
               <div class="am-actions">
                 <training-button :buttonStyle="TrainingButtonType.withRadius" />
               </div>
               <ul style="cursor: pointer">
                 <template v-for="item in listItemModel">
-                  <li
-v-if="allowShowItem(item)" :key="item.id" class="dropdown-item" :class="[
+                  <li v-if="allowShowItem(item)" :key="item.id" class="dropdown-item" :class="[
                     { active: activeList === item.id },
                     {
                       'is-red':
@@ -76,14 +75,12 @@ v-if="allowShowItem(item)" :key="item.id" class="dropdown-item" :class="[
     <header v-else class="web-header hide-to-tablet">
       <div class="logo-items">
         <nuxt-link to="/">
-          <img
-width="190px" height="60px" style="cursor: pointer" src="/images/EkhtibaratLogoColor.webp"
+          <img width="190px" height="60px" style="cursor: pointer" src="/images/EkhtibaratLogoColor.webp"
             alt="اختبارات" />
         </nuxt-link>
 
         <ul class="menu-items">
-          <li
-@click="
+          <li @click="
             toPath('/');
           openSubMenu(null);
           ">
@@ -109,8 +106,7 @@ width="190px" height="60px" style="cursor: pointer" src="/images/EkhtibaratLogoC
             <li @click="openSubMenu(null)">الأسئلة الشائعة</li>
           </nuxt-link>
 
-          <li
-@click="
+          <li @click="
             openSubMenu(null);
           toPath('/blog');
           ">
@@ -134,8 +130,7 @@ width="190px" height="60px" style="cursor: pointer" src="/images/EkhtibaratLogoC
           <div class="drop-menu">
             <div class="profile" @click="openList('sm')">
               <div v-if="userData && userData" data-toggle="tooltip" data-placement="top">
-                <custom-image
-:folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
+                <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
                   :ext="imageExt.jpg" width="40" height="40" radius="50%" />
               </div>
               <span v-if="isLoggedIn" class="name">
@@ -148,8 +143,7 @@ width="190px" height="60px" style="cursor: pointer" src="/images/EkhtibaratLogoC
             <div v-if="showList" ref="dropDownSm" class="dropdown" tabindex="-1" @blur.self="hideList">
               <div class="dropdown-menu">
                 <div class="rw-info">
-                  <custom-image
-:folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
+                  <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
                     :ext="imageExt.jpg" width="76" height="76" radius="50%" />
                   <span class="full-name">
                     <template v-if="userData.firstName || userData.lastName">
@@ -165,8 +159,7 @@ width="190px" height="60px" style="cursor: pointer" src="/images/EkhtibaratLogoC
                 </div>
                 <ul style="cursor: pointer">
                   <template v-for="item in listItemModel">
-                    <li
-v-if="allowShowItem(item)" :key="item.id" class="dropdown-item" :class="[
+                    <li v-if="allowShowItem(item)" :key="item.id" class="dropdown-item" :class="[
                       { active: activeList === item.id },
                       {
                         'is-red':
@@ -198,8 +191,7 @@ v-if="allowShowItem(item)" :key="item.id" class="dropdown-item" :class="[
 
     <client-only>
       <div class="rw-responsive-menu" :class="{ 'is-open': openMenu }">
-        <div
-ref="responsiveMenu" class="responsive-menu" :class="{ 'is-open': openMenu }" tabindex="-1"
+        <div ref="responsiveMenu" class="responsive-menu" :class="{ 'is-open': openMenu }" tabindex="-1"
           @blur="openMenu = false">
           <div class="menu-head">
             <i class="fa fa-close close-button" @click="openMenu = false"></i>
@@ -210,8 +202,7 @@ ref="responsiveMenu" class="responsive-menu" :class="{ 'is-open': openMenu }" ta
             </div>
           </div>
           <div class="menu">
-            <div
-v-for="(item, index) of menu2" :key="item.name" class="menu-item" :class="[
+            <div v-for="(item, index) of menu2" :key="item.name" class="menu-item" :class="[
               { active: currentRoute == item.href },
               { 'is-open': activeCollapse.includes(index) },
             ]" @click="toPath(item.href)">
@@ -221,16 +212,14 @@ v-for="(item, index) of menu2" :key="item.name" class="menu-item" :class="[
                   <span class="name">{{ item.name }}</span>
                 </div>
                 <div v-if="item.hasChild" class="l-part">
-                  <i
-class="fa" :class="activeCollapse.includes(index)
-                      ? 'fa-chevron-up'
-                      : 'fa-chevron-down'
+                  <i class="fa" :class="activeCollapse.includes(index)
+                    ? 'fa-chevron-up'
+                    : 'fa-chevron-down'
                     "></i>
                 </div>
               </div>
               <div v-if="item.hasChild && activeCollapse.includes(index)" class="menu-child">
-                <div
-v-for="childItem of item.child" :key="childItem.href" class="child-item"
+                <div v-for="childItem of item.child" :key="childItem.href" class="child-item"
                   @click="toPath(childItem.href)">
                   <span class="name">
                     {{ childItem.name }}
@@ -240,8 +229,7 @@ v-for="childItem of item.child" :key="childItem.href" class="child-item"
             </div>
           </div>
           <div class="pt-3 flex justify-center">
-            <custom-switch
-v-model:active="selectedGlobalType" :rightLabel="'قدرات'" :leftLabel="'تحصيلي'"
+            <custom-switch v-model:active="selectedGlobalType" :rightLabel="'قدرات'" :leftLabel="'تحصيلي'"
               :isSm="true" />
           </div>
         </div>
@@ -449,6 +437,14 @@ const allowShowItem = (item: MenuItemUi) => {
   }
   return true;
 };
+
+
+const toUserDashboard = () => {
+  router.push({
+    path: '/user-dashboard/foundation'
+  })
+}
+
 const logout = async () => {
   await signOut({ callbackUrl: '/' });
   document.getElementById('web-footer')?.classList.remove('is-user-panel');

@@ -1,7 +1,7 @@
 <template>
     <div class="u-wrapper">
 
-        <label class="text-dark-63 text-[24px] font-bold">المعلومات الشخصية</label>
+        <label class="text-dark-63 text-[24px] font-bold hidden md:inline-block">المعلومات الشخصية</label>
 
         <!-- profile img  -->
         <div class="profile-img-wrapper mt-[15px] mb-[20px]">
@@ -618,7 +618,7 @@ const fetchCities = async () => {
 };
 
 const getCityLabel = (cityId) => {
-    return cities.value?.filter(res => res.id === cityId)[0].label
+    return cities.value?.filter(res => res.id === cityId)?.[0]?.label
 }
 
 
@@ -647,7 +647,6 @@ const getGradeLabel = (gradeId) => {
 const fillProfileInfo = () => {
     Object.keys(profileInfo).forEach((res) => { profileInfo[res] = appAuth.state.userData?.[res] })
     profileInfoDefault = deepCloneUtil(profileInfo);
-    console.log(profileInfoDefault)
 }
 
 
@@ -888,10 +887,11 @@ onMounted(() => {
 
 .u-wrapper {
 
-    @include ipad-up() {
+    @include tablet-up() {
         width: 500px;
         margin-left: auto;
         margin-right: auto;
+        max-width: 90%;
     }
 
     .r-wrapper {

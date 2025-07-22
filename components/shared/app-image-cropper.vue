@@ -4,7 +4,7 @@
     v-model:visible="isOpenModel"
     :modal="true"
     :dismissableMask="false"
-    class="cropper-modal w-[500px]"
+    class="cropper-modal w-[500px] max-w-[98vw]"
     :showHeader="true"
     :closable="true"
     @hide="close()"

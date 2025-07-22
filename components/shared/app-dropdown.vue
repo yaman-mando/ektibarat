@@ -1,7 +1,7 @@
 <template>
   <div ref="dropdownRef" class="dropdown-wrapper">
     <button class="dropdown-button" @click="toggleMenu">
-      <span>{{ selected?.label || 'اختر من القائمة' }}</span>
+      <span>{{ selected || 'اختر من القائمة' }}</span>
       <i class="fa fa-chevron-down"></i>
     </button>
 
@@ -33,7 +33,7 @@ const props = defineProps({
     default: () => [],
   },
   modelValue: {
-    type: Object,
+    type: String,
     default: null,
   },
   topLabel: {
