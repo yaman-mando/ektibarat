@@ -105,6 +105,9 @@ export const APP_ROUTES = {
     },
     analytics:{
       root:'analytics'
+    },
+    analyticsDetails:{
+      root:'analytics/:id'
     }
 
   }
@@ -1161,7 +1164,7 @@ export const all_routers = [
   },
   {
     path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.foundations.root}`,
-    name: 'foundation',
+    name: 'user-foundation',
     allowAdmin: true,
     allowStudent: true,
     allowTeacher: true,
@@ -1171,7 +1174,27 @@ export const all_routers = [
   },
   {
     path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.prepare.path}`,
-    name: 'prepare',
+    name: 'user-prepare',
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowUser: true,
+    isAuth: true,
+  },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics}`,
+    name: 'user-analytics',
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowUser: true,
+    isAuth: true,
+  },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analyticsDetails}`,
+    name: 'user-analytics-details',
     allowAdmin: true,
     allowStudent: true,
     allowTeacher: true,
@@ -1328,5 +1351,6 @@ export const isAllowRouter = (
     case UserRoles.user: {
       return currentRouter.allowUser;
     }
+  
   }
 };

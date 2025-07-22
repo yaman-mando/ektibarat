@@ -1,42 +1,49 @@
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 const sizes = {
-  desktop: 768,
   sm: 800,
+  desktop:768,
   mobileEnd: 959,
   xlStart: 1400,
-}
+};
 
 export function useWindowSize() {
-  const windowWidth = ref<number>(0)
+  const windowWidth = ref<number | null>(null);
 
   const updateWindowWidth = () => {
-    windowWidth.value = window.innerWidth
-  }
+    windowWidth.value = window.innerWidth;
+  };
 
   onMounted(() => {
     if (import.meta.client) {
-      updateWindowWidth()
-      window.addEventListener('resize', updateWindowWidth)
+      updateWindowWidth();
+      window.addEventListener('resize', updateWindowWidth);
     }
-  })
+  });
 
   onBeforeUnmount(() => {
     if (import.meta.client) {
-      window.removeEventListener('resize', updateWindowWidth)
+      window.removeEventListener('resize', updateWindowWidth);
     }
-  })
+  });
 
-  const isXlWindow = computed(() => windowWidth.value >= sizes.xlStart)
-  const isMobileSize = computed(() => windowWidth.value <= sizes.mobileEnd)
-  const isSmSize = computed(() => windowWidth.value <= sizes.sm)
-  const isDesktop = computed(() => windowWidth.value >= sizes.desktop)
+  const state = reactive({
+    get windowWidth() {
+      return windowWidth.value;
+    },
+    get isXlWindow() {
+      return windowWidth.value !== null && windowWidth.value >= sizes.xlStart;
+    },
+    get isMobileSize() {
+      return windowWidth.value !== null && windowWidth.value <= sizes.mobileEnd;
+    },
+    get isSmSize() {
+      return windowWidth.value !== null && windowWidth.value <= sizes.sm;
+    },
+    get isDesktop(){
+      return windowWidth.value !== null && windowWidth.value >= sizes.desktop;
+    }
+  });
 
-  return {
-    windowWidth,
-    isXlWindow,
-    isMobileSize,
-    isSmSize,
-    isDesktop,
-  }
+  return state;
 }

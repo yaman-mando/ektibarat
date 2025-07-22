@@ -1,5 +1,5 @@
 <template>
-  <aside v-if="isDesktop" class="user-side-bar pt-[35px] pb-[25px] w-[260px] min-h-screen bg-white dark:bg-dark-37 
+  <aside v-if="windowSize.isDesktop" class="user-side-bar pt-[35px] pb-[25px] w-[260px] min-h-screen bg-white dark:bg-dark-37 
       shadow flex flex-col justify-between relative">
     <!-- logo -->
     <div>
@@ -114,7 +114,7 @@ const { data,signOut } = useAuth();
 const route = useRoute();
 const router = useRouter();
 const userPanelStore = useUserPanelStore();
-const {isDesktop} = useWindowSize();
+const windowSize = useWindowSize();
 const {filteredMenu,filteredMenuMobile} = useFilteredMenu()
 //computed
 const userData = computed(() => data.value as UserInfoDataModel);

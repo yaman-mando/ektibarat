@@ -428,7 +428,7 @@
                   </div>
 
                   <div class="w-[45%] h-[100%] flex justify-center items-center border-r-1 border-[#BCCCDB]">
-                    <button v-if="child.isEnabled"
+                    <button @click="toAnalyticsDetails(child.categoryId)" v-if="child.isEnabled"
                       class="border border-purple-78 w-[110px] h-[32px] rounded-[4px] text-purple-78 text-[14px] font-bold cursor-pointer">
                       تحليل النتيجة
                     </button>
@@ -462,8 +462,10 @@ import accordionGroup from '~/components/user/accordionGroup.vue'
 import rateProgressBar from '~/components/user/rateProgressBar.vue'
 import advicesSquare from '~/components/user/advicesSquare.vue'
 import { useApexChartService } from '~/main/services/useApexChartService';
+import { RouteHelper } from '~/main/utils/route-helper';
 
 const apexChartService = useApexChartService();
+const router = useRouter()
 
 const chartKey = Symbol();
 
@@ -485,7 +487,7 @@ const tablePeriodList = [
 const rawCategories = [
   { categoryId: 1, categoryName: 'القسم الكمي', parentId: null },
   { categoryId: 2, categoryName: 'القسم اللفظي', parentId: null },
-  { categoryId: 3, categoryName: 'المسائل الحسابية', parentId: 1 },
+  { categoryId: 241, categoryName: 'المسائل الحسابية', parentId: 1 },
   { categoryId: 4, categoryName: 'المسائل الهندسية', parentId: 1 },
   { categoryId: 7, categoryName: 'الخطأ السياقي', parentId: 2 },
   { categoryId: 8, categoryName: 'إكمال الجمل', parentId: 2 },
@@ -777,6 +779,10 @@ function scrollToRecommendations() {
   if (target) {
     target.scrollIntoView({ behavior: "smooth" });
   }
+}
+
+function toAnalyticsDetails(categoryId){
+  router.push(RouteHelper.userAnalyticsDetails(categoryId))
 }
 
 onMounted(() => {

@@ -49,6 +49,7 @@ export const useGlobalStore = defineStore('global', () => {
   const globalTypeUserCookie = useCookie<GlobalTypes | null>(
     'global_type_user',
     {
+      default:()=>GlobalTypes.kudrat,
       maxAge: undefined, //clear on close tab
     }
   );
@@ -59,7 +60,7 @@ export const useGlobalStore = defineStore('global', () => {
 
   const state = reactive<StateType>({
     globalTypeValue: GlobalTypes.kudrat,
-    globalTypeUserValue: globalTypeUserCookie.value ?? GlobalTypes.kudrat,
+    globalTypeUserValue: globalTypeUserCookie.value,
     isSchool: false,
     defaultActiveExam: 1,
     showBlockModal: false,

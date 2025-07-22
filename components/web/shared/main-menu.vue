@@ -1,6 +1,6 @@
 <template>
   <div class="web-header-container">
-    <header v-if="windowSize.isMobileSize" class="web-header hide-from-tablet">
+    <header v-if="isMobileSize" class="web-header hide-from-tablet">
       <span @click="toggleMenu">
         <i class="em-icon-Group-3396"></i>
       </span>
@@ -328,7 +328,7 @@ const userPanelItems = UserPanelItems;
 //composable
 const { status, data, signOut } = useAuth();
 const authState = useAuthState();
-const windowSize = useWindowSize();
+const {isMobileSize} = useWindowSize();
 const router = useRouter();
 const route = useRoute();
 const { state, patchState: pathGlobalStore } = useGlobalStore();

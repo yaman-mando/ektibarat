@@ -250,6 +250,14 @@ export class RouteHelper {
     return `/exam-questions/${id}`;
   }
 
+  static userAnalytics(){
+    return `${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}`
+  }
+
+  static userAnalyticsDetails(id){
+    return `${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}/${id}`
+  }
+
   static webExamQuestionToday(id, socialType = [], isAdmin = false) {
     const query: any[] = [];
 

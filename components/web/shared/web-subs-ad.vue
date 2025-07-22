@@ -53,10 +53,10 @@ export default {
     },
 
     imageUrlName() {
-      if (this.isGlobal && this.jsonData && this.windowSize.windowWidth.value) {
-        if (this.windowSize.windowWidth.value >= 840) {
+      if (this.isGlobal && this.jsonData && this.windowSize.windowWidth) {
+        if (this.windowSize.windowWidth >= 840) {
           return this.jsonData['adImage'];
-        } else if (this.windowSize.windowWidth.value >= 500) {
+        } else if (this.windowSize.windowWidth >= 500) {
           return this.jsonData['adImageMd'];
         } else {
           return this.jsonData['adImageSm'];
