@@ -5,4 +5,6 @@ export enum UserRoles {
   user = 3,
   mediaManager = 4,
   teacher = 5,
+  schoolManager = 6
 }
+

@@ -1,6 +1,6 @@
 <template>
   <aside v-if="isDesktop" class="user-side-bar pt-[35px] pb-[25px] w-[260px] min-h-screen bg-white dark:bg-dark-37 
-      shadow flex flex-col justify-between relative" ref="sidebarRef">
+      shadow flex flex-col justify-between relative">
     <!-- logo -->
     <div>
       <img src="/images/EkhtibaratLogoColor.png" alt="شعار" class="w-[190px] mx-auto block dark:hidden" />
@@ -12,8 +12,8 @@
       <ul class="space-y-1 gap-y-[10px] grid">
 
 
-        <template v-for="item in menuItems" :key="item.name">
-        <li v-if="item.show">
+        <template v-for="item in filteredMenu" :key="item.name">
+        <li>
           <router-link :to="item.route" :class="['text-[20px] h-[50px] flex items-center gap-2 font-medium p-2 transition dark:hover:text-dark-44 hover:bg-pink-ff',
             route.fullPath === item.route
               ? 'bg-pink-ff border border-purple-e0 rounded-lg text-dark-44 dark:text-dark-44'
@@ -29,6 +29,7 @@
 
 
     <div @click="toggleAccountMenu"
+      ref="sidebarRef"
       class="px-[15px] dark:border-gray-700 flex items-center justify-between cursor-pointer relative">
       <div class="flex items-center gap-3">
         <custom-image :folderName="imagesFolderName.Users" :url="userData?.pictureUrl" :size="imagesSize.xs"
@@ -50,7 +51,8 @@
 
 
             <transition name="fade-slide">
-              <div v-if="showExamMenu"
+              <div v-show="showExamMenu"
+              
                 class="ml-4 mt-2 bg-gray-50 absolute left-[-90px] top-0 rounded-lg border border-gray-200 shadow-sm p-1">
                 <div v-for="option,index in globalOptions" :key="index" @click.stop="selectExam(option.value)"
                   class="cursor-pointer py-2 px-2 hover:bg-purple-100 rounded text-sm"
@@ -73,9 +75,8 @@
   </aside>
   <div class="w-full fixed bottom-0 h-[78px] px-[15px] bg-white" style="box-shadow: 0px -2px 10px 0px #00000026" v-else-if="hasMobileMenu">
     <div class="flex items-center justify-between h-full">
-      <template v-for="item in menuItems" :key="item.name">
+      <template v-for="item in filteredMenuMobile" :key="item.name">
       <router-link
-      v-if="item.isMobile" 
       :to="item.route" 
       :class="['flex items-center',
         route.fullPath === item.route
@@ -94,11 +95,6 @@ import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.mode
 import { ImagesFolderName } from '~/main/constants/images-folder-name';
 import { ImageSize } from '~/main/constants/image-size';
 import { ImageExt } from '~/main/constants/image-ext';
-import { RouteHelper } from '~/main/utils/route-helper';
-import {
-  UserPanelItems,
-  UserPanelItemsRecord,
-} from '~/main/constants/user-panel-items';
 import { globalSubList } from '~/main/modules/user-panel/data-access/user-panel.enum';
 import { useUserPanelStore } from '~/store/user-panel';
 
@@ -113,80 +109,13 @@ const props = withDefaults(
 );
 
 
-const menuItems = [
-  {
-    name: 'الرئيسية',
-    icon: '/images/svg/user-panel/house.svg',
-    route: '/',
-    isMobile:true,
-    show:true,
-  },
-  {
-    name: 'تأسيس',
-    icon: '/images/svg/user-panel/balon.svg',
-    route: '/user-dashboard/foundation',
-    isMobile:true,
-    show:true,
-  },
-  {
-    name: 'تدريب',
-    icon: '/images/svg/user-panel/target.svg',
-    route: `/user-dashboard/prepare?page=${UserPanelItemsRecord[UserPanelItems.trainings]}`,
-    isMobile:true,
-    show:true,
-  },
-  {
-    name: 'محاكي الاختبار',
-    icon: '/images/svg/user-panel/studying-exam.svg',
-    route: `/user-dashboard/prepare?page=${UserPanelItemsRecord[UserPanelItems.exams]}`,
-    isMobile:false,
-    show:false,
-  },
-  {
-    name: 'سجل التدريب',
-    icon: '/images/svg/user-panel/hourglass-time.svg',
-    route: '/dashboard/history',
-    isMobile:false,
-    show:false,
-  },
-  {
-    name: 'خطواتي',
-    icon: '/images/svg/user-panel/star.svg',
-    route: '/user-dashboard/steps',
-    isMobile:false,
-    show:false,
-  },
-  {
-    name: 'تحليلاتي',
-    icon: '/images/svg/user-panel/analytics.svg',
-    route: '/user-dashboard/analytics',
-    isMobile:true,
-    show:true,
-  },
-  {
-    name: 'الاشتراكات',
-    icon: '/images/svg/user-panel/king.svg',
-    route: RouteHelper.userPanelSubscriptions(),
-    isMobile:false,
-    show:true,
-  },
-  {
-    name: 'المزيد',
-    icon: '/images/svg/user-panel/more.svg',
-    route: '/user-dashboard/mobile-menu',
-    isMobile:true,
-    show:false,
-  },
-];
-
 //composable
 const { data,signOut } = useAuth();
 const route = useRoute();
 const router = useRouter();
 const userPanelStore = useUserPanelStore();
-const isDesktop = ref(false);
-
-
+const {isDesktop} = useWindowSize();
+const {filteredMenu,filteredMenuMobile} = useFilteredMenu()
 //computed
 const userData = computed(() => data.value as UserInfoDataModel);
 const selectedGlobal = computed(()=> {return userPanelStore.globalType})
@@ -232,21 +161,17 @@ const handleClickOutside = (event) => {
   }
 }
 
+onMounted(() => {
+      document.addEventListener('click', handleClickOutside);
+    });
+
+    onBeforeUnmount(() => {
+      document.removeEventListener('click', handleClickOutside);
+    });
+
 const toPage = (pageName) => {
   router.push(`/user-dashboard/${pageName}`)
 }
-
-onMounted(() => {
-  const checkScreen = () => {
-    isDesktop.value = window.innerWidth >= 768;
-  }
-  checkScreen();
-  window.addEventListener('resize', checkScreen);
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
 
 </script>
 
