@@ -1,5 +1,5 @@
 import { GlobalSub } from "~/main/modules/user-panel/data-access/user-panel.enum"
-import type { categoriesListForModal, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, similarVidModel, stepCategoryInfo, studentStages } from "~/main/modules/user-panel/data-access/user-panel.model"
+import type { categoriesListForModal, categoryAnalysisList, chartDataList, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, similarVidModel, stepCategoryInfo, studentStages } from "~/main/modules/user-panel/data-access/user-panel.model"
 import { mockCategoriesForModal, mockCategoryInfo, mockStudentStages } from "~/pages/mocks/user-mocks"
 
 
@@ -11,7 +11,9 @@ interface UserPanelState {
     simillarVideos: boolean,
     studentStages: boolean,
     categoriesListForModal: boolean
-    categoryInfo: boolean
+    categoryInfo: boolean,
+    analyticsDetails:boolean,
+    analyzeDetailsChartForStudent:boolean
   }
   globalType: number,
   lessonsCategories: lessonsCategoriesDataModel[] | null,
@@ -20,7 +22,9 @@ interface UserPanelState {
   simillarVideos: similarVidModel | null,
   studentStages: studentStages | null,
   categoriesListForModal: categoriesListForModal | null,
-  categoryInfo: stepCategoryInfo | null
+  categoryInfo: stepCategoryInfo | null,
+  analyticsDetails:categoryAnalysisList | null,
+  analyzeDetailsChartForStudent:chartDataList | null | any
 }
 
 
@@ -33,7 +37,9 @@ export const useUserPanelStore = defineStore('userPanel', {
       simillarVideos: false,
       studentStages: false,
       categoriesListForModal: false,
-      categoryInfo: false
+      categoryInfo: false,
+      analyticsDetails:false,
+      analyzeDetailsChartForStudent:false
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
@@ -42,7 +48,9 @@ export const useUserPanelStore = defineStore('userPanel', {
     simillarVideos: null,
     studentStages: null,
     categoriesListForModal: null,
-    categoryInfo: null
+    categoryInfo: null,
+    analyticsDetails:null,
+    analyzeDetailsChartForStudent:null
   }),
 
   actions: {
@@ -180,7 +188,40 @@ export const useUserPanelStore = defineStore('userPanel', {
         this.fetching.categoryInfo = false
       }
 
-    }
+    },
+
+
+    async getAnalyticsDetails(id): Promise<categoryAnalysisList | null> {
+      try {
+        this.fetching.analyticsDetails = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/dashboard/analyzeSecondaryStudentPage/${id}`)
+        this.analyticsDetails = data
+        return data
+      } catch (e) {
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.lessonsDetails = false
+      }
+    },
+
+    async getAnalyzeDetailsChartForStudent(payload): Promise<chartDataList | null> {
+      try {
+        this.fetching.analyzeDetailsChartForStudent = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.post(`/dashboard/analyzeCategoryDetailsForStudent`,payload)
+        this.analyzeDetailsChartForStudent = data
+        return data
+      } catch (e) {
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.analyzeDetailsChartForStudent = false
+      }
+    },
+
+
 
   },
 })
