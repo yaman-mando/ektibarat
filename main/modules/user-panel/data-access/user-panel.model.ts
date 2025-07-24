@@ -1,3 +1,5 @@
+import { number } from "yup";
+
 export type lessonsCategoriesDataModel = {
   id: number;
   subjectId: number;
@@ -113,3 +115,27 @@ export type categoriesListForModal = {
   children:{id:number,label:string,disabled:boolean}[]
 }[]
   
+
+export type categoryAnalysisList = {
+  allStudentsTimeTakenRate: number;
+  categoryId: number;
+  categoryName: string | null;
+  categoryType: string | null;
+  correctAnswersCount: number;
+  examDefaultId: number | null;
+  hasLawAnalyze: boolean;
+  hasNoMasteredSkills: boolean;
+  isEnabled: boolean;
+  parentId: number;
+  questionsCount: number;
+  rate: number;
+  sort: number;
+  studentTimeTakenRate: number;
+  totalTime: number;
+  wrongAnswersCount: number;
+}[]
+
+export type chartDataList = {
+  count:number;
+  date:string | null
+}[]

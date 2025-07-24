@@ -251,11 +251,11 @@ export class RouteHelper {
   }
 
   static userAnalytics(){
-    return `${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}`
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}`
   }
 
   static userAnalyticsDetails(id){
-    return `${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}/${id}`
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}/${id}`
   }
 
   static webExamQuestionToday(id, socialType = [], isAdmin = false) {

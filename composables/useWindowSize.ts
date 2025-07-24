@@ -41,7 +41,7 @@ export function useWindowSize() {
       return windowWidth.value !== null && windowWidth.value <= sizes.sm;
     },
     get isDesktop(){
-      return windowWidth.value !== null && windowWidth.value >= sizes.desktop;
+      return windowWidth.value !== null && windowWidth.value >= sizes.mobileEnd;
     }
   });
 
