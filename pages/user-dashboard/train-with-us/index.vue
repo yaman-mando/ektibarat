@@ -99,7 +99,7 @@
           <!--        content-->
           <div class="st-q-content">
             <!--          date content-->
-            <div class="st-q-date-content">
+            <div :class="`st-q-date-content step-${form.currentStep}`">
               <template v-if="form.currentStep === 1">
                 <h1 class="st-q-title">متى أوّل يوم بتبدأ فيه دراسة؟</h1>
                 <app-date-picker
@@ -171,10 +171,45 @@
                   @click="submit3"
                 />
               </template>
+              <template v-if="form.currentStep === 4">
+                <h1 class="st-q-title step-2">معلومات خطتك</h1>
+                <span class="st-q-title-meta q1">
+                  تقدر تعدل خطتك الآن بالرجوع للخلف، أو تعدلها بعدين من خلال
+                  بيانات الخطة
+                </span>
+                <table class="plan-tb">
+                  <tr>
+                    <td>تاريخ بداية الخطة</td>
+                    <td>{{ dateUi(form.date) }}</td>
+                  </tr>
+                  <tr>
+                    <td>تاريخ الاختبار المتوقع</td>
+                    <td>{{ dateUi(form.examDate) }}</td>
+                  </tr>
+                  <tr>
+                    <td>الدرجة المطلوبة</td>
+                    <td>{{ form.neededDegree }}</td>
+                  </tr>
+                  <tr>
+                    <td>ساعات التدريب الأسبوعية تقديريا</td>
+                    <td>{{ requiredHours }} ساعات</td>
+                  </tr>
+                </table>
+                <app-button
+                  label="تثبيت الخطة"
+                  colorType="blue"
+                  :isLoading="loadingForm"
+                  @click="showConfirm"
+                />
+              </template>
             </div>
           </div>
         </div>
       </template>
+      <confirm-plan
+        v-model:show="isShownConfirm"
+        @continue="submit4"
+      />
     </div>
   </user-panel-layout>
 </template>
@@ -182,15 +217,26 @@
 import UserPanelLayout from '~/layouts/user-panel-layout.vue';
 import { addDays, isToday } from 'date-fns';
 import { dateUi } from '~/main/utils/date-utils';
+import ConfirmPlan from '~/components/user/confirm-plan.vue';
+import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
+import { webUserTrainingPlan } from '~/main/utils/web-routes.utils';
 export default {
   components: {
+    ConfirmPlan,
     UserPanelLayout,
+  },
+  setup() {
+    return {
+      ...useSetupRoute(),
+    };
   },
   data() {
     return {
+      isShownConfirm: false,
       showStepsSection: true,
       requiredHours: null as number | null,
       loadingRequiredHours: false,
+      loadingForm: false,
       form: {
         currentStep: 1,
         date: null as string | null,
@@ -223,7 +269,28 @@ export default {
     },
   },
   methods: {
-    submit3() {},
+    dateUi,
+    async submit3() {
+      this.form.currentStep++;
+    },
+    showConfirm() {
+      this.isShownConfirm = true;
+    },
+    async submit4() {
+      try {
+        this.loadingForm = true;
+        const res = await this.$axios.put('trainingPlansInfo', {
+          startDate: this.form.date,
+          endDate: this.form.examDate,
+          neededDegree: this.form.neededDegree,
+        });
+        this.isShownConfirm = false;
+        const id = res.data.id;
+        this.appRouter.push(webUserTrainingPlan(id));
+      } finally {
+        this.loadingForm = false;
+      }
+    },
     async getRequiredHours() {
       try {
         this.loadingRequiredHours = true;

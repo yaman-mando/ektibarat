@@ -177,6 +177,14 @@
           }
           color: var(--gray-63);
           margin: 0px auto 90px auto;
+          &.q1 {
+            margin-bottom: 30px;
+            padding: 0 30px;
+            @include web-desktop-up() {
+              padding: 0;
+              margin-bottom: 50px;
+            }
+          }
         }
 
         .c-date {
@@ -203,6 +211,44 @@
         .app-button {
           margin-top: 100px;
           margin-bottom: 60px;
+        }
+
+        &.step-4 {
+          .app-button {
+            margin-top: 42px;
+            margin-bottom: 50px;
+            @include web-desktop-up() {
+              margin-bottom: 60px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .plan-tb {
+    align-self: flex-start;
+    margin-inline-start: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    @include web-desktop-up() {
+      padding-inline-start: 40px;
+      display: table;
+    }
+    td {
+      display: block;
+      font-size: 16px;
+      @include web-desktop-up() {
+        display: table-cell;
+        font-size: 22px;
+        padding-bottom: 10px;
+      }
+      &:nth-child(2) {
+        font-weight: bold;
+
+        @include web-desktop-up() {
+          padding-inline-start: 30px;
         }
       }
     }

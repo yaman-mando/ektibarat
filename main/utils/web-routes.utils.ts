@@ -23,6 +23,8 @@ export const webGeneralSelectionPathUtil = () => '/general-selection';
 export const webUserPanelTraining = () =>
   `/user-dashboard/prepare?page=trainings`;
 export const webUserTrainWithUs = () => `/user-dashboard/train-with-us`;
+export const webUserTrainingPlan = (id: number | string) =>
+  `/user-dashboard/training-plan/${id}`;
 export const webUserPanelSubscriptions = () =>
   '/user-panel?page=subscriptionList';
 export const webUserPanelTrainingWithQuery = (
