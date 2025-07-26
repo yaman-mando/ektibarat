@@ -1,6 +1,12 @@
 @import '@/assets/scss/mixin';
 
 .training-plan-page {
+  .z-w {
+    display: grid;
+    width: 100%;
+    gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+  }
   .ac-sep {
     display: block;
     width: 100%;
@@ -99,6 +105,24 @@
     .p-datepicker-dropdown {
       border: none;
       border-radius: 20px;
+    }
+  }
+
+  .st2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    @include web-desktop-up() {
+      grid-template-columns: 1fr 2fr;
+    }
+  }
+
+  .az-table {
+    td:nth-child(1) {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--purple-8c);
+      padding-inline-end: 15px;
     }
   }
 }

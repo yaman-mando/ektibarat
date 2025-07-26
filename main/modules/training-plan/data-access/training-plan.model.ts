@@ -25,8 +25,10 @@ export type TrainingPlanDetailDataModel = {
     timeRequired: number;
     timeDone: number;
   };
-  recommendations: {
-    title: string;
-    advices: string[];
-  };
+  recommendations: TrainingPlanRecommendationsDetailDataModel;
+};
+
+export type TrainingPlanRecommendationsDetailDataModel = {
+  title: string;
+  advices: string[];
 };
