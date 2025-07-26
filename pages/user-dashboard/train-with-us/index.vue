@@ -281,7 +281,7 @@ export default {
         this.loadingForm = true;
         const res = await this.$axios.put('trainingPlansInfo', {
           startDate: this.form.date,
-          endDate: this.form.examDate,
+          examDate: this.form.examDate,
           neededDegree: this.form.neededDegree,
         });
         this.isShownConfirm = false;

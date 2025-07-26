@@ -99,7 +99,7 @@ const togglePopover = (event: any) => {
   width: 300px;
   height: 40px;
   border-radius: 5px;
-  border: 1px solid var(--gray-8f);
+  border: 1px solid var(--gray-db);
   .a-val {
     font-size: 18px;
     font-weight: bold;

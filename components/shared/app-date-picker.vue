@@ -15,6 +15,7 @@
       dateFormat="dd/mm/yy"
       :locale="localeSettings"
       :showButtonBar="true"
+      :disabled="isDisabled"
       @dateSelect="updateDate"
     >
       <template #footer>
@@ -40,6 +41,7 @@
 <script>
 export default {
   props: {
+    isDisabled: Boolean,
     startDate: {
       type: [String, Date],
       default: null,
