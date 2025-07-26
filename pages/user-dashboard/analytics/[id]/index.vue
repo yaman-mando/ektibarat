@@ -146,7 +146,7 @@
               <div class="space-y-2 min-w-[900px]">
                 <div class="h-[70px] w-full flex items-center">
                   <div
-                    class="bg-[#F5F7FA] h-[100%] flex-[75%] flex items-center border border-[#BCCCDB] rounded-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
+                    class="bg-[#F5F7FA] h-[100%] flex-[75%] flex items-center border border-[#BCCCDB] !border-l-0 rounded-r-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
                     <div class="w-[40%]">القسم الفرعي</div>
                     <div class="w-[20%] text-center">عدد الأسئلة</div>
                     <div class="w-[20%] text-center">الإجابات<br><span class="font-medium text-[12px]">صحيحة |
@@ -155,15 +155,14 @@
                     <div class="w-[20%] text-center">مدة التدريب</div>
                     <div class="w-[20%] text-center">التقييم</div>
                   </div>
-                  <div class="w-[15px]"></div>
                   <div
-                    class="bg-[#F5F7FA] h-[100%] flex flex-[25%] items-center border border-[#BCCCDB] rounded-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
+                    class="bg-[#F5F7FA] h-[100%] flex flex-[25%] items-center border border-[#BCCCDB] !border-r-0 rounded-l-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
                     <div class="w-full text-center">توصيات</div>
                   </div>
                 </div>
 
                 <div v-for="(child, i) in tableCategories" :key="i" :class="['h-[60px] flex items-center']">
-                  <div class="flex flex-[75%] h-[100%] items-center rounded-[8px] border border-[#BCCCDB] px-[15px]"
+                  <div class="flex flex-[75%] h-[100%] items-center rounded-r-[8px] border border-[#BCCCDB] !border-l-0 px-[15px]"
                     :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
                     <div class="w-[40%] text-gray-63 font-medium">{{ child.categoryName }}</div>
                     <div class="w-[20%] text-center">{{ child.questionsCount }}</div>
@@ -191,8 +190,7 @@
 
                     </div>
                   </div>
-                  <div class="w-[15px]"></div>
-                  <div class="flex flex-[25%] h-[100%] items-center rounded-[8px] border border-[#BCCCDB]"
+                  <div class="flex flex-[25%] h-[100%] items-center rounded-l-[8px] border border-[#BCCCDB]"
                     :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
                     <div class="w-full h-[100%] flex justify-center items-center gap-[15px] flex-wrap">
                       <template v-if="child.rate >= 60 && !child.hasLawAnalyze && userData.planSubscribed">
