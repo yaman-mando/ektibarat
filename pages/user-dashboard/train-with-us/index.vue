@@ -39,7 +39,10 @@
               </span>
             </div>
           </div>
-          <div class="qd-item blue">
+          <nuxt-link
+            :to="webUserPanelTraining()"
+            class="qd-item blue"
+          >
             <img
               class="qd-badge"
               src="/images/badge-blue.png"
@@ -58,8 +61,11 @@
                 على التزامك واجتهادك
               </span>
             </div>
-          </div>
-          <div class="qd-item orange">
+          </nuxt-link>
+          <nuxt-link
+            :to="userPanelExamPath"
+            class="qd-item orange"
+          >
             <img
               class="qd-badge hidden"
               src="/images/badge-blue.png"
@@ -78,7 +84,7 @@
                 اللفظي والكمي مدة الاختبار: 120 دقيقة
               </span>
             </div>
-          </div>
+          </nuxt-link>
         </div>
       </div>
       <template v-if="showStepsSection">
@@ -86,7 +92,7 @@
           <!--        top-->
           <div class="st-q-top">
             <i
-              class="fa fa-chevron-right st-q-icon"
+              class="fa fa-arrow-right st-q-icon"
               @click="previousStep"
             ></i>
             <app-progress-bar
@@ -219,7 +225,15 @@ import { addDays, isToday } from 'date-fns';
 import { dateUi } from '~/main/utils/date-utils';
 import ConfirmPlan from '~/components/user/confirm-plan.vue';
 import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
-import { webUserTrainingPlan } from '~/main/utils/web-routes.utils';
+import {
+  webUserPanelTraining,
+  webUserPanelTrainingWithQuery,
+  webUserTrainingPlan,
+} from '~/main/utils/web-routes.utils';
+import {
+  UserPanelItems,
+  UserPanelItemsRecord,
+} from '~/main/constants/user-panel-items';
 export default {
   components: {
     ConfirmPlan,
@@ -233,19 +247,24 @@ export default {
   data() {
     return {
       isShownConfirm: false,
-      showStepsSection: true,
+      showStepsSection: false,
       requiredHours: null as number | null,
       loadingRequiredHours: false,
       loadingForm: false,
       form: {
         currentStep: 1,
-        date: null as string | null,
+        date: new Date().toISOString() as string | null,
         examDate: null as string | null,
         neededDegree: null as number | null,
       },
     };
   },
   computed: {
+    userPanelExamPath() {
+      return webUserPanelTrainingWithQuery({
+        page: UserPanelItemsRecord[UserPanelItems.exams],
+      });
+    },
     requiredHoursMessage() {
       if (!this.requiredHours) return null;
       return `تحتاج تتدرب معنا (${this.requiredHours}) ساعات كل أسبوع`;
@@ -269,6 +288,7 @@ export default {
     },
   },
   methods: {
+    webUserPanelTraining,
     dateUi,
     async submit3() {
       this.form.currentStep++;
@@ -310,6 +330,8 @@ export default {
     previousStep() {
       if (this.form.currentStep > 1) {
         this.form.currentStep--;
+      } else {
+        this.showStepsSection = false;
       }
     },
     submitFirst() {

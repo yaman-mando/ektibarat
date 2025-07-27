@@ -160,7 +160,7 @@
                 </div>
 
                 <span
-                  class="text-start text-[#FF6A39] text-[14px] mt-[10px] font-bold"
+                  class="text-start text-[#FF6A39] text-[14px] mt-[10px] mb-[5px] font-bold"
                 >
                   نسب الالتزام السابقة
                 </span>
@@ -258,7 +258,7 @@
                   <!-- "You are here" indicator -->
                   <div
                     :style="{
-                      right: `calc(${detail.percentageDone}% - 30px)`,
+                      right: `calc(${detail.percentageDone}% - 20px)`,
                     }"
                     class="absolute -top-[10px] h-[27px] grid gap-y-[5px] justify-items-center w-[40px]"
                   >
@@ -284,7 +284,7 @@
                   <!-- Target indicator -->
                   <div
                     :style="{
-                      right: `calc(${detail.percentageRequired}% - 45px)`,
+                      right: `calc(${detail.percentageRequired}% - 40px)`,
                     }"
                     class="absolute bottom-0 h-[27px] grid gap-y-[5px] justify-items-center w-[80px]"
                   >
@@ -475,6 +475,9 @@ export default {
         const { data: detail } = await this.$axios.get(
           'trainingPlansInfo/details'
         );
+
+        // detail.percentageDone = 10;
+        // detail.percentageRequired = 30;
 
         this.info = info;
         this.detail = detail;

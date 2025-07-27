@@ -30,6 +30,7 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
+      gap: 5px;
       .ac-item-l {
         font-size: 18px;
         text-align: start;
@@ -89,9 +90,16 @@
       width: calc(100% - 15px) !important;
       justify-self: center;
       margin-bottom: 20px;
+      height: 40px !important;
       @include web-desktop-up() {
         width: 120px !important;
         margin-bottom: 0;
+      }
+
+      .app-button-label {
+        @include web-desktop-up() {
+          font-size: 16px;
+        }
       }
     }
   }

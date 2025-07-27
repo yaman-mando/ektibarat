@@ -1,7 +1,7 @@
 <template>
   <div
     class="date-picker"
-    :class="{ hasBorder: hasBorder }"
+    :class="[{ hasBorder: hasBorder }, { 'is-disabled': isDisabled }]"
     :style="{ width: width }"
   >
     <prime-date-picker
@@ -199,6 +199,14 @@ export default {
   outline: none;
   display: flex;
   align-items: center;
+
+  &.is-disabled {
+    background-color: var(--gray-fa);
+    --p-datepicker-dropdown-background: var(--gray-fa);
+    :deep(.p-datepicker-dropdown) {
+      cursor: auto;
+    }
+  }
 
   ::v-deep .p-datepicker {
     width: 100%;
