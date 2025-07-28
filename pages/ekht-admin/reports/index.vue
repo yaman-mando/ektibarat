@@ -30,7 +30,7 @@
         />
         <app-date-picker
           placeHolder="التاريخ"
-          :startDate="trainingsFilterForm.from"
+          :startDate="trainingsFilterForm.from!"
           :endDate="trainingsFilterForm.to"
           @updateDate="
             (e) => {

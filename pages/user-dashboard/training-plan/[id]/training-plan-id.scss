@@ -1,0 +1,136 @@
+@import '@/assets/scss/mixin';
+
+.training-plan-page {
+  .z-w {
+    display: grid;
+    width: 100%;
+    gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ac-sep {
+    display: block;
+    width: 100%;
+    border-bottom: 2px solid var(--gray-db);
+    margin-bottom: 20px;
+  }
+  .a-c {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 15px;
+    padding: 20px 15px;
+    @include web-desktop-up() {
+      grid-template-columns: repeat(3, auto);
+      justify-content: flex-start;
+      padding: 25px 20px;
+      gap: 20px;
+    }
+
+    .ac-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 5px;
+      .ac-item-l {
+        font-size: 18px;
+        text-align: start;
+      }
+    }
+  }
+
+  .t-w {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0 15px 15px 15px;
+    @include web-desktop-up() {
+      padding: 0 20px 20px 20px;
+      grid-template-columns: 1fr auto;
+    }
+    .qt-a {
+      display: flex;
+      width: 100%;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: column;
+      gap: 10px;
+
+      @include web-desktop-up() {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .qt-a-lab {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 5px;
+        font-size: 16px;
+        @include web-desktop-up() {
+          font-size: 18px;
+          padding-inline-end: 20px;
+        }
+        strong {
+        }
+        span {
+        }
+      }
+
+      .qt-a-co {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        strong {
+          color: var(--purple-e0);
+          font-size: 30px;
+        }
+      }
+    }
+    .sa-button {
+      width: calc(100% - 15px) !important;
+      justify-self: center;
+      margin-bottom: 20px;
+      height: 40px !important;
+      @include web-desktop-up() {
+        width: 120px !important;
+        margin-bottom: 0;
+      }
+
+      .app-button-label {
+        @include web-desktop-up() {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  .c-date {
+    width: 100%;
+    max-width: 300px;
+    margin: 0;
+    border: 1px solid var(--gray-db) !important;
+    --p-datepicker-dropdown-background: #fff;
+    .p-datepicker-dropdown {
+      border: none;
+      border-radius: 20px;
+    }
+  }
+
+  .st2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    @include web-desktop-up() {
+      grid-template-columns: 1fr 2fr;
+    }
+  }
+
+  .az-table {
+    td:nth-child(1) {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--purple-8c);
+      padding-inline-end: 15px;
+    }
+  }
+}

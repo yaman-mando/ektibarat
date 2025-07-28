@@ -1,19 +1,21 @@
 <template>
   <div
     class="date-picker"
-    :class="{ hasBorder: hasBorder }"
+    :class="[{ hasBorder: hasBorder }, { 'is-disabled': isDisabled }]"
     :style="{ width: width }"
   >
     <prime-date-picker
       v-model="dateValue"
-      selectionMode="range"
+      :selectionMode="singleType ? 'single' : 'range'"
       :manualInput="false"
-      :maxDate="getToday()"
+      :minDate="parsedMinDate"
+      :maxDate="parsedMaxDate"
       :showIcon="true"
       :placeholder="placeHolder || 'أختر التاريخ'"
       dateFormat="dd/mm/yy"
       :locale="localeSettings"
       :showButtonBar="true"
+      :disabled="isDisabled"
       @dateSelect="updateDate"
     >
       <template #footer>
@@ -39,7 +41,9 @@
 <script>
 export default {
   props: {
+    isDisabled: Boolean,
     startDate: {
+      type: [String, Date],
       default: null,
     },
     endDate: {
@@ -58,6 +62,14 @@ export default {
       default: false,
     },
     placeHolder: null,
+    min: {
+      type: [String, Date, null],
+      default: null,
+    },
+    max: {
+      type: [String, Date, null],
+      default: null,
+    },
   },
   emits: ['updateDate'],
   data() {
@@ -118,52 +130,60 @@ export default {
       },
     };
   },
-
-  watch: {
-    startDate: {
-      handler(newVal) {
-        if (!newVal) {
-          this.dateValue = null;
-        }
-      },
+  computed: {
+    parsedMinDate() {
+      return this.min ? new Date(this.min) : null;
     },
-    endDate: {
-      handler(newVal) {
-        if (!newVal) {
-          this.dateValue = null;
-        }
-      },
+    parsedMaxDate() {
+      return this.max ? new Date(this.max) : null;
     },
   },
-
+  watch: {
+    startDate(newVal) {
+      if (!newVal && !this.singleType) {
+        this.dateValue = null;
+      }
+    },
+    endDate(newVal) {
+      if (!newVal && !this.singleType) {
+        this.dateValue = null;
+      }
+    },
+  },
   mounted() {
-    if (this.startDate && this.endDate) {
+    if (this.singleType && this.startDate) {
+      this.dateValue = new Date(this.startDate);
+    } else if (this.startDate && this.endDate) {
       this.dateValue = [new Date(this.startDate), new Date(this.endDate)];
     }
   },
-
   methods: {
     getToday() {
       return new Date();
     },
-
     updateDate() {
-      if (this.dateValue && this.dateValue[0] && this.dateValue[1]) {
+      if (this.singleType) {
+        if (this.dateValue) {
+          this.$emit('updateDate', this.dateValue);
+        }
+      } else if (this.dateValue && this.dateValue[0] && this.dateValue[1]) {
         this.$emit('updateDate', {
           startDate: this.dateValue[0],
           endDate: this.dateValue[1],
         });
       }
     },
-
     clearDates() {
       this.dateValue = null;
-      this.$emit('updateDate', {
-        startDate: null,
-        endDate: null,
-      });
+      if (this.singleType) {
+        this.$emit('updateDate', null);
+      } else {
+        this.$emit('updateDate', {
+          startDate: null,
+          endDate: null,
+        });
+      }
     },
-
     applyDates() {
       this.updateDate();
     },
@@ -179,6 +199,14 @@ export default {
   outline: none;
   display: flex;
   align-items: center;
+
+  &.is-disabled {
+    background-color: var(--gray-fa);
+    --p-datepicker-dropdown-background: var(--gray-fa);
+    :deep(.p-datepicker-dropdown) {
+      cursor: auto;
+    }
+  }
 
   ::v-deep .p-datepicker {
     width: 100%;
