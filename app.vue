@@ -167,6 +167,7 @@ const handleCredentialResponse = async (response: { credential: string }) => {
 };
 
 const signInAction = async (data: SignInActionDataUiModel) => {
+  try{
   authStore.setAuthCookie({
     token: data.token,
     refreshToken: data.refreshToken!,
@@ -186,7 +187,11 @@ const signInAction = async (data: SignInActionDataUiModel) => {
     localStorageStore.setFirstRegister(data.id);
   }
   await router.push(authStore.redirectUrlAfterLogin());
-};
+}
+catch(e){
+console.log(e)
+}
+}
 
 const handleClarityUser = async (model: {
   id: number;

@@ -1,5 +1,5 @@
 <template>
-    <userPanelLayout>
+    <userPanelLayout content-class="max-w-[1050] mx-auto">
         <div class="flex flex-col justify-center gap-y-[20px] xl1200:flex-row gap-x-[50px]">
 
 
@@ -15,8 +15,7 @@
                 </div>
 
                 <div class="py-[12px_20px]">
-                    <VideoPlayer src="/videos/master.m3u8" poster="/videos/poster.jpg"
-                        thumbnails="/videos/thumbnails.vtt" />
+                        <app-video-player class="!m-4" />
                 </div>
 
                 <!-- Contents -->

@@ -18,19 +18,22 @@
       <div v-else v-for="section in userPanelStore.lessonsCategories" :key="section.id" class="fade-in">
 
 
-        <h2 class="text-[24px] font-bold text-blue-d6 mb-[20px]">{{ section.title }}</h2>
+        <div class="flex items-center gap-x-[10px] mb-[20px]">
+          <img :src="section.iconUrl" alt="icon" class="w-[36px]" />
+          <h2 class="text-[24px] font-bold text-blue-d6">{{ section.title }}</h2>
+        </div>
 
         <div class="flex flex-wrap gap-[15px]">
           <div @click="toLesson(child.categoryId)" v-for="child in section.children" :key="child.id" class="rounded-[8px] w-[300px] p-[17px_15px] bg-white dark:bg-dark-37 transition
                     hover:scale-[1.02] cursor-pointer group
                     shadow-custom dark:shadow-custom-dark
                     ">
-            <div class="flex gap-x-[8px] items-center mb-2">
-              <img :src="child.iconUrl" alt="icon" class="w-5 h-5" />
-              <h3 class="text-[20px] font-bold text-dark-63 dark:text-white">
-                {{ child.title }}
-              </h3>
-            </div>
+
+
+            <h3 class="text-[20px] font-bold text-dark-63 dark:text-white">
+              {{ child.title }}
+            </h3>
+
 
 
             <p class="text-[14px] font-bold text-purple-c2 mb-1">

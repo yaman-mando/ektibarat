@@ -1,7 +1,7 @@
 <!-- LessonCard.vue -->
 <template>
     <div class="rounded-[8px] cursor-pointer p-[15px_17px] flex items-center justify-between h-[70px] border-[1px]"
-        @click="status !== 'locked' ? toLessonDetails() : {}" :class="cardClass">
+        @click="status !== 'locked' ? toLessonDetails() : openSubscribeModal()" :class="cardClass">
         <div class="flex items-center gap-x-[10px]">
             <span v-if="status === 'completed'"
                 class="flex items-center justify-center w-9 h-9 rounded-full bg-white text-green-8c text-[22px]">
@@ -38,6 +38,9 @@
             </div>
         </div>
         <i class="fa fa-chevron-left"></i>
+        <!-- subscribe modal -->
+      <SubscribeModal v-if="showSubscribeModal" @update:show="($event) => { showSubscribeModal = $event }"
+        :show="showSubscribeModal" />
     </div>
 </template>
 
@@ -59,6 +62,8 @@ const props = defineProps<{
     }
     status: 'completed' | 'next' | 'locked'
 }>()
+
+const showSubscribeModal = ref(false)
 
 const cardClass = computed(() => {
     switch (props.status) {
@@ -100,8 +105,11 @@ function formatTime(seconds: number) {
 function toLessonDetails() {
     const currentPath = route.fullPath.split('?')[0]
     const detailsId = props.lesson.id
-
     const newPath = `${currentPath}/${detailsId}`
     router.push(newPath)
+}
+
+function openSubscribeModal() {
+  showSubscribeModal.value = true
 }
 </script>

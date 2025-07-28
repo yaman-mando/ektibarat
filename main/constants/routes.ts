@@ -21,6 +21,7 @@ export const APP_ROUTES = {
           allowStudent: true,
           allowEmployee: true,
           allowUser: true,
+          allowSchollManager: true,
           isAuth: false,
         },
       },
@@ -34,6 +35,7 @@ export const APP_ROUTES = {
           allowStudent: true,
           allowEmployee: true,
           allowUser: true,
+          allowSchollManager: true,
           isAuth: false,
         },
       },
@@ -47,6 +49,7 @@ export const APP_ROUTES = {
           allowStudent: true,
           allowEmployee: true,
           allowUser: true,
+          allowSchollManager: true,
           isAuth: false,
         },
       },
@@ -60,6 +63,7 @@ export const APP_ROUTES = {
           allowStudent: true,
           allowEmployee: true,
           allowUser: true,
+          allowSchollManager: true,
           isAuth: false,
         },
       },
@@ -135,6 +139,7 @@ export const all_routers = [
     allowEmployee: true,
     allowTeacher: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -145,6 +150,7 @@ export const all_routers = [
     allowEmployee: true,
     allowTeacher: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -155,6 +161,7 @@ export const all_routers = [
     allowEmployee: true,
     allowTeacher: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -165,6 +172,7 @@ export const all_routers = [
     allowEmployee: true,
     allowTeacher: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -175,6 +183,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -185,6 +194,7 @@ export const all_routers = [
     allowEmployee: true,
     allowTeacher: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -215,6 +225,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -225,6 +236,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -235,6 +247,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -245,6 +258,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -255,6 +269,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -265,6 +280,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -275,6 +291,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -285,6 +302,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -295,6 +313,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -305,6 +324,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -315,6 +335,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -325,6 +346,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -335,6 +357,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -345,6 +368,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isPublic: true,
     isAuth: false,
   },
@@ -356,6 +380,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isPublic: true,
     isAuth: false,
   },
@@ -367,6 +392,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isPublic: true,
     isAuth: false,
   },
@@ -378,6 +404,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -388,6 +415,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -398,6 +426,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -408,6 +437,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -418,6 +448,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -428,6 +459,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -438,6 +470,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -448,6 +481,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -458,6 +492,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -468,6 +503,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -478,6 +514,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -488,6 +525,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -498,6 +536,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -508,6 +547,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -518,6 +558,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -528,6 +569,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -538,6 +580,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -548,6 +591,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -558,6 +602,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -568,6 +613,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -578,6 +624,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -588,6 +635,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -598,6 +646,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -608,6 +657,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -618,6 +668,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -628,6 +679,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -638,6 +690,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -648,6 +701,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -658,6 +712,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -668,6 +723,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -678,6 +734,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -688,6 +745,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -698,6 +756,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -708,6 +767,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -718,6 +778,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -728,6 +789,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -738,6 +800,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -748,6 +811,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -758,6 +822,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
 
@@ -769,6 +834,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -779,6 +845,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -789,6 +856,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -799,6 +867,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -809,6 +878,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -819,6 +889,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -829,6 +900,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -839,6 +911,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -849,6 +922,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -859,6 +933,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
 
@@ -870,6 +945,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -880,6 +956,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -890,6 +967,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -900,6 +978,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -910,6 +989,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -920,6 +1000,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -930,6 +1011,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -940,6 +1022,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -950,6 +1033,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -960,6 +1044,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -970,6 +1055,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -980,6 +1066,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -990,6 +1077,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -1000,6 +1088,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -1010,6 +1099,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -1020,6 +1110,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: false,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -1030,6 +1121,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -1040,6 +1132,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -1050,6 +1143,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -1060,6 +1154,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -1070,6 +1165,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -1080,6 +1176,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -1090,6 +1187,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -1100,6 +1198,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -1110,6 +1209,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -1120,6 +1220,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -1130,6 +1231,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -1140,6 +1242,7 @@ export const all_routers = [
     allowTeacher: false,
     allowEmployee: false,
     allowUser: false,
+    allowSchollManager: false,
     isAuth: true,
   },
   {
@@ -1150,6 +1253,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -1160,6 +1264,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -1170,6 +1275,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -1180,6 +1286,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -1190,6 +1297,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -1200,6 +1308,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: true,
   },
   {
@@ -1210,6 +1319,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -1220,6 +1330,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -1230,6 +1341,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -1240,6 +1352,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -1250,6 +1363,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -1260,6 +1374,7 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: true,
     allowUser: true,
+    allowSchollManager: true,
     isAuth: false,
   },
   {
@@ -1269,6 +1384,7 @@ export const all_routers = [
     allowStudent: true,
     allowTeacher: true,
     allowEmployee: true,
+    allowSchollManager: true,
     allowUser: false,
     isPublic: false,
     isAuth: true,
@@ -1280,6 +1396,7 @@ export const all_routers = [
     allowStudent: true,
     allowTeacher: true,
     allowEmployee: true,
+    allowSchollManager: true,
     allowUser: false,
     isPublic: false,
     isAuth: true,
@@ -1291,6 +1408,7 @@ export const all_routers = [
     allowStudent: true,
     allowTeacher: true,
     allowEmployee: true,
+    allowSchollManager: true,
     allowUser: false,
     isPublic: false,
     isAuth: true,
@@ -1302,6 +1420,7 @@ export const all_routers = [
     allowStudent: true,
     allowTeacher: true,
     allowEmployee: true,
+    allowSchollManager: true,
     allowUser: false,
     isPublic: false,
     isAuth: true,
@@ -1313,6 +1432,7 @@ export const all_routers = [
     allowStudent: true,
     allowTeacher: true,
     allowEmployee: true,
+    allowSchollManager: true,
     allowUser: false,
     isPublic: false,
     isAuth: true,
@@ -1350,6 +1470,9 @@ export const isAllowRouter = (
     }
     case UserRoles.user: {
       return currentRouter.allowUser;
+    }
+    case UserRoles.schoolManager: {
+      return currentRouter.allowSchollManager;
     }
   
   }

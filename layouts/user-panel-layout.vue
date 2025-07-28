@@ -9,7 +9,8 @@
       ☰
     </button> -->
     <div v-if="hasPrev" class="w-full h-[60px] flex items-center px-[19px] shadow-custom sticky top-0">
-      <i @click="router.push('/user-dashboard/mobile-menu')"  class="fa fa-chevron-right cursor-pointer text-gray-8f"></i>
+      <i @click="router.push('/user-dashboard/mobile-menu')"
+        class="fa fa-chevron-right cursor-pointer text-gray-8f"></i>
       <span class="!text-center text-dark-63 text-[18px] font-bold flex-auto">{{ pageName }}</span>
     </div>
 
@@ -24,40 +25,40 @@
       <div v-if="isSidebarOpen && !isDesktop" class="fixed inset-0 bg-black opacity-40 z-30"
         @click="isSidebarOpen = false"></div>
 
-      <div
-        :class="[{'!pb-[100px]':!isDesktop && !noSpaces},{'!p-0 !bg-white':noSpaces}]"
+      <div :class="[{ '!pb-[100px]': !isDesktop && !noSpaces }, { '!p-0 !bg-white': noSpaces }]"
         class="us-content flex-1 bg-gray-fb dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-[40px] py-[30px] ml-0">
 
 
-        <div v-if="hasLInfo || hasRInfo" class="flex justify-between items-baseline flex-wrap gap-4 mb-6">
+        <div :class="contentClass">
+          <div v-if="hasLInfo || hasRInfo" class="flex justify-between items-baseline flex-wrap gap-4 mb-6">
 
-          <!-- right info -->
-          <div v-if="hasRInfo" class="flex items-center">
-            <slot name="top-right"></slot>
+            <!-- right info -->
+            <div v-if="hasRInfo" class="flex items-center">
+              <slot name="top-right"></slot>
+            </div>
+
+            <!-- left info -->
+            <div v-if="hasLInfo" class="flex items-center w-[300px] gap-x-[20px]">
+              <div class="flex items-center gap-x-[8px]">
+                <img src="/images/svg/star-orange.svg" alt="icon" class="w-[24px] h-auto" />
+                <span class="text-[20px] font-bold text-blue-f7">2,849</span>
+              </div>
+              <div class="flex items-center gap-x-[8px]">
+                <img src="/images/svg/fire.svg" alt="icon" class="w-[16px] h-auto" />
+                <span class="text-[20px] font-bold text-orange-39">7</span>
+              </div>
+              <app-dropdown :modelValue="globalOptions.filter(k => k.value === selectedGlobal)?.[0].label"
+                topLabel="تغيير الاختبار" :options="globalOptions" @select="handleSelectGlobal" />
+            </div>
           </div>
 
-          <!-- left info -->
-          <div v-if="hasLInfo" class="flex items-center w-[300px] gap-x-[20px]">
-            <div class="flex items-center gap-x-[8px]">
-              <img src="/images/svg/star-orange.svg" alt="icon" class="w-[24px] h-auto" />
-              <span class="text-[20px] font-bold text-blue-f7">2,849</span>
-            </div>
-            <div class="flex items-center gap-x-[8px]">
-              <img src="/images/svg/fire.svg" alt="icon" class="w-[16px] h-auto" />
-              <span class="text-[20px] font-bold text-orange-39">7</span>
-            </div>
-            <app-dropdown :modelValue="globalOptions.filter(k=>k.value === selectedGlobal)?.[0].label"  topLabel="تغيير الاختبار" :options="globalOptions"
-              @select="handleSelectGlobal" />
-          </div>
+          <slot></slot>
         </div>
-
-        <slot></slot>
       </div>
     </div>
 
     <!-- dark light button -->
-    <button
-      :class="{'!bottom-[90px]':!isDesktop && !hasPrev}"
+    <button :class="{ '!bottom-[90px]': !isDesktop && !hasPrev }"
       class="fixed bottom-4 left-4 bg-gray-700 text-white p-2 rounded-full shadow-md hover:bg-gray-600 z-50 cursor-pointer"
       @click="toggleDarkMode">
       {{ colorMode.preference === 'dark' ? '🌙' : '☀️' }}
@@ -85,17 +86,17 @@ const props = withDefaults(
     contentClass?: string;
     hasRInfo?: boolean;
     hasLInfo?: boolean;
-    hasPrev?:boolean;
-    noSpaces?:boolean;
-    pageName?:string
+    hasPrev?: boolean;
+    noSpaces?: boolean;
+    pageName?: string
   }>(),
   {
     contentClass: '',
     hasRInfo: true,
     hasLInfo: true,
-    hasPrev:false,
-    noSpaces:false,
-    pageName:''
+    hasPrev: false,
+    noSpaces: false,
+    pageName: ''
   }
 );
 const router = useRouter()
@@ -107,7 +108,7 @@ const isDesktop = ref(false);
 //enums
 const globalOptions = globalSubList;
 
-const selectedGlobal = computed(()=> {return userPanelStore.globalType})
+const selectedGlobal = computed(() => { return userPanelStore.globalType })
 
 const handleSelectGlobal = (item) => {
   userPanelStore.setGlobalType(item.value);
@@ -151,7 +152,8 @@ onMounted(() => {
 
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 0.3s ease;}
+  transition: transform 0.3s ease;
+}
 
 .slide-enter-from,
 .slide-leave-to {

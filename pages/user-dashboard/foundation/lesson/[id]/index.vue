@@ -1,5 +1,5 @@
 <template>
-  <userPanelLayout>
+  <userPanelLayout content-class="max-w-[1050px] !mx-auto">
 
     <template #top-right>
 
@@ -176,7 +176,8 @@ const toFoundation = () => {
   router.push(`/user-dashboard/foundation`)
 }
 
-
+//type=1 training,type=2 file to save,type=3 videos
+//if type2 + type3 behind div is tow part
 const lessonGroups = computed(() => {
   const groups: any[][] = []
   const lessons = sortedLessons.value

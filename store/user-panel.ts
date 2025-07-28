@@ -1,5 +1,5 @@
 import { GlobalSub } from "~/main/modules/user-panel/data-access/user-panel.enum"
-import type { categoriesListForModal, categoryAnalysisList, chartDataList, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, similarVidModel, stepCategoryInfo, studentStages } from "~/main/modules/user-panel/data-access/user-panel.model"
+import type { categoriesListForModal, categoryAnalysisList, chartDataList, idLabelList, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, schoolDashboardData, similarVidModel, stepCategoryInfo, studentStages } from "~/main/modules/user-panel/data-access/user-panel.model"
 import { mockCategoriesForModal, mockCategoryInfo, mockStudentStages } from "~/pages/mocks/user-mocks"
 
 
@@ -13,7 +13,9 @@ interface UserPanelState {
     categoriesListForModal: boolean
     categoryInfo: boolean,
     analyticsDetails:boolean,
-    analyzeDetailsChartForStudent:boolean
+    analyzeDetailsChartForStudent:boolean,
+    schoolDashboard:boolean,
+    teachersOfManager:boolean
   }
   globalType: number,
   lessonsCategories: lessonsCategoriesDataModel[] | null,
@@ -25,6 +27,8 @@ interface UserPanelState {
   categoryInfo: stepCategoryInfo | null,
   analyticsDetails:categoryAnalysisList | null,
   analyzeDetailsChartForStudent:chartDataList | null | any
+  schoolDashboardData:schoolDashboardData | null,
+  teachersOfManager:idLabelList | null
 }
 
 
@@ -39,7 +43,9 @@ export const useUserPanelStore = defineStore('userPanel', {
       categoriesListForModal: false,
       categoryInfo: false,
       analyticsDetails:false,
-      analyzeDetailsChartForStudent:false
+      analyzeDetailsChartForStudent:false,
+      schoolDashboard:false,
+      teachersOfManager:false
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
@@ -50,7 +56,9 @@ export const useUserPanelStore = defineStore('userPanel', {
     categoriesListForModal: null,
     categoryInfo: null,
     analyticsDetails:null,
-    analyzeDetailsChartForStudent:null
+    analyzeDetailsChartForStudent:null,
+    schoolDashboardData:null,
+    teachersOfManager:null
   }),
 
   actions: {
@@ -72,7 +80,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       try {
         this.fetching.lessonsCategories = true
         const { $axios } = useNuxtApp()
-        const { data } = await $axios.get(`/lessonsCategories/listForStudent/${this.globalType}`)
+        const { data } = await $axios.get(`/lessonsCategories/listForStudent?grade=${this.globalType}`)
         this.lessonsCategories = data
         return data
       } catch (e) {
@@ -220,6 +228,38 @@ export const useUserPanelStore = defineStore('userPanel', {
         this.fetching.analyzeDetailsChartForStudent = false
       }
     },
+
+
+    async getSchoolDashboardData(payload): Promise<schoolDashboardData | null> {
+      try {
+        this.fetching.schoolDashboard = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.post(`/dashboard/showSchoolDashboard`,payload)
+        this.schoolDashboardData = data
+        return data
+      } catch (e) {
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.schoolDashboard = false
+      }
+    },
+
+    async getTeachersOfManager(): Promise<idLabelList | null> {
+      try {
+        this.fetching.teachersOfManager = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/employee/teachersOfManager`)
+        this.teachersOfManager = data
+        return data
+      } catch (e) {
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.teachersOfManager = false
+      }
+    },
+
 
 
 

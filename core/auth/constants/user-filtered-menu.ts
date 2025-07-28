@@ -19,7 +19,7 @@ export const userMenuItems = [
     isMobile:true,
     isDesktop:true,
     allowRoles:[],
-    denyRoles:[UserRoles.teacher],
+    denyRoles:[UserRoles.teacher,UserRoles.schoolManager],
   },
   {
     name: 'تدريب',
@@ -37,7 +37,7 @@ export const userMenuItems = [
     isMobile:false,
     isDesktop:false,
     allowRoles:[],
-    denyRoles:[UserRoles.teacher],
+    denyRoles:[UserRoles.teacher,UserRoles.schoolManager],
   },
   {
     name: 'سجل التدريب',
@@ -46,7 +46,7 @@ export const userMenuItems = [
     isMobile:false,
     isDesktop:false,
     allowRoles:[],
-    denyRoles:[UserRoles.teacher],
+    denyRoles:[UserRoles.teacher,UserRoles.schoolManager],
   },
   {
     name: 'خطواتي',
@@ -55,7 +55,7 @@ export const userMenuItems = [
     isMobile:false,
     isDesktop:false,
     allowRoles:[],
-    denyRoles:[UserRoles.teacher],
+    denyRoles:[UserRoles.teacher,UserRoles.schoolManager],
   },
   {
     name: 'تحليلاتي',
@@ -64,7 +64,7 @@ export const userMenuItems = [
     isMobile:true,
     isDesktop:true,
     allowRoles:[],
-    denyRoles:[UserRoles.teacher],
+    denyRoles:[UserRoles.teacher,UserRoles.schoolManager],
   },
   {
     name: 'لوحة المدرب',
@@ -81,7 +81,7 @@ export const userMenuItems = [
     route: '/user-dashboard/school',
     isMobile:true,
     isDesktop:true,
-    allowRoles:[UserRoles.schoolManager],
+    allowRoles:[UserRoles.schoolManager,UserRoles.teacher],
     denyRoles:[],
   },
   {
@@ -91,7 +91,7 @@ export const userMenuItems = [
     isMobile:false,
     isDesktop:true,
     allowRoles:[],
-    denyRoles:[UserRoles.teacher],
+    denyRoles:[UserRoles.teacher,UserRoles.schoolManager],
   },
   {
     name: 'المزيد',
@@ -100,6 +100,6 @@ export const userMenuItems = [
     isMobile:true,
     isDesktop:false,
     allowRoles:[],
-    denyRoles:[UserRoles.teacher],
+    denyRoles:[UserRoles.teacher,UserRoles.schoolManager],
   },
 ];

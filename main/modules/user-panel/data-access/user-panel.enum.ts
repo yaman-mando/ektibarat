@@ -1,6 +1,6 @@
 export enum GlobalSub {
-  kudrat = 1,
-  tahsele = 3,
+  kudrat = 13,
+  tahsele = 15,
 }
 
 export const globalSubList = [

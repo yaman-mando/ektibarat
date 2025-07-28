@@ -1,5 +1,3 @@
-import { number } from "yup";
-
 export type lessonsCategoriesDataModel = {
   id: number;
   subjectId: number;
@@ -139,3 +137,32 @@ export type chartDataList = {
   count:number;
   date:string | null
 }[]
+
+export type idLabelList = {
+  id:number,
+  label:string
+}[]
+
+
+export type studentSchoolDashbord = {
+  studentId: number;
+  studentName: string;
+  teacherId: number;
+  teacherName: string;
+  questionsCount: number;
+  correctAnswersCount: number;
+  wrongAnswersCount: number;
+  trainingPeriod: number; 
+  levelRate: number;
+  predictedMark: number;
+  requiredGrade: number;
+  planAdherence: number;
+}
+
+export type schoolDashboardData = {
+  data: studentSchoolDashbord[];
+  levelRateAvg: number;
+  planAdherenceAvg: number;
+  predictedMarksAvg: number;
+  studentsCount: number;
+}

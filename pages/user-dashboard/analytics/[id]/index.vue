@@ -339,7 +339,7 @@ function getRateLabel(rate) {
 
 function getRateColor(rate) {
   if (rate < 50) return 'red-5e';
-  if (rate < 70) return 'yellow-00';
+  if (rate < 70) return 'yellow-16';
   return 'green-8c';
 }
 
