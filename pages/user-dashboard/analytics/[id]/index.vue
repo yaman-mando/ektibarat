@@ -193,7 +193,7 @@
                   <div class="flex flex-[25%] h-[100%] items-center rounded-l-[8px] border border-[#BCCCDB]"
                     :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
                     <div class="w-full h-[100%] flex justify-center items-center gap-[15px] flex-wrap">
-                      <template v-if="child.hasNoMasteredSkills">
+                      <template v-if="child.hasNoMasteredSkills && child.rate === 100">
                         <span class="text-green-8c font-bold text-[16px]">أنت متقن لهذا القسم</span>
                       </template>
                       <template v-else>
@@ -202,7 +202,7 @@
                             class="bg-blue-d6 text-white text-[14px] font-medium h-[32px] w-[110px] rounded-[4px] cursor-pointer">إعادة
                             تأسيس</button>
                         </template>
-                        <template v-if="child.hasLawAnalyze">
+                        <template v-if="!child.hasNoMasteredSkills">
                           <button
                             class="bg-red-5e text-white text-[14px] font-medium h-[32px] w-[70px] rounded-[4px] cursor-pointer">للحفظ</button>
                         </template>
