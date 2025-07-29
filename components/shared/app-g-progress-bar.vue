@@ -1,6 +1,7 @@
 <template>
     <div
-    class="w-full bg-gray-200 dark:bg-dark-600 overflow-hidden"
+    class="w-full dark:bg-dark-600 overflow-hidden"
+    :class="bgEmptyClass"
     :style="{
       height,
       borderRadius: radius
@@ -39,6 +40,7 @@ const props = defineProps({
   radius: { type: String, default: '4px' },
   background: { type: String, default: null },
   bgClass: { type: String, default: '' },
+  bgEmptyClass: { type: String, default: 'bg-gray-200' },  
   textColor: { type: String, default: '' },
   fontSize: { type: String, default: '14px' },
   animated: { type: Boolean, default: true }

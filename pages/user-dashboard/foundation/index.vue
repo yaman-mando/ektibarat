@@ -1,11 +1,11 @@
 <template>
-  <user-panel-layout>
+  <user-panel-layout content-class="max-w-[1050px] !mx-auto">
 
     <template #top-right>
 
     </template>
 
-    <div class="space-y-10">
+    <div class="space-y-10 mb-[100px] lg:mb-0">
 
       <app-loading-spinner v-if="userPanelStore.fetching.lessonsCategories" text="جاري تحميل البيانات..."
         :showText="false" :showSpinner="false" :showSkeleton="true" :skeletonCount="16" />
@@ -15,7 +15,7 @@
         <span class="text-gray-500 dark:text-gray-300">لا توجد بيانات</span>
       </div>
 
-      <div v-else v-for="section in userPanelStore.lessonsCategories" :key="section.id" class="fade-in">
+      <div v-else v-for="section in userPanelStore.lessonsCategories" :key="section.id" class="fade-in mx-auto max-w-fit">
 
 
         <div class="flex items-center gap-x-[10px] mb-[20px]">
@@ -23,8 +23,9 @@
           <h2 class="text-[24px] font-bold text-blue-d6">{{ section.title }}</h2>
         </div>
 
-        <div class="flex flex-wrap gap-[15px]">
-          <div @click="toLesson(child.categoryId)" v-for="child in section.children" :key="child.id" class="rounded-[8px] w-[300px] p-[17px_15px] bg-white dark:bg-dark-37 transition
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-[15px] justify-self-start">
+          <div @click="toLesson(child.id)" v-for="child in section.children" :key="child.id" class="rounded-[8px] w-[300px] p-[17px_15px] bg-white dark:bg-dark-37 transition
                     hover:scale-[1.02] cursor-pointer group
                     shadow-custom dark:shadow-custom-dark
                     ">
@@ -37,26 +38,18 @@
 
 
             <p class="text-[14px] font-bold text-purple-c2 mb-1">
-
               {{ getProgress(child) + '%' }}
             </p>
 
             <div class="flex justify-between items-center gap-x-[26px]">
-              <div class="relative w-full bg-gray-200 h-[5px] rounded-full overflow-hidden">
-                <div class="h-full bg-purple-c2 transition-all" :style="{ width: getProgress(child) + '%' }"></div>
-                <span class="absolute text-[10px] text-purple-700 -top-5 left-0 rtl:right-0 rtl:left-auto">
-                  {{ getProgress(child) }}%
-                </span>
-              </div>
+              <app-g-progress-bar bg-class="bg-purple-c2" height="5px" :show-text="false" :value="getProgress(child)" />
               <div class="flex items-center gap-x-[8px]">
-                <p class="text-[14px] font-medium text-gray-8f dark:text-gray-400 mb-1">
-                  {{ getStatus(child) }}
-
-                </p>
+                <p class="text-[14px] font-medium text-gray-8f dark:text-gray-400 mb-1">{{ getStatus(child) }}</p>
                 <i class="fa fa-chevron-left text-[14px] text-gray-8f dark:text-gray-400"></i>
               </div>
             </div>
           </div>
+        
         </div>
       </div>
     </div>

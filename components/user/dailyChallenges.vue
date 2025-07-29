@@ -17,9 +17,7 @@
                         </div>
                     </div>
                     <div class="flex justify-between items-center gap-x-[16px]">
-                        <div class="h-[8px] flex-1 bg-[#BCCCDB] rounded-full">
-                            <div class="h-full bg-[#FDC830] rounded-full" style="width: 70%"></div>
-                        </div>
+                        <app-g-progress-bar class="flex-1" height="8px" :value="70" :show-text="false" bg-class="bg-[#FDC830]"></app-g-progress-bar>
                         <span class="text-[16px] text-orange-39">10 / 7</span>
                     </div>
                 </div>
@@ -36,9 +34,7 @@
                         </div>
                     </div>
                     <div class="flex justify-between items-center gap-x-[16px]">
-                        <div class="h-[8px] flex-1 bg-[#BCCCDB] rounded-full">
-                            <div class="h-full bg-[#FF375E] rounded-full" style="width: 36%"></div>
-                        </div>
+                        <app-g-progress-bar class="flex-1" height="8px" :value="36" :show-text="false" bg-class="bg-[#FF375E]"></app-g-progress-bar>
                         <span class="text-[16px] text-orange-39">50 / 18</span>
                     </div>
                 </div>
@@ -66,9 +62,7 @@
                     </div>
                 </div>
                 <div class="flex justify-between items-center gap-x-[16px]">
-                    <div class="h-[8px] flex-1 bg-[#BCCCDB] rounded-full">
-                        <div class="h-full bg-[#FF6A39] rounded-full" style="width: 70%"></div>
-                    </div>
+                    <app-g-progress-bar class="flex-1" height="8px" :value="36" :show-text="false" bg-class="bg-[#FF6A39]"></app-g-progress-bar>
                     <span class="text-[16px] text-orange-39">7 / 14</span>
                 </div>
             </div>

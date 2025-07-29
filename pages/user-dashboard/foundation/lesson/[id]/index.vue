@@ -18,10 +18,16 @@
             <h2 class="text-lg font-bold">{{ userPanelStore.lessonsList?.title }}</h2>
           </div>
           <div class="flex items-center gap-x-[23px] justify-between">
-            <div class="w-full h-[8px] bg-white/30 rounded-[8px] mt-2">
-              <div v-if="doneCount && totalCount" class="h-full bg-white rounded"
-                :style="{ width: `${(doneCount / totalCount) * 100}%` }"></div>
-            </div>
+            <app-g-progress-bar 
+            v-if="doneCount && totalCount" 
+            class="flex-1" 
+            height="8px" 
+            :value="(doneCount / totalCount) * 100" 
+            :show-text="false" 
+            bg-class="bg-white"
+            bg-empty-class="bg-white/30"
+            >
+          </app-g-progress-bar>
             <span>{{ doneCount }}/{{ totalCount }}</span>
           </div>
         </div>
