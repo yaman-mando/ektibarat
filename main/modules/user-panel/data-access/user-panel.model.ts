@@ -70,6 +70,12 @@ export type similarVidObj = {
 export type similarVidModel = similarVidObj[]
 
 
+export type categoryInfoForStep={
+  categoryId: number | null;
+  questionsCount: number | null | any;
+  stepId: number | null;
+}
+
 export type stepCategoryInfo = {
   categoryId: number | null;
   categoryName: string | null;
@@ -87,6 +93,9 @@ export type step = {
   categoryInfo: stepCategoryInfo | null;
   text_before?: string;
   text_after?: string;
+  color_1: string;
+  color_2: string;
+  type:number
 }
 
 export type stage= {

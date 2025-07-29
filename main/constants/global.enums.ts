@@ -72,3 +72,9 @@ export const pictureTypesEnum = {
   19: "StaticContent",
   22: "Messaging"
 };
+
+export const planSubscribedEnum = {
+  notSubscribe:1,
+  subscribed:2,
+  finished:3
+}

@@ -1,6 +1,5 @@
 import { GlobalSub } from "~/main/modules/user-panel/data-access/user-panel.enum"
-import type { categoriesListForModal, categoryAnalysisList, chartDataList, idLabelList, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, schoolDashboardData, similarVidModel, stepCategoryInfo, studentStages } from "~/main/modules/user-panel/data-access/user-panel.model"
-import { mockCategoriesForModal, mockCategoryInfo, mockStudentStages } from "~/pages/mocks/user-mocks"
+import type { categoriesListForModal, categoryAnalysisList, categoryInfoForStep, chartDataList, idLabelList, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, schoolDashboardData, similarVidModel, stepCategoryInfo, studentStages } from "~/main/modules/user-panel/data-access/user-panel.model"
 
 
 interface UserPanelState {
@@ -141,7 +140,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       try {
         this.fetching.studentStages = true
         const { $axios } = useNuxtApp()
-        const data = mockStudentStages
+        const {data} = await $axios.get(`/studentsTrainingPlans/wizard?grade=${this.globalType}`)
         this.studentStages = data
         return data
       } catch (e) {
@@ -157,7 +156,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       try {
         this.fetching.categoriesListForModal = true
         const { $axios } = useNuxtApp()
-        const data = mockCategoriesForModal
+        const {data} = await $axios.get(`/studentsTrainingPlans/wizardCategories?grade=${this.globalType}`)
         this.categoriesListForModal = data
         return data
       } catch (e) {
@@ -170,25 +169,30 @@ export const useUserPanelStore = defineStore('userPanel', {
     },
 
 
-    async getCategoryInfo(id: Number, stepId: Number): Promise<stepCategoryInfo | null> {
+    async getCategoryInfo(catId: Number, stepId: Number): Promise<categoryInfoForStep | null> {
       try {
         this.fetching.categoryInfo = true
         const { $axios } = useNuxtApp()
-        const data = mockCategoryInfo
+        const {data} = await $axios.post(`/studentsTrainingPlans/assignCategoryToStep`,{
+          stepId:stepId,
+          categoryId:catId
+        })
 
-        if (!this.studentStages) return data
-        for (const stage of this.studentStages?.stages) {
-          const step = stage.steps.find(s => s.id === stepId);
-          if (step) {
-            step.categoryInfo = data;
-            this.categoryInfo = data;
-            return data;
-          }
-        }
-
-
-        console.warn(`لم يتم العثور على stepId: ${stepId}`)
         return data
+
+        // if (!this.studentStages) return data
+        // for (const stage of this.studentStages?.stages) {
+        //   const step = stage.steps.find(s => s.id === stepId);
+        //   if (step) {
+        //     step.categoryInfo = data;
+        //     this.categoryInfo = data;
+        //     return data;
+        //   }
+        // }
+
+
+        //console.warn(`لم يتم العثور على stepId: ${stepId}`)
+        //return data
       } catch (e) {
         console.error('خطأ في تحميل بيانات التصنيف', e)
         return null

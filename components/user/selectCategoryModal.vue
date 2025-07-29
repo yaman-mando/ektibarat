@@ -3,23 +3,18 @@
   <div v-show="show" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
     <transition name="grow-fade">
       <!-- Modal box -->
-      <div
-        v-if="show"
-        class="bg-white shadow-xl rounded-[15px]
+      <div v-if="show" class="bg-white shadow-xl rounded-[15px]
                w-full max-w-[95vw] md:w-[830px]
                min-h-[429px]
                flex flex-col gap-5
-               p-5 md:p-[20px] text-center relative"
-      >
+               p-5 md:p-[20px] text-center relative">
         <!-- Modal header with close button -->
         <div class="w-full flex justify-between items-center">
           <span class="text-[18px] md:text-[20px] font-medium text-purple-8c">
             اختيار القسم التالي
           </span>
-          <i
-            class="fa fa-times text-[22px] md:text-[24px] text-purple-8c cursor-pointer"
-            @click="$emit('update:show', false)"
-          ></i>
+          <i class="fa fa-times text-[22px] md:text-[24px] text-purple-8c cursor-pointer"
+            @click="$emit('update:show', false)"></i>
         </div>
 
         <!-- Instructional text -->
@@ -43,13 +38,9 @@
 
               <!-- Items under category -->
               <div class="ca-contents relative">
-                <div
-                  v-for="item in card.children"
-                  :key="item.id"
-                  class="item"
+                <div v-for="item in card.children" :key="item.id" class="item"
                   :class="{ active: selectedCat === item.id, disabled: item.disabled }"
-                  @click="!item.disabled && (selectedCat = item.id)"
-                >
+                  @click="!item.disabled && (selectedCat = item.id)">
                   <text-slice :length="20" :text="item.label" />
                 </div>
               </div>
@@ -58,17 +49,15 @@
         </div>
 
         <!-- Save button -->
-        <button
-          @click="selectedCat !== null && saveSelection(selectedCat)"
-          class="mt-4 w-[150px] md:w-[200px]
+        <app-overlay v-if="examLoading" />
+        <button @click="selectedCat !== null && saveSelection(selectedCat)" class="mt-4 w-[150px] md:w-[200px]
                  h-[40px] md:h-[44px]
                  text-[14px] md:text-[16px]
                  font-bold text-white
                  bg-purple-8c rounded-[6px] 
                 mx-auto
                  flex items-center justify-center
-                 cursor-pointer"
-        >
+                 cursor-pointer">
           حفظ
         </button>
       </div>
@@ -81,53 +70,162 @@
 
 
 <script setup lang="ts">
+import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+import { GlobalTypes, globalTypesList } from '~/main/constants/global-types';
 import type { categoriesListForModal } from '~/main/modules/user-panel/data-access/user-panel.model';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { getUuid, sleepUtil } from '~/main/utils/shared-utils';
 import { useUserPanelStore } from '~/store/user-panel';
+import { useStore } from 'vuex';
 
 
 const props = defineProps({
-    stepId: {
-        type: Number,
-        required: true
-    },
-    show: {
-        type: Boolean,
-        default: false,
-        required: true
-    }
+  stepId: {
+    type: Number,
+    required: true
+  },
+  show: {
+    type: Boolean,
+    default: false,
+    required: true
+  }
 })
 
 //emits
 const emit = defineEmits<{
-    (e: 'continue'): void
-    (e: 'update:show', value: boolean): void
+  (e: 'continue'): void
+  (e: 'update:show', value: boolean): void
 }>()
 
 //store
 const userPanelStore = useUserPanelStore()
+const globalStore = useGlobalStore()
+const runtimeConfig = useRuntimeConfig();
+const store = useStore();
+const auth = useAuth();
+const authStore = useAuthStore();
+const { $axios } = useNuxtApp();
+const router = useRouter();
+const toastMessage = useToastMessage()
 
+//getting
 await userPanelStore.getCategoriesListForUser()
 
-const categoriesList: categoriesListForModal | null = userPanelStore.categoriesListForModal
 
+
+//enums
+class examForm {
+  subjectId: number | string;
+
+  constructor(subjectId: number | string) {
+    this.subjectId = subjectId;
+  }
+  willDo = false;
+  withoutStudentEvaluate = false;
+  randomLevel = false;
+  isOpen = false;
+  tagsIds = [] as any[];
+  takfeelTagsIds = [] as any[];
+  onlyWrongQuestions = false;
+  onlyFlaggedQuestions = false;
+  randomQuestionsSettings = [] as any[];
+  questionsLevelsMin = 0;
+  questionsCount: null | number = 10;
+  questionsLevelsMax = 10;
+  customerId: any | null = null;
+  sessionId: any | null = null;
+  stepId: null | number = null;
+
+}
 
 //data
+const categoriesList: categoriesListForModal | null = userPanelStore.categoriesListForModal
 const selectedCat = ref<number | null>(null)
+const examLoading = ref<boolean>(false)
+const form = ref(new examForm(runtimeConfig.public.defaultSubjectId));
+
+
+//computed
+const user = computed(
+  () => { return authStore.state.userData as unknown as UserInfoDataModel }
+)
+
+const globalUser = computed(() => {
+  return globalStore.state.globalTypeUserValue
+})
+
+const isTahsele = computed(() => {
+  return globalUser.value === GlobalTypes.tahsele;
+})
 
 //method
+const handleClarityData = async () => {
+  try {
+    //eslint-disable-next-line
+    return new Promise(async (resolve, reject) => {
+      if (!window['clarity']) {
+        resolve(null);
+        return null;
+      }
+      const custom_session_id = getUuid();
 
-function continueTraining() {
-    emit('continue')
+      const result = await window['clarity'](
+        'identify',
+        user.value.email,
+        user.value.id + '_' + custom_session_id
+      );
+      form.value.customerId = result?.userId;
+      form.value.sessionId = result?.sessionId;
+      resolve(result);
+    });
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+}
+
+const toTrainig = async () => {
+  try {
+    examLoading.value = true;
+    if (runtimeConfig.public.currentEnv === 'dev') {
+      await handleClarityData();
+    }
+    const url = 'studentsExam/customFromTags';
+    form.value.subjectId = isTahsele.value
+      ? runtimeConfig.public.defaultSubjectIdTahsele
+      : runtimeConfig.public.defaultSubjectId;
+    const { data: res } = await $axios.post(url, form.value)
+    if (res) {
+      store.commit('student/SET_CURRENT_EXAM_TRAIN_PAGE_DATA', res);
+      router.push(`/student/training/${res.id}`)
+    }
+    await sleepUtil(1500);
+    examLoading.value = false;
+  } catch (e) {
+    toastMessage.showError({
+      life: 2500,
+      summary: 'عذراً حدث خطأ في إنشاء امتحانكم ... يرجى إعادة المحاولة',
+    });
+    await sleepUtil(1000);
+    examLoading.value = false;
+    console.log(e);
+  }
 }
 
 const saveSelection = async (catId: Number) => {
-    try {
-        await userPanelStore.getCategoryInfo(catId, props.stepId)
-        continueTraining()
-
-    } catch (e) {
-        console.log('حدث خطأ')
-    }
+  try {
+    const catInfo = await userPanelStore.getCategoryInfo(catId, props.stepId)
+    form.value.randomQuestionsSettings.push({
+      categoryId: catInfo?.categoryId,
+      questionLevel: 0,
+      questionsCount: catInfo?.questionsCount,
+    })
+    form.value.stepId = catInfo?.stepId ?? null
+    toTrainig()
+  } catch (e) {
+    console.log('حدث خطأ')
+  }
 }
 
 </script>
@@ -162,11 +260,11 @@ const saveSelection = async (catId: Number) => {
   :deep(.ca-contents) {
     padding: 10px 20px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr); 
+    grid-template-columns: repeat(2, 1fr);
     justify-content: center;
 
     @media (min-width: 640px) {
-      grid-template-columns: repeat(3, 90px); 
+      grid-template-columns: repeat(3, 90px);
     }
 
     column-gap: 15px;

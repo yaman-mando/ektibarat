@@ -1,12 +1,12 @@
 <template>
-  <div v-if="steps"
-    class="relative w-[50vw] sm:w-50 md:w-60 lg:w-[25vw] xl1200:w-[25vw] 2xl:w-[32vw] sm:mx-auto lg:mx-0 xl:mx-auto mx-0"
+  <div v-if="steps" class="relative w-full max-w-[650px] mx-auto flex justify-center"
     :style="{ height: `${steps.length * stepSpacing}px` }">
 
     <!-- Step rendering loop -->
     <div class="relative" v-for="(step, index) in steps" :key="step.id">
+
       <!-- Step button -->
-      <button @click="(e) =>onStepClick(index, step, e)" :style="getPositionStyle(index)"
+      <button @click="(e) => onStepClick(index, step, e)" :style="getPositionStyle(index)"
         class="group absolute left-1/2 transform -translate-x-1/2 cursor-pointer hover-effect">
         <div class="relative flex items-center justify-center transition-transform active:scale-95 animate-bounce-in"
           :style="getButtonStyle(step.status, index)">
@@ -29,15 +29,27 @@
       <img v-if="step.image_path" :src="step.image_path" alt=""
         class="absolute object-contain w-[75px] sm:w-[12vw] max-w-[136px]" :style="getImagePosition(index)" />
 
+
+      <!-- Start popup -->
+      <div v-if="step.status === 1 && activePopupIndex === null" :id="`popupReStart-${index}`" tabindex="1"
+        @focusout="handlePopupFocusOut" :class="['popup', popupDirection]" :style="{
+          left: `${pattern[index % pattern.length] - 45}px`,
+          top: popupDirection === 'up' ? `${index * stepSpacing - 70}px` : `${index * stepSpacing + 90}px`
+        }">
+        <div class="popup-start-content flex items-center justify-center">
+          <div class="popup-start-inner flex items-center justify-center">
+            <span class="text-[18px] font-bold text-green-8c">ابدأ</span>
+          </div>
+          <div class="popup-start-arrow"></div>
+        </div>
+      </div>
+
       <!-- Info popup -->
-      <div v-if="step.categoryInfo && step.status === 1 && activePopupIndex === index" 
-      :id="`popupRefs-${index}`"
-      tabindex="1"
-      @focusout="handlePopupFocusOut"
-      :class="['popup', popupDirection]" :style="{
-  left: `${pattern[index % pattern.length] - 80}px`,
-  top: popupDirection === 'up' ? `${index * stepSpacing - 255}px` : `${index * stepSpacing + 90}px`
-}">
+      <div v-if="step.categoryInfo && step.status === 1 && activePopupIndex === index" :id="`popupRefs-${index}`"
+        tabindex="1" @focusout="handlePopupFocusOut" :class="['popup', popupDirection]" :style="{
+          left: `${pattern[index % pattern.length] - 80}px`,
+          top: popupDirection === 'up' ? `${index * stepSpacing - 255}px` : `${index * stepSpacing + 90}px`
+        }">
         <div class="popup-content p-[15px]">
           <div class="popup-inner !p-[0px_10px]">
             <h2 class="text-[16px] font-medium text-purple-78 !text-center m-0">
@@ -58,13 +70,16 @@
                 <span class="text-[16px] text-gray-63 text-center">{{ formatTime(step.categoryInfo.time) }} ساعة</span>
               </div>
             </div>
-            <button @click="toTrining" class="w-[200px] h-[44px] rounded-[6px] bg-purple-78 text-white font-bold 
-            text-[16px] mt-[14px] cursor-pointer flex items-center justify-center justify-self-center">ابدأ
-              التدريب</button>
+            <app-overlay v-if="examLoading" />
+            <button @click="toTrining(step)"
+              class="w-[200px] h-[44px] rounded-[6px] bg-purple-78 text-white font-bold text-[16px] mt-[14px] cursor-pointer flex items-center justify-center justify-self-center">
+              ابدأ التدريب
+            </button>
           </div>
           <div class="popup-arrow"></div>
         </div>
       </div>
+
     </div>
 
     <!-- Help modal -->
@@ -90,6 +105,12 @@ import { defineProps, type PropType } from 'vue'
 import type { step } from '~/main/modules/user-panel/data-access/user-panel.model';
 import helpModal from '@/components/user/helpModal.vue'
 import selectCategoryModal from '@/components/user/selectCategoryModal.vue'
+import { getUuid, sleepUtil } from '~/main/utils/shared-utils';
+import { GlobalTypes } from '~/main/constants/global-types';
+import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+import { useGlobalStore } from '~/main/useGlobalStore';
+import { useStore } from 'vuex';
 
 // Define props
 const props = defineProps({
@@ -104,9 +125,43 @@ const props = defineProps({
   }
 })
 
+const globalStore = useGlobalStore()
+const runtimeConfig = useRuntimeConfig();
+const store = useStore();
+const authStore = useAuthStore();
+const { $axios } = useNuxtApp();
+const router = useRouter();
+const toastMessage = useToastMessage()
+
+//enum
+class examForm {
+  subjectId: number | string;
+
+  constructor(subjectId: number | string) {
+    this.subjectId = subjectId;
+  }
+  willDo = false;
+  withoutStudentEvaluate = false;
+  randomLevel = false;
+  isOpen = false;
+  tagsIds = [] as any[];
+  takfeelTagsIds = [] as any[];
+  onlyWrongQuestions = false;
+  onlyFlaggedQuestions = false;
+  randomQuestionsSettings = [] as any[];
+  questionsLevelsMin = 0;
+  questionsCount: null | number = 10;
+  questionsLevelsMax = 10;
+  customerId: any | null = null;
+  sessionId: any | null = null;
+  stepId: null | number = null;
+}
+
+
 // Reactive data setup
 const stepSpacing = 90;
 const pattern = [0, -44, -70, -44, 0, 44, 70, 44, 0, -44];
+//const pattern = [0, -30, -50, -30, 0, 30, 50, 30, 0, -30];
 const activePopupIndex = ref<number | null>(null);
 const popupDirection = ref('up');
 const toShowHelpModal = ref(false);
@@ -115,8 +170,16 @@ const helpModalSeen = ref(false);
 const pendingStepIndex = ref<number | null>(null);
 const pendingStepData = ref<step | null>(null);
 const pendingClickEvent = ref<MouseEvent | null>(null);
+const examLoading = ref<boolean>(false)
+const form = ref(new examForm(runtimeConfig.public.defaultSubjectId));
+const stepTypesEnum = {
+  selectedCategory: 1,
+  trainings: 2,
+  examSimulator: 5
+}
 
 function handlePopupFocusOut(event: FocusEvent) {
+  if (examLoading.value) return
   const related = event.relatedTarget as HTMLElement | null;
   const currentPopup = event.currentTarget as HTMLElement;
 
@@ -125,10 +188,83 @@ function handlePopupFocusOut(event: FocusEvent) {
   }
 }
 
-function toTrining(){
-  console.log('toTrainig')
+function toTrining(step: step) {
+  form.value.randomQuestionsSettings.push({
+    categoryId: step.categoryInfo?.categoryId,
+    questionLevel: 0,
+    questionsCount: step.categoryInfo?.numberQuestion,
+  })
+  form.value.stepId = step.id
+  startTrainig()
 }
 
+const handleClarityData = async () => {
+  try {
+    //eslint-disable-next-line
+    return new Promise(async (resolve, reject) => {
+      if (!window['clarity']) {
+        resolve(null);
+        return null;
+      }
+      const custom_session_id = getUuid();
+
+      const result = await window['clarity'](
+        'identify',
+        user.value.email,
+        user.value.id + '_' + custom_session_id
+      );
+      form.value.customerId = result?.userId;
+      form.value.sessionId = result?.sessionId;
+      resolve(result);
+    });
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+}
+
+const startTrainig = async () => {
+  try {
+    examLoading.value = true;
+    if (runtimeConfig.public.currentEnv === 'dev') {
+      await handleClarityData();
+    }
+    const url = 'studentsExam/customFromTags';
+    form.value.subjectId = isTahsele.value
+      ? runtimeConfig.public.defaultSubjectIdTahsele
+      : runtimeConfig.public.defaultSubjectId;
+    const { data: res } = await $axios.post(url, form.value)
+    if (res) {
+      store.commit('student/SET_CURRENT_EXAM_TRAIN_PAGE_DATA', res);
+      router.push(`/student/training/${res.id}`)
+    }
+    await sleepUtil(1500);
+    examLoading.value = false;
+  } catch (e) {
+    toastMessage.showError({
+      life: 2500,
+      summary: 'عذراً حدث خطأ في إنشاء امتحانكم ... يرجى إعادة المحاولة',
+    });
+    await sleepUtil(1000);
+    examLoading.value = false;
+    console.log(e);
+  }
+}
+
+//computed
+const user = computed(
+  () => { return authStore.state.userData as unknown as UserInfoDataModel }
+)
+
+const globalUser = computed(() => {
+  return globalStore.state.globalTypeUserValue
+})
+
+const isTahsele = computed(() => {
+  return globalUser.value === GlobalTypes.tahsele;
+})
+
+//watch
 watch(activePopupIndex, async (newVal) => {
   if (newVal !== null) {
     await nextTick();
@@ -138,7 +274,7 @@ watch(activePopupIndex, async (newVal) => {
 
 // Handle step click
 const onStepClick = async (index, stepData: step | null, event) => {
-  if(stepData?.status !== 1) return
+  if (stepData?.status !== 1) return
   pendingStepIndex.value = index;
   pendingClickEvent.value = event;
   pendingStepData.value = stepData;
@@ -146,7 +282,7 @@ const onStepClick = async (index, stepData: step | null, event) => {
     toShowHelpModal.value = true;
     return;
   }
-  if (!stepData?.categoryInfo) {
+  if (stepData?.type === stepTypesEnum.selectedCategory) {
     toShowSelectCategoryModal.value = true;
     return;
   }
@@ -234,10 +370,14 @@ const getImagePosition = (index) => {
   const cycleIndex = index % pattern.length;
   const offsetX = pattern[cycleIndex];
   let offsetY = index * stepSpacing - 30;
-  let spaceValue = window.innerWidth / 8 + offsetX;
+  const container = document.querySelector('.your-container-class') as HTMLElement;
+  const containerWidth = container?.offsetWidth || 600;
+
+  let spaceValue = containerWidth / 5 + offsetX;
+
   if (window.innerWidth < 640) {
     offsetY = index * stepSpacing - 15;
-    spaceValue = 50 + offsetX;
+    spaceValue = 90 + offsetX;
   }
   if (offsetX <= 0) {
     return {
@@ -288,6 +428,7 @@ function formatTime(seconds: number) {
 
 
 
+
 .popup {
   position: absolute;
   display: flex;
@@ -298,15 +439,44 @@ function formatTime(seconds: number) {
   z-index: 50;
 }
 
-.popup-content {
+
+.popup-box {
   background: #FFFFFF;
   box-shadow: 0px 0px 10px #00000040;
   border: 0.5px solid #BCCCDB;
   border-radius: 15px;
-  width: 295px;
-  height: 223px;
   position: relative;
 }
+
+
+.popup-content {
+  width: 295px;
+  height: 223px;
+}
+
+.popup-content,
+.popup-start-content {
+  background: #FFFFFF;
+  box-shadow: 0px 0px 10px #00000040;
+  border: 0.5px solid #BCCCDB;
+  border-radius: 15px;
+  position: relative;
+}
+
+
+.popup-start-content {
+  width: 80px;
+  height: 45px;
+}
+
+.popup.up .popup-start-content {
+  animation: floating 2.5s ease-in-out infinite;
+}
+
+.popup.down .popup-start-content {
+  animation: floatingDown 2.5s ease-in-out infinite;
+}
+
 
 .popup-inner {
   padding: 20px;
@@ -315,19 +485,41 @@ function formatTime(seconds: number) {
   box-sizing: border-box;
 }
 
-.popup-arrow {
+
+.popup-arrow,
+.popup-start-arrow {
   position: absolute;
-  left: 70px;
   width: 20px;
   height: 10px;
   overflow: hidden;
+}
+
+.popup-arrow {
+  left: 70px;
+}
+
+.popup-start-arrow {
+  left: 30px;
 }
 
 .popup.up .popup-arrow {
   bottom: -10px;
 }
 
-.popup.up .popup-arrow::after {
+.popup.down .popup-arrow {
+  top: -10px;
+}
+
+.popup.up .popup-start-arrow {
+  bottom: -10px;
+}
+
+.popup.down .popup-start-arrow {
+  top: -10px;
+}
+
+.popup.up .popup-arrow::after,
+.popup.up .popup-start-arrow::after {
   content: "";
   position: absolute;
   top: 0;
@@ -338,11 +530,8 @@ function formatTime(seconds: number) {
   filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.1));
 }
 
-.popup.down .popup-arrow {
-  top: -10px;
-}
-
-.popup.down .popup-arrow::after {
+.popup.down .popup-arrow::after,
+.popup.down .popup-start-arrow::after {
   content: "";
   position: absolute;
   top: 0;
@@ -351,6 +540,35 @@ function formatTime(seconds: number) {
   border-right: 10px solid transparent;
   border-bottom: 10px solid #FFFFFF;
   filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Animation: floating up/down */
+@keyframes floating {
+  0% {
+    transform: translateY(15px);
+  }
+
+  50% {
+    transform: translateY(25px);
+  }
+
+  100% {
+    transform: translateY(15px);
+  }
+}
+
+@keyframes floatingDown {
+  0% {
+    transform: translateY(-15px);
+  }
+
+  50% {
+    transform: translateY(-25px);
+  }
+
+  100% {
+    transform: translateY(-15px);
+  }
 }
 
 @keyframes grow-fade {

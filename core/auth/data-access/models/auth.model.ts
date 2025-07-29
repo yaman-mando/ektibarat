@@ -55,7 +55,7 @@ export type UserInfoDataModel = {
   schoolId: number;
   qodoratAttempt: number | null;
   lastQodoratMark:number | null;
-  planSubscribed: boolean;
+  planSubscribed: number;
 };
 
 type UserSubscriptionItemDataModel = {

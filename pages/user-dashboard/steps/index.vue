@@ -1,5 +1,5 @@
 <template>
-    <userPanelLayout>
+    <userPanelLayout content-class="max-w-[1050px] !mx-auto">
 
         <app-loading-spinner v-if="userPanelStore.fetching.studentStages" text="جاري تحميل البيانات..."
             :showText="false" :showSpinner="false" :showSkeleton="true" :skeletonCount="16" />
@@ -43,22 +43,26 @@
 
                 <!-- steps -->
                 <!-- scroll element -->
-                <div ref="scrollContainer" class="overflow-y-auto pr-2 hide-scrollbar"
-                    style="max-height: calc(100vh - 171px);">
-                    <div v-for="stage of props?.stages" :key="stage.phase_id" class="mb-8"
-                        :ref="el => stageRefs.set(stage.phase_id, el)">
-                        <div class="flex items-center justify-center mb-[40px]">
-                            <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
-                            <span class="px-4 mt-2 text-[20px] font-medium text-gray-8f whitespace-nowrap">
-                                {{ stage.phase_name }}
-                            </span>
-                            <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
+                <ClientOnly>
+                    <div ref="scrollContainer" class="overflow-y-auto pr-2 hide-scrollbar"
+                        style="max-height: calc(100vh - 171px);">
+                        <div v-for="stage of props?.stages" :key="stage.phase_id" class="mb-8"
+                            :ref="el => stageRefs.set(stage.phase_id, el)">
+                            <div class="flex items-center justify-center mb-[40px]">
+                                <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
+                                <span class="px-4 mt-2 text-[20px] font-medium text-gray-8f whitespace-nowrap">
+                                    {{ stage.phase_name }}
+                                </span>
+                                <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
+                            </div>
+
+                            <spiralButton :show-help-modal="props?.show_modal_need_help ?? false"
+                                :steps="stage.steps" />
+
                         </div>
-                        <spiralButton :show-help-modal="props?.show_modal_need_help ?? false" :steps="stage.steps" />
                     </div>
-                </div>
 
-
+                </ClientOnly>
 
 
             </div>

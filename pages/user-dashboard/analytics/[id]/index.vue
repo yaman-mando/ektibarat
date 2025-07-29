@@ -193,7 +193,7 @@
                   <div class="flex flex-[25%] h-[100%] items-center rounded-l-[8px] border border-[#BCCCDB]"
                     :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
                     <div class="w-full h-[100%] flex justify-center items-center gap-[15px] flex-wrap">
-                      <template v-if="child.rate >= 60 && !child.hasLawAnalyze && userData.planSubscribed">
+                      <template v-if="child.hasNoMasteredSkills">
                         <span class="text-green-8c font-bold text-[16px]">أنت متقن لهذا القسم</span>
                       </template>
                       <template v-else>
@@ -206,7 +206,7 @@
                           <button
                             class="bg-red-5e text-white text-[14px] font-medium h-[32px] w-[70px] rounded-[4px] cursor-pointer">للحفظ</button>
                         </template>
-                        <template v-if="!userData.planSubscribed">
+                        <template v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe || userData.planSubscribed === planSubscribedEnum.finished">
                           <button
                             class=" bg-purple-78  text-white text-[14px] font-medium h-[32px] w-[60px] rounded-[4px] cursor-pointer">تدرب</button>
                         </template>
@@ -232,6 +232,7 @@ import { useUserPanelStore } from '~/store/user-panel';
 import { useApexChartService } from '~/main/services/useApexChartService';
 import { ref, computed, onMounted } from 'vue';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
+import { planSubscribedEnum } from '~/main/constants/global.enums';
 
 const userPanelStore = useUserPanelStore();
 const route = useRoute();
