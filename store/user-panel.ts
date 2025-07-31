@@ -1,5 +1,5 @@
 import { GlobalSub } from "~/main/modules/user-panel/data-access/user-panel.enum"
-import type { categoriesListForModal, categoryAnalysisList, categoryInfoForStep, chartDataList, idLabelList, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, schoolDashboardData, similarVidModel, stepCategoryInfo, studentStages } from "~/main/modules/user-panel/data-access/user-panel.model"
+import type { categoriesListForModal, categoryAnalysisList, categoryInfoForStep, chartDataList, idLabelList, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, recommendation, recommendationsResponse, schoolDashboardData, similarVidModel, stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeResponse, studentStages, trainingPlanSummaryResponse } from "~/main/modules/user-panel/data-access/user-panel.model"
 
 
 interface UserPanelState {
@@ -11,10 +11,14 @@ interface UserPanelState {
     studentStages: boolean,
     categoriesListForModal: boolean
     categoryInfo: boolean,
-    analyticsDetails:boolean,
-    analyzeDetailsChartForStudent:boolean,
-    schoolDashboard:boolean,
-    teachersOfManager:boolean
+    analyticsDetails: boolean,
+    analyzeDetailsChartForStudent: boolean,
+    schoolDashboard: boolean,
+    teachersOfManager: boolean,
+    studentAnalyze: boolean,
+    studentAnalyzeChart: boolean,
+    studentPlanInfo: boolean,
+    recommendations:boolean
   }
   globalType: number,
   lessonsCategories: lessonsCategoriesDataModel[] | null,
@@ -24,10 +28,14 @@ interface UserPanelState {
   studentStages: studentStages | null,
   categoriesListForModal: categoriesListForModal | null,
   categoryInfo: stepCategoryInfo | null,
-  analyticsDetails:categoryAnalysisList | null,
-  analyzeDetailsChartForStudent:chartDataList | null | any
-  schoolDashboardData:schoolDashboardData | null,
-  teachersOfManager:idLabelList | null
+  analyticsDetails: categoryAnalysisList | null,
+  analyzeDetailsChartForStudent: chartDataList | null | any
+  schoolDashboardData: schoolDashboardData | null,
+  teachersOfManager: idLabelList | null,
+  studentAnalyze: studentAnalyzeResponse | null,
+  studentAnalyzeChart: studentAnalyzeChartResponse | null,
+  studentPlanInfo: trainingPlanSummaryResponse | null,
+  recommendations:recommendationsResponse | null,
 }
 
 
@@ -41,10 +49,14 @@ export const useUserPanelStore = defineStore('userPanel', {
       studentStages: false,
       categoriesListForModal: false,
       categoryInfo: false,
-      analyticsDetails:false,
-      analyzeDetailsChartForStudent:false,
-      schoolDashboard:false,
-      teachersOfManager:false
+      analyticsDetails: false,
+      analyzeDetailsChartForStudent: false,
+      schoolDashboard: false,
+      teachersOfManager: false,
+      studentAnalyze: false,
+      studentAnalyzeChart: false,
+      studentPlanInfo: false,
+      recommendations:false,
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
@@ -54,10 +66,14 @@ export const useUserPanelStore = defineStore('userPanel', {
     studentStages: null,
     categoriesListForModal: null,
     categoryInfo: null,
-    analyticsDetails:null,
-    analyzeDetailsChartForStudent:null,
-    schoolDashboardData:null,
-    teachersOfManager:null
+    analyticsDetails: null,
+    analyzeDetailsChartForStudent: null,
+    schoolDashboardData: null,
+    teachersOfManager: null,
+    studentAnalyze: null,
+    studentAnalyzeChart: null,
+    studentPlanInfo: null,
+    recommendations:null
   }),
 
   actions: {
@@ -140,7 +156,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       try {
         this.fetching.studentStages = true
         const { $axios } = useNuxtApp()
-        const {data} = await $axios.get(`/studentsTrainingPlans/wizard?grade=${this.globalType}`)
+        const { data } = await $axios.get(`/studentsTrainingPlans/wizard?grade=${this.globalType}`)
         this.studentStages = data
         return data
       } catch (e) {
@@ -156,7 +172,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       try {
         this.fetching.categoriesListForModal = true
         const { $axios } = useNuxtApp()
-        const {data} = await $axios.get(`/studentsTrainingPlans/wizardCategories?grade=${this.globalType}`)
+        const { data } = await $axios.get(`/studentsTrainingPlans/wizardCategories?grade=${this.globalType}`)
         this.categoriesListForModal = data
         return data
       } catch (e) {
@@ -173,9 +189,9 @@ export const useUserPanelStore = defineStore('userPanel', {
       try {
         this.fetching.categoryInfo = true
         const { $axios } = useNuxtApp()
-        const {data} = await $axios.post(`/studentsTrainingPlans/assignCategoryToStep`,{
-          stepId:stepId,
-          categoryId:catId
+        const { data } = await $axios.post(`/studentsTrainingPlans/assignCategoryToStep`, {
+          stepId: stepId,
+          categoryId: catId
         })
 
         return data
@@ -222,7 +238,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       try {
         this.fetching.analyzeDetailsChartForStudent = true
         const { $axios } = useNuxtApp()
-        const { data } = await $axios.post(`/dashboard/analyzeCategoryDetailsForStudent`,payload)
+        const { data } = await $axios.post(`/dashboard/analyzeCategoryDetailsForStudent`, payload)
         this.analyzeDetailsChartForStudent = data
         return data
       } catch (e) {
@@ -238,7 +254,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       try {
         this.fetching.schoolDashboard = true
         const { $axios } = useNuxtApp()
-        const { data } = await $axios.post(`/dashboard/showSchoolDashboard`,payload)
+        const { data } = await $axios.post(`/dashboard/showSchoolDashboard`, payload)
         this.schoolDashboardData = data
         return data
       } catch (e) {
@@ -264,6 +280,79 @@ export const useUserPanelStore = defineStore('userPanel', {
       }
     },
 
+
+    async getStudentAnalyze(period: number): Promise<studentAnalyzeResponse[] | null> {
+      try {
+        this.fetching.studentAnalyze = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.post(`/dashboard/studentPartOfMainAnalyze`, {
+          period: period,
+          grade: this.globalType
+        })
+        this.studentAnalyze = data[0]
+        return data
+      } catch (e) {
+        console.error('خطأ في تحميل بيانات تحليل الطالب', e)
+        return null
+      } finally {
+        this.fetching.studentAnalyze = false
+      }
+
+    },
+
+
+    async getStudentAnalyzeChart(period: Number,parentId:any): Promise<studentAnalyzeChartResponse[] | null> {
+      try {
+        this.fetching.studentAnalyzeChart = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.post(`/dashboard/totalAnalyzeDetailsForStudent`, {
+          period,
+          grade: this.globalType,
+          parentId
+        })
+        console.log(data)
+        this.studentAnalyzeChart = data
+        return data
+      } catch (e) {
+        console.error('خطأ في تحميل بيانات تحليل الطالب المخطط البياني', e)
+        return null
+      } finally {
+        this.fetching.studentAnalyzeChart = false
+      }
+
+    },
+
+    async getTrainingPlansInfo(): Promise<trainingPlanSummaryResponse | null> {
+      try {
+        this.fetching.studentPlanInfo = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/trainingPlansInfo/details`)
+        this.studentPlanInfo = data
+        return data
+      } catch (e) {
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.studentPlanInfo = false
+      }
+    },
+
+
+    async getanalyzeRecommendations(payload): Promise<recommendationsResponse | null> {
+      try {
+        this.fetching.recommendations = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.post(`/dashboard/analyzeRecommendations`, payload)
+        this.recommendations = data
+        return data
+      } catch (e) {
+        console.error('خطأ في تحميل بيانات التوصيات', e)
+        return null
+      } finally {
+        this.fetching.recommendations = false
+      }
+
+    },
 
 
 

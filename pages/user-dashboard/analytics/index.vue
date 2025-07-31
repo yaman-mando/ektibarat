@@ -4,7 +4,8 @@
     <div class="mx-auto">
 
       <!-- student info for teacher -->
-      <div class="flex flex-wrap justify-center gap-[15px] lg:justify-between my-[20px]">
+      <div v-if="userData.role === UserRoles.schoolManager"
+        class="flex flex-wrap justify-center gap-[15px] lg:justify-between my-[20px]">
         <!-- info part -->
         <div class="flex gap-[20px] items-center">
           <img src="/images/png/person.png" class="rounded-full w-[80px] h-[80px] bg-white">
@@ -53,6 +54,8 @@
 
           <!-- rate square -->
           <div class="h-[160px] bg-white shadow-custom rounded-[8px] p-[15px] grid justify-items-center relative">
+            <app-overlay msg="جاري جلب البيانات ..."
+              v-if="panelStore.fetching.studentAnalyze && userData.planSubscribed !== planSubscribedEnum.notSubscribe" />
             <div class="absolute right-[15px] top-[20px]">
               <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_608_900)">
@@ -85,15 +88,15 @@
                 </defs>
               </svg>
             </div>
-            <span class="text-center text-blue-d6 h-[20px] text-[18px]   2xl:text-[22px] font-bold">الدرجة
+            <span class="text-center text-blue-d6 h-[30px] text-[18px] 2xl:text-[22px] font-bold">الدرجة
               المتوقعة</span>
 
-            <span class="text-center text-dark-63 h-[16px] text-[14px] 2xl:text-[16px] font-medium">في الاختبار
+            <span class="text-center text-dark-63 h-[20px] text-[14px] 2xl:text-[16px] font-medium">في الاختبار
               الحقيقي</span>
 
             <!-- for unsubscribe user -->
-            <div v-if="false" @click="openSubscribeModal()"
-              class="absolute bottom-[10px] w-full h-[76px] z-50 flex items-center justify-center backdrop-blur-[16px] cursor-pointer">
+            <div v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" @click="openSubscribeModal()"
+              class="absolute bottom-[10px] pb-[5px] w-full h-[76px] z-50 flex items-center justify-center backdrop-blur-[16px] cursor-pointer">
               <button
                 class="flex items-center gap-x-[10px] h-[76px] px-6 border border-purple-e0 rounded-[8px] bg-transparent backdrop-blur-[16px] cursor-pointer">
                 <i class="fas fa-lock text-[22px] text-purple-e0"></i>
@@ -101,30 +104,62 @@
               </button>
             </div>
 
-            <div class="relative mt-auto">
+            <div class="relative mt-auto w-full">
               <div class="text-center text-green-8c font-bold leading-none">
-                <span class="text-[40px] 2xl:text-[50px]" v-if="false">95~98</span>
-                <span class="text-[22px] 2xl:text-[26px]" v-if="true">بانتظار تحديد المستوى</span>
-                <span class="text-[22px] 2xl:text-[26px]" v-if="false">عدد الاسئلة غير كافي</span>
+                <span class="text-[22px] 2xl:text-[26px]"
+                  v-if="(stdAnlyzeData?.levelRate ?? 0) === 0 && (stdAnlyzeData?.requiredGrade ?? 0) > 0">بانتظار تحديد
+                  المستوى</span>
+                <span class="text-[22px] 2xl:text-[26px]"
+                  v-else-if="(stdAnlyzeData?.levelRate ?? 0) === 0 && (stdAnlyzeData?.requiredGrade ?? 0) === 0">عدد الاسئلة غير
+                  كافي</span>
+                <span class="text-[40px] 2xl:text-[50px]" v-else>{{ predictedMark }}</span>
               </div>
               <hr class="border-[#BCCCDB] border-t-[2px] my-[10px]">
               <div class="flex items-center justify-around">
                 <div class="flex items-center gap-x-[12px]">
                   <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">درجة تحديد المستوى </span>
-                  <span class="font-bold text-dark-2b text-[10px] 2xl:text-[12px]">74</span>
+                  <span class="font-bold text-dark-2b text-[10px] 2xl:text-[12px]">{{ stdAnlyzeData?.levelRate }}</span>
                 </div>
                 <div class="flex items-center gap-x-[12px]">
                   <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">الدرجة المطلوبة</span>
-                  <span class="font-bold text-dark-2b text-[10px] 2xl:text-[12px]">74</span>
+                  <span class="font-bold text-dark-2b text-[10px] 2xl:text-[12px]">{{ stdAnlyzeData?.requiredGrade
+                  }}</span>
                 </div>
               </div>
             </div>
 
           </div>
 
-          <!-- palne square -->
-          <div class="min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid">
+          <!-- plane square -->
+          <div class="min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid relative">
+            <!-- not subscribe -->
+            <div v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe">
+              <div class="flex items-center justify-baseline">
+                <span class="font-bold text-[18px] text-blue-d6">خطة التدريب</span>
+              </div>
+              <div class="border border-purple-e0 rounded-[8px] mt-[15px] py-[22px] px-[20px]">
+                <div class="grid justify-items-center gap-y-[18px]">
+                  <div class="flex gap-x-[10px] items-center">
+                    <i class="fas fa-lock text-[22px] text-purple-e0"></i>
+                    <span class=" text-purple-e0 text-[30px] font-bold">للمشتركين فقط</span>
+                  </div>
+                  <div class="text-black text-[18px] font-medium text-center">
+                    خطة مخصصة لك
+                    <br>
+                    لتضمن أعلى درجة في أقل وقت
+                  </div>
+                  <button @click="openSubscribeModal()"
+                    style="background: linear-gradient(270deg, #24A7F1 0%, #0266D6 100%);"
+                    class="flex justify-center items-center gap-x-[12px] h-[36px] w-[164px] rounded-[8px] text-white text-[14px] font-bold cursor-pointer">
+                    <span>اشترك الآن</span>
+                    <i class="fa fa-chevron-left"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
 
+            <template v-else>
+            <app-overlay msg="جاري جلب بيانات الخطة ..." v-if="panelStore.fetching.studentPlanInfo" />
             <!-- First line -->
             <div class="flex items-center justify-between h-[50px]">
               <div class="flex flex-col items-start">
@@ -139,11 +174,11 @@
               </div>
               <div class="flex flex-col items-center">
                 <span class="text-[40px] 2xl:text-[48px] leading-[42px] font-bold text-dark-63">
-                  <span>{{ planGrades.totalPercentage }}</span>
+                  <span>{{ stdPlaneInfo?.totalPercentage }}</span>
                   <span class="text-[26px] 2xl:text-[30px]">%</span>
                 </span>
                 <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">
-                  {{ formatTime(planGrades.timeDone) }} | {{ formatTime(planGrades.timeRequired) }}
+                  {{ formatTime(stdPlaneInfo?.timeDone) }} | {{ formatTime(stdPlaneInfo?.timeRequired) }}
                 </span>
               </div>
             </div>
@@ -153,17 +188,18 @@
               <div style="box-shadow: 2px 2px 4px 0px #00000026 inset" class="relative h-[20px] bg-[#F0F0F0]">
                 <!-- Green bar -->
                 <div style="background: linear-gradient(90deg, #58CC02 0%, #4E9818 100%)"
-                  class="absolute top-0 bottom-0 right-0" :style="{ width: `${planGrades.percentageDone}%` }"></div>
+                  class="absolute top-0 bottom-0 right-0" :style="{ width: `${stdPlaneInfo?.percentageDone}%` }"></div>
 
                 <!-- Orange bar -->
                 <div style="background: linear-gradient(90deg, #FDC830 0%, #CE9800 100%)"
                   class="absolute top-0 bottom-0"
-                  :style="{ width: `${planGrades.percentageRequired - planGrades.percentageDone}%`, right: `${planGrades.percentageDone}%` }">
+                  :style="{ width: `${stdPlaneInfo?.percentageRequired ?? 0 - stdPlaneInfo?.percentageDone ?? 0}%`, right: `${stdPlaneInfo?.percentageDone ?? 0}%` }">
                 </div>
               </div>
 
               <!-- "You are here" indicator -->
-              <div :style="{ right: `calc(${planGrades.percentageDone}% - 30px)` }"
+              <div v-if="stdPlaneInfo?.percentageDone > 0"
+                :style="{ right: `calc(${stdPlaneInfo?.percentageDone ?? 0}% - 30px)` }"
                 class="absolute -top-[10px] h-[27px] grid gap-y-[5px] justify-items-center w-[40px]">
                 <div class="text-[10px] 2xl:text-[12px] text-black font-medium">أنت هنا</div>
                 <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -172,7 +208,8 @@
               </div>
 
               <!-- Target indicator -->
-              <div :style="{ right: `calc(${planGrades.percentageRequired}% - 45px)` }"
+              <div v-if="stdPlaneInfo?.percentageRequired > 0"
+                :style="{ right: `calc(${stdPlaneInfo?.percentageRequired ?? 0}% - 45px)` }"
                 class="absolute bottom-0 h-[27px] grid gap-y-[5px] justify-items-center w-[80px]">
                 <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M8 0L16 14H0L8 0Z" fill="#EAB316" />
@@ -184,21 +221,22 @@
             <!-- Last week / month -->
             <div class="flex flex-wrap gap-y-[10px] justify-around items-center mt-[28px] h-[30px]">
               <div class="flex items-center gap-x-[8px] text-right pr-[5px] border-r-[3px] border-r-purple-e0">
-                <div class="font-bold text-[24px] 2xl:text-[28px] text-dark-63">{{ planGrades.lastMonth.percentage }}%
+                <div class="font-bold text-[24px] 2xl:text-[28px] text-dark-63">{{ stdPlaneInfo?.lastMonth.percentage
+                  }}%
                 </div>
                 <div class="flex flex-col items-center text-[12px] 2xl:text-[14px] font-medium text-gray-8f">
                   <span>آخر الشهر</span>
-                  <span>{{ formatTime(planGrades.lastMonth.timeDone) }} | {{
-                    formatTime(planGrades.lastMonth.timeRequired) }}</span>
+                  <span>{{ formatTime(stdPlaneInfo?.lastMonth.timeDone) }} | {{
+                    formatTime(stdPlaneInfo?.lastMonth.timeRequired) }}</span>
                 </div>
               </div>
               <div class="flex items-center gap-x-[8px] text-right pr-[5px] border-r-[3px] border-r-purple-e0">
-                <div class="font-bold text-[24px] 2xl:text-[28px] text-dark-63">{{ planGrades.lastWeek.percentage }}%
+                <div class="font-bold text-[24px] 2xl:text-[28px] text-dark-63">{{ stdPlaneInfo?.lastWeek.percentage }}%
                 </div>
                 <div class="flex flex-col items-center text-[12px] 2xl:text-[14px] font-medium text-gray-8f">
                   <span>آخر أسبوع</span>
-                  <span>{{ formatTime(planGrades.lastWeek.timeDone) }} | {{
-                    formatTime(planGrades.lastWeek.timeRequired) }}</span>
+                  <span>{{ formatTime(stdPlaneInfo?.lastWeek.timeDone) }} | {{
+                    formatTime(stdPlaneInfo?.lastWeek.timeRequired) }}</span>
                 </div>
               </div>
             </div>
@@ -208,13 +246,14 @@
             <div class="flex items-center justify-around h-[8px]">
               <div class="flex items-center gap-x-[12px]">
                 <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">بداية التدريب </span>
-                <span class="text-dark-2b text-[10px] 2xl:text-[12px]">{{ planGrades.startTraining }}</span>
+                <span class="text-dark-2b text-[10px] 2xl:text-[12px]">{{ stdPlaneInfo?.startTraining }}</span>
               </div>
               <div class="flex items-center gap-x-[12px]">
                 <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">تاريخ الاختبار</span>
-                <span class="text-dark-2b text-[10px] 2xl:text-[12px]">{{ planGrades.examDate }}</span>
+                <span class="text-dark-2b text-[10px] 2xl:text-[12px]">{{ stdPlaneInfo?.examDate }}</span>
               </div>
             </div>
+            </template>
           </div>
 
         </div>
@@ -223,9 +262,11 @@
 
         <!-- analytics info left part - chart filter -->
         <div class="w-full flex-2/3 2xl:min-w-[700px] h-[480px] bg-white shadow-md rounded-lg p-4 relative">
+          <app-overlay msg="جاري جلب بيانات المخطط ..."
+            v-if="panelStore.fetching.studentAnalyzeChart && userData.planSubscribed !== planSubscribedEnum.notSubscribe" />
 
           <!-- for unsubscribe user -->
-          <div v-if="false"
+          <div v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe"
             class="absolute bottom-[0] w-[98%] 2xl:min-w-[700px] h-[470px] z-50 flex items-center justify-center backdrop-blur-[5px]">
             <!-- contents -->
 
@@ -253,22 +294,23 @@
 
 
             <div class="flex gap-[12px] flex-wrap">
-              <button v-for="category in topCategories" :key="category.categoryId" :class="[
-                'rounded-[8px] w-[100px] h-[60px] xl:w-[140px] xl:h-[80px] shadow-custom text-[13px] xl:text-[16px] font-medium cursor-pointer',
-                selectedCategoryId === category.categoryId
-                  ? 'bg-blue-d6 text-white shadow-none'
-                  : 'bg-white text-dark-2b'
-              ]" @click="selectCategory(category.categoryId)">
+              <button v-for="(category, index) in stdChartData ? stdChartData.mainCategoriesRates : topCategories"
+                :key="category.categoryId ?? index" :class="[
+                  'rounded-[8px] w-[100px] h-[60px] xl:w-[140px] xl:h-[80px] shadow-custom text-[13px] xl:text-[16px] font-medium cursor-pointer',
+                  selectedCategoryId === category.categoryId
+                    ? 'bg-blue-d6 text-white shadow-none'
+                    : 'bg-white text-dark-2b'
+                ]" @click="selectCategory(category.categoryId)">
                 <div class="grid items-center justify-items-center">
                   <TextSlice :text="category.categoryName" :length="12"></TextSlice>
-                  <span class=" font-bold text-[22px] xl:text-[30px]">83.6</span>
+                  <span class=" font-bold text-[22px] xl:text-[30px]">{{ category.rate }}</span>
                 </div>
 
 
               </button>
             </div>
 
-            <select v-model="selectedPeriod" @change="fetchChartData"
+            <select v-model="selectedPeriodTable" @change="fetchStudentAnalyzeChart()"
               class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm">
               <option v-for="item in chartPeriodList" :key="item.id" :value="item.id">
                 الفترة: {{ item.label }}
@@ -288,18 +330,18 @@
             class="flex justify-around items-center justify-self-center text-sm text-gray-700 max-w-[93vw] w-[540px] h-[50px] border border-[#BCCCDB] rounded-[8px] p-2">
             <div class="text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
               <span>الأسئلة</span>
-              <span class="text-dark-2b">516</span>
+              <span class="text-dark-2b">{{ stdChartData?.totalQuestionsCount }}</span>
             </div>
             <div class="text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
               <span>الإجابات</span>
-              <span class="text-green-8c">40
+              <span class="text-green-8c">{{ stdChartData?.correctCount }}
                 <span class="text-gray-8f px-1">|</span>
-                <span class="text-red-5e">16</span>
+                <span class="text-red-5e">{{ stdChartData?.wrongCount }}</span>
               </span>
             </div>
             <div class="text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
               <span>مدة التدريب</span>
-              <span class="text-dark-2b">18:05
+              <span class="text-dark-2b">{{ formatTime(stdChartData?.totalPeriod) }}
                 <span class="text-gray-8f">ساعة </span>
               </span>
             </div>
@@ -312,7 +354,7 @@
       <div class="flex flex-col md:flex-row md:items-center md:justify-baseline mt-[25px] gap-x-[30px] gap-y-[15px]">
         <h2 class="text-[24px] font-bold text-blue-d6 text-right">تفاصيل التدريب</h2>
 
-        <select v-model="selectedPeriodTable" @change=""
+        <select v-model="selectedPeriodTable" @change="fetchStudentAnalyze"
           class="w-full md:w-[220px] h-[40px] bg-white border border-[#BCCCDB] rounded-[6px] text-dark-2b outline-0">
           <option v-for="item in tablePeriodList" :key="item.id" :value="item.id">
             الفترة: {{ item.label }}
@@ -321,17 +363,19 @@
       </div>
 
       <!-- tables - Accordion -->
-      <div class="mt-5 flex flex-col gap-5">
-        <accordionGroup>
-          <disclosureGroup v-for="(item, index) in items" :key="index" :defaultOpen="true" :onlyOneOpen="false"
-            :index="index">
+      <div class="mt-5 flex flex-col gap-5 relative">
+        <app-overlay msg="جاري جلب البيانات ..." v-if="panelStore.fetching.studentAnalyze" />
+        <app-no-data v-if="!stdAnlyzeDataTable || stdAnlyzeDataTable.length === 0" />
+        <accordionGroup v-else>
+          <disclosureGroup v-for="(item, index) in stdAnlyzeDataTable" :key="index" :defaultOpen="true"
+            :onlyOneOpen="false" :index="index">
             <!-- head -->
             <template #right>
               <div class="flex justify-between w-[705px] max-w-[90vw] items-center justify-self-center p-2">
                 <div class="flex gap-x-[5px] items-center">
 
                   <img src="/images/svg/calculator.svg" alt="icon" />
-                  <span class="text-[18px] font-bold text-orange-39">{{ item.categoryName }}</span>
+                  <span class="text-[18px] font-bold text-orange-39">{{ item?.categoryName }}</span>
                 </div>
                 <div class="text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
                   <span class="font-bold text-purple-78">الأسئلة</span>
@@ -346,7 +390,7 @@
                 </div>
                 <div class="text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
                   <span class="font-bold text-purple-78">مدة التدريب</span>
-                  <span class="text-dark-2b">{{ formatTime(item.trainingTime) }}
+                  <span class="text-dark-2b">{{ formatTime(item.totalTime) }}
                     <span class="text-gray-8f">ساعة </span>
                   </span>
                 </div>
@@ -374,7 +418,7 @@
                   <div class="w-[20%] text-center">مدة التدريب</div>
                 </div>
 
-                
+
                 <div class="w-[15px]"></div>
 
                 <!-- second part -->
@@ -386,7 +430,7 @@
               </div>
 
               <!-- data -->
-              <div v-for="(child, i) in item.details" :key="i" :class="['h-[60px] flex items-center']">
+              <div v-for="(child, i) in item.children" :key="i" :class="['h-[60px] flex items-center']">
                 <!-- first part -->
                 <div class="flex flex-[70%] h-[100%] items-center rounded-[8px] border border-[#BCCCDB] px-[15px]"
                   :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
@@ -402,11 +446,11 @@
                     <span class="text-red-5e font-bold text-[14px]">{{ formatTime(child.studentTimeTakenRate) }}</span>
 
                   </div>
-                  <div class="w-[20%] text-gray-63 font-medium text-center">{{ formatTime(child.trainingTime) }} ساعة
+                  <div class="w-[20%] text-gray-63 font-medium text-center">{{ formatTime(child.totalTime) }} ساعة
                   </div>
                 </div>
 
-                
+
                 <div class="w-[15px]"></div>
 
                 <!-- second part -->
@@ -445,7 +489,7 @@
       </div>
 
       <!-- advices part -->
-      <advicesSquare />
+      <advicesSquare v-if="userData.role === UserRoles.schoolManager" />
 
       <!-- subscribe modal -->
       <SubscribeModal v-if="showSubscribeModal" @update:show="($event) => { showSubscribeModal = $event }"
@@ -463,34 +507,45 @@ import rateProgressBar from '~/components/user/rateProgressBar.vue'
 import advicesSquare from '~/components/user/advicesSquare.vue'
 import { useApexChartService } from '~/main/services/useApexChartService';
 import { RouteHelper } from '~/main/utils/route-helper';
+import { useUserPanelStore } from '~/store/user-panel';
+import type { analyzeStudentCategory, analyzeStudentCategoryForTable } from '~/main/modules/user-panel/data-access/user-panel.model';
+import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
+import { UserRoles } from '~/core/auth/constants/user-roles';
+import { planSubscribedEnum } from '~/main/constants/global.enums';
 
 const apexChartService = useApexChartService();
-const router = useRouter()
+const router = useRouter();
+const panelStore = useUserPanelStore();
+const { data } = useAuth()
+
+const userData = computed(() => data.value as UserInfoDataModel);
 
 const chartKey = Symbol();
 
 
 const chartPeriodList = [
   { id: 0, label: 'يومي' },
-  { id: 1, label: 'أسبوعي' },
-  { id: 2, label: 'شهري' }
+  { id: 1, label: 'اسبوعيا' },
+  { id: 2, label: 'شهريا' },
 ]
 
 const tablePeriodList = [
   { id: 0, label: 'كامل المدة' },
-  { id: 1, label: 'الأسبوع الماضي' },
-  { id: 2, label: 'الشهر الماضي' },
-  { id: 3, label: 'آخر ثلاث اشهر' }
+  { id: 1, label: 'اليوم' },
+  { id: 2, label: 'البارحة' },
+  { id: 3, label: 'الشهر الماضي' },
+  { id: 4, label: '3 اشهر الماضية' },
+  { id: 5, label: '6 اشهر الماضية' },
 ]
 
 
 const rawCategories = [
-  { categoryId: 1, categoryName: 'القسم الكمي', parentId: null },
-  { categoryId: 2, categoryName: 'القسم اللفظي', parentId: null },
-  { categoryId: 241, categoryName: 'المسائل الحسابية', parentId: 1 },
-  { categoryId: 4, categoryName: 'المسائل الهندسية', parentId: 1 },
-  { categoryId: 7, categoryName: 'الخطأ السياقي', parentId: 2 },
-  { categoryId: 8, categoryName: 'إكمال الجمل', parentId: 2 },
+  { categoryId: 1, categoryName: 'القسم الكمي', parentId: null, rate: 75 },
+  { categoryId: 2, categoryName: 'القسم اللفظي', parentId: null, rate: 80.8 },
+  { categoryId: 241, categoryName: 'المسائل الحسابية', parentId: 1, rate: 75 },
+  { categoryId: 4, categoryName: 'المسائل الهندسية', parentId: 1, rate: 75 },
+  { categoryId: 7, categoryName: 'الخطأ السياقي', parentId: 2, rate: 75 },
+  { categoryId: 8, categoryName: 'إكمال الجمل', parentId: 2, rate: 75 },
 ]
 
 
@@ -515,9 +570,9 @@ const planGrades = {
 }
 
 const level = computed(() => {
-  if (planGrades.percentageDone >= 95) return 'ممتاز';
-  if (planGrades.percentageDone >= 80) return 'جيد';
-  if (planGrades.percentageDone >= 50) return 'متوسط';
+  if (stdPlaneInfo.value?.percentageDone >= 95) return 'ممتاز';
+  if (stdPlaneInfo.value?.percentageDone >= 80) return 'جيد';
+  if (stdPlaneInfo.value?.percentageDone >= 50) return 'متوسط';
   return 'ضعيف';
 });
 
@@ -535,134 +590,185 @@ const levelColor = computed(() => {
   }
 });
 
-/*********************** **************************/
 
-const trianingDeltailsData = [
-  {
-    categoryId: 1,
-    categoryName: "القسم الكمي",
-    parentId: null,
-    correctAnswersCount: 27,
-    wrongAnswersCount: 48,
-    questionsCount: 75,
-    examDefaultId: null,
-    hasLawAnalyze: false,
-    isEnabled: true,
-    studentTimeTakenRate: 22.2,
-    allStudentsTimeTakenRate: 71.44,
-    rate: 80,
-    trainingTime: 910,
-    icon: 'fa fa-star'
-  },
-  {
-    categoryId: 2,
-    categoryName: "القسم اللفظي",
-    parentId: null,
-    correctAnswersCount: 35,
-    wrongAnswersCount: 40,
-    questionsCount: 75,
-    examDefaultId: null,
-    hasLawAnalyze: false,
-    isEnabled: true,
-    studentTimeTakenRate: 24.1,
-    allStudentsTimeTakenRate: 70.0,
-    rate: 80,
-    trainingTime: 560,
-    icon: 'fa fa-map'
-  },
-  {
-    categoryId: 3,
-    categoryName: "المسائل الحسابية",
-    parentId: 1,
-    correctAnswersCount: 40,
-    wrongAnswersCount: 16,
-    questionsCount: 56,
-    examDefaultId: null,
-    hasLawAnalyze: false,
-    isEnabled: true,
-    studentTimeTakenRate: 41,
-    allStudentsTimeTakenRate: 57,
-    rate: 50,
-    trainingTime: 57,
-    icon: 'fa fa-star'
-  },
-  {
-    categoryId: 4,
-    categoryName: "المسائل الهندسية",
-    parentId: 2,
-    correctAnswersCount: 40,
-    wrongAnswersCount: 16,
-    questionsCount: 56,
-    examDefaultId: null,
-    hasLawAnalyze: false,
-    isEnabled: true,
-    studentTimeTakenRate: 41,
-    allStudentsTimeTakenRate: 57,
-    rate: 80,
-    trainingTime: 177,
-    icon: 'fa fa-star'
-  },
-  {
-    categoryId: 5,
-    categoryName: "المسائل الجبرية",
-    parentId: 2,
-    correctAnswersCount: 40,
-    wrongAnswersCount: 16,
-    questionsCount: 56,
-    examDefaultId: null,
-    hasLawAnalyze: false,
-    isEnabled: true,
-    studentTimeTakenRate: 41,
-    allStudentsTimeTakenRate: 57,
-    rate: 0,
-    trainingTime: 140,
-    icon: 'fa fa-star'
-  },
-  {
-    categoryId: 6,
-    categoryName: "تحليل البيانات",
-    parentId: 1,
-    correctAnswersCount: 40,
-    wrongAnswersCount: 16,
-    questionsCount: 56,
-    examDefaultId: null,
-    hasLawAnalyze: false,
-    isEnabled: true,
-    studentTimeTakenRate: 41,
-    allStudentsTimeTakenRate: 57,
-    rate: 30,
-    trainingTime: 110,
-    icon: 'fa fa-star'
-  },
-  {
-    categoryId: 7,
-    categoryName: "المقارنات",
-    parentId: 1,
-    correctAnswersCount: 40,
-    wrongAnswersCount: 16,
-    questionsCount: 56,
-    examDefaultId: null,
-    hasLawAnalyze: false,
-    isEnabled: false,
-    studentTimeTakenRate: 41,
-    allStudentsTimeTakenRate: 80,
-    rate: 45,
-    trainingTime: 120,
-    icon: 'fa fa-star'
-  }
-]
+const stdAnlyzeData = computed(() => {
+  return panelStore.studentAnalyze
+})
 
+const stdAnlyzeDataTable = computed(() => {
+  const flat = stdAnlyzeData.value?.analayzeStudentCategories ?? []
 
-const items = trianingDeltailsData
-  .filter(item => item.parentId === null)
-  .map(parent => {
-    const children = trianingDeltailsData.filter(child => child.parentId === parent.categoryId)
-    return {
-      ...parent,
-      details: children
+  const map = new Map<number, any>()
+
+  const result: analyzeStudentCategoryForTable = []
+
+  flat.forEach(item => {
+    map.set(item.categoryId, { ...item, children: <analyzeStudentCategory[]>[] })
+  })
+
+  flat.forEach(item => {
+    if (item.parentId === null) {
+      result.push(map.get(item.categoryId))
+    } else {
+      const parent = map.get(item.parentId)
+      if (parent) {
+        parent.children.push(map.get(item.categoryId))
+      }
     }
   })
 
+  return result
+})
+
+const stdChartData = computed(() => {
+  return panelStore.studentAnalyzeChart
+})
+
+const stdPlaneInfo = computed(() => {
+  return panelStore.studentPlanInfo
+})
+
+const predictedMark = computed(() => {
+  const numericMark = Number(stdAnlyzeData.value?.studentRate);
+  if (numericMark >= 100) {
+    return 100;
+  }
+  const increaseMark = numericMark + 5;
+  const cappedMark = increaseMark > 100 ? 100 : increaseMark;
+  return `${numericMark}~${cappedMark}`;
+})
+
+/*********************** **************************/
+
+// const trianingDeltailsData = [
+//   {
+//     categoryId: 1,
+//     categoryName: "القسم الكمي",
+//     parentId: null,
+//     correctAnswersCount: 27,
+//     wrongAnswersCount: 48,
+//     questionsCount: 75,
+//     examDefaultId: null,
+//     hasLawAnalyze: false,
+//     isEnabled: true,
+//     studentTimeTakenRate: 22.2,
+//     allStudentsTimeTakenRate: 71.44,
+//     rate: 80,
+//     trainingTime: 910,
+//     icon: 'fa fa-star'
+//   },
+//   {
+//     categoryId: 2,
+//     categoryName: "القسم اللفظي",
+//     parentId: null,
+//     correctAnswersCount: 35,
+//     wrongAnswersCount: 40,
+//     questionsCount: 75,
+//     examDefaultId: null,
+//     hasLawAnalyze: false,
+//     isEnabled: true,
+//     studentTimeTakenRate: 24.1,
+//     allStudentsTimeTakenRate: 70.0,
+//     rate: 80,
+//     trainingTime: 560,
+//     icon: 'fa fa-map'
+//   },
+//   {
+//     categoryId: 3,
+//     categoryName: "المسائل الحسابية",
+//     parentId: 1,
+//     correctAnswersCount: 40,
+//     wrongAnswersCount: 16,
+//     questionsCount: 56,
+//     examDefaultId: null,
+//     hasLawAnalyze: false,
+//     isEnabled: true,
+//     studentTimeTakenRate: 41,
+//     allStudentsTimeTakenRate: 57,
+//     rate: 50,
+//     trainingTime: 57,
+//     icon: 'fa fa-star'
+//   },
+//   {
+//     categoryId: 4,
+//     categoryName: "المسائل الهندسية",
+//     parentId: 2,
+//     correctAnswersCount: 40,
+//     wrongAnswersCount: 16,
+//     questionsCount: 56,
+//     examDefaultId: null,
+//     hasLawAnalyze: false,
+//     isEnabled: true,
+//     studentTimeTakenRate: 41,
+//     allStudentsTimeTakenRate: 57,
+//     rate: 80,
+//     trainingTime: 177,
+//     icon: 'fa fa-star'
+//   },
+//   {
+//     categoryId: 5,
+//     categoryName: "المسائل الجبرية",
+//     parentId: 2,
+//     correctAnswersCount: 40,
+//     wrongAnswersCount: 16,
+//     questionsCount: 56,
+//     examDefaultId: null,
+//     hasLawAnalyze: false,
+//     isEnabled: true,
+//     studentTimeTakenRate: 41,
+//     allStudentsTimeTakenRate: 57,
+//     rate: 0,
+//     trainingTime: 140,
+//     icon: 'fa fa-star'
+//   },
+//   {
+//     categoryId: 6,
+//     categoryName: "تحليل البيانات",
+//     parentId: 1,
+//     correctAnswersCount: 40,
+//     wrongAnswersCount: 16,
+//     questionsCount: 56,
+//     examDefaultId: null,
+//     hasLawAnalyze: false,
+//     isEnabled: true,
+//     studentTimeTakenRate: 41,
+//     allStudentsTimeTakenRate: 57,
+//     rate: 30,
+//     trainingTime: 110,
+//     icon: 'fa fa-star'
+//   },
+//   {
+//     categoryId: 7,
+//     categoryName: "المقارنات",
+//     parentId: 1,
+//     correctAnswersCount: 40,
+//     wrongAnswersCount: 16,
+//     questionsCount: 56,
+//     examDefaultId: null,
+//     hasLawAnalyze: false,
+//     isEnabled: false,
+//     studentTimeTakenRate: 41,
+//     allStudentsTimeTakenRate: 80,
+//     rate: 45,
+//     trainingTime: 120,
+//     icon: 'fa fa-star'
+//   }
+// ]
+
+
+// const items = trianingDeltailsData
+//   .filter(item => item.parentId === null)
+//   .map(parent => {
+//     const children = trianingDeltailsData.filter(child => child.parentId === parent.categoryId)
+//     return {
+//       ...parent,
+//       details: children
+//     }
+//   })
+
+const topCategories = computed(() =>
+  rawCategories.filter(cat => cat.parentId === null)
+)
 
 const formatTime = (minutes) => {
   const hrs = Math.floor(minutes / 60);
@@ -670,23 +776,14 @@ const formatTime = (minutes) => {
   return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
 };
 
-const topCategories = computed(() =>
-  rawCategories.filter(cat => cat.parentId === null)
-)
+
 
 const showSubscribeModal = ref(false)
-const selectedPeriod = ref(0)
-const selectedCategoryId = ref(topCategories.value[0].categoryId)
+const selectedCategoryId = ref<any>(null)
 
 
 const selectedPeriodTable = ref(0)
-
-const chartSeries = ref([
-  {
-    name: 'النشاط',
-    data: []
-  }
-])
+const chartSeries = ref<any>([]);
 
 const chartOptions = ref({
   chart: {
@@ -740,11 +837,30 @@ const backendDays = 45
 
 function selectCategory(id) {
   selectedCategoryId.value = id
-  fetchChartData()
+  fetchStudentAnalyzeChart()
 }
 
 
-function fetchChartData() {
+function openSubscribeModal() {
+  showSubscribeModal.value = true
+}
+
+function scrollToRecommendations() {
+  const target = document.getElementById("recommendations");
+  if (target) {
+    target.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+function toAnalyticsDetails(categoryId) {
+  router.push(RouteHelper.userAnalyticsDetails(categoryId))
+}
+
+async function fetchStudentAnalyze() {
+  await panelStore.getStudentAnalyze(selectedPeriodTable.value)
+}
+
+function fetchDefaultChartData() {
   const now = new Date()
   const data: any = []
   const totalPoints = 12
@@ -752,11 +868,11 @@ function fetchChartData() {
   for (let i = totalPoints - 1; i >= 0; i--) {
     const d = new Date(now)
 
-    if (selectedPeriod.value === 0) {
+    if (selectedPeriodTable.value === 0) {
       d.setDate(now.getDate() - i)
-    } else if (selectedPeriod.value === 1) {
+    } else if (selectedPeriodTable.value === 1) {
       d.setDate(now.getDate() - i * 7)
-    } else if (selectedPeriod.value === 2) {
+    } else if (selectedPeriodTable.value === 2) {
       d.setMonth(now.getMonth() - i)
     }
 
@@ -770,28 +886,65 @@ function fetchChartData() {
   chartSeries.value = [{ name: 'النشاط', data }]
 }
 
-function openSubscribeModal() {
-  showSubscribeModal.value = true
-}
-
-function scrollToRecommendations() {
-  const target = document.getElementById("recommendations");
-  if (target) {
-    target.scrollIntoView({ behavior: "smooth" });
+async function fetchStudentAnalyzeChart() {
+  if (userData.value.planSubscribed === planSubscribedEnum.notSubscribe) {
+    fetchDefaultChartData()
+    return
   }
+  await panelStore.getStudentAnalyzeChart(selectedPeriodTable.value, selectedCategoryId.value)
+  const data = stdChartData.value?.chartData
+    .filter(item => item.count > 0)
+    .map(item => {
+      if (item.date)
+        return { x: formatDate(item?.date), y: item.count };
+    });
+
+  chartSeries.value = [
+    {
+      name: 'النشاط',
+      data
+    }
+  ];
 }
 
-function toAnalyticsDetails(categoryId){
-  router.push(RouteHelper.userAnalyticsDetails(categoryId))
+async function fetchStudentTrainingPlane() {
+  await panelStore.getTrainingPlansInfo()
 }
 
-onMounted(() => {
-  if (backendDays <= 10) selectedPeriod.value = 0 // daily
-  else if (backendDays < 90) selectedPeriod.value = 1 // weekly
-  else selectedPeriod.value = 2 // monthly
+function fetchAdvices() {
+  const bodyData = {
+    totalPercentage: stdPlaneInfo.value?.totalPercentage,
+    lastWeekPercentage: stdPlaneInfo.value?.lastWeek.percentage,
+    analayzeStudentCategories: stdAnlyzeData.value?.analayzeStudentCategories
+  }
+  panelStore.getanalyzeRecommendations(bodyData)
+}
+
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // الأشهر تبدأ من 0
+  const year = date.getUTCFullYear();
+
+  return `${day}/${month}/${year}`;
+};
+
+onMounted(async () => {
+  // if (backendDays <= 10) selectedPeriod.value = 0 // daily
+  // else if (backendDays < 90) selectedPeriod.value = 1 // weekly
+  // else selectedPeriod.value = 2 // monthly
 
   apexChartService.initApexChart();
-  fetchChartData()
+  fetchStudentAnalyzeChart()
+  if (userData.value.role === UserRoles.schoolManager) {
+    await fetchStudentAnalyze()
+    await fetchStudentTrainingPlane()
+    fetchAdvices()
+  }
+  else {
+    fetchStudentAnalyze()
+    fetchStudentTrainingPlane()
+  }
 })
 
 </script>

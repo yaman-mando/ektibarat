@@ -175,3 +175,87 @@ export type schoolDashboardData = {
   predictedMarksAvg: number;
   studentsCount: number;
 }
+
+export type analyzeStudentCategory= {
+  categoryId: number;
+  categoryName: string;
+  parentId: number | null;
+  questionsCount: number;
+  correctAnswersCount: number;
+  wrongAnswersCount: number;
+  studentTimeTakenRate: number;
+  allStudentsTimeTakenRate: number;
+  totalTime: number; 
+  sort: number;
+  rate: number;
+  isEnabled: boolean;
+  hasLawAnalyze: boolean;
+}
+
+export type analyzeStudentCategoryForTable={
+  categoryId: number;
+  categoryName: string;
+  parentId: number | null;
+  questionsCount: number;
+  correctAnswersCount: number;
+  wrongAnswersCount: number;
+  studentTimeTakenRate: number;
+  allStudentsTimeTakenRate: number;
+  totalTime: number; 
+  sort: number;
+  rate: number;
+  isEnabled: boolean;
+  hasLawAnalyze: boolean;
+  children:analyzeStudentCategory[]
+}[]
+
+export type studentAnalyzeResponse = {
+  studentRate: number;       
+  levelRate: number;        
+  requiredGrade: number;
+  analayzeStudentCategories: analyzeStudentCategory[];
+}
+
+export type mainCategoryRate = {
+  categoryId: number | null;
+  categoryName: string;
+  rate: number;
+}
+
+export type studentAnalyzeChartResponse = {
+  mainCategoriesRates: mainCategoryRate[];
+  totalQuestionsCount: number;
+  wrongCount: number;
+  correctCount: number;
+  totalPeriod: number;
+  chartData: chartDataList;
+}
+
+export type recommendation = {
+  title: string;
+  advices: string[];
+}
+
+export type recommendationsResponse = {
+  recommendations: recommendation[];
+}
+
+
+export type timeStats= {
+  percentage: number;
+  timeRequired: number;
+  timeDone: number;
+}
+
+export type trainingPlanSummaryResponse = {
+  examDate: string; 
+  startTraining: string; 
+  lastMonth: timeStats;
+  lastWeek: timeStats;
+  timeDone: number;
+  timeRequired: number;
+  totalPercentage: number;
+  percentageDone: number | any;
+  percentageRequired: number | any;
+  recommendations: recommendation;
+}
