@@ -39,9 +39,12 @@ import 'videojs-hls-quality-selector';
 import vttThumbnails from 'videojs-vtt-thumbnails';
 import 'videojs-vtt-thumbnails/dist/videojs-vtt-thumbnails.css';
 import { parseVTTChapters } from '~/main/utils/shared-utils';
+import dynamicWatermark from 'videojs-dynamic-watermark';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 
-// Register the plugin before using it
+// Register the plugin
 videojs.registerPlugin('vttThumbnails', vttThumbnails);
+videojs.registerPlugin('dynamicWatermark', dynamicWatermark);
 
 // Define interface for QualitySelector options
 interface QualitySelectorOptions {
@@ -184,6 +187,9 @@ const props = withDefaults(
   {}
 );
 
+const authStore = useAuthStore();
+const userId = computed(() => authStore.state.userData!.id);
+
 const pathModel = computed(() => {
   return props.path;
 });
@@ -289,6 +295,15 @@ async function onPlayerReady(event: { target: { player: any } }) {
       window.location.origin
     ).href,
     showTimestamp: true,
+  });
+
+  // Add dynamic watermark with a custom number
+  player.dynamicWatermark({
+    elementId: `water-mark-${userId.value}`,
+    watermarkText: `${userId.value}`,
+    changeDuration: 5 * 1000,
+    cssText:
+      'display: inline-block; color: white; background-color: rgba(0, 0, 0, 0.5); font-size: 1.2rem; padding: 5px 10px; border-radius: 4px; z-index: 9999; position: absolute;',
   });
 
   // Handle player errors
