@@ -176,33 +176,45 @@ class ChapterMarkers extends Component {
 
 videojs.registerComponent('ChapterMarkers', ChapterMarkers);
 
+//props
+const props = withDefaults(
+  defineProps<{
+    path: string;
+  }>(),
+  {}
+);
+
+const pathModel = computed(() => {
+  return props.path;
+});
+
 const videoSource = reactive({
   poster: '/images/poster/elephants-dream.jpg',
   sources: [
     {
-      src: '/videos/360p.m3u8',
+      src: `${pathModel.value}/360p.m3u8`,
       type: 'application/x-mpegURL',
       label: '360p',
     },
     {
-      src: '/videos/480p.m3u8',
+      src: `${pathModel.value}/480p.m3u8`,
       type: 'application/x-mpegURL',
       label: '480p',
     },
     {
-      src: '/videos/720p.m3u8',
+      src: `${pathModel.value}/720p.m3u8`,
       type: 'application/x-mpegURL',
       label: '720p',
     },
     {
-      src: '/videos/1080p.m3u8',
+      src: `${pathModel.value}/1080p.m3u8`,
       type: 'application/x-mpegURL',
       label: '1080p',
     },
   ],
   tracks: [
     {
-      src: '/videos/vtt/chapters.vtt',
+      src: `${pathModel.value}/vtt/chapters.vtt`,
       kind: 'chapters',
       srclang: 'ar',
       label: 'الاقسام',
@@ -220,7 +232,7 @@ async function onPlayerReady(event: { target: { player: any } }) {
   player = event.target.player;
 
   // Fetch and parse chapter VTT
-  const response = await fetch('/videos/vtt/chapters.vtt');
+  const response = await fetch(`${pathModel.value}/vtt/chapters.vtt`);
   const text = await response.text();
   const chapters = parseVTTChapters(text);
 
@@ -272,7 +284,10 @@ async function onPlayerReady(event: { target: { player: any } }) {
   //vtt thumbnails
   console.log(player);
   player.vttThumbnails({
-    src: new URL('/videos/vtt/thumbnails.vtt', window.location.origin).href,
+    src: new URL(
+      `${pathModel.value}/vtt/thumbnails.vtt`,
+      window.location.origin
+    ).href,
     showTimestamp: true,
   });
 

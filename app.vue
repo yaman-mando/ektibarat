@@ -1,9 +1,6 @@
 <template>
   <nuxt-route-announcer />
   <nuxt-layout>
-    <!-- <client-only>
-      <app-video-player class="!m-4" />
-    </client-only> -->
     <nuxt-page />
   </nuxt-layout>
   <lazy-hello-modal ref="hello_modal_ref" />
@@ -167,31 +164,30 @@ const handleCredentialResponse = async (response: { credential: string }) => {
 };
 
 const signInAction = async (data: SignInActionDataUiModel) => {
-  try{
-  authStore.setAuthCookie({
-    token: data.token,
-    refreshToken: data.refreshToken!,
-  });
-  const userData = authStore.state.userData;
-  if (!userData) {
-    await auth.getSession();
+  try {
+    authStore.setAuthCookie({
+      token: data.token,
+      refreshToken: data.refreshToken!,
+    });
+    const userData = authStore.state.userData;
+    if (!userData) {
+      await auth.getSession();
+    }
+    if (userData?.id) {
+      localStorageStore.setRegisterInfo(userData.id, true);
+    }
+    if (IS_PRODUCTION_APP) {
+      handleClarityUser({ email: data.email, id: data.id });
+      handleFcm(data.id);
+    }
+    if (data.showWelcomeModal) {
+      localStorageStore.setFirstRegister(data.id);
+    }
+    await router.push(authStore.redirectUrlAfterLogin());
+  } catch (e) {
+    console.log(e);
   }
-  if (userData?.id) {
-    localStorageStore.setRegisterInfo(userData.id, true);
-  }
-  if (IS_PRODUCTION_APP) {
-    handleClarityUser({ email: data.email, id: data.id });
-    handleFcm(data.id);
-  }
-  if (data.showWelcomeModal) {
-    localStorageStore.setFirstRegister(data.id);
-  }
-  await router.push(authStore.redirectUrlAfterLogin());
-}
-catch(e){
-console.log(e)
-}
-}
+};
 
 const handleClarityUser = async (model: {
   id: number;
