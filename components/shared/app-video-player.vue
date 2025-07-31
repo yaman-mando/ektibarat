@@ -1,31 +1,33 @@
 <template>
   <div class="apv-w">
-    <video-player
-      id="CustomVideoPlayer"
-      class="video-player vjs-theme-forest"
-      crossorigin="anonymous"
-      playsinline
-      controls
-      :sources="[currentSource]"
-      :poster="videoSource.poster"
-      :tracks="videoSource.tracks"
-      :height="600"
-      :volume="0.4"
-      :children="[
-        'mediaLoader',
-        'posterImage',
-        'bigPlayButton',
-        'loadingSpinner',
-        'controlBar',
-        'textTrackDisplay',
-        'QualitySelector',
-      ]"
-      :controlBar="{
-        volumePanel: true,
-        qualitySelector: false, // Disable default quality selector
-      }"
-      @ready="onPlayerReady"
-    />
+    <client-only>
+      <video-player
+        id="CustomVideoPlayer"
+        class="video-player vjs-theme-forest"
+        crossorigin="anonymous"
+        playsinline
+        controls
+        :sources="[currentSource]"
+        :poster="videoSource.poster"
+        :tracks="videoSource.tracks"
+        :height="600"
+        :volume="0.4"
+        :children="[
+          'mediaLoader',
+          'posterImage',
+          'bigPlayButton',
+          'loadingSpinner',
+          'controlBar',
+          'textTrackDisplay',
+          'QualitySelector',
+        ]"
+        :controlBar="{
+          volumePanel: true,
+          qualitySelector: false, // Disable default quality selector
+        }"
+        @ready="onPlayerReady"
+      />
+    </client-only>
   </div>
 </template>
 
@@ -270,7 +272,7 @@ async function onPlayerReady(event: { target: { player: any } }) {
   //vtt thumbnails
   console.log(player);
   player.vttThumbnails({
-    src: '/videos/vtt/thumbnails.vtt',
+    src: new URL('/videos/vtt/thumbnails.vtt', window.location.origin).href,
     showTimestamp: true,
   });
 
