@@ -141,7 +141,7 @@
   >
     <div class="flex items-center justify-between h-full">
       <template
-        v-for="item in filteredMenuMobile"
+        v-for="item in filteredMobileMenuModel"
         :key="item.name"
       >
         <router-link
@@ -171,6 +171,7 @@ import { ImageExt } from '~/main/constants/image-ext';
 import { globalSubList } from '~/main/modules/user-panel/data-access/user-panel.enum';
 import { useUserPanelStore } from '~/store/user-panel';
 import { UserPlanSubscribedEnum } from '~/core/auth/constants/user-plan-subscribed.enum';
+import type { userMenuItems } from '~/core/auth/constants/user-filtered-menu';
 import { userMenuItemsIds } from '~/core/auth/constants/user-filtered-menu';
 import {
   webUserSteps,
@@ -201,10 +202,15 @@ const selectedGlobal = computed(() => {
 });
 
 const filteredMenuModel = computed(() => {
+  return mapMenuModel(filteredMenu.value);
+});
+
+const filteredMobileMenuModel = computed(() => {
+  return mapMenuModel(filteredMenuMobile.value);
+});
+
+function mapMenuModel(list: typeof userMenuItems) {
   const user = userData.value as UserInfoDataModel;
-
-  const list = filteredMenu.value;
-
   const targetIndex = list.findIndex(
     (item) => item.id === userMenuItemsIds.train
   )!;
@@ -224,7 +230,7 @@ const filteredMenuModel = computed(() => {
   list.splice(targetIndex, 1, item);
 
   return list;
-});
+}
 
 //data
 const showExamMenu = ref(false);
