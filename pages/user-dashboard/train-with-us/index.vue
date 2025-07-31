@@ -228,12 +228,15 @@ import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 import {
   webUserPanelTraining,
   webUserPanelTrainingWithQuery,
+  webUserSteps,
   webUserTrainingPlan,
 } from '~/main/utils/web-routes.utils';
 import {
   UserPanelItems,
   UserPanelItemsRecord,
 } from '~/main/constants/user-panel-items';
+import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
+import { UserPlanSubscribedEnum } from '~/core/auth/constants/user-plan-subscribed.enum';
 export default {
   components: {
     ConfirmPlan,
@@ -242,6 +245,7 @@ export default {
   setup() {
     return {
       ...useSetupRoute(),
+      ...useSetupAuth(),
     };
   },
   data() {
@@ -306,7 +310,7 @@ export default {
         });
         this.isShownConfirm = false;
         const id = res.data.id;
-        this.appRouter.push(webUserTrainingPlan(id));
+        this.appRouter.push(webUserTrainingPlan());
       } finally {
         this.loadingForm = false;
       }
@@ -345,7 +349,18 @@ export default {
       this.form.examDate = null;
     },
     smartClick() {
-      this.showStepsSection = true;
+      if (
+        this.appAuth.user.planSubscribed === UserPlanSubscribedEnum.Finished
+      ) {
+        this.appRouter.push(webUserSteps());
+      }
+
+      if (
+        this.appAuth.user.planSubscribed ===
+        UserPlanSubscribedEnum.NotSubscribed
+      ) {
+        this.showStepsSection = true;
+      }
     },
   },
 };

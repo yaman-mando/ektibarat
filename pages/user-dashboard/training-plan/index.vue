@@ -382,7 +382,6 @@ import type {
   TrainingPlanInfoDataModel,
 } from '~/main/modules/training-plan/data-access/training-plan.model';
 import { addDays } from 'date-fns';
-import { webUserTrainingPlan } from '~/main/utils/web-routes.utils';
 
 export default {
   components: { UserPanelLayout },
@@ -493,4 +492,4 @@ export default {
   },
 };
 </script>
-<style lang="scss" src="./training-plan-id.scss"></style>
+<style lang="scss" src="./training-plan.scss"></style>
