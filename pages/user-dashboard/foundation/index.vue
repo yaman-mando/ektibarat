@@ -1,5 +1,5 @@
 <template>
-  <user-panel-layout contentClass="max-w-[1050px] !mx-auto">
+  <user-panel-wrapper contentClass="max-w-[1050px] !mx-auto">
     <template #top-right></template>
 
     <div class="space-y-10 mb-[100px] lg:mb-0">
@@ -78,11 +78,10 @@
         </div>
       </div>
     </div>
-  </user-panel-layout>
+  </user-panel-wrapper>
 </template>
 
 <script lang="ts" setup>
-import userPanelLayout from '~/layouts/user-panel-layout.vue';
 import type { lessonsCategoriesDataModel } from '~/main/modules/user-panel/data-access/user-panel.model';
 import { useUserPanelStore } from '~/store/user-panel';
 import { definePageMeta } from '#imports';

@@ -1,5 +1,5 @@
 <template>
-  <user-panel-layout contentClass="!pb-0">
+  <user-panel-wrapper contentClass="!pb-0">
     <template #top-right></template>
 
     <div class="prepare-co space-y-10">
@@ -13,12 +13,10 @@
       <!--        :skeletonCount="16"-->
       <!--      />-->
     </div>
-  </user-panel-layout>
+  </user-panel-wrapper>
 </template>
 
 <script lang="ts" setup>
-import UserPanelLayout from '~/layouts/user-panel-layout.vue';
-
 const route = useRoute();
 const examPanelKey = ref<any>(Symbol());
 

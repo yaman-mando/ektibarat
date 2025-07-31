@@ -1,5 +1,5 @@
 <template>
-  <user-panel-layout contentClass="!pb-0">
+  <user-panel-wrapper contentClass="!pb-0">
     <template #top-right>
       <app-button
         label="رجوع للخلف"
@@ -217,10 +217,9 @@
         @continue="submit4"
       />
     </div>
-  </user-panel-layout>
+  </user-panel-wrapper>
 </template>
 <script lang="ts">
-import UserPanelLayout from '~/layouts/user-panel-layout.vue';
 import { addDays, isToday } from 'date-fns';
 import { dateUi } from '~/main/utils/date-utils';
 import ConfirmPlan from '~/components/user/confirm-plan.vue';
@@ -240,7 +239,6 @@ import { UserPlanSubscribedEnum } from '~/core/auth/constants/user-plan-subscrib
 export default {
   components: {
     ConfirmPlan,
-    UserPanelLayout,
   },
   setup() {
     definePageMeta({

@@ -1,5 +1,5 @@
 <template>
-  <user-panel-layout contentClass="max-w-[1050] mx-auto">
+  <user-panel-wrapper contentClass="max-w-[1050] mx-auto">
     <div
       class="flex flex-col justify-center gap-y-[20px] xl1200:flex-row gap-x-[50px]"
     >
@@ -99,11 +99,10 @@
         />
       </aside>
     </div>
-  </user-panel-layout>
+  </user-panel-wrapper>
 </template>
 
 <script setup lang="ts">
-import userPanelLayout from '~/layouts/user-panel-layout.vue';
 import { ref } from 'vue';
 import { useUserPanelStore } from '~/store/user-panel';
 import LessonsListSideBar from '~/components/user/lessonsListSideBar.vue';

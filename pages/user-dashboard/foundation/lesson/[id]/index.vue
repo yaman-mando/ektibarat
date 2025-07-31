@@ -1,5 +1,5 @@
 <template>
-  <user-panel-layout contentClass="max-w-[1050px] !mx-auto">
+  <user-panel-wrapper contentClass="max-w-[1050px] !mx-auto">
     <template #top-right></template>
 
     <div
@@ -67,11 +67,10 @@
         <daily-challenges />
       </div>
     </div>
-  </user-panel-layout>
+  </user-panel-wrapper>
 </template>
 
 <script lang="ts" setup>
-import userPanelLayout from '~/layouts/user-panel-layout.vue';
 import { computed } from 'vue';
 import lessonCard from '@/components/user/lessonCard.vue';
 import dailyChallenges from '@/components/user/dailyChallenges.vue';

@@ -1,5 +1,5 @@
 <template>
-  <user-panel-layout contentClass="!pb-0">
+  <user-panel-wrapper contentClass="!pb-0">
     <div class="training-plan-page">
       <template v-if="loadingPage">
         <app-loading-spinner :showSpinner="true" />
@@ -373,10 +373,9 @@
         </template>
       </template>
     </div>
-  </user-panel-layout>
+  </user-panel-wrapper>
 </template>
 <script lang="ts">
-import UserPanelLayout from '~/layouts/user-panel-layout.vue';
 import type {
   TrainingPlanDetailDataModel,
   TrainingPlanInfoDataModel,
@@ -384,7 +383,6 @@ import type {
 import { addDays } from 'date-fns';
 
 export default {
-  components: { UserPanelLayout },
   data() {
     return {
       isOpenRecommendations: true,
