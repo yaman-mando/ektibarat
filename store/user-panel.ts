@@ -273,6 +273,7 @@ export const useUserPanelStore = defineStore('userPanel', {
         this.teachersOfManager = data
         return data
       } catch (e) {
+        this.teachersOfManager = null
         console.error(e)
         return null
       } finally {
@@ -293,6 +294,7 @@ export const useUserPanelStore = defineStore('userPanel', {
         return data
       } catch (e) {
         console.error('خطأ في تحميل بيانات تحليل الطالب', e)
+        this.studentAnalyze = null
         return null
       } finally {
         this.fetching.studentAnalyze = false
@@ -310,10 +312,10 @@ export const useUserPanelStore = defineStore('userPanel', {
           grade: this.globalType,
           parentId
         })
-        console.log(data)
         this.studentAnalyzeChart = data
         return data
       } catch (e) {
+        this.studentAnalyzeChart = null
         console.error('خطأ في تحميل بيانات تحليل الطالب المخطط البياني', e)
         return null
       } finally {
@@ -330,6 +332,7 @@ export const useUserPanelStore = defineStore('userPanel', {
         this.studentPlanInfo = data
         return data
       } catch (e) {
+        this.studentPlanInfo = null
         console.error(e)
         return null
       } finally {
@@ -346,6 +349,7 @@ export const useUserPanelStore = defineStore('userPanel', {
         this.recommendations = data
         return data
       } catch (e) {
+        this.recommendations = null
         console.error('خطأ في تحميل بيانات التوصيات', e)
         return null
       } finally {
