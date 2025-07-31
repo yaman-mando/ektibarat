@@ -243,6 +243,9 @@ export default {
     UserPanelLayout,
   },
   setup() {
+    definePageMeta({
+      layout: 'empty-layout',
+    });
     return {
       ...useSetupRoute(),
       ...useSetupAuth(),
@@ -350,7 +353,10 @@ export default {
     },
     smartClick() {
       if (
-        this.appAuth.user.planSubscribed === UserPlanSubscribedEnum.Finished
+        [
+          UserPlanSubscribedEnum.Finished,
+          UserPlanSubscribedEnum.Subscribed,
+        ].some((val) => val === this.appAuth.user.planSubscribed)
       ) {
         this.appRouter.push(webUserSteps());
       }
