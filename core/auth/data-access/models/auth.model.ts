@@ -50,11 +50,11 @@ export type UserInfoDataModel = {
   joinedWhatsappGroup: boolean;
   joinedTelegramGroup: boolean;
   subscriptions: UserSubscriptionItemDataModel[] | null;
-  cityId:Number;
+  cityId: number;
   grades: number;
   schoolId: number;
   qodoratAttempt: number | null;
-  lastQodoratMark:number | null;
+  lastQodoratMark: number | null;
   planSubscribed: number;
 };
 

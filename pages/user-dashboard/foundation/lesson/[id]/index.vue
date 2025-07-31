@@ -1,68 +1,82 @@
 <template>
-  <userPanelLayout content-class="max-w-[1050px] !mx-auto">
+  <user-panel-wrapper contentClass="max-w-[1050px] !mx-auto">
+    <template #top-right></template>
 
-    <template #top-right>
-
-    </template>
-
-    <div class="flex flex-col xl1200:flex-row gap-[50px]" v-if="userPanelStore.lessonsList">
+    <div
+      v-if="userPanelStore.lessonsList"
+      class="flex flex-col xl1200:flex-row gap-[50px]"
+    >
       <div class="flex-1 xl1200:mt-[-60px]">
         <div
-          class="grid h-[110px] gap-y-2px bg-gradient-to-r from-[#24A7F1] to-[#0266D6] text-white p-[15px_20px] rounded-[8px] mb-[30px]">
-          <div @click="toFoundation()"
-            class="flex items-center justify-baseline gap-x-[8px] cursor-pointer opacity-50 w-fit">
+          class="grid h-[110px] gap-y-2px bg-gradient-to-r from-[#24A7F1] to-[#0266D6] text-white p-[15px_20px] rounded-[8px] mb-[30px]"
+        >
+          <div
+            class="flex items-center justify-baseline gap-x-[8px] cursor-pointer opacity-50 w-fit"
+            @click="toFoundation()"
+          >
             <i class="fa fa-chevron-right text-white text-[16px]"></i>
             <span class="text-white font-medium text-[16px]">رجوع للخلف</span>
           </div>
           <div class="flex justify-between">
-            <h2 class="text-lg font-bold">{{ userPanelStore.lessonsList?.title }}</h2>
+            <h2 class="text-lg font-bold">
+              {{ userPanelStore.lessonsList?.title }}
+            </h2>
           </div>
           <div class="flex items-center gap-x-[23px] justify-between">
-            <app-g-progress-bar 
-            v-if="doneCount && totalCount" 
-            class="flex-1" 
-            height="8px" 
-            :value="(doneCount / totalCount) * 100" 
-            :show-text="false" 
-            bg-class="bg-white"
-            bg-empty-class="bg-white/30"
-            >
-          </app-g-progress-bar>
+            <app-g-progress-bar
+              v-if="doneCount && totalCount"
+              class="flex-1"
+              height="8px"
+              :value="(doneCount / totalCount) * 100"
+              :showText="false"
+              bgClass="bg-white"
+              bgEmptyClass="bg-white/30"
+            />
             <span>{{ doneCount }}/{{ totalCount }}</span>
           </div>
         </div>
 
-
         <div class="space-y-[15px]">
-          <template v-for="(group, index) in lessonGroups" :key="index">
+          <template
+            v-for="(group, index) in lessonGroups"
+            :key="index"
+          >
             <div v-if="group.length === 1">
-              <lessonCard :lesson="group[0]" :status="getStatus(group[0])" />
+              <lesson-card
+                :lesson="group[0]"
+                :status="getStatus(group[0])"
+              />
             </div>
-            <div v-else class="flex flex-wrap gap-[15px]">
-              <lessonCard v-for="lesson in group" :key="lesson.id" :lesson="lesson" :status="getStatus(lesson)"
-                class="flex-1" />
+            <div
+              v-else
+              class="flex flex-wrap gap-[15px]"
+            >
+              <lesson-card
+                v-for="lesson in group"
+                :key="lesson.id"
+                :lesson="lesson"
+                :status="getStatus(lesson)"
+                class="flex-1"
+              />
             </div>
           </template>
         </div>
       </div>
 
       <div class="w-full xl1200:w-[310px]">
-        <dailyChallenges />
+        <daily-challenges />
       </div>
     </div>
-
-
-  </userPanelLayout>
-
+  </user-panel-wrapper>
 </template>
 
 <script lang="ts" setup>
-import userPanelLayout from '~/layouts/user-panel-layout.vue';
-import { computed } from 'vue'
-import lessonCard from '@/components/user/lessonCard.vue'
-import dailyChallenges from '@/components/user/dailyChallenges.vue'
+import { computed } from 'vue';
+import lessonCard from '@/components/user/lessonCard.vue';
+import dailyChallenges from '@/components/user/dailyChallenges.vue';
 import { useUserPanelStore } from '~/store/user-panel';
 import type { lessonObj } from '~/main/modules/user-panel/data-access/user-panel.model';
+import { definePageMeta } from '#imports';
 
 const data = {
   id: 3,
@@ -147,60 +161,68 @@ const data = {
       periodTime: 0,
       isWatched: false,
       isShow: false,
-    }
-  ]
-}
+    },
+  ],
+};
 
 //resourses
 const route = useRoute();
-const router = useRouter()
-const id = route.params.id
+const router = useRouter();
+const id = route.params.id;
 
 //store
-const userPanelStore = useUserPanelStore()
+const userPanelStore = useUserPanelStore();
 
 //data getting
-await userPanelStore.getLessonsList(id)
+await userPanelStore.getLessonsList(id);
 
 const sortedLessons = computed(() => {
-  return userPanelStore.lessonsList?.lessons.sort((a, b) => a.order - b.order)
-})
+  return userPanelStore.lessonsList?.lessons.sort((a, b) => a.order - b.order);
+});
 
-const doneCount = computed(() => userPanelStore.lessonsList?.doneLessonsCount ?? null)
-const totalCount = computed(() => userPanelStore.lessonsList?.totalLessonsCount ?? null)
+const doneCount = computed(
+  () => userPanelStore.lessonsList?.doneLessonsCount ?? null
+);
+const totalCount = computed(
+  () => userPanelStore.lessonsList?.totalLessonsCount ?? null
+);
 
 function getStatus(lesson: lessonObj) {
-  const index = sortedLessons.value?.findIndex(l => l.id === lesson.id)
-  const firstLocked = sortedLessons.value?.findIndex(l => l.isWatched === false)
-  if (lesson.isWatched) return 'completed'
-  if (index === firstLocked) return 'next'
-  return 'locked'
+  const index = sortedLessons.value?.findIndex((l) => l.id === lesson.id);
+  const firstLocked = sortedLessons.value?.findIndex(
+    (l) => l.isWatched === false
+  );
+  if (lesson.isWatched) return 'completed';
+  if (index === firstLocked) return 'next';
+  return 'locked';
 }
-
 
 const toFoundation = () => {
-  router.push(`/user-dashboard/foundation`)
-}
+  router.push(`/user-dashboard/foundation`);
+};
 
 //type=1 training,type=2 file to save,type=3 videos
 //if type2 + type3 behind div is tow part
 const lessonGroups = computed(() => {
-  const groups: any[][] = []
-  const lessons = sortedLessons.value
-  let i = 0
-  if (!lessons) return groups
+  const groups: any[][] = [];
+  const lessons = sortedLessons.value;
+  let i = 0;
+  if (!lessons) return groups;
   while (i < lessons.length) {
-    const curr = lessons[i]
-    const next = lessons[i + 1]
+    const curr = lessons[i];
+    const next = lessons[i + 1];
     if (curr?.type === 2 && next?.type === 3) {
-      groups.push([curr, next])
-      i += 2
+      groups.push([curr, next]);
+      i += 2;
     } else {
-      groups.push([curr])
-      i += 1
+      groups.push([curr]);
+      i += 1;
     }
   }
-  return groups
-})
+  return groups;
+});
 
+definePageMeta({
+  layout: 'empty-layout',
+});
 </script>

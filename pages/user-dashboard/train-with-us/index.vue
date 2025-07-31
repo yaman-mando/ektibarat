@@ -1,5 +1,5 @@
 <template>
-  <user-panel-layout contentClass="!pb-0">
+  <user-panel-wrapper contentClass="!pb-0">
     <template #top-right>
       <app-button
         label="رجوع للخلف"
@@ -217,10 +217,9 @@
         @continue="submit4"
       />
     </div>
-  </user-panel-layout>
+  </user-panel-wrapper>
 </template>
 <script lang="ts">
-import UserPanelLayout from '~/layouts/user-panel-layout.vue';
 import { addDays, isToday } from 'date-fns';
 import { dateUi } from '~/main/utils/date-utils';
 import ConfirmPlan from '~/components/user/confirm-plan.vue';
@@ -228,20 +227,26 @@ import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 import {
   webUserPanelTraining,
   webUserPanelTrainingWithQuery,
+  webUserSteps,
   webUserTrainingPlan,
 } from '~/main/utils/web-routes.utils';
 import {
   UserPanelItems,
   UserPanelItemsRecord,
 } from '~/main/constants/user-panel-items';
+import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
+import { UserPlanSubscribedEnum } from '~/core/auth/constants/user-plan-subscribed.enum';
 export default {
   components: {
     ConfirmPlan,
-    UserPanelLayout,
   },
   setup() {
+    definePageMeta({
+      layout: 'empty-layout',
+    });
     return {
       ...useSetupRoute(),
+      ...useSetupAuth(),
     };
   },
   data() {
@@ -306,7 +311,7 @@ export default {
         });
         this.isShownConfirm = false;
         const id = res.data.id;
-        this.appRouter.push(webUserTrainingPlan(id));
+        this.appRouter.push(webUserTrainingPlan());
       } finally {
         this.loadingForm = false;
       }
@@ -345,7 +350,21 @@ export default {
       this.form.examDate = null;
     },
     smartClick() {
-      this.showStepsSection = true;
+      if (
+        [
+          UserPlanSubscribedEnum.Finished,
+          UserPlanSubscribedEnum.Subscribed,
+        ].some((val) => val === this.appAuth.user.planSubscribed)
+      ) {
+        this.appRouter.push(webUserSteps());
+      }
+
+      if (
+        this.appAuth.user.planSubscribed ===
+        UserPlanSubscribedEnum.NotSubscribed
+      ) {
+        this.showStepsSection = true;
+      }
     },
   },
 };
