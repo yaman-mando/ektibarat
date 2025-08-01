@@ -301,6 +301,9 @@ export class RouteHelper {
   static adminSurveysDetails(id) {
     return `/${adminPrefix}/${APP_ROUTES.admin.surveys.root}/${APP_ROUTES.admin.surveys.show}/${id}`;
   }
+  static userInformationSteps(){
+    return `/${APP_ROUTES.userInformation.root}`;
+  }
 }
 
 export const main_routers = {

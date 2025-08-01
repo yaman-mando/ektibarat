@@ -48,7 +48,7 @@ const init = async () => {
     token: res.token,
     refreshToken: res.refreshToken,
     email: res.email,
-    showWelcomeModal: false,
+    showWelcomeModal: res.showWelcomeModal,
   });
 };
 </script>

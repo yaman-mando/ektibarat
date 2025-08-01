@@ -120,11 +120,14 @@ export const APP_ROUTES = {
     }
     },
     
+  },
+  userInformation:{
+    root:'information-steps'
   }
 };
 
 export const EXAM_QUESTIONS_ROUTES = {
-  root: 'exam-questions',
+  root: '/exam-questions',
 };
 
 export const routersWithoutTypeSelect = [
@@ -1382,6 +1385,18 @@ export const all_routers = [
     allowUser: true,
     allowSchollManager: true,
     isAuth: false,
+  },
+  {
+    path: `/${APP_ROUTES.userInformation.root}`,
+    name: 'information-steps',
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowSchollManager: true,
+    allowUser: true,
+    isPublic: true,
+    isAuth: true,
   },
   {
     path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.foundations.root}`,

@@ -76,6 +76,7 @@ export type AuthLoginProviderDataModel = {
   token: string;
   refreshToken: string | null;
   tokenExpireDate: string;
+  showWelcomeModal: boolean;
 };
 
 //loginOTP

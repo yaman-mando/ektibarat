@@ -131,11 +131,13 @@ import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.mode
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import type { citiesListDataModel, schoolsListDataModel } from "~/main/modules/global/data-access/global.enum"
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
+import { RouteHelper } from '~/main/utils/route-helper';
 import { sleepUtil } from '~/main/utils/shared-utils';
+import { webUserPanelTraining } from '~/main/utils/web-routes.utils';
 import { useGlobalUserStore } from '~/store/global';
 
 
-const route = useRoute();
+const router = useRouter();
 const auth = useAuth();
 const setupAuth = useSetupAuth();
 const authStore = useAuthStore();
@@ -284,7 +286,7 @@ const avatarClass = (type) =>
   `w-25 h-25 cursor-pointer rounded-full ${form.value.sex === type ? 'border-blue-d6 border-[3px]' : 'border-gray-8f border-[1px]'}`;
 
 const startTraining = () => {
-  console.log('Start training with:', form.value);
+  router.push(webUserPanelTraining())
 };
 
 function enforceRange(e) {

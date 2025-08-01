@@ -22,6 +22,7 @@ import {
 } from '~/core/auth/data-access/services/useAuthEvents';
 import { delay, filter, mergeMap, of, Subject } from 'rxjs';
 import { useGlobalStore } from '~/main/useGlobalStore';
+import { RouteHelper } from './main/utils/route-helper';
 
 declare const google: any;
 
@@ -153,7 +154,7 @@ const handleCredentialResponse = async (response: { credential: string }) => {
       token: res.token,
       refreshToken: res.refreshToken,
       email: res.email,
-      showWelcomeModal: false,
+      showWelcomeModal: res.showWelcomeModal,
     });
   } else {
     router.push({
@@ -182,6 +183,8 @@ const signInAction = async (data: SignInActionDataUiModel) => {
     }
     if (data.showWelcomeModal) {
       localStorageStore.setFirstRegister(data.id);
+      router.push(RouteHelper.userInformationSteps())
+      return
     }
     await router.push(authStore.redirectUrlAfterLogin());
   } catch (e) {
