@@ -1,31 +1,33 @@
 <template>
   <div class="apv-w">
-    <video-player
-      id="CustomVideoPlayer"
-      class="video-player vjs-theme-forest"
-      crossorigin="anonymous"
-      playsinline
-      controls
-      :sources="[currentSource]"
-      :poster="videoSource.poster"
-      :tracks="videoSource.tracks"
-      :height="600"
-      :volume="0.4"
-      :children="[
-        'mediaLoader',
-        'posterImage',
-        'bigPlayButton',
-        'loadingSpinner',
-        'controlBar',
-        'textTrackDisplay',
-        'QualitySelector',
-      ]"
-      :controlBar="{
-        volumePanel: true,
-        qualitySelector: false, // Disable default quality selector
-      }"
-      @ready="onPlayerReady"
-    />
+    <client-only>
+      <video-player
+        id="CustomVideoPlayer"
+        class="video-player vjs-theme-forest"
+        crossorigin="anonymous"
+        playsinline
+        controls
+        :sources="[currentSource]"
+        :poster="videoSource.poster"
+        :tracks="videoSource.tracks"
+        :height="600"
+        :volume="0.4"
+        :children="[
+          'mediaLoader',
+          'posterImage',
+          'bigPlayButton',
+          'loadingSpinner',
+          'controlBar',
+          'textTrackDisplay',
+          'QualitySelector',
+        ]"
+        :controlBar="{
+          volumePanel: true,
+          qualitySelector: false, // Disable default quality selector
+        }"
+        @ready="onPlayerReady"
+      />
+    </client-only>
   </div>
 </template>
 
@@ -37,9 +39,12 @@ import 'videojs-hls-quality-selector';
 import vttThumbnails from 'videojs-vtt-thumbnails';
 import 'videojs-vtt-thumbnails/dist/videojs-vtt-thumbnails.css';
 import { parseVTTChapters } from '~/main/utils/shared-utils';
+import dynamicWatermark from 'videojs-dynamic-watermark';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 
-// Register the plugin before using it
+// Register the plugin
 videojs.registerPlugin('vttThumbnails', vttThumbnails);
+videojs.registerPlugin('dynamicWatermark', dynamicWatermark);
 
 // Define interface for QualitySelector options
 interface QualitySelectorOptions {
@@ -174,33 +179,48 @@ class ChapterMarkers extends Component {
 
 videojs.registerComponent('ChapterMarkers', ChapterMarkers);
 
+//props
+const props = withDefaults(
+  defineProps<{
+    path: string;
+  }>(),
+  {}
+);
+
+const authStore = useAuthStore();
+const userId = computed(() => authStore.state.userData!.id);
+
+const pathModel = computed(() => {
+  return props.path;
+});
+
 const videoSource = reactive({
   poster: '/images/poster/elephants-dream.jpg',
   sources: [
     {
-      src: '/videos/360p.m3u8',
+      src: `${pathModel.value}/360p.m3u8`,
       type: 'application/x-mpegURL',
       label: '360p',
     },
     {
-      src: '/videos/480p.m3u8',
+      src: `${pathModel.value}/480p.m3u8`,
       type: 'application/x-mpegURL',
       label: '480p',
     },
     {
-      src: '/videos/720p.m3u8',
+      src: `${pathModel.value}/720p.m3u8`,
       type: 'application/x-mpegURL',
       label: '720p',
     },
     {
-      src: '/videos/1080p.m3u8',
+      src: `${pathModel.value}/1080p.m3u8`,
       type: 'application/x-mpegURL',
       label: '1080p',
     },
   ],
   tracks: [
     {
-      src: '/videos/vtt/chapters.vtt',
+      src: `${pathModel.value}/vtt/chapters.vtt`,
       kind: 'chapters',
       srclang: 'ar',
       label: 'الاقسام',
@@ -218,7 +238,7 @@ async function onPlayerReady(event: { target: { player: any } }) {
   player = event.target.player;
 
   // Fetch and parse chapter VTT
-  const response = await fetch('/videos/vtt/chapters.vtt');
+  const response = await fetch(`${pathModel.value}/vtt/chapters.vtt`);
   const text = await response.text();
   const chapters = parseVTTChapters(text);
 
@@ -270,8 +290,20 @@ async function onPlayerReady(event: { target: { player: any } }) {
   //vtt thumbnails
   console.log(player);
   player.vttThumbnails({
-    src: '/videos/vtt/thumbnails.vtt',
+    src: new URL(
+      `${pathModel.value}/vtt/thumbnails.vtt`,
+      window.location.origin
+    ).href,
     showTimestamp: true,
+  });
+
+  // Add dynamic watermark with a custom number
+  player.dynamicWatermark({
+    elementId: `water-mark-${userId.value}`,
+    watermarkText: `${userId.value}`,
+    changeDuration: 5 * 1000,
+    cssText:
+      'display: inline-block; color: white; background-color: rgba(0, 0, 0, 0.5); font-size: 1.2rem; padding: 5px 10px; border-radius: 4px; z-index: 9999; position: absolute;',
   });
 
   // Handle player errors

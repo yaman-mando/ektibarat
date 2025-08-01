@@ -16,7 +16,11 @@
         </div>
 
         <div class="py-[12px_20px]">
-          <app-video-player class="!m-4" />
+          <app-video-player
+            v-if="videoPath"
+            :path="videoPath"
+            class="!m-4"
+          />
         </div>
 
         <!-- Contents -->
@@ -107,6 +111,7 @@ import { ref } from 'vue';
 import { useUserPanelStore } from '~/store/user-panel';
 import LessonsListSideBar from '~/components/user/lessonsListSideBar.vue';
 
+const config = useRuntimeConfig();
 const router = useRouter();
 const route = useRoute();
 const userPanelStore = useUserPanelStore();
@@ -210,6 +215,13 @@ function formatTimestamp(seconds: number): string {
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
+
+const videoPath = computed(() => {
+  const lesson = userPanelStore.lessonDetails;
+  if (!lesson) return null;
+
+  return `${config.public.baseImageUrl}/LessonsVideos/${lesson.videoLink}`;
+});
 
 const buttonClasses = computed(() => {
   const base =
