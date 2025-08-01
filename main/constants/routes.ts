@@ -112,8 +112,14 @@ export const APP_ROUTES = {
     },
     analyticsDetails:{
       root:'analytics/:id'
+    },
+    school:{
+      root:'school',
+      studentAnalytics:{
+      root:'student-analytics'  
     }
-
+    },
+    
   }
 };
 
@@ -1432,6 +1438,30 @@ export const all_routers = [
     allowStudent: true,
     allowTeacher: true,
     allowEmployee: true,
+    allowSchollManager: true,
+    allowUser: false,
+    isPublic: false,
+    isAuth: true,
+  },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.school.root}`,
+    name: 'schools',  
+    allowAdmin: false,
+    allowStudent: false,
+    allowTeacher: true,
+    allowEmployee: false,
+    allowSchollManager: true,
+    allowUser: false,
+    isPublic: false,
+    isAuth: true,
+  },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.school.root}/${APP_ROUTES.userDashboard.school.studentAnalytics.root}/:id`,
+    name: 'student-analytics',  
+    allowAdmin: false,
+    allowStudent: false,
+    allowTeacher: true,
+    allowEmployee: false,
     allowSchollManager: true,
     allowUser: false,
     isPublic: false,

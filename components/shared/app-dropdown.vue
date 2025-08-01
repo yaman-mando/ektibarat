@@ -127,7 +127,7 @@ const handleClickOutside = (event) => {
   box-shadow: -4px 0px 10px #00000029;
   padding: 10px 0;
   border-radius: 20px;
-  z-index: 50;
+  z-index: 60;
   overflow-y: auto;
   text-align: right;
 

@@ -1,5 +1,6 @@
+import type { BlobOptions } from "buffer"
 import { GlobalSub } from "~/main/modules/user-panel/data-access/user-panel.enum"
-import type { categoriesListForModal, categoryAnalysisList, categoryInfoForStep, chartDataList, idLabelList, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, recommendation, recommendationsResponse, schoolDashboardData, similarVidModel, stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeResponse, studentStages, trainingPlanSummaryResponse } from "~/main/modules/user-panel/data-access/user-panel.model"
+import type { categoriesListForModal, categoryAnalysisList, categoryInfoForStep, chartDataList, idLabelList, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, recommendation, recommendationsResponse, schoolDashboardData, similarVidModel, stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeForTeacherResponse, studentAnalyzeResponse, studentStages, trainingPlanSummaryResponse } from "~/main/modules/user-panel/data-access/user-panel.model"
 
 
 interface UserPanelState {
@@ -18,7 +19,10 @@ interface UserPanelState {
     studentAnalyze: boolean,
     studentAnalyzeChart: boolean,
     studentPlanInfo: boolean,
-    recommendations:boolean
+    recommendations: boolean,
+    studentAnalyzeForTeacher: boolean,
+    studentAnalyzeChartForTeacher: boolean,
+    studentPlanInfoForTeacher: boolean
   }
   globalType: number,
   lessonsCategories: lessonsCategoriesDataModel[] | null,
@@ -34,8 +38,11 @@ interface UserPanelState {
   teachersOfManager: idLabelList | null,
   studentAnalyze: studentAnalyzeResponse | null,
   studentAnalyzeChart: studentAnalyzeChartResponse | null,
+  studentAnalyzeChartForTeacher: studentAnalyzeChartResponse | null,
   studentPlanInfo: trainingPlanSummaryResponse | null,
-  recommendations:recommendationsResponse | null,
+  recommendations: recommendationsResponse | null,
+  studentAnalyzeForTeacher: studentAnalyzeForTeacherResponse | null,
+  studentPlanInfoForTeacher: trainingPlanSummaryResponse | null,
 }
 
 
@@ -56,7 +63,10 @@ export const useUserPanelStore = defineStore('userPanel', {
       studentAnalyze: false,
       studentAnalyzeChart: false,
       studentPlanInfo: false,
-      recommendations:false,
+      recommendations: false,
+      studentAnalyzeForTeacher: false,
+      studentAnalyzeChartForTeacher: false,
+      studentPlanInfoForTeacher: false,
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
@@ -73,7 +83,10 @@ export const useUserPanelStore = defineStore('userPanel', {
     studentAnalyze: null,
     studentAnalyzeChart: null,
     studentPlanInfo: null,
-    recommendations:null
+    recommendations: null,
+    studentAnalyzeForTeacher: null,
+    studentAnalyzeChartForTeacher: null,
+    studentPlanInfoForTeacher: null
   }),
 
   actions: {
@@ -302,8 +315,29 @@ export const useUserPanelStore = defineStore('userPanel', {
 
     },
 
+    async getStudentAnalyzeForTeacher(period: number, studentId: number): Promise<studentAnalyzeForTeacherResponse | null> {
+      try {
+        this.fetching.studentAnalyzeForTeacher = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.post(`/dashboard/studentPartOfMainAnalyzeForTeacher`, {
+          period,
+          grade: this.globalType,
+          studentId
+        })
+        this.studentAnalyzeForTeacher = data
+        return data
+      } catch (e) {
+        console.error('خطأ في تحميل بيانات تحليل الطالب', e)
+        this.studentAnalyzeForTeacher = null
+        return null
+      } finally {
+        this.fetching.studentAnalyzeForTeacher = false
+      }
 
-    async getStudentAnalyzeChart(period: Number,parentId:any): Promise<studentAnalyzeChartResponse[] | null> {
+    },
+
+
+    async getStudentAnalyzeChart(period: Number, parentId: any): Promise<studentAnalyzeChartResponse[] | null> {
       try {
         this.fetching.studentAnalyzeChart = true
         const { $axios } = useNuxtApp()
@@ -324,6 +358,28 @@ export const useUserPanelStore = defineStore('userPanel', {
 
     },
 
+
+    async getStudentAnalyzeChartForTeacher(period: Number, parentId: any, studentId): Promise<studentAnalyzeChartResponse[] | null> {
+      try {
+        this.fetching.studentAnalyzeChartForTeacher = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.post(`/dashboard/totalAnalyzeDetailsForStudentForTeacher/${studentId}`, {
+          period,
+          grade: this.globalType,
+          parentId
+        })
+        this.studentAnalyzeChartForTeacher = data
+        return data
+      } catch (e) {
+        this.studentAnalyzeChartForTeacher = null
+        console.error('خطأ في تحميل بيانات تحليل الطالب المخطط البياني', e)
+        return null
+      } finally {
+        this.fetching.studentAnalyzeChartForTeacher = false
+      }
+
+    },
+
     async getTrainingPlansInfo(): Promise<trainingPlanSummaryResponse | null> {
       try {
         this.fetching.studentPlanInfo = true
@@ -337,6 +393,22 @@ export const useUserPanelStore = defineStore('userPanel', {
         return null
       } finally {
         this.fetching.studentPlanInfo = false
+      }
+    },
+
+    async getTrainingPlansInfoForTeacher(studentId): Promise<trainingPlanSummaryResponse | null> {
+      try {
+        this.fetching.studentPlanInfoForTeacher = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/trainingPlansInfo/detailsForTeacher/${studentId}`)
+        this.studentPlanInfoForTeacher = data
+        return data
+      } catch (e) {
+        this.studentPlanInfoForTeacher = null
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.studentPlanInfoForTeacher = false
       }
     },
 

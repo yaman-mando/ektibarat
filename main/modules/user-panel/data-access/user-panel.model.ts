@@ -70,7 +70,7 @@ export type similarVidObj = {
 export type similarVidModel = similarVidObj[]
 
 
-export type categoryInfoForStep={
+export type categoryInfoForStep = {
   categoryId: number | null;
   questionsCount: number | null | any;
   stepId: number | null;
@@ -95,10 +95,10 @@ export type step = {
   text_after?: string;
   color_1: string;
   color_2: string;
-  type:number
+  type: number
 }
 
-export type stage= {
+export type stage = {
   phase_name: string;
   phase_id: number;
   total_steps: number;
@@ -119,9 +119,9 @@ export type studentStages = {
 
 export type categoriesListForModal = {
   name: string,
-  children:{id:number,label:string,disabled:boolean}[]
+  children: { id: number, label: string, disabled: boolean }[]
 }[]
-  
+
 
 export type categoryAnalysisList = {
   allStudentsTimeTakenRate: number;
@@ -143,13 +143,13 @@ export type categoryAnalysisList = {
 }[]
 
 export type chartDataList = {
-  count:number;
-  date:string | null
+  count: number;
+  date: string | null
 }[]
 
 export type idLabelList = {
-  id:number,
-  label:string
+  id: number,
+  label: string
 }[]
 
 
@@ -161,7 +161,7 @@ export type studentSchoolDashbord = {
   questionsCount: number;
   correctAnswersCount: number;
   wrongAnswersCount: number;
-  trainingPeriod: number; 
+  trainingPeriod: number;
   levelRate: number;
   predictedMark: number;
   requiredGrade: number;
@@ -176,7 +176,7 @@ export type schoolDashboardData = {
   studentsCount: number;
 }
 
-export type analyzeStudentCategory= {
+export type analyzeStudentCategory = {
   categoryId: number;
   categoryName: string;
   parentId: number | null;
@@ -185,14 +185,14 @@ export type analyzeStudentCategory= {
   wrongAnswersCount: number;
   studentTimeTakenRate: number;
   allStudentsTimeTakenRate: number;
-  totalTime: number; 
+  totalTime: number;
   sort: number;
   rate: number;
   isEnabled: boolean;
   hasLawAnalyze: boolean;
 }
 
-export type analyzeStudentCategoryForTable={
+export type analyzeStudentCategoryForTable = {
   categoryId: number;
   categoryName: string;
   parentId: number | null;
@@ -201,17 +201,17 @@ export type analyzeStudentCategoryForTable={
   wrongAnswersCount: number;
   studentTimeTakenRate: number;
   allStudentsTimeTakenRate: number;
-  totalTime: number; 
+  totalTime: number;
   sort: number;
   rate: number;
   isEnabled: boolean;
   hasLawAnalyze: boolean;
-  children:analyzeStudentCategory[]
+  children: analyzeStudentCategory[]
 }[]
 
 export type studentAnalyzeResponse = {
-  studentRate: number;       
-  levelRate: number;        
+  studentRate: number;
+  levelRate: number;
   requiredGrade: number;
   analayzeStudentCategories: analyzeStudentCategory[];
 }
@@ -241,15 +241,15 @@ export type recommendationsResponse = {
 }
 
 
-export type timeStats= {
+export type timeStats = {
   percentage: number;
   timeRequired: number;
   timeDone: number;
 }
 
 export type trainingPlanSummaryResponse = {
-  examDate: string; 
-  startTraining: string; 
+  examDate: string;
+  startTraining: string;
   lastMonth: timeStats;
   lastWeek: timeStats;
   timeDone: number;
@@ -258,4 +258,18 @@ export type trainingPlanSummaryResponse = {
   percentageDone: number | any;
   percentageRequired: number | any;
   recommendations: recommendation;
+}
+
+export type studentAnalyzeForTeacherResponse = {
+  studentId: string | number;
+  userName: string;
+  pictureUrl: string;
+  fullName: string;
+  phoneNumber: string;
+  analyzes: {
+    studentRate: number;
+    levelRate: number;
+    requiredGrade: number;
+    analayzeStudentCategories: analyzeStudentCategory[];
+  }[]
 }

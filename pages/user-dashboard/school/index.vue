@@ -283,6 +283,7 @@
                 :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'"
               >
                 <button
+                  @click="toAnalytics(std.studentId)"
                   class="border border-purple-78 rounded-[4px] w-[88px] h-[32px] flex items-center justify-center gap-x-[8px] text-purple-78 text-[14px] font-medium cursor-pointer"
                 >
                   التفاصيل
@@ -303,9 +304,11 @@ import { useUserPanelStore } from '~/store/user-panel';
 import { ref, computed, onMounted, watch } from 'vue';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { UserRoles } from '~/core/auth/constants/user-roles';
+import { RouteHelper } from '~/main/utils/route-helper';
 
 const panelStore = useUserPanelStore();
 const { data } = useAuth();
+const router = useRouter()
 const userData = data.value as UserInfoDataModel;
 
 const filterForm = ref({
@@ -326,6 +329,11 @@ const changeTeacher = (studentId: number, event: Event) => {
   const teacherId = Number((event.target as HTMLSelectElement).value);
   console.log(studentId, teacherId);
 };
+
+
+const toAnalytics = (studentId) =>{
+ router.push(RouteHelper.studentAnalytics(studentId)) 
+}
 
 function getRateColor(rate: number): string {
   if (rate < 50) return 'red-5e';

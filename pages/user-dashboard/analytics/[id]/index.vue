@@ -366,6 +366,7 @@ import { useApexChartService } from '~/main/services/useApexChartService';
 import { ref, computed, onMounted } from 'vue';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { planSubscribedEnum } from '~/main/constants/global.enums';
+import { UserRoles } from '~/core/auth/constants/user-roles';
 
 const userPanelStore = useUserPanelStore();
 const route = useRoute();
@@ -459,11 +460,15 @@ async function fetchChartData() {
 }
 
 function toAnalytics() {
-  router.push(RouteHelper.userAnalytics());
+  if(userData.value.role !== UserRoles.schoolManager && userData.value.role !== UserRoles.teacher){
+  router.push(RouteHelper.userAnalytics())
+  return
+  }
+  router.go(-1)
 }
 
 function getRateLabel(rate) {
-  if (rate == 0) return 'لايوجد';
+  if (rate == 0 || !rate) return 'لايوجد';
   if (rate < 30) return 'ضعيف جداً';
   if (rate < 50) return 'ضعيف';
   if (rate < 70) return 'جيد';
@@ -472,7 +477,7 @@ function getRateLabel(rate) {
 }
 
 function getRateColor(rate) {
-  if (rate < 50) return 'red-5e';
+  if (rate < 50 || !rate) return 'red-5e';
   if (rate < 70) return 'yellow-16';
   return 'green-8c';
 }

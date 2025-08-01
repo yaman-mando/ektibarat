@@ -47,27 +47,17 @@
     <!-- Accordion Body -->
     <transition name="accordion">
       <div v-show="isOpen" class="px-[15px] py-[25px]">
-        <!-- Commitment Plan -->
-        <div class="mb-[20px]">
-          <h3 class="text-blue-d6 dark:text-blue-400 font-bold text-[20px] mb-[15px]">الالتزام بالخطة:</h3>
-          <ul class="list-disc pr-5 text-[16px] font-medium text-dark-63 dark:text-gray-100 space-y-1" style="line-height: 28px">
-            <li v-for="(item, index) in localData.CommitmentPlan" :key="'plan-' + index">
-              {{ item }}
-            </li>
-          </ul>
-        </div>
-
         <!-- Categories -->
         <div
-          v-for="(section, index) in localData.category"
+          v-for="(section, index) in data?.recommendations"
           :key="'cat-' + index"
           class="mb-[20px]"
         >
           <h3 class="text-blue-d6 dark:text-blue-400 font-bold text-[20px] mb-[15px]">
-            {{ section.title }}:
+            {{ section.title }}
           </h3>
           <ul class="list-disc pr-5 text-[16px] font-medium text-dark-63 dark:text-gray-100 space-y-1" style="line-height: 28px">
-            <li v-for="(advice, i) in section.advice" :key="'advice-' + i">
+            <li v-for="(advice, i) in section.advices" :key="'advice-' + i">
               {{ advice }}
             </li>
           </ul>
@@ -93,22 +83,19 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import type { recommendationsResponse } from '~/main/modules/user-panel/data-access/user-panel.model';
+
 export default {
   name: "TestAdvice",
   props: {
     data: {
-      type: Object,
+      type: Object as () => recommendationsResponse | null,
       default: () => ({
-        CommitmentPlan: [
-          "الطالب لديه تأخير بسيط عن الخطة المقررة له",
-          "تراجع التزامه عن آخر أسبوع بمقدار 7%",
-          "على الطالب تكثيف ساعات تدريبه لتعويض النقص وإدراك الخطة"
-        ],
-        category: [
+        recommendations: [
           {
             title: "الكمي",
-            advice: [
+            advices: [
               "الطالب يجيب على الأسئلة في مدة أبطأ من المتوسط",
               "يعاني من ضعف في 4 مهارات ضمن قسم (المسائل الجبرية)",
               "لم يتدرب منذ فترة على قسم (تحليل البيانات)"
@@ -116,7 +103,7 @@ export default {
           },
           {
             title: "اللفظي",
-            advice: [
+            advices: [
               "الطالب يجيب على الأسئلة في مدة أبطأ من المتوسط",
               "يعاني من ضعف في 4 مهارات ضمن قسم (المسائل الجبرية)",
               "لم يتدرب منذ فترة على قسم (تحليل البيانات)"
