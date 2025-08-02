@@ -18,6 +18,7 @@
         <div class="py-[12px_20px]">
           <app-video-player
             v-if="videoPath"
+            ref="video_ref"
             :path="videoPath"
             class="!m-4"
           />
@@ -80,7 +81,10 @@
                 :key="content.id"
                 class="flex items-center gap-x-[8px]"
               >
-                <span class="text-blue-d6 text-[20px]">
+                <span
+                  class="text-blue-d6 text-[20px] cursor-pointer"
+                  @click="onTimeClick(content.from)"
+                >
                   {{ formatTimestamp(content.from) }}
                 </span>
                 <span class="text-gray-2b text-[20px]">
@@ -110,13 +114,15 @@
 import { ref } from 'vue';
 import { useUserPanelStore } from '~/store/user-panel';
 import LessonsListSideBar from '~/components/user/lessonsListSideBar.vue';
+import type { AppVideoPlayer } from '#components';
 
 const config = useRuntimeConfig();
 const router = useRouter();
 const route = useRoute();
 const userPanelStore = useUserPanelStore();
 const { $axios } = useNuxtApp();
-
+const videoRef =
+  useTemplateRef<InstanceType<typeof AppVideoPlayer>>('video_ref');
 const id = route.params.lesson;
 
 await userPanelStore.getLessonDetails(id);
@@ -146,6 +152,10 @@ const sendFeedback = async (benefited: boolean) => {
     loading.value = false;
   }
 };
+
+function onTimeClick(seconds) {
+  videoRef.value?.moveTo(seconds);
+}
 
 function goBack() {
   const segments = route.fullPath.split('?')[0].split('/');
