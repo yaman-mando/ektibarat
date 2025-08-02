@@ -1347,14 +1347,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .subscriptions-part {
   padding: 0 15px;
   width: 100%;
   margin-left: auto !important;
   margin-right: auto !important;
   max-width: 100vw;
-
 
   .web-subs-part-co {
     width: 100%;
@@ -2264,5 +2263,4 @@ export default {
 ::v-deep #my-modal {
   max-width: max-content;
 }
-
 </style>

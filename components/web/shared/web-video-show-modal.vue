@@ -40,13 +40,13 @@
         @click="closeModal"
       ></i>
       <client-only>
-      <iframe
-        :src="youtubeEmbedUrl"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      ></iframe>
+        <iframe
+          :src="youtubeEmbedUrl"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
       </client-only>
     </lazy-prime-dialog>
   </div>
@@ -67,10 +67,9 @@ const isOpenModal = ref(false);
 const promotionImageUrl = computed(() =>
   props.isTahsele ? '/images/th.webp' : '/images/no-th.webp'
 );
- const youtubeEmbedUrl = computed(() => {
-     return 'https://www.youtube.com/embed/uTcFE0fS2Wc?autoplay=1&mute=1';
-  }
- )
+const youtubeEmbedUrl = computed(() => {
+  return 'https://www.youtube.com/embed/uTcFE0fS2Wc?autoplay=1&mute=1';
+});
 
 //method
 const onClickImage = () => {
@@ -82,7 +81,7 @@ const closeModal = () => {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .video-promotions {
   margin-top: 16px;
@@ -223,7 +222,7 @@ const closeModal = () => {
 }
 </style>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 #seo-video-modal {
   --p-dialog-content-padding: 0;

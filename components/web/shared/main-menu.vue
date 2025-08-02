@@ -1,30 +1,79 @@
 <template>
   <div class="web-header-container">
-    <header v-if="isMobileSize" class="web-header hide-from-tablet">
+    <header
+      v-if="isMobileSize"
+      class="web-header hide-from-tablet"
+    >
       <span @click="toggleMenu">
         <i class="em-icon-Group-3396"></i>
       </span>
       <nuxt-link to="/">
-        <nuxt-img style="cursor: pointer" width="126px" height="40px" src="/images/EkhtibaratLogoColor.webp"
-          alt="شعار اختبارات - منصة الاختبارات الإلكترونية" title="شعار منصة اختبارات - اختبارات إلكترونية متنوعة"
-          loading="lazy" format="webp" quality="80" class="logo" />
+        <nuxt-img
+          style="cursor: pointer"
+          width="126px"
+          height="40px"
+          src="/images/EkhtibaratLogoColor.webp"
+          alt="شعار اختبارات - منصة الاختبارات الإلكترونية"
+          title="شعار منصة اختبارات - اختبارات إلكترونية متنوعة"
+          loading="lazy"
+          format="webp"
+          quality="80"
+          class="logo"
+        />
       </nuxt-link>
 
-      <lazy-app-button v-if="!isLoggedIn && !isLoadingProfile" variant="clear" label="الدخول" size="sm"
-        :isDisabled="authState.loading.value" :isLoading="authStore.state.isLoadingProfile" @click="onLoginClick" />
-      <div v-else class="actions">
+      <lazy-app-button
+        v-if="!isLoggedIn && !isLoadingProfile"
+        variant="clear"
+        label="الدخول"
+        size="sm"
+        :isDisabled="authState.loading.value"
+        :isLoading="authStore.state.isLoadingProfile"
+        @click="onLoginClick"
+      />
+      <div
+        v-else
+        class="actions"
+      >
         <div class="drop-menu">
-          <div class="profile" @click="openList()">
-            <div v-if="isLoggedIn" data-toggle="tooltip" data-placement="top">
-              <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
-                :ext="imageExt.jpg" width="40" height="40" radius="50%" />
+          <div
+            class="profile"
+            @click="openList()"
+          >
+            <div
+              v-if="isLoggedIn"
+              data-toggle="tooltip"
+              data-placement="top"
+            >
+              <custom-image
+                :folderName="imagesFolderName.Users"
+                :url="userData.pictureUrl"
+                :size="imagesSize.xs"
+                :ext="imageExt.jpg"
+                width="40"
+                height="40"
+                radius="50%"
+              />
             </div>
           </div>
-          <div v-if="showList" ref="dropDown" class="dropdown" tabindex="-1" @blur.self="hideList">
+          <div
+            v-if="showList"
+            ref="dropDown"
+            class="dropdown"
+            tabindex="-1"
+            @blur.self="hideList"
+          >
             <div class="dropdown-menu">
               <div class="rw-info">
-                <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
-                  :ext="imageExt.jpg" width="76" height="76" radius="50%" />
+                <custom-image
+                  :folderName="imagesFolderName.Users"
+                  :url="userData.pictureUrl"
+                  :size="imagesSize.xs"
+                  :ext="imageExt.jpg"
+                  width="76"
+                  height="76"
+                  radius="50%"
+                />
                 <span class="full-name">
                   <template v-if="userData.firstName || userData.lastName">
                     {{ userData.firstName + ' ' + userData.lastName }}
@@ -32,8 +81,12 @@
                 </span>
               </div>
 
-              <custom-switch v-model:active="selectedGlobalType" :rightLabel="'قدرات'" :leftLabel="'تحصيلي'"
-                :isSm="true" />
+              <custom-switch
+                v-model:active="selectedGlobalType"
+                :rightLabel="'قدرات'"
+                :leftLabel="'تحصيلي'"
+                :isSm="true"
+              />
 
               <div class="exams-btn">
                 <button @click="toUserDashboard">لوحة الطالب</button>
@@ -44,26 +97,49 @@
               </div>
               <ul style="cursor: pointer">
                 <template v-for="item in listItemModel">
-                  <li v-if="allowShowItem(item)" :key="item.id" class="dropdown-item" :class="[
-                    { active: activeList === item.id },
-                    {
-                      'is-red':
-                        item.id === userPanelItems.teachers ||
-                        item.id === userPanelItems.teacherPanel,
-                    },
-                  ]" @click="goPanelPart(item.id)">
-                    <img width="20" :src="`/images/icons/menu/${item.icon}.svg`" :alt="item.icon" />
+                  <li
+                    v-if="allowShowItem(item)"
+                    :key="item.id"
+                    class="dropdown-item"
+                    :class="[
+                      { active: activeList === item.id },
+                      {
+                        'is-red':
+                          item.id === userPanelItems.teachers ||
+                          item.id === userPanelItems.teacherPanel,
+                      },
+                    ]"
+                    @click="goPanelPart(item.id)"
+                  >
+                    <img
+                      width="20"
+                      :src="`/images/icons/menu/${item.icon}.svg`"
+                      :alt="item.icon"
+                    />
                     <span class="text">{{ item.label }}</span>
-                    <span v-if="item.badgeLabel" class="r-part__badge">
+                    <span
+                      v-if="item.badgeLabel"
+                      class="r-part__badge"
+                    >
                       {{ item.badgeLabel }}
                     </span>
-                    <div v-if="item.id == 7 && notificationCount > 0" class="c-notification">
+                    <div
+                      v-if="item.id == 7 && notificationCount > 0"
+                      class="c-notification"
+                    >
                       <span>{{ notificationCount }}</span>
                     </div>
                   </li>
                 </template>
-                <li class="dropdown-item" @click="logout()">
-                  <img width="20" src="/images/icons/menu/signout.svg" alt="signout" />
+                <li
+                  class="dropdown-item"
+                  @click="logout()"
+                >
+                  <img
+                    width="20"
+                    src="/images/icons/menu/signout.svg"
+                    alt="signout"
+                  />
                   <span class="text logout">تسجيل خروج</span>
                 </li>
               </ul>
@@ -72,23 +148,39 @@
         </div>
       </div>
     </header>
-    <header v-else class="web-header hide-to-tablet">
+    <header
+      v-else
+      class="web-header hide-to-tablet"
+    >
       <div class="logo-items">
         <nuxt-link to="/">
-          <img width="190px" height="60px" style="cursor: pointer" src="/images/EkhtibaratLogoColor.webp"
-            alt="اختبارات" />
+          <img
+            width="190px"
+            height="60px"
+            style="cursor: pointer"
+            src="/images/EkhtibaratLogoColor.webp"
+            alt="اختبارات"
+          />
         </nuxt-link>
 
         <ul class="menu-items">
-          <li @click="
-            toPath('/');
-          openSubMenu(null);
-          ">
+          <li
+            @click="
+              toPath('/');
+              openSubMenu(null);
+            "
+          >
             الرئيسية
           </li>
           <li @click="openSubMenu(2)">
             المسارات
-            <div v-if="activeSub == 2" ref="subMenu" class="sub-menu" tabindex="-1" @blur.prevent="hideSubMenu">
+            <div
+              v-if="activeSub == 2"
+              ref="subMenu"
+              class="sub-menu"
+              tabindex="-1"
+              @blur.prevent="hideSubMenu"
+            >
               <nuxt-link :to="webPathKudratPathUtil()">
                 <span class="sub-item">القدرات</span>
               </nuxt-link>
@@ -106,10 +198,12 @@
             <li @click="openSubMenu(null)">الأسئلة الشائعة</li>
           </nuxt-link>
 
-          <li @click="
-            openSubMenu(null);
-          toPath('/blog');
-          ">
+          <li
+            @click="
+              openSubMenu(null);
+              toPath('/blog');
+            "
+          >
             المدونة
           </li>
           <nuxt-link :to="webPricesPathUtil()">
@@ -117,68 +211,138 @@
           </nuxt-link>
         </ul>
       </div>
-      <div v-if="!isLoggedIn && !isLoadingProfile" class="actions">
-        <button class="normal-btn" @click="onLoginClick">
+      <div
+        v-if="!isLoggedIn && !isLoadingProfile"
+        class="actions"
+      >
+        <button
+          class="normal-btn"
+          @click="onLoginClick"
+        >
           الدخول
         </button>
       </div>
-      <div v-else class="actions">
+      <div
+        v-else
+        class="actions"
+      >
         <div class="user-part">
-          <button class="normal-btn" @click="goPanelPart(userPanelItems.learningPanel)">
+          <button
+            class="normal-btn"
+            @click="goPanelPart(userPanelItems.learningPanel)"
+          >
             لوحتي التعليمية
           </button>
           <div class="drop-menu">
-            <div class="profile" @click="openList('sm')">
-              <div v-if="userData && userData" data-toggle="tooltip" data-placement="top">
-                <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
-                  :ext="imageExt.jpg" width="40" height="40" radius="50%" />
+            <div
+              class="profile"
+              @click="openList('sm')"
+            >
+              <div
+                v-if="userData && userData"
+                data-toggle="tooltip"
+                data-placement="top"
+              >
+                <custom-image
+                  :folderName="imagesFolderName.Users"
+                  :url="userData.pictureUrl"
+                  :size="imagesSize.xs"
+                  :ext="imageExt.jpg"
+                  width="40"
+                  height="40"
+                  radius="50%"
+                />
               </div>
-              <span v-if="isLoggedIn" class="name">
+              <span
+                v-if="isLoggedIn"
+                class="name"
+              >
                 <template v-if="userData.firstName">
                   {{ userData.firstName }}
                 </template>
               </span>
               <i class="fa fa-chevron-down"></i>
             </div>
-            <div v-if="showList" ref="dropDownSm" class="dropdown" tabindex="-1" @blur.self="hideList">
+            <div
+              v-if="showList"
+              ref="dropDownSm"
+              class="dropdown"
+              tabindex="-1"
+              @blur.self="hideList"
+            >
               <div class="dropdown-menu">
                 <div class="rw-info">
-                  <custom-image :folderName="imagesFolderName.Users" :url="userData.pictureUrl" :size="imagesSize.xs"
-                    :ext="imageExt.jpg" width="76" height="76" radius="50%" />
+                  <custom-image
+                    :folderName="imagesFolderName.Users"
+                    :url="userData.pictureUrl"
+                    :size="imagesSize.xs"
+                    :ext="imageExt.jpg"
+                    width="76"
+                    height="76"
+                    radius="50%"
+                  />
                   <span class="full-name">
                     <template v-if="userData.firstName || userData.lastName">
                       {{ userData.firstName + ' ' + userData.lastName }}
                     </template>
                   </span>
                 </div>
-                <nuxt-link v-if="isEmployee" :to="adminQuestionsListPath()">
+                <nuxt-link
+                  v-if="isEmployee"
+                  :to="adminQuestionsListPath()"
+                >
                   <span class="normal-btn">لوحة التحكم</span>
                 </nuxt-link>
                 <div class="am-actions">
-                  <training-button :buttonStyle="TrainingButtonType.withRadius" />
+                  <training-button
+                    :buttonStyle="TrainingButtonType.withRadius"
+                  />
                 </div>
                 <ul style="cursor: pointer">
                   <template v-for="item in listItemModel">
-                    <li v-if="allowShowItem(item)" :key="item.id" class="dropdown-item" :class="[
-                      { active: activeList === item.id },
-                      {
-                        'is-red':
-                          item.id === userPanelItems.teachers ||
-                          item.id === userPanelItems.teacherPanel,
-                      },
-                    ]" @click="goPanelPart(item.id)">
-                      <img width="20" :src="`/images/icons/menu/${item.icon}.svg`" :alt="item.icon" />
+                    <li
+                      v-if="allowShowItem(item)"
+                      :key="item.id"
+                      class="dropdown-item"
+                      :class="[
+                        { active: activeList === item.id },
+                        {
+                          'is-red':
+                            item.id === userPanelItems.teachers ||
+                            item.id === userPanelItems.teacherPanel,
+                        },
+                      ]"
+                      @click="goPanelPart(item.id)"
+                    >
+                      <img
+                        width="20"
+                        :src="`/images/icons/menu/${item.icon}.svg`"
+                        :alt="item.icon"
+                      />
                       <span class="text">{{ item.label }}</span>
-                      <span v-if="item.badgeLabel" class="r-part__badge">
+                      <span
+                        v-if="item.badgeLabel"
+                        class="r-part__badge"
+                      >
                         {{ item.badgeLabel }}
                       </span>
-                      <div v-if="item.id == 7 && notificationCount > 0" class="c-notification">
+                      <div
+                        v-if="item.id == 7 && notificationCount > 0"
+                        class="c-notification"
+                      >
                         <span>{{ notificationCount }}</span>
                       </div>
                     </li>
                   </template>
-                  <li class="dropdown-item" @click="logout()">
-                    <img width="20" src="/images/icons/menu/signout.svg" alt="signout" />
+                  <li
+                    class="dropdown-item"
+                    @click="logout()"
+                  >
+                    <img
+                      width="20"
+                      src="/images/icons/menu/signout.svg"
+                      alt="signout"
+                    />
                     <span class="text logout">تسجيل خروج</span>
                   </li>
                 </ul>
@@ -190,37 +354,79 @@
     </header>
 
     <client-only>
-      <div class="rw-responsive-menu" :class="{ 'is-open': openMenu }">
-        <div ref="responsiveMenu" class="responsive-menu" :class="{ 'is-open': openMenu }" tabindex="-1"
-          @blur="openMenu = false">
+      <div
+        class="rw-responsive-menu"
+        :class="{ 'is-open': openMenu }"
+      >
+        <div
+          ref="responsiveMenu"
+          class="responsive-menu"
+          :class="{ 'is-open': openMenu }"
+          tabindex="-1"
+          @blur="openMenu = false"
+        >
           <div class="menu-head">
-            <i class="fa fa-close close-button" @click="openMenu = false"></i>
+            <i
+              class="fa fa-close close-button"
+              @click="openMenu = false"
+            ></i>
             <div class="e-logo">
               <nuxt-link to="/">
-                <img width="126px" height="40px" src="/images/EkhtibaratLogoWhite.webp" alt="اختبارات" />
+                <img
+                  width="126px"
+                  height="40px"
+                  src="/images/EkhtibaratLogoWhite.webp"
+                  alt="اختبارات"
+                />
               </nuxt-link>
             </div>
           </div>
           <div class="menu">
-            <div v-for="(item, index) of menu2" :key="item.name" class="menu-item" :class="[
-              { active: currentRoute == item.href },
-              { 'is-open': activeCollapse.includes(index) },
-            ]" @click="toPath(item.href)">
-              <div class="menu-main" @click="item.hasChild ? openCollapse(index) : ''">
+            <div
+              v-for="(item, index) of menu2"
+              :key="item.name"
+              class="menu-item"
+              :class="[
+                { active: currentRoute == item.href },
+                { 'is-open': activeCollapse.includes(index) },
+              ]"
+              @click="toPath(item.href)"
+            >
+              <div
+                class="menu-main"
+                @click="item.hasChild ? openCollapse(index) : ''"
+              >
                 <div class="r-part">
-                  <i v-if="item.iconClass" :class="item.iconClass"></i>
+                  <i
+                    v-if="item.iconClass"
+                    :class="item.iconClass"
+                  ></i>
                   <span class="name">{{ item.name }}</span>
                 </div>
-                <div v-if="item.hasChild" class="l-part">
-                  <i class="fa" :class="activeCollapse.includes(index)
-                    ? 'fa-chevron-up'
-                    : 'fa-chevron-down'
-                    "></i>
+                <div
+                  v-if="item.hasChild"
+                  class="l-part"
+                >
+                  <i
+                    class="fa"
+                    :class="
+                      activeCollapse.includes(index)
+                        ? 'fa-chevron-up'
+                        : 'fa-chevron-down'
+                    "
+                  ></i>
                 </div>
               </div>
-              <div v-if="item.hasChild && activeCollapse.includes(index)" class="menu-child">
-                <div v-for="childItem of item.child" :key="childItem.href" class="child-item"
-                  @click="toPath(childItem.href)">
+              <div
+                v-if="item.hasChild && activeCollapse.includes(index)"
+                class="menu-child"
+              >
+                <div
+                  v-for="childItem of item.child"
+                  :key="childItem.href"
+                  class="child-item"
+                  @click="toPath(childItem.href)"
+                >
                   <span class="name">
                     {{ childItem.name }}
                   </span>
@@ -229,8 +435,12 @@
             </div>
           </div>
           <div class="pt-3 flex justify-center">
-            <custom-switch v-model:active="selectedGlobalType" :rightLabel="'قدرات'" :leftLabel="'تحصيلي'"
-              :isSm="true" />
+            <custom-switch
+              v-model:active="selectedGlobalType"
+              :rightLabel="'قدرات'"
+              :leftLabel="'تحصيلي'"
+              :isSm="true"
+            />
           </div>
         </div>
       </div>
@@ -328,7 +538,7 @@ const userPanelItems = UserPanelItems;
 //composable
 const { status, data, signOut } = useAuth();
 const authState = useAuthState();
-const {isMobileSize} = useWindowSize();
+const { isMobileSize } = useWindowSize();
 const router = useRouter();
 const route = useRoute();
 const { state, patchState: pathGlobalStore } = useGlobalStore();
@@ -438,12 +648,11 @@ const allowShowItem = (item: MenuItemUi) => {
   return true;
 };
 
-
 const toUserDashboard = () => {
   router.push({
-    path: '/user-dashboard/foundation'
-  })
-}
+    path: '/user-dashboard/foundation',
+  });
+};
 
 const logout = async () => {
   await signOut({ callbackUrl: '/' });
@@ -519,7 +728,7 @@ const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .web-header-container {
   overflow-x: hidden;

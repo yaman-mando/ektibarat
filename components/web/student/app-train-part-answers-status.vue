@@ -323,7 +323,7 @@ onMounted(() => {
 });
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .tp-status {
   .tp-status-wrapper {

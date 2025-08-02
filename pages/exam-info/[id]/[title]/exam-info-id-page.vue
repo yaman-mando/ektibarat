@@ -391,7 +391,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .exam-info-page {
   padding-bottom: 51px;

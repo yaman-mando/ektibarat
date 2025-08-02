@@ -30,7 +30,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .cd-co-w {
   line-height: 1;

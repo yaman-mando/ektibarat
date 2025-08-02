@@ -92,7 +92,7 @@ const imageUrl = useImageUrl();
 const jsonData = computed(() => globalStore.staticState.tahselJson);
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .rw-tahsele {
   max-width: 1400px;
   margin: 0 auto;

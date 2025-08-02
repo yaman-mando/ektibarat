@@ -204,7 +204,7 @@ export default {
 };
 </script>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 #surveys-modal {
   min-width: 500px;

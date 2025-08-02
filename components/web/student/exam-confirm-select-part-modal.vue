@@ -113,7 +113,7 @@ export default {
 };
 </script>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .exam-confirm-select-part-modal {
   border: 0;
   margin: 0 auto;

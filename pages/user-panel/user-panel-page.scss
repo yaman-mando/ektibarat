@@ -1,4 +1,4 @@
-﻿@import '@/assets/scss/mixin';
+﻿@use '@/assets/scss/mixin' as *;
 
 .user-panel {
   padding: 30px 40px 50px;
@@ -71,9 +71,9 @@
       color: var(--gray-63);
       margin-top: 5px;
     }
-    .type-switch{
-      @media (max-width: 1300px){
-        zoom: .75;
+    .type-switch {
+      @media (max-width: 1300px) {
+        zoom: 0.75;
       }
     }
     @include tablet-down() {
@@ -128,7 +128,7 @@
             border: 1px solid var(--green-8c);
             border-radius: 20px;
             padding: 2px 6px;
-            @include ipad-down(){
+            @include ipad-down() {
               font-size: 9px;
             }
           }
@@ -409,7 +409,7 @@
             }
 
             @include mobile-down() {
-              label{
+              label {
                 display: none;
               }
               position: relative;
@@ -667,11 +667,11 @@
       align-items: center;
       width: 197px;
       justify-content: space-between;
-      span{
+      span {
         font-size: 15px;
         color: var(--purple-8c);
       }
-      i{
+      i {
         color: var(--purple-8c);
       }
     }
@@ -683,7 +683,7 @@
   #modal-edit-phone {
     border-radius: 15px;
     height: 430px;
-    width: 360px!important;
+    width: 360px !important;
 
     .code-part {
       display: grid;
@@ -744,7 +744,6 @@
         }
       }
     }
-
 
     .fa-close {
       position: absolute;

@@ -1,4 +1,4 @@
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .chat-panel-page {
   padding: 20px 33px;

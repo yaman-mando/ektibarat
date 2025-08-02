@@ -184,22 +184,24 @@
                   بيانات الخطة
                 </span>
                 <table class="plan-tb">
-                  <tr>
-                    <td>تاريخ بداية الخطة</td>
-                    <td>{{ dateUi(form.date) }}</td>
-                  </tr>
-                  <tr>
-                    <td>تاريخ الاختبار المتوقع</td>
-                    <td>{{ dateUi(form.examDate) }}</td>
-                  </tr>
-                  <tr>
-                    <td>الدرجة المطلوبة</td>
-                    <td>{{ form.neededDegree }}</td>
-                  </tr>
-                  <tr>
-                    <td>ساعات التدريب الأسبوعية تقديريا</td>
-                    <td>{{ requiredHours }} ساعات</td>
-                  </tr>
+                  <tbody>
+                    <tr>
+                      <td>تاريخ بداية الخطة</td>
+                      <td>{{ dateUi(form.date) }}</td>
+                    </tr>
+                    <tr>
+                      <td>تاريخ الاختبار المتوقع</td>
+                      <td>{{ dateUi(form.examDate) }}</td>
+                    </tr>
+                    <tr>
+                      <td>الدرجة المطلوبة</td>
+                      <td>{{ form.neededDegree }}</td>
+                    </tr>
+                    <tr>
+                      <td>ساعات التدريب الأسبوعية تقديريا</td>
+                      <td>{{ requiredHours }} ساعات</td>
+                    </tr>
+                  </tbody>
                 </table>
                 <app-button
                   label="تثبيت الخطة"

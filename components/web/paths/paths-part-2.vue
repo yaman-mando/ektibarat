@@ -77,7 +77,7 @@ const navLink = redirectService.getStudentRedirectUrl();
 //method
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .rw-2 {
   padding: 40px 40px 80px;

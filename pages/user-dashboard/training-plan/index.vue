@@ -148,14 +148,16 @@
 
                 <div class="flex">
                   <table class="az-table">
-                    <tr>
-                      <td>مدة التدريب المــنــجــزة:</td>
-                      <td>{{ formatTime(detail.timeDone) }} ساعة</td>
-                    </tr>
-                    <tr>
-                      <td>مدة التدريب المطلوبة:</td>
-                      <td>{{ formatTime(detail?.timeRequired) }} ساعة</td>
-                    </tr>
+                    <tbody>
+                      <tr>
+                        <td>مدة التدريب المــنــجــزة:</td>
+                        <td>{{ formatTime(detail.timeDone) }} ساعة</td>
+                      </tr>
+                      <tr>
+                        <td>مدة التدريب المطلوبة:</td>
+                        <td>{{ formatTime(detail?.timeRequired) }} ساعة</td>
+                      </tr>
+                    </tbody>
                   </table>
                 </div>
 

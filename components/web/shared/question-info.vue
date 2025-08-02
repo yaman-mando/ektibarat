@@ -98,7 +98,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .aq-info {
   box-shadow: 0px 0px 15px #00000033;
@@ -275,22 +275,22 @@ export default {
     display: flex;
     justify-content: center;
     .reg-btn {
-        background: var(--purple-8c);
-        color: white;
-        border-radius: 10px;
-        font-size: 24px;
-        font-weight: bold;
-        width: 300px;
-        height: 80px;
-        min-height: 80px;
-        @include tablet-down() {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 60px;
-          min-height: 60px;
-        }
+      background: var(--purple-8c);
+      color: white;
+      border-radius: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      width: 300px;
+      height: 80px;
+      min-height: 80px;
+      @include tablet-down() {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 60px;
+        min-height: 60px;
       }
+    }
   }
 }
 

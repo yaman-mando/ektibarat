@@ -85,7 +85,7 @@ onMounted(() => {
 });
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .faqs-page {
   background-color: #fbfcfe;

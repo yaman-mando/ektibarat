@@ -1,10 +1,16 @@
 <template>
-  <div id="exam-question-layout" class="exam-question-layout">
+  <div
+    id="exam-question-layout"
+    class="exam-question-layout"
+  >
     <div class="app-nuxt">
       <div class="wrapper">
         <div class="main-section">
           <main-menu />
-          <div id="scroll-page" class="scroll-page">
+          <div
+            id="scroll-page"
+            class="scroll-page"
+          >
             <div class="page-contents">
               <slot></slot>
             </div>
@@ -15,7 +21,10 @@
         </div>
       </div>
     </div>
-    <div class="chat-btn" @click="goChat">
+    <div
+      class="chat-btn"
+      @click="goChat"
+    >
       <i class="fa fa-comment"></i>
     </div>
     <client-only>
@@ -36,7 +45,7 @@ import { deepEqualUtil } from '~/main/utils/lodash.utils';
 export default {
   setup() {
     const route = useRoute();
-      
+
     watch(route, (newVal, oldVal) => {
       if (!deepEqualUtil(newVal, oldVal)) {
         scrollToTopUtil('scroll-page');
@@ -61,13 +70,13 @@ export default {
   data() {
     return {
       openModalTimeoutId: null as any,
-    }
+    };
   },
 
   computed: {
     selectedSurveys() {
-      return this.$store.state.selectedSurveys
-    }
+      return this.$store.state.selectedSurveys;
+    },
   },
 
   watch: {
@@ -134,16 +143,15 @@ export default {
     openSurveysModal() {
       if (import.meta.client) {
         //@ts-expect-error access prop ref
-        this.$refs['modal_surveys_ref']?.showModal()
+        this.$refs['modal_surveys_ref']?.showModal();
       }
-    }
-  }
-
+    },
+  },
 };
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 @import '@/assets/scss/shared/sidebar-filter';
 @import '@/assets/scss/style.scss';
 @import '@/assets/scss/main';

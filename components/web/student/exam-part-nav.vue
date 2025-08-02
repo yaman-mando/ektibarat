@@ -84,7 +84,7 @@ export default {
 };
 </script>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .exam-part-nav {
   display: flex;
   width: 100%;

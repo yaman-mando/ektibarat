@@ -94,7 +94,7 @@ function hideModal() {
 }
 </script>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 #laws-images-modal {
   width: 680px;
   margin: 0 auto;

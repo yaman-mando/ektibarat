@@ -26,7 +26,7 @@ const currentYear = new Date().getFullYear();
 const isLoading = ref(false);
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .google-page-redirect {
   display: flex;

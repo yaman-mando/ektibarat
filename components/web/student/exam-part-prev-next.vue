@@ -67,7 +67,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .ex-pt {
   display: flex;
   align-items: center;

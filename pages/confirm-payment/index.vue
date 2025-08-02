@@ -216,7 +216,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .confirm-payment {
   display: grid;
   column-gap: 100px;

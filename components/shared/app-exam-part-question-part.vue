@@ -911,7 +911,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 @mixin exam-part-img() {
   ::v-deep {

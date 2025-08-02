@@ -50,7 +50,7 @@ const navLink = redirectService.getStudentRedirectUrl();
 //method
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .rw-1 {
   width: 100%;

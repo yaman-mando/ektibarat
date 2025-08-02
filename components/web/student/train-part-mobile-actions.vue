@@ -118,7 +118,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .tpm-main {
   width: 100%;
   display: block;

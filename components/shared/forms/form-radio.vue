@@ -142,7 +142,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .radio-group {
   line-height: 0;
   &.inline {

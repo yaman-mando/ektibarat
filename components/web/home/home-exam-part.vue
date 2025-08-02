@@ -68,7 +68,7 @@ const globalStore = useGlobalStore();
 const staticData = globalStore.staticState.homeJson;
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .exams-part {
   padding-bottom: 80px;

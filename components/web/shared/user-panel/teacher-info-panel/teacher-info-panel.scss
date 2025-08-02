@@ -1,4 +1,4 @@
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .teachers-part {
   .m-title {
@@ -114,36 +114,36 @@
                 height: 56px;
                 padding-inline-start: 10px;
                 @include outline-btn() {
-                 border-radius: 3px;
-                 width: 32px;
-                 height: 32px;
-                 display: flex;
-                 align-items: center;
-                 justify-content: center;
-                 border: 1px solid !important;
-                 &.whatsapp {
-                   border-color: #25d366 !important;
-                   i {
-                     color: #25d366;
-                     font-size: 14px;
-                   }
-                 }
-                 &.trash {
-                   border-color: var(--red-5e) !important;
-                   i {
-                     color: var(--red-5e);
-                     font-size: 14px;
-                   }
-                 }
-                 &.action {
-                   width: 50px;
-                   border-color: var(--purple-8c) !important;
-                   span {
-                     color: var(--purple-8c);
-                     font-size: 14px;
-                     font-weight: bold;
-                   }
-                 }
+                  border-radius: 3px;
+                  width: 32px;
+                  height: 32px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  border: 1px solid !important;
+                  &.whatsapp {
+                    border-color: #25d366 !important;
+                    i {
+                      color: #25d366;
+                      font-size: 14px;
+                    }
+                  }
+                  &.trash {
+                    border-color: var(--red-5e) !important;
+                    i {
+                      color: var(--red-5e);
+                      font-size: 14px;
+                    }
+                  }
+                  &.action {
+                    width: 50px;
+                    border-color: var(--purple-8c) !important;
+                    span {
+                      color: var(--purple-8c);
+                      font-size: 14px;
+                      font-weight: bold;
+                    }
+                  }
                 }
               }
               &.fullName {

@@ -49,7 +49,7 @@ function hideModal() {
 defineExpose({ showModal });
 </script>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 #question-animate-layout {
   .p-dialog-mask {

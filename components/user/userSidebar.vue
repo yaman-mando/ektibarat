@@ -5,16 +5,18 @@
   >
     <!-- logo -->
     <div>
-      <img
-        src="/images/EkhtibaratLogoColor.png"
-        alt="شعار"
-        class="w-[190px] mx-auto block dark:hidden"
-      />
-      <img
-        src="/images/EkhtibaratLogoWhite.png"
-        alt="شعار"
-        class="w-[190px] mx-auto hidden dark:block"
-      />
+      <nuxt-link :to="webHomePathUtil()">
+        <img
+          src="/images/EkhtibaratLogoColor.png"
+          alt="شعار"
+          class="w-[190px] mx-auto block dark:hidden"
+        />
+        <img
+          src="/images/EkhtibaratLogoWhite.png"
+          alt="شعار"
+          class="w-[190px] mx-auto hidden dark:block"
+        />
+      </nuxt-link>
     </div>
 
     <!-- menu items -->
@@ -174,6 +176,7 @@ import { UserPlanSubscribedEnum } from '~/core/auth/constants/user-plan-subscrib
 import type { userMenuItems } from '~/core/auth/constants/user-filtered-menu';
 import { userMenuItemsIds } from '~/core/auth/constants/user-filtered-menu';
 import {
+  webHomePathUtil,
   webUserSteps,
   webUserTrainingPlan,
   webUserTrainWithUs,

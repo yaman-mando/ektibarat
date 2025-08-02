@@ -92,7 +92,7 @@ defineExpose({
 });
 </script>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 #web-login-register-modal {
   --p-dialog-content-padding: 0;
   max-width: 340px;

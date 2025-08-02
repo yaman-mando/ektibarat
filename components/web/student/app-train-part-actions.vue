@@ -148,7 +148,7 @@ function onLawsClick() {
 }
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .tpa-main {
   padding-top: 25px !important;
   padding-bottom: 25px !important;
