@@ -1,3 +1,6 @@
+<template>
+  <section></section>
+</template>
 <script setup lang="ts">
 import { webErrorPathUtil } from '~/main/utils/web-routes.utils';
 

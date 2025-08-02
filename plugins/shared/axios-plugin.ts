@@ -8,7 +8,7 @@ import { ErrorsRecord } from '~/main/constants/errors.enum';
 import { useGlobalStore } from '~/main/useGlobalStore';
 
 export default defineNuxtPlugin(() => {
-  const auth = useAuth();
+  const authState = useAuthState();
   const config = useRuntimeConfig();
   const globalStore = useGlobalStore();
   const toastMessage = useToastMessage();
@@ -19,7 +19,7 @@ export default defineNuxtPlugin(() => {
 
   $axios.interceptors.request.use(
     (config) => {
-      const token = auth.token.value;
+      const token = authState.token.value;
       if (token) {
         config.headers.Authorization = token;
       }
