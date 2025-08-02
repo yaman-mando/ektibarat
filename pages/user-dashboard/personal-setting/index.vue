@@ -14,7 +14,9 @@
         class="bg-white rounded-[8px] flex-2/3 sm:min-w-[400px] shadow-custom py-[30px] h-fit"
         :class="{ '!py-0 !rounded-none !shadow-none': !isDesktop }"
       >
+      <client-only>
         <component :is="currentComponent" />
+        </client-only>
       </main>
 
       <aside
@@ -100,8 +102,8 @@ const accountItems = [
 
 const helpItems = [
   { key: 'faq', label: 'الأسئلة الشائعة', link: null },
-  { key: 'support', label: 'الدعم الفني', link: '/user-panel?page=chat' },
-  { key: 'contact', label: 'اتصل بنا', link: '/contact-us' },
+  { key: 'support', label: 'الدعم الفني', link: null },
+  { key: 'contact', label: 'اتصل بنا', link: null },
 ];
 
 const validSections: any = [
