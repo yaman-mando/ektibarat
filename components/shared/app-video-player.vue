@@ -407,11 +407,11 @@ defineExpose({
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--purple-8c);
+  //border: 1px solid var(--purple-8c);
   border-radius: 15px;
   overflow: hidden;
   padding-bottom: 20px;
-  box-shadow: var(--shadow-light-1);
+  //box-shadow: var(--shadow-light-1);
 
   :deep(.video-js) {
     .vjs-control {
