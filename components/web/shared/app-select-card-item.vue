@@ -1,8 +1,26 @@
 <template>
   <div
     class="sci-item"
-    :class="[color, { active: isActive }, { 'cursor-pointer': !isDisabled }]"
+    :class="[
+      color,
+      { active: isActive },
+      { 'cursor-pointer': !isDisabled },
+      { '!bg-[#F5F7FA]': isDisabled },
+    ]"
   >
+    <template v-if="hasNewBadge">
+      <img
+        class="absolute left-0 top-0 w-[55px] -rotate-90"
+        src="/images/badge.png"
+        alt="new"
+      />
+      <span
+        class="absolute left-[7px] top-[9px] -rotate-[45deg] text-[14px] text-[#fff]"
+      >
+        جديد
+      </span>
+    </template>
+
     <img
       :src="iconSvgPath"
       alt="icon"
@@ -22,11 +40,13 @@ const props = withDefaults(
     color: 'blue' | 'green' | 'red' | 'yellow';
     isActive?: boolean;
     isDisabled?: boolean;
+    hasNewBadge?: boolean;
     badgePath?: string | null;
   }>(),
   {
     isActive: false,
     isDisabled: false,
+    hasNewBadge: false,
   }
 );
 </script>
