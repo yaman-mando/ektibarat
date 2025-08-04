@@ -141,7 +141,7 @@
           <!--        content-->
           <div class="st-q-content">
             <!--          date content-->
-            <div :class="`st-q-date-content step-${form.currentStep}`">
+            <div :class="`st-q-date-content relative step-${form.currentStep}`">
               <template v-if="form.currentStep === 1">
                 <h1 class="st-q-title">متى أوّل يوم بتبدأ فيه دراسة؟</h1>
                 <app-date-picker
@@ -166,6 +166,39 @@
                 />
               </template>
               <template v-if="form.currentStep === 2">
+                <h1 class="st-q-title step-2">كم الدرجة اللي تطمح تجيبها؟</h1>
+                <span class="st-q-title-meta">
+                  بنعلمك متى تصير جاهز تختبر وتجيب الدرجة اللي تبيها
+                </span>
+                <select-number-popover
+                  v-model="form.neededDegree!"
+                  :start="85"
+                  :end="100"
+                  :step="1"
+                />
+                <app-button
+                  label="التالي"
+                  iconEndClass="fa fa-chevron-left"
+                  colorType="blue"
+                  :isDisabled="!form.neededDegree"
+                  @click="submitRequiredDegree"
+                />
+                <div class="hidden absolute lg:flex bottom-[0px] left-[20px]">
+                  <span
+                    class="flex !text-center relative -left-[50px] -top-[50px] w-[220px] h-[90px] items-center justify-center text-[18px] rounded-[8px] bg-white shadow-[0_0_10px_0_rgba(0,0,0,0.15)]"
+                  >
+                    كفو يا بطل! هذا الطموح
+                    <br />
+                    ولا بلاش
+                  </span>
+                  <img
+                    class="flex z-10 w-[155px] h-[155px] justify-center items-center flex-shrink-0 aspect-[1/1]"
+                    src="/images/robot-target.png"
+                    alt="target"
+                  />
+                </div>
+              </template>
+              <template v-if="form.currentStep === 3">
                 <h1 class="st-q-title step-2">
                   متى تتوقع تاريخ اختبارك الجاي؟
                 </h1>
@@ -191,25 +224,6 @@
                   colorType="blue"
                   :isDisabled="!form.examDate"
                   :isLoading="loadingRequiredHours"
-                  @click="submit2"
-                />
-              </template>
-              <template v-if="form.currentStep === 3">
-                <h1 class="st-q-title step-2">كم الدرجة اللي تطمح تجيبها؟</h1>
-                <span class="st-q-title-meta">
-                  بنعلمك متى تصير جاهز تختبر وتجيب الدرجة اللي تبيها
-                </span>
-                <select-number-popover
-                  v-model="form.neededDegree!"
-                  :start="85"
-                  :end="100"
-                  :step="1"
-                />
-                <app-button
-                  label="التالي"
-                  iconEndClass="fa fa-chevron-left"
-                  colorType="blue"
-                  :isDisabled="!form.neededDegree"
                   @click="submit3"
                 />
               </template>
@@ -290,7 +304,7 @@ export default {
   data() {
     return {
       isShownConfirm: false,
-      showStepsSection: false,
+      showStepsSection: true,
       requiredHours: null as number | null,
       loadingRequiredHours: false,
       loadingForm: false,
@@ -333,7 +347,7 @@ export default {
   methods: {
     webUserPanelTraining,
     dateUi,
-    async submit3() {
+    async submitRequiredDegree() {
       this.form.currentStep++;
     },
     showConfirm() {
@@ -380,7 +394,7 @@ export default {
     submitFirst() {
       this.form.currentStep++;
     },
-    submit2() {
+    submit3() {
       this.form.currentStep++;
     },
     dateChange(e: any) {
