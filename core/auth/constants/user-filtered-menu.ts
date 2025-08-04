@@ -12,7 +12,7 @@ export const userMenuItems = [
   {
     name: 'الرئيسية',
     icon: '/images/svg/user-panel/house.svg',
-    route: '/',
+    route: '/user-dashboard',
     isMobile: true,
     isDesktop: true,
     allowRoles: [],

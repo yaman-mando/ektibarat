@@ -20,7 +20,9 @@
     >
       {{ staticData.topText }}
     </h4>
+    <client-only>
     <app-messaging/>
+    </client-only>
     
      </template>
   </div>
