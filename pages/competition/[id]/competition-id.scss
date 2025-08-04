@@ -1,4 +1,4 @@
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .competition-page {
   .competition-contents {
     display: grid;
@@ -30,7 +30,7 @@
       }
     }
 
-    ._remind-time{
+    ._remind-time {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -39,7 +39,7 @@
         font-size: 16px;
         font-weight: bold;
         color: var(--red-5e);
-        &._started{
+        &._started {
           color: var(--green-8c);
         }
       }
@@ -116,7 +116,7 @@
         }
       }
 
-      ._remind-time{
+      ._remind-time {
         margin-top: 25px;
         span {
           font-size: 13px;

@@ -1,4 +1,4 @@
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .exam-question-page {
   .question-info-place-holder {
@@ -346,20 +346,26 @@
           margin: 0;
         }
         grid-template-areas:
-    "question"
-    "similar"
-    "info"
+          'question'
+          'similar'
+          'info';
       }
 
       /* تحسين المساحة للمقاسات الصغيرة */
       grid-template-areas:
-    "question info"
-    "similar similar";
+        'question info'
+        'similar similar';
 
       /* تخصيص العناصر */
-      .aa-q { grid-area: question; }
-      .question-info-place-holder { grid-area: info; }
-      .w-similar-questions { grid-area: similar; }
+      .aa-q {
+        grid-area: question;
+      }
+      .question-info-place-holder {
+        grid-area: info;
+      }
+      .w-similar-questions {
+        grid-area: similar;
+      }
     }
 
     /*.m-content {

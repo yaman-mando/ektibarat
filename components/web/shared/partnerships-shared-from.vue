@@ -646,7 +646,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .partnerships-shared-form {
   .c-back-mobile {
     display: grid;
@@ -776,7 +776,7 @@ export default {
 }
 </style>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 #modal-edit-mail,
 #modal-edit-phone {

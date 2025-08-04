@@ -92,7 +92,7 @@ const getImageUrl = imageUrl.staticImageUrl;
 const navLink = redirectService.getStudentRedirectUrl();
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .rw-4 {
   background: #f4f4f9;
   .cl-4 {

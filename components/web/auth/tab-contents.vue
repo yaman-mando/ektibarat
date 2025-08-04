@@ -255,7 +255,7 @@ watch(
 );
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .registration-tab-content {
   padding: 15px;

@@ -100,7 +100,7 @@ const trimmedTextModel = computed(() => {
 });
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .exam-part-article {
   display: block;
   margin-top: 15px;

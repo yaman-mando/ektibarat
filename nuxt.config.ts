@@ -9,8 +9,8 @@ import { APP_ENVS, currentEnv, getEnv } from './config';
 // eslint-disable-next-line no-restricted-properties
 const IS_PRODUCTION_APP = process.env.NODE_ENV === 'production';
 enum AuthCookiesEnum {
-  token = 'auth.token',
-  refreshToken = 'auth.refresh-token',
+  token = 'ek-auth.token',
+  refreshToken = 'ek-auth.refresh-token',
 }
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -315,16 +315,16 @@ export default defineNuxtConfig({
         type: 'Bearer',
         cookieName: AuthCookiesEnum.token,
         headerName: 'Authorization',
-        maxAgeInSeconds: 60 * 60 * 5,
+        maxAgeInSeconds: 60 * 60 * 7,
         // sameSiteAttribute: 'lax',
         cookieDomain: IS_PRODUCTION_APP
           ? new URL(getEnv().websiteUrl).hostname
           : undefined,
-        secureCookieAttribute: false,
+        secureCookieAttribute: IS_PRODUCTION_APP,
         httpOnlyCookieAttribute: false,
       },
       refresh: {
-        isEnabled: true,
+        isEnabled: false,
         endpoint: { path: '/identity/refreshToken', method: 'post' },
         refreshOnlyToken: false,
         token: {
@@ -332,12 +332,12 @@ export default defineNuxtConfig({
           refreshResponseTokenPointer: '/token',
           refreshRequestTokenPointer: '/refreshToken',
           cookieName: AuthCookiesEnum.refreshToken,
-          maxAgeInSeconds: 60 * 60 * 5,
+          maxAgeInSeconds: 60 * 60 * 7,
           // sameSiteAttribute: 'lax',
           cookieDomain: IS_PRODUCTION_APP
             ? new URL(getEnv().websiteUrl).hostname
             : undefined,
-          secureCookieAttribute: false,
+          secureCookieAttribute: IS_PRODUCTION_APP,
           httpOnlyCookieAttribute: false,
         },
       },

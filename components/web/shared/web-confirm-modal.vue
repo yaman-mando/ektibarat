@@ -95,7 +95,7 @@ export default {
 };
 </script>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 .web-confirm-modal {
   width: 650px !important;
   margin: 0 auto;

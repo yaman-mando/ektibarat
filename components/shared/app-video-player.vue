@@ -26,6 +26,8 @@
           qualitySelector: false, // Disable default quality selector
         }"
         @ready="onPlayerReady"
+        @play="onPlayerStart"
+        @pause="onPlayerPause"
       />
     </client-only>
   </div>
@@ -188,7 +190,23 @@ const props = withDefaults(
 );
 
 const authStore = useAuthStore();
-const userId = computed(() => authStore.state.userData!.id);
+const waterMarkText1 = computed(() => {
+  const user = authStore.state.userData!;
+  if (user.firstName || user.lastName) {
+    return `${user.firstName} ${user.lastName}`;
+  }
+
+  return user.userName;
+});
+
+const waterMarkText2 = computed(() => {
+  const user = authStore.state.userData!;
+  if (user.phoneNumber) {
+    return user.phoneNumber;
+  }
+
+  return user.email;
+});
 
 const pathModel = computed(() => {
   return props.path;
@@ -233,6 +251,14 @@ const currentSource = computed(
   () => videoSource.sources[currentSourceIndex.value]
 );
 let player = null as any;
+
+function onPlayerStart() {
+  document.documentElement.style.setProperty('--wt-opacity', '0.5');
+}
+
+function onPlayerPause() {
+  document.documentElement.style.setProperty('--wt-opacity', '0');
+}
 
 async function onPlayerReady(event: { target: { player: any } }) {
   player = event.target.player;
@@ -299,11 +325,15 @@ async function onPlayerReady(event: { target: { player: any } }) {
 
   // Add dynamic watermark with a custom number
   player.dynamicWatermark({
-    elementId: `water-mark-${userId.value}`,
-    watermarkText: `${userId.value}`,
+    elementId: `water-mark`,
+    watermarkText: `
+<div id="wt-c" class="flex flex-col items-center text-white text-xs space-x-2 text-[22px]">
+  <span class="pb-[90px] text-purple-8d">${waterMarkText1.value}</span>
+  <span class="pie-[90px] text-purple-8d">${waterMarkText2.value}</span>
+</div>`,
     changeDuration: 5 * 1000,
     cssText:
-      'display: inline-block; color: white; background-color: rgba(0, 0, 0, 0.5); font-size: 1.2rem; padding: 5px 10px; border-radius: 4px; z-index: 9999; position: absolute;',
+      'display: inline-block; color: white; font-size: 1.2rem; padding: 5px 10px; border-radius: 4px; z-index: 9999; position: absolute;',
   });
 
   // Handle player errors
@@ -350,9 +380,28 @@ function updateQualitySelector() {
     });
   }
 }
+
+function moveTo(seconds: any) {
+  if (seconds < player.duration()) {
+    player.currentTime(seconds);
+  }
+}
+
+defineExpose({
+  moveTo,
+});
 </script>
 
+<style lang="scss">
+:root {
+  --wt-opacity: 0;
+}
+</style>
 <style lang="scss" scoped>
+:deep(#wt-c) {
+  opacity: var(--wt-opacity);
+}
+
 .apv-w {
   display: flex;
   flex-direction: column;

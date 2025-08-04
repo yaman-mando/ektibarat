@@ -122,7 +122,7 @@ const navTo = (type: GlobalTypes | null = null) => {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .tasks-part {
   background: var(--gray-ff);

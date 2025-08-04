@@ -324,7 +324,7 @@ watch(
 );
 </script>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .answer-select-wrapper {
   display: grid;

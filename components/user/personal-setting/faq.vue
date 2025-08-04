@@ -15,12 +15,26 @@
         <div class="faqs-section">
           <div class="faqs-list">
             <template v-if="filteredList.length">
-              <div v-for="(item, index) in filteredList" :key="item.title" class="accordion-item space-y-[15px]">
-                <div class="accordion-header" @click="toggleAccordion(index)">
-                  <i class="fa" :class="activeIndex === index ? 'fa-minus' : 'fa-plus'"></i>
+              <div
+                v-for="(item, index) in filteredList"
+                :key="item.title"
+                class="accordion-item space-y-[15px]"
+              >
+                <div
+                  class="accordion-header"
+                  @click="toggleAccordion(index)"
+                >
+                  <i
+                    class="fa"
+                    :class="activeIndex === index ? 'fa-minus' : 'fa-plus'"
+                  ></i>
                   <span class="question-text">{{ item.title }}</span>
                 </div>
-                <div v-show="activeIndex === index" class="accordion-body" v-html="item.answer"></div>
+                <div
+                  v-show="activeIndex === index"
+                  class="accordion-body"
+                  v-html="item.answer"
+                ></div>
               </div>
             </template>
           </div>
@@ -32,50 +46,50 @@
 
 <script lang="ts" setup>
 //meta
-import { useCommonQuestionsStore } from '~/main/modules/common-questions/services/useCommonQuestionsStore'
+import { useCommonQuestionsStore } from '~/main/modules/common-questions/services/useCommonQuestionsStore';
 
 definePageMeta({
   layout: 'website-layout',
-})
+});
 
 useHead({
   bodyAttrs: {
     class: 'no-background',
   },
-})
+});
 
 // store
-const commonQuestionsStore = useCommonQuestionsStore()
+const commonQuestionsStore = useCommonQuestionsStore();
 
 // data
-const search = ref<string | null>(null)
-const activeIndex = ref<number | null>(null)
+const search = ref<string | null>(null);
+const activeIndex = ref<number | null>(null);
 const listRequest = useLazyAsyncData(
   'common-questions-all',
   () => commonQuestionsStore.getAll(),
   { immediate: false }
-)
+);
 
 const filteredList = computed(() => {
-  const list = listRequest.data.value
-  if (!list?.length) return []
-  if (!search.value) return list
+  const list = listRequest.data.value;
+  if (!list?.length) return [];
+  if (!search.value) return list;
   return list.filter((post) =>
     post.title?.toLowerCase().includes(search.value?.toLowerCase() ?? '')
-  )
-})
+  );
+});
 
 const toggleAccordion = (index: number) => {
-  activeIndex.value = activeIndex.value === index ? null : index
-}
+  activeIndex.value = activeIndex.value === index ? null : index;
+};
 
 onMounted(() => {
-  listRequest.execute()
-})
+  listRequest.execute();
+});
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .faqs-page {
   padding: 15px;
@@ -90,7 +104,7 @@ onMounted(() => {
   .title {
     font-size: 24px;
     font-weight: bold;
-    color: #4B5363;
+    color: #4b5363;
     margin-bottom: 24px;
     text-align: right;
   }

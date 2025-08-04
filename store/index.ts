@@ -43,7 +43,6 @@ export type VuexRootState = {
   subscriptionsStatic: any | null;
   lastMessages: any[];
   chatStatic: any | null;
-  refreshInterval: any | null;
   chatRooms: any[];
   chatRoomsList: any[];
   unreadMessage: any | null;
@@ -56,9 +55,9 @@ export type VuexRootState = {
   lastUserSubUpdate: number;
   loadedCss: string[];
   loadedScripts: string[];
-  surveysSetting: any | null,
-  selectedSurveys: any | null,
-  surveysData: any | null,
+  surveysSetting: any | null;
+  selectedSurveys: any | null;
+  surveysData: any | null;
 };
 
 export type VuexStoreState = VuexRootState & {
@@ -88,7 +87,6 @@ export const vuexStore = createStore<VuexRootState>({
       subscriptionsStatic: null,
       lastMessages: [],
       chatStatic: null,
-      refreshInterval: null,
       chatRooms: [],
       chatRoomsList: [],
       unreadMessage: null,
@@ -153,9 +151,6 @@ export const vuexStore = createStore<VuexRootState>({
     },
     SET_CHAT_PANEL(state, payload) {
       state.chatStatic = payload;
-    },
-    SET_REFRESH_INTERVAL(state, payload) {
-      state.refreshInterval = payload;
     },
     SET_LAST_MESSAGES(state, payload) {
       state.lastMessages = payload;
@@ -513,7 +508,7 @@ export const vuexStore = createStore<VuexRootState>({
       } catch (e) {
         console.error('surveysRequest error:', e);
       }
-    }
+    },
   },
   modules: {
     subs: subsVuexStore,

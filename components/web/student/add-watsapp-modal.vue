@@ -498,7 +498,7 @@ export default {
 };
 </script>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .a-add-teacher-modal {
   background-color: var(--modal-bg);

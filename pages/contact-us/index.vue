@@ -262,7 +262,7 @@ useHead({
 });
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .contact-us {
   background: #f6fafe;

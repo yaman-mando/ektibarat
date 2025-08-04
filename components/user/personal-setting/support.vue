@@ -1,9 +1,6 @@
 <template>
-  <div
-    class="chat-panel-page"
-  >
-  
-  <app-overlay
+  <div class="chat-panel-page">
+    <app-overlay
       v-if="!staticData"
       :fullScreen="true"
     />
@@ -32,13 +29,10 @@ import { useStore } from 'vuex';
 import { onMounted, computed } from 'vue';
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
 
-
 const store = useStore();
-const {appAuth} = useSetupAuth();
-
+const { appAuth } = useSetupAuth();
 
 const staticData = computed(() => store.state.chatStatic);
-
 
 onMounted(() => {
   store.dispatch('getChatPanelStatic');
@@ -46,7 +40,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 .chat-panel-page {
   padding: 20px 33px;
@@ -70,5 +64,4 @@ onMounted(() => {
     max-width: 100vw;
   }
 }
-
 </style>

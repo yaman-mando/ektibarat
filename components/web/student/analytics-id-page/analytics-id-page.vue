@@ -1279,7 +1279,7 @@ export default {
 </script>
 <style lang="scss" src="./analytics-id-page.scss" scoped></style>
 <style lang="scss">
-@import '@/assets/scss/mixin';
+@use '@/assets/scss/mixin' as *;
 
 #skills-modal {
   max-width: 100vw;
