@@ -304,7 +304,7 @@ export default {
   data() {
     return {
       isShownConfirm: false,
-      showStepsSection: true,
+      showStepsSection: false,
       requiredHours: null as number | null,
       loadingRequiredHours: false,
       loadingForm: false,
