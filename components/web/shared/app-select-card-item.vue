@@ -7,7 +7,7 @@
       :src="iconSvgPath"
       alt="icon"
     />
-    <div class="flex flex-col !gap-1 items-start justify-start">
+    <div class="flex flex-col items-start justify-start">
       <span class="sci-item__title">{{ title }}</span>
       <span class="sci-item__label">{{ label }}</span>
     </div>

@@ -18,31 +18,38 @@
         @click="startTour(true)"
       />
     </div>
-    <div
-      v-if="!isExams && userCurrentSub.remainTrainingCountPerDay < 100"
-      class="training-count"
-    >
-      <span
-        v-if="userCurrentSub.remainTrainingCountPerDay > 0"
-        class="remind"
+    <template v-if="showRemainingCount">
+      <div
+        class="ra-count flex flex-col lg:flex-row items-start justify-start lg:justify-between gap-[10px] my-2 px-[15px] py-[15px] rounded-[8px] border-[#EAB316] bg-[#FFFBEB] border"
       >
-        🎯 تبقّى لك اليوم
-        <span class="count">
-          ({{ userCurrentSub.remainTrainingCountPerDay }})
-        </span>
-        تدريبات مجانية!
-        <br />
-        اغتنم الفرصة ودرّب قدراتك لأقصى حد – كل تدريب يقربك من هدفك 💪
-      </span>
-      <span
-        v-else
-        class="finish"
-      >
-        ⏳ لقد وصلت للحد اليومي المجاني من التدريبات.
-        <br />
-        عُد غدًا لتكمل رحلتك مجانًا، أو ارتقِ بخطتك وواصل التدريب بلا حدود 🚀
-      </span>
-    </div>
+        <div class="flex gap-[15px]">
+          <img
+            src="/images/icons/triangle-exclamation.png"
+            alt="warn"
+            class="flex items-center justify-center m-auto"
+          />
+          <div class="flex flex-col gap-[5px]">
+            <span class="text-[#92400E] text-[14px] lg:text-[16px] font-bold">
+              لديك {{ userCurrentSub.remainTrainingCountPerDay }} محاولات تدريب
+              مجانية لهذا اليوم
+            </span>
+            <span class="text-[#92400E] text-[13px] lg:text-[14]">
+              اشترك في باقات اختبارات لتتدرب بلا حدود!
+            </span>
+          </div>
+        </div>
+        <nuxt-link
+          class="flex items-center justify-center self-center"
+          :to="webUserDashboardPlan()"
+        >
+          <app-button
+            class="ra-bu"
+            label="اشترك الان"
+            iconEndClass="fa fa-chevron-left"
+          />
+        </nuxt-link>
+      </div>
+    </template>
     <h4 class="t-text">
       {{ staticData.topText }}
     </h4>
@@ -150,6 +157,7 @@
             class="cw-bank"
           >
             <prime-accordion-header class="c-head">
+              <div class="flex items-center justify-start"></div>
               <div class="r-part">
                 <!--                <i class="ek-icon-sliders-solid"></i>-->
                 <span class="r_tt">خصص تدريبك</span>
@@ -689,25 +697,27 @@
       class="pa-fo"
       :style="{ width: usContentWidth }"
     >
-      <div class="pa-fo__st">
-        <div class="pa-fo-met">
-          <img
-            src="/images/svg/Icons8_flat_clock.svg"
-            alt="icon"
-          />
-          <span>الزمن المتوقع</span>
+      <div class="pa-fo-wrapper">
+        <div class="pa-fo__st">
+          <div class="pa-fo-met">
+            <img
+              src="/images/svg/Icons8_flat_clock.svg"
+              alt="icon"
+            />
+            <span>الزمن المتوقع</span>
+          </div>
+          <span class="pg-t">{{ getTotalTime }}</span>
         </div>
-        <span class="pg-t">{{ getTotalTime }}</span>
-      </div>
-      <div class="pa-fo__en">
-        <app-button
-          v-if="!isExams"
-          :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"
-          :label="texts.btnText"
-          colorType="blue"
-          iconEndClass="fa fa-chevron-left"
-          @click="checkAndStart"
-        />
+        <div class="pa-fo__en">
+          <app-button
+            v-if="!isExams"
+            :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"
+            :label="texts.btnText"
+            colorType="blue"
+            iconEndClass="fa fa-chevron-left"
+            @click="checkAndStart"
+          />
+        </div>
       </div>
     </div>
 
@@ -742,6 +752,7 @@ import { RouteHelper } from '~/main/utils/route-helper';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import { appEvents } from '~/main/shared/events/app.events';
 import AppSelectCardItem from '~/components/web/shared/app-select-card-item.vue';
+import { webUserDashboardPlan } from '~/main/utils/web-routes.utils';
 
 const SIMULATE_START_DELAY = 600;
 const TOGGLE_DELAY_GAP = 500;
@@ -986,6 +997,7 @@ export default {
   },
 
   methods: {
+    webUserDashboardPlan,
     onSelectDifficult(val: string | number) {
       const set = new Set(this.selectedDifficultValues);
       if (set.size === 2 && !set.has(val)) return;
@@ -1802,6 +1814,11 @@ export default {
   },
 
   computed: {
+    showRemainingCount() {
+      return (
+        !this.isExams && this.userCurrentSub.remainTrainingCountPerDay < 100
+      );
+    },
     canStartTour() {
       return (
         this.introService.isIntroLibReady &&

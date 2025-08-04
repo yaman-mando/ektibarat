@@ -25,6 +25,8 @@ export const webUserPanelTraining = () =>
 export const webUserTrainWithUs = () => `/user-dashboard/train-with-us`;
 export const webUserSteps = () => `/user-dashboard/steps`;
 export const webUserTrainingPlan = () => `/user-dashboard/training-plan`;
+export const webUserDashboardPlan = () =>
+  'user-dashboard/personal-setting?section=subscriptions';
 export const webUserPanelSubscriptions = () =>
   '/user-panel?page=subscriptionList';
 export const webUserPanelTrainingWithQuery = (
