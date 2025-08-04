@@ -6,18 +6,22 @@
     />
 
     <template v-else>
-      <h3 class="t-title">
-        <template v-if="appAuth.user.role == 0">المراسلة</template>
-        <template v-else>الدعم الفني</template>
-      </h3>
-      <h4
-        v-if="staticData && staticData.topText"
-        class="t-text"
-      >
-        {{ staticData.topText }}
-      </h4>
-      <app-messaging />
-    </template>
+
+    <h3 class="t-title">
+     <template v-if="appAuth.user.role == 0">المراسلة</template>
+     <template v-else>الدعم الفني</template>
+    </h3>
+    <h4
+      v-if="staticData && staticData.topText"
+      class="t-text"
+    >
+      {{ staticData.topText }}
+    </h4>
+    <client-only>
+    <app-messaging/>
+    </client-only>
+    
+     </template>
   </div>
 </template>
 <script lang="ts" setup>

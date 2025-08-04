@@ -273,3 +273,54 @@ export type studentAnalyzeForTeacherResponse = {
     analayzeStudentCategories: analyzeStudentCategory[];
   }[]
 }
+
+
+export type blog = {
+  link: string;
+  title: string;
+  description: string;
+  source_url: string
+}
+
+export type blogsListResponse = blog[]
+
+
+export type trainingAnalyzeCategorySimple = {
+  categoryId: number;
+  parentId: number | null;
+  categoryName: string;
+  questionsCount: number;
+  correctAnswersCount: number;
+  wrongAnswersCount: number;
+  rate: number;
+  totalTime: number;
+  sort: number;
+}
+
+export type trainingAnalyzeSimpleResponse = {
+  subjectId: number;
+  subjectName: string;
+  studentRate: number;
+  trainingAnalyzeCategories: trainingAnalyzeCategorySimple[];
+}
+
+export type trainingPlanInfoSimpleResponse = {
+  totalPercentage: number;
+  percentageRequired: number | any;
+  percentageDone: number | any;
+  timeRequired: number | any;
+  timeDone: number;
+}
+
+export type slide = {
+  createdDate: string,
+  goLinkUrl: string,
+  id: number,
+  imagePath: string,
+  imagePathMobile: string,
+  isExternalLink: boolean,
+  order: number,
+  tag: number
+}
+
+export type slidersResponse = slide[]

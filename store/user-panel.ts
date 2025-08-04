@@ -1,6 +1,10 @@
-import type { BlobOptions } from "buffer"
 import { GlobalSub } from "~/main/modules/user-panel/data-access/user-panel.enum"
-import type { categoriesListForModal, categoryAnalysisList, categoryInfoForStep, chartDataList, idLabelList, lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, recommendation, recommendationsResponse, schoolDashboardData, similarVidModel, stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeForTeacherResponse, studentAnalyzeResponse, studentStages, trainingPlanSummaryResponse } from "~/main/modules/user-panel/data-access/user-panel.model"
+import type { blogsListResponse, categoriesListForModal, categoryAnalysisList, categoryInfoForStep, chartDataList, idLabelList,
+   lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, recommendationsResponse, schoolDashboardData, similarVidModel, 
+   slidersResponse, 
+   stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeForTeacherResponse, studentAnalyzeResponse, studentStages,
+   trainingAnalyzeSimpleResponse, trainingPlanInfoSimpleResponse, trainingPlanSummaryResponse } 
+   from "~/main/modules/user-panel/data-access/user-panel.model"
 
 
 interface UserPanelState {
@@ -22,7 +26,11 @@ interface UserPanelState {
     recommendations: boolean,
     studentAnalyzeForTeacher: boolean,
     studentAnalyzeChartForTeacher: boolean,
-    studentPlanInfoForTeacher: boolean
+    studentPlanInfoForTeacher: boolean,
+    blogs: boolean,
+    homeSliders: boolean,
+    trainingAnalyzeSimple: boolean,
+    planInfoSimple: boolean
   }
   globalType: number,
   lessonsCategories: lessonsCategoriesDataModel[] | null,
@@ -43,6 +51,10 @@ interface UserPanelState {
   recommendations: recommendationsResponse | null,
   studentAnalyzeForTeacher: studentAnalyzeForTeacherResponse | null,
   studentPlanInfoForTeacher: trainingPlanSummaryResponse | null,
+  blogs: blogsListResponse | null,
+  homeSliders: slidersResponse | null,
+  trainingAnalyzeSimple: trainingAnalyzeSimpleResponse | null,
+  planInfoSimple: trainingPlanInfoSimpleResponse | null
 }
 
 
@@ -67,6 +79,10 @@ export const useUserPanelStore = defineStore('userPanel', {
       studentAnalyzeForTeacher: false,
       studentAnalyzeChartForTeacher: false,
       studentPlanInfoForTeacher: false,
+      blogs: false,
+      homeSliders: false,
+      trainingAnalyzeSimple:false,
+      planInfoSimple:false
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
@@ -86,7 +102,11 @@ export const useUserPanelStore = defineStore('userPanel', {
     recommendations: null,
     studentAnalyzeForTeacher: null,
     studentAnalyzeChartForTeacher: null,
-    studentPlanInfoForTeacher: null
+    studentPlanInfoForTeacher: null,
+    blogs: null,
+    homeSliders: null,
+    trainingAnalyzeSimple:null,
+      planInfoSimple:null
   }),
 
   actions: {
@@ -428,6 +448,73 @@ export const useUserPanelStore = defineStore('userPanel', {
         this.fetching.recommendations = false
       }
 
+    },
+
+
+    async getBlogs(): Promise<blogsListResponse | null> {
+      try {
+        this.fetching.blogs = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/generalUse/getBlogs`)
+        this.blogs = data
+        return data
+      } catch (e) {
+        this.blogs = null
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.blogs = false
+      }
+    },
+
+
+    async getHomeSlides(): Promise<slidersResponse | null> {
+      try {
+        this.fetching.homeSliders = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/sliders/all`)
+        this.homeSliders = data
+        return data
+      } catch (e) {
+        this.homeSliders = null
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.homeSliders = false
+      }
+    },
+
+     async getSimpleTrainingAnalyze(): Promise<trainingAnalyzeSimpleResponse | null> {
+      try {
+        this.fetching.trainingAnalyzeSimple = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/dashboard/simpleTrainingAnalyze?${this.globalType}`)
+        this.trainingAnalyzeSimple = data
+        return data
+      } catch (e) {
+        this.trainingAnalyzeSimple = null
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.trainingAnalyzeSimple = false
+      }
+    },
+
+
+    async getSimplePlansInfo(): Promise<trainingPlanInfoSimpleResponse | null> {
+      try {
+        this.fetching.planInfoSimple = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/trainingPlansInfo/simpleDetails`)
+        this.planInfoSimple = data
+        return data
+      } catch (e) {
+        this.planInfoSimple = null
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.planInfoSimple = false
+      }
     },
 
 
