@@ -157,11 +157,21 @@
             class="cw-bank"
           >
             <prime-accordion-header class="c-head">
-              <div class="flex items-center justify-start"></div>
-              <div class="r-part">
-                <!--                <i class="ek-icon-sliders-solid"></i>-->
-                <span class="r_tt">خصص تدريبك</span>
-                <span class="me-t">تحكم بالأسئلة التي تريد أن تتدرب عليها</span>
+              <div class="flex items-center justify-start gap-[10px]">
+                <template v-if="appAuth.notSubscribedUser">
+                  <img
+                    class="flex items-center justify-center"
+                    src="/images/icons/lock-icon.png"
+                    alt="locked"
+                  />
+                </template>
+
+                <div class="r-part">
+                  <span class="r_tt">خصص تدريبك</span>
+                  <span class="me-t">
+                    تحكم بالأسئلة التي تريد أن تتدرب عليها
+                  </span>
+                </div>
               </div>
             </prime-accordion-header>
             <prime-accordion-content>
@@ -268,6 +278,7 @@
                     v-model:selectedValues="form.questionCount"
                     inputId="questionCount"
                     class="w-[130px] h-[45px]"
+                    :isDisabled="appAuth.notSubscribedUser"
                     :list="questionCountOptions"
                     :placeholder="'سؤال'"
                     :isMulti="false"
@@ -829,7 +840,7 @@ export class examForm {
   onlyFlaggedQuestions = false;
   randomQuestionsSettings = [] as any[];
   questionsLevelsMin = 0;
-  questionCount: null | number = 10;
+  questionCount: null | number = 50;
   questionsLevelsMax = 10;
   customerId: any | null = null;
   sessionId: any | null = null;
@@ -895,16 +906,20 @@ export default {
 
     const questionCountOptions = [
       {
-        id: 10,
-        label: '10',
-      },
-      {
-        id: 24,
-        label: '24',
+        id: 25,
+        label: '25',
       },
       {
         id: 50,
         label: '50',
+      },
+      {
+        id: 75,
+        label: '75',
+      },
+      {
+        id: 100,
+        label: '100',
       },
     ];
 

@@ -112,11 +112,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 28px 40px;
+    padding: 18px 15px;
     position: fixed;
-    bottom: 0;
+    bottom: 78px;
     left: 0;
     flex-direction: column;
+    @include web-desktop-up() {
+      bottom: 0;
+      padding: 28px 40px;
+    }
     @include ipad-up() {
       flex-direction: row;
     }
@@ -128,21 +132,17 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-direction: column;
-      @include ipad-up() {
+      @include web-desktop-up() {
         flex-direction: row;
       }
     }
 
     &__st {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
       justify-content: flex-start;
       gap: 10px;
-      @include ipad-up() {
-        align-items: flex-start;
-        flex-direction: column;
-      }
       .pa-fo-met {
         display: flex;
         align-items: baseline;
@@ -176,6 +176,23 @@
           font-size: 12px;
           position: absolute;
           inset-inline-end: 10px;
+        }
+      }
+    }
+
+    .pa-fo__en {
+      :deep(.app-button) {
+        width: 160px !important;
+        height: 40px !important;
+        border-radius: 8px;
+        gap: 10px;
+        .app-button-label {
+          font-size: 14px;
+        }
+        .app-button-icon {
+          position: relative;
+          inset-inline: 0;
+          inset-inline-start: 10px;
         }
       }
     }
