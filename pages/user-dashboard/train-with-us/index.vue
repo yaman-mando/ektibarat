@@ -1,13 +1,13 @@
 <template>
   <user-panel-wrapper contentClass="!pb-0">
-    <template #top-right>
-      <app-button
-        label="رجوع للخلف"
-        iconStartClass="fa fa-chevron-right"
-        variant="clear"
-        size="md"
-      />
-    </template>
+    <!--    <template #top-right>-->
+    <!--      <app-button-->
+    <!--        label="رجوع للخلف"-->
+    <!--        iconStartClass="fa fa-chevron-right"-->
+    <!--        variant="clear"-->
+    <!--        size="md"-->
+    <!--      />-->
+    <!--    </template>-->
 
     <div class="train-with-us space-y-10">
       <div
@@ -20,11 +20,25 @@
             class="qd-item"
             @click="smartClick"
           >
+            <template v-if="appAuth.notSubscribedUser">
+              <service-block />
+              <img
+                class="absolute w-[24px] top-[10px] left-[10px]"
+                src="/images/icons/lock-icon.png"
+                alt="lock"
+              />
+            </template>
+
             <img
               class="qd-badge"
               src="/images/badge.png"
               alt=""
             />
+            <span
+              class="absolute right-[0px] top-[15px] rotate-[45deg] text-[12px] text-[#fff]"
+            >
+              الافضل
+            </span>
             <div class="qd-item__img">
               <img
                 src="/images/robot-head.png"
@@ -34,7 +48,10 @@
             <div class="qd-item__content">
               <span class="qd-item-m1">مدربك الذكي</span>
               <span class="qd-item-m2">
-                روبوت ذكي خاص فيك يخاويك ويفهمك ويضبط لك خطة تدريب ويتابعك فيها
+                روبوت ذكي خاص فيك يخاويك ويفهمك
+                <br />
+                ويضبط لك خطة تدريب ويتابعك فيها
+                <br />
                 لتحصل على أعلى درجة في أقل وقت
               </span>
             </div>
@@ -48,6 +65,11 @@
               src="/images/badge-blue.png"
               alt=""
             />
+            <span
+              class="absolute right-[4px] top-[14px] rotate-[45deg] text-[12px] text-[#fff]"
+            >
+              مجاني
+            </span>
             <div class="qd-item__img">
               <img
                 src="/images/self-train.png"
@@ -57,8 +79,11 @@
             <div class="qd-item__content">
               <span class="qd-item-m1">التدريب الشخصي</span>
               <span class="qd-item-m2">
-                درب نفسك بنفسك بإمكانك اختيار الأقسام وتخصيص الأسئلة تقدمك يعتمد
-                على التزامك واجتهادك
+                درب نفسك بنفسك
+                <br />
+                بإمكانك اختيار الأقسام وتخصيص الأسئلة
+                <br />
+                تقدمك يعتمد على التزامك واجتهادك
               </span>
             </div>
           </nuxt-link>
@@ -66,6 +91,14 @@
             :to="userPanelExamPath"
             class="qd-item orange"
           >
+            <template v-if="appAuth.notSubscribedUser">
+              <service-block />
+              <img
+                class="absolute w-[24px] top-[10px] left-[10px]"
+                src="/images/icons/lock-icon.png"
+                alt="lock"
+              />
+            </template>
             <img
               class="qd-badge hidden"
               src="/images/badge-blue.png"
@@ -80,8 +113,11 @@
             <div class="qd-item__content">
               <span class="qd-item-m1">محاكي الاختبار</span>
               <span class="qd-item-m2">
-                اختبار مشابه لاختبارك الحقيقي في قياس يحتوي على 120 سؤال في
-                اللفظي والكمي مدة الاختبار: 120 دقيقة
+                اختبار مشابه لاختبارك الحقيقي في قياس
+                <br />
+                يحتوي على 120 سؤال في اللفظي والكمي
+                <br />
+                مدة الاختبار: 120 دقيقة
               </span>
             </div>
           </nuxt-link>
@@ -105,7 +141,7 @@
           <!--        content-->
           <div class="st-q-content">
             <!--          date content-->
-            <div :class="`st-q-date-content step-${form.currentStep}`">
+            <div :class="`st-q-date-content relative step-${form.currentStep}`">
               <template v-if="form.currentStep === 1">
                 <h1 class="st-q-title">متى أوّل يوم بتبدأ فيه دراسة؟</h1>
                 <app-date-picker
@@ -130,6 +166,39 @@
                 />
               </template>
               <template v-if="form.currentStep === 2">
+                <h1 class="st-q-title step-2">كم الدرجة اللي تطمح تجيبها؟</h1>
+                <span class="st-q-title-meta">
+                  بنعلمك متى تصير جاهز تختبر وتجيب الدرجة اللي تبيها
+                </span>
+                <select-number-popover
+                  v-model="form.neededDegree!"
+                  :start="85"
+                  :end="100"
+                  :step="1"
+                />
+                <app-button
+                  label="التالي"
+                  iconEndClass="fa fa-chevron-left"
+                  colorType="blue"
+                  :isDisabled="!form.neededDegree"
+                  @click="submitRequiredDegree"
+                />
+                <div class="hidden absolute lg:flex bottom-[0px] left-[20px]">
+                  <span
+                    class="flex !text-center relative -left-[50px] -top-[50px] w-[220px] h-[90px] items-center justify-center text-[18px] rounded-[8px] bg-white shadow-[0_0_10px_0_rgba(0,0,0,0.15)]"
+                  >
+                    كفو يا بطل! هذا الطموح
+                    <br />
+                    ولا بلاش
+                  </span>
+                  <img
+                    class="flex z-10 w-[155px] h-[155px] justify-center items-center flex-shrink-0 aspect-[1/1]"
+                    src="/images/robot-target.png"
+                    alt="target"
+                  />
+                </div>
+              </template>
+              <template v-if="form.currentStep === 3">
                 <h1 class="st-q-title step-2">
                   متى تتوقع تاريخ اختبارك الجاي؟
                 </h1>
@@ -155,25 +224,6 @@
                   colorType="blue"
                   :isDisabled="!form.examDate"
                   :isLoading="loadingRequiredHours"
-                  @click="submit2"
-                />
-              </template>
-              <template v-if="form.currentStep === 3">
-                <h1 class="st-q-title step-2">كم الدرجة اللي تطمح تجيبها؟</h1>
-                <span class="st-q-title-meta">
-                  بنعلمك متى تصير جاهز تختبر وتجيب الدرجة اللي تبيها
-                </span>
-                <select-number-popover
-                  v-model="form.neededDegree!"
-                  :start="85"
-                  :end="100"
-                  :step="1"
-                />
-                <app-button
-                  label="التالي"
-                  iconEndClass="fa fa-chevron-left"
-                  colorType="blue"
-                  :isDisabled="!form.neededDegree"
                   @click="submit3"
                 />
               </template>
@@ -297,7 +347,7 @@ export default {
   methods: {
     webUserPanelTraining,
     dateUi,
-    async submit3() {
+    async submitRequiredDegree() {
       this.form.currentStep++;
     },
     showConfirm() {
@@ -344,7 +394,7 @@ export default {
     submitFirst() {
       this.form.currentStep++;
     },
-    submit2() {
+    submit3() {
       this.form.currentStep++;
     },
     dateChange(e: any) {

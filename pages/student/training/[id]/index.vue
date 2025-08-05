@@ -157,6 +157,7 @@
                     <app-train-part-actions
                       ref="trainPartMobileRef"
                       class="w-container"
+                      :isActiveQuestionAnswered="isActiveQuestionAnswered"
                       :isActiveNext="canSelectNextQuestion"
                       :isActiveConfirm="canConfirmAnswerModel"
                       @confirmAction="onSelectAnswer(currentQuestionAnswerId)"
@@ -229,6 +230,7 @@
               <app-train-part-actions
                 ref="trainPartWebRef"
                 class="w-container"
+                :isActiveQuestionAnswered="isActiveQuestionAnswered"
                 :isActiveNext="canSelectNextQuestion"
                 :isActiveConfirm="canConfirmAnswerModel"
                 :questionId="currentQuestionDetailModel.questionId"
@@ -563,6 +565,13 @@ const activeQuestionModel = computed(() =>
     ? activeQuestionListModel.value[activeQuestionIndex.value]
     : null
 );
+
+const isActiveQuestionAnswered = computed(() => {
+  const model = activeQuestionModel.value;
+  if (!model) return false;
+
+  return model.questionState !== QuestionStateEnum.initial;
+});
 
 const currentQuestionDetailModel = computed(() =>
   activeQuestionModel.value
@@ -1448,7 +1457,7 @@ onBeforeRouteLeave(async (to, from, next) => {
     confirmNavigate.value = true;
     return { proceed: true };
   };
-  const data:any = await firstValueFrom(
+  const data: any = await firstValueFrom(
     confirmExitRef.value?.onActionSub ?? of(true)
   );
   const result = await onActionHandler(data);

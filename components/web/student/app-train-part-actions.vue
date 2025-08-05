@@ -26,74 +26,67 @@
         />
       </div>
       <div class="c-e-wrapper">
-        <app-popover-wrapper
-          triggerEvent="click"
-          popoverClass="ce-pop"
-        >
-          <template #trigger="{ bindTrigger }">
-            <app-button
-              v-bind="bindTrigger"
-              variant="outline"
-              iconStartClass="fa-solid fa-question"
-              label="مساعدة"
-              labelClass="text-lg text-orange-39"
-            />
-          </template>
-          <template #content>
-            <div class="ce-pop-content">
-              <span class="qt-a">مساعدة</span>
-              <div class="qt-w">
-                <div
-                  class="qt-w-item"
-                  @click="$emit('showAnswerAction')"
-                >
-                  <img
-                    src="/images/svg/lightbulb.svg"
-                    alt=""
-                  />
-                  <span>طريقة الحل</span>
-                </div>
-                <div
-                  v-if="canShowLaw"
-                  class="qt-w-item"
-                  @click="onLawsClick"
-                >
-                  <img
-                    src="/images/svg/br.svg"
-                    alt=""
-                  />
-                  <span>قوانين السؤال</span>
-                </div>
-                <div class="qt-w-item">
-                  <img
-                    src="/images/svg/br.svg"
-                    alt=""
-                  />
-                  <span>فيديوهات التأسيس</span>
-                </div>
-                <div
-                  class="qt-w-item"
-                  @click="$emit('complainAction')"
-                >
-                  <img
-                    src="/images/svg/triangle-exclamation-solid.svg"
-                    alt=""
-                  />
-                  <span>أبلغنا عن خطأ</span>
+        <template v-if="isActiveQuestionAnswered">
+          <app-popover-wrapper
+            triggerEvent="click"
+            popoverClass="ce-pop"
+          >
+            <template #trigger="{ bindTrigger }">
+              <app-button
+                v-bind="bindTrigger"
+                variant="outline"
+                iconStartClass="fa-solid fa-question"
+                label="مساعدة"
+                labelClass="text-lg text-orange-39"
+              />
+            </template>
+            <template #content>
+              <div class="ce-pop-content">
+                <span class="qt-a">مساعدة</span>
+                <div class="qt-w">
+                  <div
+                    class="qt-w-item"
+                    @click="$emit('showAnswerAction')"
+                  >
+                    <img
+                      src="/images/svg/lightbulb.svg"
+                      alt=""
+                    />
+                    <span>طريقة الحل</span>
+                  </div>
+                  <div
+                    v-if="canShowLaw"
+                    class="qt-w-item"
+                    @click="onLawsClick"
+                  >
+                    <img
+                      src="/images/svg/br.svg"
+                      alt=""
+                    />
+                    <span>قوانين السؤال</span>
+                  </div>
+                  <div class="qt-w-item">
+                    <img
+                      src="/images/svg/br.svg"
+                      alt=""
+                    />
+                    <span>فيديوهات التأسيس</span>
+                  </div>
+                  <div
+                    class="qt-w-item"
+                    @click="$emit('complainAction')"
+                  >
+                    <img
+                      src="/images/svg/triangle-exclamation-solid.svg"
+                      alt=""
+                    />
+                    <span>أبلغنا عن خطأ</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </template>
-        </app-popover-wrapper>
-
-        <!--        <lazy-app-button-->
-        <!--          variant="outline"-->
-        <!--          colorType="warn-light"-->
-        <!--          iconStartClass="fa-solid fa-triangle-exclamation"-->
-        <!--          :label="staticLocales.trainPage.complaintActionLabel"-->
-        <!--          labelClass="text-lg text-orange-39 "-->
-        <!--          @click="$emit('complainAction')"-->
-        <!--        />-->
+            </template>
+          </app-popover-wrapper>
+        </template>
       </div>
     </div>
     <client-only>
@@ -120,6 +113,7 @@ const props = withDefaults(
   defineProps<{
     isActiveConfirm?: boolean;
     isActiveNext?: boolean;
+    isActiveQuestionAnswered?: boolean;
     isLoadingConfirm?: boolean;
     questionId?: string | number;
     canShowLaw?: boolean;

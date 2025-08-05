@@ -40,7 +40,7 @@
 
       .qd-item {
         cursor: pointer;
-        padding: 20px 15px;
+        padding: 13px;
         position: relative;
         display: grid;
         gap: 10px;
@@ -116,6 +116,7 @@
     width: calc(100% - 10px);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    height: 540px;
     @include web-desktop-up() {
       width: 100%;
     }
@@ -162,7 +163,7 @@
             font-size: 40px;
           }
           color: var(--blue-d6);
-          margin: 60px auto 120px auto;
+          margin: 60px auto 110px auto;
 
           &.step-2 {
             margin-bottom: 10px;
@@ -209,8 +210,8 @@
         }
 
         .app-button {
-          margin-top: 100px;
-          margin-bottom: 60px;
+          margin-top: 90px;
+          margin-bottom: 40px;
           width: 200px !important;
           height: 50px !important;
         }
@@ -220,7 +221,7 @@
             margin-top: 42px;
             margin-bottom: 50px;
             @include web-desktop-up() {
-              margin-bottom: 60px;
+              margin-bottom: 40px;
             }
           }
         }
