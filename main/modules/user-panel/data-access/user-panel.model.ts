@@ -59,12 +59,15 @@ export type lessonDetailsModel = {
 }
 
 export type similarVidObj = {
+  iconUrl: string,
   id: number,
   periodTime: number,
   title: string,
   order: number,
   videoLink: string,
-  isWatched: boolean
+  isWatched: boolean,
+  isFree: boolean,
+  isActive: boolean
 }
 
 export type similarVidModel = similarVidObj[]

@@ -13,11 +13,11 @@
     </button> -->
     <div
       v-if="hasPrev"
-      class="w-full h-[60px] flex items-center px-[19px] shadow-custom sticky top-0"
+      class="w-full h-[60px] flex items-center px-[19px] shadow-custom sticky top-0 bg-white"
     >
       <i
         class="fa fa-chevron-right cursor-pointer text-gray-8f"
-        @click="router.push('/user-dashboard/mobile-menu')"
+        @click="toBack"
       ></i>
       <span class="!text-center text-dark-63 text-[18px] font-bold flex-auto">
         {{ pageName }}
@@ -40,6 +40,7 @@
 
       <div
         :class="[
+            {'hasPrev':hasPrev},
           { '!pb-[100px]': !isDesktop && !noSpaces },
           { '!p-0 !bg-white': noSpaces },
         ]"
@@ -126,6 +127,7 @@ const props = withDefaults(
     contentClass?: string;
     hasRInfo?: boolean;
     hasLInfo?: boolean;
+    withBackPage?:boolean;
     hasPrev?: boolean;
     noSpaces?: boolean;
     pageName?: string;
@@ -136,6 +138,7 @@ const props = withDefaults(
     hasLInfo: true,
     hasPrev: false,
     noSpaces: false,
+    withBackPage:false,
     pageName: '',
   }
 );
@@ -158,6 +161,14 @@ const handleSelectGlobal = (item) => {
 
 function toggleDarkMode() {
   colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark';
+}
+
+function toBack(){
+  if(props.withBackPage){
+    router.go(-1)
+    return
+  }
+  router.push('/user-dashboard/mobile-menu')
 }
 
 onMounted(() => {
@@ -188,6 +199,9 @@ definePageMeta({
 #user-panel-wrapper {
   .us-content {
     max-height: 100vh;
+    &.hasPrev{
+      max-height: calc(100vh - 60px);
+    }
     overflow-y: scroll;
 
     @include tablet-down() {

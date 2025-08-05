@@ -123,6 +123,7 @@ module.exports = {
         'yellow-30': 'var(--yellow-30)',
         'orange-35': 'var(--orange-35)',
         'blue-ff': 'var(--blue-ff)',
+        'blue-0ff':'#E3F0FF',
         'blue-f4': 'var(--blue-f4)',
         'blue-fe': 'var(--blue-fe)',
         'blue-d6': 'var(--blue-d6)',

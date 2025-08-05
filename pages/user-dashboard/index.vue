@@ -6,7 +6,7 @@
         </div>
 
         <!-- السلايدر -->
-        <app-slider class="mt-[20px]" v-if="slidersTest" :slides="slidersTest" :delay-action="6000" :tagFilter="0" />
+        <app-slider class="mt-[20px]" v-if="sliders" :slides="sliders" :delay-action="6000" :tagFilter="0" />
 
         <!-- التحليلات -->
         <div class="flex 2xl:flex-nowrap flex-wrap mt-[20px] gap-[20px]">
@@ -192,7 +192,7 @@ import { onMounted, computed } from 'vue';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 
 const panelStore = useUserPanelStore();
-const { data } = useAuth()
+const { data } = useAuth();
 
 panelStore.getBlogs();
 panelStore.getHomeSlides();

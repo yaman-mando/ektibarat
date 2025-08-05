@@ -3,14 +3,14 @@
     <client-only>
       <video-player
         id="CustomVideoPlayer"
-        class="video-player vjs-theme-forest"
+        class="video-player vjs-theme-forest w-[100%]"
         crossorigin="anonymous"
         playsinline
         controls
         :sources="[currentSource]"
         :poster="videoSource.poster"
         :tracks="videoSource.tracks"
-        :height="600"
+        :height="height"
         :volume="0.4"
         :children="[
           'mediaLoader',
@@ -185,8 +185,9 @@ videojs.registerComponent('ChapterMarkers', ChapterMarkers);
 const props = withDefaults(
   defineProps<{
     path: string;
+    height?:number;
   }>(),
-  {}
+  {height:600}
 );
 
 const authStore = useAuthStore();
@@ -408,7 +409,9 @@ defineExpose({
   align-items: center;
   justify-content: center;
   //border: 1px solid var(--purple-8c);
-  border-radius: 15px;
+  @media (min-width:959px) {
+   border-radius: 15px; 
+  }
   overflow: hidden;
   padding-bottom: 20px;
   //box-shadow: var(--shadow-light-1);
@@ -418,6 +421,10 @@ defineExpose({
       span::before {
         font-family: VideoJS, serif !important;
       }
+    }
+
+    .vjs-tech{
+      border: none;
     }
 
     .vjs-quality-selector {

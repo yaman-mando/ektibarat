@@ -12,6 +12,7 @@
 
       <!-- Left: Arrow -->
       <div
+        v-if="!hideArrow"
         class="w-[24px] h-[24px] flex items-center justify-center text-orange-500 transition-transform duration-300"
         :class="{ 'rotate-180': isOpen }"
       >
@@ -54,6 +55,7 @@ interface Props {
   onlyOneOpen?: boolean;
   index?: number;
   contentClass?: string;
+  hideArrow?:boolean;
 }
 
 const props = defineProps<Props>();
