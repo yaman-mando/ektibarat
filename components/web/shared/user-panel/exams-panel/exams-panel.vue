@@ -33,24 +33,24 @@
               لديك {{ userCurrentSub.remainTrainingCountPerDay }} محاولات تدريب
               مجانية لهذا اليوم
             </span>
-            <span class="text-[#92400E] text-[13px] lg:text-[14]">
+            <span class="text-[#92400E] text-[13px] lg:text-[14px]">
               اشترك في باقات اختبارات لتتدرب بلا حدود!
             </span>
           </div>
         </div>
         <nuxt-link
           class="flex items-center justify-center self-center"
-          :to="webUserDashboardPlan()"
+          :to="webPricesPathUtil()"
         >
           <app-button
             class="ra-bu"
-            label="اشترك الان"
+            label="اشترك الآن"
             iconEndClass="fa fa-chevron-left"
           />
         </nuxt-link>
       </div>
     </template>
-    <h4 class="t-text !text-[16px] !lg:text-[20px]">
+    <h4 class="t-text !text-[16px] lg:!text-[20px]">
       {{ staticData.topText }}
     </h4>
 
@@ -168,14 +168,14 @@
 
                 <div class="r-part">
                   <span class="r_tt">خصص تدريبك</span>
-                  <span class="me-t">
+                  <span class="me-t !text-[14px] lg:!text-[16px]">
                     تحكم بالأسئلة التي تريد أن تتدرب عليها
                   </span>
                 </div>
               </div>
             </prime-accordion-header>
             <prime-accordion-content>
-              <div class="__bank !p-[10px] !lg:p-[20px 10px]">
+              <div class="__bank !p-[10px] lg:!p-[20px 10px]">
                 <div class="select-items-wrapper">
                   <div class="select-items-wrapper__st">
                     <div class="relative">
@@ -774,7 +774,10 @@ import { RouteHelper } from '~/main/utils/route-helper';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import { appEvents } from '~/main/shared/events/app.events';
 import AppSelectCardItem from '~/components/web/shared/app-select-card-item.vue';
-import { webUserDashboardPlan } from '~/main/utils/web-routes.utils';
+import {
+  webPricesPathUtil,
+  webUserDashboardPlan,
+} from '~/main/utils/web-routes.utils';
 
 const SIMULATE_START_DELAY = 600;
 const TOGGLE_DELAY_GAP = 500;
@@ -1023,6 +1026,7 @@ export default {
   },
 
   methods: {
+    webPricesPathUtil,
     webUserDashboardPlan,
     onSelectDifficult(val: string | number) {
       const set = new Set(this.selectedDifficultValues);
