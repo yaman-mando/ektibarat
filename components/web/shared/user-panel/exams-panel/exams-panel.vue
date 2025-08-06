@@ -7,20 +7,9 @@
     class="exams-part relative"
   >
     <app-overlay v-if="examLoading" />
-    <div class="w-full flex items-center justify-between">
-      <h3 class="t-title">{{ texts.title }}</h3>
-      <app-button
-        v-if="selectedType != examTypes.exams"
-        class="sr-ho-button"
-        size="sm"
-        label="شرح الاستخدام"
-        colorType="success"
-        @click="startTour(true)"
-      />
-    </div>
     <template v-if="showRemainingCount">
       <div
-        class="ra-count flex flex-col lg:flex-row items-start justify-start lg:justify-between gap-[10px] my-2 px-[15px] py-[15px] rounded-[8px] border-[#EAB316] bg-[#FFFBEB] border"
+        class="ra-count flex flex-col lg:flex-row items-start justify-start lg:justify-between gap-[10px] mt-2 mb-[10px] lg:mb-[15px] px-[15px] py-[15px] rounded-[8px] border-[#EAB316] bg-[#FFFBEB] border"
       >
         <div class="flex gap-[15px]">
           <img
@@ -50,6 +39,18 @@
         </nuxt-link>
       </div>
     </template>
+
+    <div class="w-full flex items-center justify-between">
+      <h3 class="t-title">{{ texts.title }}</h3>
+      <app-button
+        v-if="selectedType != examTypes.exams"
+        class="sr-ho-button"
+        size="sm"
+        label="شرح الاستخدام"
+        colorType="success"
+        @click="startTour(true)"
+      />
+    </div>
     <h4 class="t-text !text-[16px] lg:!text-[20px]">
       {{ staticData.topText }}
     </h4>

@@ -40,7 +40,7 @@
 
       <div
         :class="[
-            {'hasPrev':hasPrev},
+          { hasPrev: hasPrev },
           { '!pb-[100px]': !isDesktop && !noSpaces },
           { '!p-0 !bg-white': noSpaces },
         ]"
@@ -50,6 +50,7 @@
           <div
             v-if="hasLInfo || hasRInfo"
             class="flex justify-between items-baseline flex-wrap gap-4 mb-6"
+            :class="contentWrapperClass"
           >
             <!-- right info -->
             <div
@@ -125,20 +126,22 @@ useHead({
 const props = withDefaults(
   defineProps<{
     contentClass?: string;
+    contentWrapperClass?: string;
     hasRInfo?: boolean;
     hasLInfo?: boolean;
-    withBackPage?:boolean;
+    withBackPage?: boolean;
     hasPrev?: boolean;
     noSpaces?: boolean;
     pageName?: string;
   }>(),
   {
     contentClass: '',
+    contentWrapperClass: '',
     hasRInfo: true,
     hasLInfo: true,
     hasPrev: false,
     noSpaces: false,
-    withBackPage:false,
+    withBackPage: false,
     pageName: '',
   }
 );
@@ -163,12 +166,12 @@ function toggleDarkMode() {
   colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark';
 }
 
-function toBack(){
-  if(props.withBackPage){
-    router.go(-1)
-    return
+function toBack() {
+  if (props.withBackPage) {
+    router.go(-1);
+    return;
   }
-  router.push('/user-dashboard/mobile-menu')
+  router.push('/user-dashboard/mobile-menu');
 }
 
 onMounted(() => {
@@ -199,7 +202,7 @@ definePageMeta({
 #user-panel-wrapper {
   .us-content {
     max-height: 100vh;
-    &.hasPrev{
+    &.hasPrev {
       max-height: calc(100vh - 60px);
     }
     overflow-y: scroll;
