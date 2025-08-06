@@ -3,7 +3,8 @@
     <div class="flex justify-center mb-[35px]">
       <img src="/images/EkhtibaratLogoColor.png" alt="" />
     </div>
-    <div class="w-[1060px] max-w-[calc(100vw-30px)] m-auto bg-white rounded-[8px] pb-[50px] min-h-[530px] grid"
+    <div class="w-[1060px] max-w-[calc(100vw-30px)] m-auto bg-white rounded-[8px] pb-[50px] min-h-[530px]"
+          :class="{'grid':step !==3}"
       style="box-shadow: 0px 0px 10px 0px #00000026">
       <!-- Progress Bar & Back Arrow -->
       <div class="flex items-center gap-[6px] h-[44px] p-[0_15px] border-b-[1px] border-b-[#BCCCDB]">
@@ -17,21 +18,21 @@
         </div>
       </div>
 
-      <div class="my-auto">
+      <div class="my-auto" :class="{'!mt-[60px]':step === 3}">
         <!-- Step 1 -->
         <div v-if="step === 1">
           <h2 class="text-[30px] sm:text-[40px] font-bold !text-center text-blue-d6">خلنا نتعرّف عليك</h2>
           <div class="flex gap-x-[10px] justify-center mt-[50px]">
             <input
-              :class="['border-gray-[#8F8F8F]', 'border-[.5px]', 'rounded-[8px]', 'outline-0', 'pr-[15px]', 'h-[40px]', 'w-[145px]', { 'border-red-500': errors.firstName }]"
-              v-model="form.firstName" placeholder="الاسم الاول" />
+              :class="['border-gray-8f', 'border-[.5px]', 'rounded-[8px]', 'outline-0', 'pr-[15px]', 'h-[40px]', 'w-[145px]', { 'border-red-500': errors.firstName }]"
+              v-model="form.firstName" placeholder="اكتب اسمك الأول" />
             <input
-              :class="['border-gray-[#8F8F8F]', 'border-[.5px]', 'rounded-[8px]', 'outline-0', 'pr-[15px]', 'h-[40px]', 'w-[145px]', { 'border-red-500': errors.lastName }]"
-              v-model="form.lastName" placeholder="الاسم الاخير" />
+              :class="['border-gray-8f', 'border-[.5px]', 'rounded-[8px]', 'outline-0', 'pr-[15px]', 'h-[40px]', 'w-[145px]', { 'border-red-500': errors.lastName }]"
+              v-model="form.lastName" placeholder="اكتب اسمك الأخير" />
           </div>
 
           <div class="mt-[30px]">
-            <p class="!text-center font-medium text-blue-d6">اختر شخصيّتك</p>
+            <p class="!text-center font-medium text-blue-d6 text-[20px]">اختر شخصيّتك</p>
             <div class="flex justify-center items-center gap-[20px] mt-[20px]">
               <img :class="[avatarClass(0), errors.sex ? 'border-red-500 border-[3px]' : '']"
                 src="/images/png/person.png" alt="male" @click="form.sex = 0" />
@@ -44,34 +45,37 @@
         <div v-if="step === 2" class="space-y-[30px] w-[300px] grid justify-self-center">
           <client-only>
             <div class="space-y-[10px]">
-              <label class="block">مدينتك في السعودية</label>
+              <label class="block text-[20px] font-medium text-dark-2b">مدينتك في السعودية</label>
               <v-select v-model="form.cityId" :options="cities" :reduce="city => city.id" label="label"
-                :clearable="false" placeholder="اختر مدينة" @update:modelValue="fetchSchools(true)" :class="[
+                class="custom-select" @update:modelValue="fetchSchools(true)" :clearable="false"
+                placeholder="اختر مدينة" dir="rtl" :filterable="false" @search="handleSearch" :loading="loadingCities"
+                :class="[
                   'w-full',
                   'text-right',
                   'rtl',
-                  errors.cityId ? 'border border-red-500 rounded' : ''
-                ]" dir="rtl" />
+                  errors.cityId ? 'rounded-[6px] bg-gray-fa error' : ''
+                ]" />
             </div>
             <div class="space-y-[10px]">
-              <label class="block">مدرستك</label>
+              <label class="block text-[20px] font-medium text-dark-2b">مدرستك</label>
               <v-select v-model="form.schoolId" :options="schools" :reduce="school => school.id" label="label"
-                :clearable="false" placeholder="اختر مدرسة" :disabled="!form.cityId" style="direction: rtl" :class="[
+                class="custom-select" :clearable="false" placeholder="اختر مدرسة" :disabled="!form.cityId"
+                style="direction: rtl" :class="[
                   'w-full',
                   'text-right',
                   'rtl',
-                  errors.schoolId ? 'border border-red-500 rounded' : ''
+                  errors.schoolId ? 'rounded-[6px] bg-gray-fa error' : ''
                 ]" dir="rtl" />
             </div>
           </client-only>
         </div>
 
         <!-- Step 3 -->
-        <div v-if="step === 3" class="space-y-[40px] grid justify-center">
-          <h2 class="text-blue-d6 text-[30px] sm:text-[40px] font-bold !text-center">في أي صف تدرس؟</h2>
+        <div v-if="step === 3" class="grid gap-y-[50px] justify-center">
+          <h2 class="text-blue-d6 text-[30px] sm:text-[40px] font-bold !text-center mb-0">في أي صف تدرس؟</h2>
           <div class="space-y-[20px] grid justify-center">
             <button v-for="grade in grades" :key="grade.id"
-              :class="[{ 'border-1 border-blue-d6': form.grades === grade.id, 'border border-red-500': errors.grades && form.grades !== grade.id }, 'w-[300px] h-[50px] bg-gray-fa rounded-[10px] text-dark-2b text-[20px] font-medium cursor-pointer']"
+              :class="[{ 'border !border-blue-d6': form.grades === grade.id, 'border !border-red-500': errors.grades && form.grades !== grade.id }, 'border border-[#E5E5E5] w-[300px] h-[50px] bg-gray-fa rounded-[10px] text-dark-2b text-[20px] font-medium cursor-pointer']"
               @click="selectGrade(grade.id)">
               {{ grade.label }}
             </button>
@@ -84,8 +88,8 @@
             <label class="text-dark-2b text-[20px] font-medium">أي محاولة قدرات هذي لك؟</label>
             <div class="flex gap-[12px]">
               <div v-for="n in 5" :key="n" @click="form.qodoratAttempt = n; form.lastQodoratMark = null"
-                class="w-[50px] h-[50px] flex items-center justify-center rounded-full cursor-pointer"
-                :class="[form.qodoratAttempt === n ? 'bg-[#F8F3FF] border-1 border-[#7840E0]' : 'bg-[#F5F7FA]', errors.qodoratAttempt ? 'border-red-500' : '']">
+                class="w-[50px] h-[50px] text-[26px] flex items-center justify-center rounded-full cursor-pointer"
+                :class="[form.qodoratAttempt === n ? 'bg-[#F8F3FF] border-1 border-purple-e0 text-purple-e0' : 'bg-[#F5F7FA] border-1 border-[#E5E5E5] text-dark-2b', errors.qodoratAttempt ? 'border-red-500 text-red-5e' : '']">
                 {{ n }}
               </div>
             </div>
@@ -116,8 +120,8 @@
         </div>
       </div>
 
-      <button v-if="step !== 3" @click="step === 5 ? startTraining() : toStep()"
-        class="w-[200px] h-[50px] bg-blue-d6 text-white text-[18px] font-bold rounded-[8px] cursor-pointer flex items-center justify-center justify-self-center mt-auto">
+      <button v-if="step !== 3" @click="step === 5 ? startTraining() : toStep()" :disabled="!isStepValid"
+        class=" disabled:bg-gray-8f disabled:cursor-default w-[200px] h-[50px] bg-blue-d6 text-white text-[18px] font-bold rounded-[8px] cursor-pointer flex items-center justify-center justify-self-center mt-auto">
         {{ step === 5 ? 'ابدأ التدريب' : 'التالي' }}
         <i class="fa fa-chevron-left mr-[8px]"></i>
       </button>
@@ -131,18 +135,19 @@ import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.mode
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import type { citiesListDataModel, schoolsListDataModel } from "~/main/modules/global/data-access/global.enum"
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
-import { RouteHelper } from '~/main/utils/route-helper';
 import { sleepUtil } from '~/main/utils/shared-utils';
-import { webUserPanelTraining } from '~/main/utils/web-routes.utils';
+import { webUserPanelTraining, webUserTrainWithUs } from '~/main/utils/web-routes.utils';
 import { useGlobalUserStore } from '~/store/global';
+import { useDebounceFn } from '@vueuse/core';
+
 
 
 const router = useRouter();
-const auth = useAuth();
 const setupAuth = useSetupAuth();
 const authStore = useAuthStore();
 const toastMessage = useToastMessage()
 const globalStore = useGlobalUserStore();
+const loadingCities = ref(false);
 
 
 const step = ref(1);
@@ -168,11 +173,12 @@ const errors = ref({
   lastQodoratMark: false,
 });
 
-const isStepValid = (currentStep: number): boolean => {
+
+const isStepValid = computed(() => {
   let valid = true;
   Object.keys(errors.value).forEach(key => errors.value[key] = false);
 
-  switch (currentStep) {
+  switch (step.value) {
     case 1:
       if (!form.value.firstName) { errors.value.firstName = true; valid = false; }
       if (!form.value.lastName) { errors.value.lastName = true; valid = false; }
@@ -187,18 +193,18 @@ const isStepValid = (currentStep: number): boolean => {
       break;
     case 4:
       if (!form.value.qodoratAttempt) { errors.value.qodoratAttempt = true; valid = false; }
-      if (form.value.qodoratAttempt > 1 && !form.value.lastQodoratMark) {
+      if (form.value.qodoratAttempt > 1 && (!form.value.lastQodoratMark || form.value.lastQodoratMark<1)) {
         errors.value.lastQodoratMark = true;
         valid = false;
       }
       break;
   }
   return valid;
-};
+})
 
 const toStep = async () => {
   try {
-    if (!isStepValid(step.value)) return;
+    if (!isStepValid.value) return;
     if (step.value !== 4) {
       step.value++;
       return;
@@ -216,10 +222,37 @@ const grades = [{ id: 10, label: 'الأول الثانوي' }, { id: 11, label:
 //computed
 const user = computed(() => authStore.state.userData as unknown as UserInfoDataModel);
 
-const fetchCities = async () => {
-  const res = await globalStore.getCitiesList();
-  cities.value = res
+
+//methods
+const handleSearch = useDebounceFn(async (search: string) => {
+  console.log(search)
+  if (search.length < 3) {
+    await fetchImportantCities();
+    return;
+  }
+
+  loadingCities.value = true;
+  try {
+    const res = await globalStore.getCitiesList(search);
+
+
+    cities.value = res?.slice(0, 10) ?? res;
+  } finally {
+    loadingCities.value = false;
+  }
+}, 1000); // debounce 1
+
+
+const fetchImportantCities = async () => {
+  loadingCities.value = true;
+  try {
+    const res = await globalStore.getCitiesList();
+    cities.value = res?.slice(0, 10) ?? res;
+  } finally {
+    loadingCities.value = false;
+  }
 };
+
 
 const fetchSchools = async (resetId: boolean = false) => {
   if (resetId) {
@@ -276,7 +309,7 @@ const fillForm = () => {
 
 const fetchData = () => {
   fillForm()
-  fetchCities()
+  fetchImportantCities();
   if (form.value.schoolId) {
     fetchSchools()
   }
@@ -286,7 +319,7 @@ const avatarClass = (type) =>
   `w-25 h-25 cursor-pointer rounded-full ${form.value.sex === type ? 'border-blue-d6 border-[3px]' : 'border-gray-8f border-[1px]'}`;
 
 const startTraining = () => {
-  router.push(webUserPanelTraining())
+  router.push(webUserTrainWithUs())
 };
 
 function enforceRange(e) {
@@ -301,8 +334,19 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-/* .input {
-  @apply border border-gray-300 rounded-md px-3 py-2 text-sm;
-} */
+<style lang="scss" scoped>
+::v-deep {
+  .custom-select .vs__dropdown-toggle {
+    min-height: 40px;
+    height: 40px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 6px;
+  }
+  .custom-select.error{
+    input{
+      opacity: .45;
+    }
+  }
+}
 </style>

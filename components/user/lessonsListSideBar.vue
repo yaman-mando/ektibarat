@@ -49,7 +49,6 @@
                             'bg-blue-0ff text-blue-d6': lesson.status === 'active',
                             'bg-white text-dark-63': lesson.status === 'next',
                             'bg-gray-fa text-gray-8f flex items-center gap-x-[10px]': lesson.status === 'locked',
-
                         }">
 
                         <div class="flex items-center gap-x-[8px]">
