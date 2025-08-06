@@ -14,12 +14,12 @@
             <span v-else class="flex items-center justify-center w-9 h-9 
                 rounded-full bg-[#BCCCDB33] text-[22px] text-gray-8f">
 
-                <tooltip>
+                <tooltip background-color="#06152BE5" textColor="#ffffff">
                     <template #default>
                         <i class="fa fa-lock"></i>
                     </template>
                     <template #content>
-                        <span class="text-[16px] font-medium text-gray-63">
+                        <span class="text-[16px] font-medium text-white">
                             سيفتح هذا الدرس بعد إكمالك
                             <br>
                             للدروس السابقة له.
@@ -31,8 +31,8 @@
             </span>
             <div class="grid">
                 <span :class="textClass">{{ titleText }}</span>
-                <span v-if="lesson.periodTime" class="flex items-center gap-[6px] text-[14px] text-gray-8f">
-                    <i class="fa-solid fa-clock text-[12px]"></i>
+                <span v-if="lesson.periodTime" class="flex items-center gap-[4px] text-[16px] font-medium text-gray-8f">
+                    المدة: 
                     {{ formatTime(lesson.periodTime) }}
                 </span>
             </div>
@@ -77,7 +77,7 @@ const cardClass = computed(() => {
 })
 
 const textClass = computed(() => {
-    return 'md:text-[20px] text-sm md:font-bold'
+    return 'text-[20px] font-bold'
 })
 
 const titleText = computed(() => {

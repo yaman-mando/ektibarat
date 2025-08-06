@@ -1,63 +1,38 @@
 <template>
-  <user-panel-wrapper contentClass="max-w-[1050px] !mx-auto">
+  <user-panel-wrapper :has-l-info="windowSize.isDesktop" :has-r-info="windowSize.isDesktop"
+    :contentClass="`max-w-[1050px] !mx-auto ${!windowSize.isDesktop?'!py-[5px] !px-[10px]':''} `">
     <template #top-right></template>
 
-    <div
-      v-if="userPanelStore.lessonsList"
-      class="flex flex-col xl1200:flex-row gap-[50px]"
-    >
+    <div v-if="userPanelStore.lessonsList" class="flex flex-col xl1200:flex-row gap-[50px]">
       <div class="flex-1 xl1200:mt-[-60px]">
-        <div
-          class="grid h-[110px] gap-y-2px bg-gradient-to-r from-[#24A7F1] to-[#0266D6] text-white p-[15px_20px] rounded-[8px] mb-[30px]"
-        >
-          <div
-            class="flex items-center justify-baseline gap-x-[8px] cursor-pointer opacity-50 w-fit"
-            @click="toFoundation()"
-          >
+        <div style="background: linear-gradient(270deg, #24A7F1 0%, #0266D6 100%);"
+          :class="windowSize.isDesktop?'mb-[30px]':'mb-[20px]'"
+          class="grid items-center h-[107px] text-white p-[10px_20px] rounded-[8px]">
+          <div class="flex items-center justify-baseline gap-x-[8px] cursor-pointer opacity-50 w-fit"
+            @click="toFoundation()">
             <i class="fa fa-chevron-right text-white text-[16px]"></i>
-            <span class="text-white font-medium text-[16px]">رجوع للخلف</span>
+            <span class="text-white font-medium text-[16px] leading-[1.2]">رجوع للخلف</span>
           </div>
-          <div class="flex justify-between">
-            <h2 class="text-lg font-bold">
+          <div class="flex justify-between mt-[5px]">
+            <h2 class="text-[26px] font-bold leading-[1.2]">
               {{ userPanelStore.lessonsList?.title }}
             </h2>
           </div>
-          <div class="flex items-center gap-x-[23px] justify-between">
-            <app-g-progress-bar
-              v-if="doneCount && totalCount"
-              class="flex-1"
-              height="8px"
-              :value="(doneCount / totalCount) * 100"
-              :showText="false"
-              bgClass="bg-white"
-              bgEmptyClass="bg-white/30"
-            />
-            <span>{{ doneCount }}/{{ totalCount }}</span>
+          <div class="flex items-center gap-x-[10px] justify-between">
+            <app-g-progress-bar v-if="doneCount && totalCount" class="flex-1" height="8px"
+              :value="(doneCount / totalCount) * 100" :showText="false" bgClass="bg-white" bgEmptyClass="bg-white/30" />
+            <span class="text-[16px] font-bold text-white">{{ doneCount }}/{{ totalCount }}</span>
           </div>
         </div>
 
-        <div class="space-y-[15px]">
-          <template
-            v-for="(group, index) in lessonGroups"
-            :key="index"
-          >
+        <div :class="windowSize.isDesktop?'space-y-[15px]':'space-y-[20px]'">
+          <template v-for="(group, index) in lessonGroups" :key="index">
             <div v-if="group.length === 1">
-              <lesson-card
-                :lesson="group[0]"
-                :status="getStatus(group[0])"
-              />
+              <lesson-card :lesson="group[0]" :status="getStatus(group[0])" />
             </div>
-            <div
-              v-else
-              class="flex flex-wrap gap-[15px]"
-            >
-              <lesson-card
-                v-for="lesson in group"
-                :key="lesson.id"
-                :lesson="lesson"
-                :status="getStatus(lesson)"
-                class="flex-1"
-              />
+            <div v-else class="flex flex-wrap gap-[15px]">
+              <lesson-card v-for="lesson in group" :key="lesson.id" :lesson="lesson" :status="getStatus(lesson)"
+                class="flex-1" />
             </div>
           </template>
         </div>
@@ -77,6 +52,7 @@ import dailyChallenges from '@/components/user/dailyChallenges.vue';
 import { useUserPanelStore } from '~/store/user-panel';
 import type { lessonObj } from '~/main/modules/user-panel/data-access/user-panel.model';
 import { definePageMeta } from '#imports';
+const windowSize = useWindowSize();
 
 const data = {
   id: 3,
@@ -181,10 +157,10 @@ const sortedLessons = computed(() => {
 });
 
 const doneCount = computed(
-  () => userPanelStore.lessonsList?.doneLessonsCount ?? null
+  () => userPanelStore.lessonsList?.doneLessonsCount ?? 0
 );
 const totalCount = computed(
-  () => userPanelStore.lessonsList?.totalLessonsCount ?? null
+  () => userPanelStore.lessonsList?.totalLessonsCount ?? 0
 );
 
 function getStatus(lesson: lessonObj) {

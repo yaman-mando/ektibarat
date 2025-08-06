@@ -149,9 +149,9 @@
         <router-link
           :to="item.route"
           :class="[
-            'flex items-center',
+            'flex items-center justify-center',
             route.fullPath === item.route
-              ? 'bg-pink-ff border border-purple-e0 rounded-[8px] p-[8px] text-dark-44 dark:text-dark-44'
+              ? 'bg-pink-ff border border-purple-e0 rounded-[8px] h-[48px] w-[48px] text-dark-44 dark:text-dark-44'
               : 'text-dark-44 dark:text-white',
           ]"
         >

@@ -1,9 +1,11 @@
 <template>
-    <div
+  <div
     class="w-full dark:bg-dark-600 overflow-hidden"
-    :class="bgEmptyClass"
+    :class="[!emptyBackground && bgEmptyClass]"
     :style="{
       height,
+      ...(emptyBackground || !bgEmptyClass ? { background: emptyBackground} : {}),
+      ...(hasShadow ? { boxShadow: shadow } : {}),
       borderRadius: radius
     }"
   >
@@ -30,6 +32,7 @@
   </div>
 </template>
 
+
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 
@@ -40,7 +43,10 @@ const props = defineProps({
   radius: { type: String, default: '4px' },
   background: { type: String, default: null },
   bgClass: { type: String, default: '' },
-  bgEmptyClass: { type: String, default: 'bg-gray-200' },  
+  bgEmptyClass: { type: String, default: 'bg-gray-200' },
+  emptyBackground: { type: String, default: null },
+  shadow: { type: String, default: '2px 2px 4px 0px #00000026 inset' },
+  hasShadow: { type: Boolean, default: false },
   textColor: { type: String, default: '' },
   fontSize: { type: String, default: '14px' },
   animated: { type: Boolean, default: true }
@@ -64,5 +70,4 @@ watch(() => props.value, (newVal) => {
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
