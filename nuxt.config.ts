@@ -71,6 +71,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     baseURL: getEnv().websiteUrl,
     public: {
+      configData: getEnv().configData,
       currentEnv,
       paymentKey: getEnv().paymentKey,
       defaultSubjectId: getEnv().defaultSubjectId,

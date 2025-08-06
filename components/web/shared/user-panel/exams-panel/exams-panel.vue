@@ -50,7 +50,7 @@
         </nuxt-link>
       </div>
     </template>
-    <h4 class="t-text">
+    <h4 class="t-text !text-[16px] !lg:text-[20px]">
       {{ staticData.topText }}
     </h4>
 
@@ -175,7 +175,7 @@
               </div>
             </prime-accordion-header>
             <prime-accordion-content>
-              <div class="__bank">
+              <div class="__bank !p-[10px] !lg:p-[20px 10px]">
                 <div class="select-items-wrapper">
                   <div class="select-items-wrapper__st">
                     <div class="relative">
@@ -189,7 +189,8 @@
                         color="blue"
                         :isActive="isRecentQuestionActive"
                         :isDisabled="
-                          !userServicesState.ROWNQUESTIONPRACTICE.isActive
+                          !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
+                          appAuth.notSubscribedUser
                         "
                         :hasNewBadge="true"
                         @click="onRecentSelect"
@@ -206,7 +207,8 @@
                         color="red"
                         :isActive="advancedFilter.onlyWrongQuestions"
                         :isDisabled="
-                          !userServicesState.ROWNQUESTIONPRACTICE.isActive
+                          !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
+                          appAuth.notSubscribedUser
                         "
                         @click="
                           () => (
@@ -227,7 +229,10 @@
                         label="تدرب على الأسئلة التي ميزتها بنجمة فقط"
                         color="yellow"
                         :isActive="advancedFilter.onlyFlaggedQuestions"
-                        :isDisabled="!userServicesState.FAVORITEUSAGE.isActive"
+                        :isDisabled="
+                          !userServicesState.FAVORITEUSAGE.isActive ||
+                          appAuth.notSubscribedUser
+                        "
                         @click="
                           () => (
                             (advancedFilter.onlyFlaggedQuestions =
@@ -248,7 +253,10 @@
                         label="تدرب على أسئلة التقفيلات فقط"
                         color="green"
                         :isActive="advancedFilter.onlyTakfelQuestions"
-                        :isDisabled="!userServicesState.TAKFELATUSAGE.isActive"
+                        :isDisabled="
+                          !userServicesState.TAKFELATUSAGE.isActive ||
+                          appAuth.notSubscribedUser
+                        "
                         @click="
                           () =>
                             (advancedFilter.onlyTakfelQuestions =
@@ -263,7 +271,9 @@
                     />
                     <app-select-card-options
                       title="مستوى الأسئلة"
-                      label="تحدى نفسك واختر المستوى الذي تريده لهذا التدريب"
+                      label="تحدى نفسك واختر
+                       المستوى الذي تريده
+                        لهذا التدريب"
                       iconSvgPath="/images/svg/layer-group-solid.svg"
                       :selectedValues="selectedDifficultValues"
                       :options="levelOptions"
@@ -271,7 +281,9 @@
                     />
                   </div>
                 </div>
-                <div class="qu-count">
+                <div
+                  class="qu-count font-bold text-[#4B5363] w-full lg:w-[330px] !justify-between"
+                >
                   <span class="la">عدد الأسئلة</span>
                   <form-select
                     v-model:selectedValues="form.questionCount"
@@ -839,7 +851,7 @@ export class examForm {
   onlyFlaggedQuestions = false;
   randomQuestionsSettings = [] as any[];
   questionsLevelsMin = 0;
-  questionCount: null | number = 50;
+  questionCount: null | number = 24;
   questionsLevelsMax = 10;
   customerId: any | null = null;
   sessionId: any | null = null;
@@ -905,8 +917,8 @@ export default {
 
     const questionCountOptions = [
       {
-        id: 25,
-        label: '25',
+        id: 24,
+        label: '24',
       },
       {
         id: 50,
@@ -2133,6 +2145,14 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.us-content {
+  &:has(.pa-fo) {
+    --fo-height: 100px;
+    max-height: calc(100vh - var(--fo-height)) !important;
+  }
+}
+</style>
 <style lang="scss" src="./exams-panel.scss" scoped></style>
 <style lang="scss">
 @import '@/assets/scss/lib/intro-lib';

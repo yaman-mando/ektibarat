@@ -1,5 +1,12 @@
 @use '@/assets/scss/mixin' as *;
 
+.us-content {
+  &:has(.train-with-us) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
 .train-with-us {
   display: grid;
   grid-template-columns: 1fr;
@@ -13,7 +20,7 @@
   .qw {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-    padding: 15px;
+    padding: 0 15px;
     background-color: #fff;
 
     h1 {
@@ -21,10 +28,10 @@
       color: var(--blue-d6);
       font-size: 30px;
       text-align: center;
-      margin: 60px auto 40px 0;
+      margin: 50px auto 30px 0;
       @include web-desktop-up() {
         font-size: 40px;
-        margin: 90px auto 70px 0;
+        margin: 90px auto 55px 0;
       }
     }
 
@@ -35,7 +42,7 @@
       margin-bottom: 60px;
       @include web-desktop-up() {
         grid-template-columns: repeat(3, 1fr);
-        margin-bottom: 150px;
+        margin-bottom: 135px;
       }
 
       .qd-item {

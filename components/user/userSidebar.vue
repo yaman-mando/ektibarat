@@ -192,6 +192,7 @@ const props = withDefaults(
 );
 
 //composable
+const runtimeConfig = useRuntimeConfig();
 const { data, signOut } = useAuth();
 const route = useRoute();
 const router = useRouter();
@@ -223,7 +224,8 @@ function mapMenuModel(list: typeof userMenuItems) {
     [
       UserPlanSubscribedEnum.NotSubscribed,
       UserPlanSubscribedEnum.Finished,
-    ].some((val) => val === user.planSubscribed)
+    ].some((val) => val === user.planSubscribed) ||
+    runtimeConfig.public.configData.byPassSubscribedUser
   ) {
     item.route = webUserTrainWithUs();
   } else {

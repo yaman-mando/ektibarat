@@ -7,7 +7,7 @@
       />
       <div class="flex flex-col !gap-1 items-start justify-start">
         <span class="sci-item__title">{{ title }}</span>
-        <span class="sci-item__label">{{ label }}</span>
+        <span class="sci-item__label whitespace-pre-line">{{ label }}</span>
       </div>
     </div>
     <div class="flex flex-col gap-2">
@@ -49,7 +49,7 @@ function isActive(key: string | number) {
 .sci-item {
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: space-between;
   border-radius: 8px;
   box-shadow: 0 0 6px #00000026;
   gap: 10px;
