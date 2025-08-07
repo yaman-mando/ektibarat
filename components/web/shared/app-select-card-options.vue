@@ -1,10 +1,7 @@
 <template>
   <div
     class="sci-item"
-    :class="[
-      { 'cursor-pointer': !isDisabled },
-      { '!bg-[#F5F7FA]': isDisabled },
-    ]"
+    :class="[{ '!bg-[#F5F7FA]': isDisabled }]"
   >
     <div class="flex gap-2 items-center justify-center">
       <img
@@ -21,8 +18,12 @@
         v-for="option of options"
         :key="option.key"
         class="option-item"
-        :class="[{ active: isActive(option.key) }]"
-        @click="emit('select', option.key)"
+        :class="[
+          { active: isActive(option.key) },
+          { '!cursor-pointer': !isDisabled },
+          { '!bg-[#F5F7FA]': isDisabled },
+        ]"
+        @click="isDisabled ? '' : emit('select', option.key)"
       >
         <span>{{ option.description }}</span>
       </div>
@@ -88,7 +89,7 @@ function isActive(key: string | number) {
     border: 1px solid transparent;
     width: 95px;
     height: 36px;
-    cursor: pointer;
+    cursor: auto;
     span {
       font-size: 14px;
     }
