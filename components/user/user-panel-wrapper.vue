@@ -199,6 +199,10 @@ definePageMeta({
 @import 'assets/font-icons/ek-icon-v1.0/style.css';
 @import '/assets/scss/main';
 
+:root {
+  --mobile-menu-height: 78px;
+}
+
 #user-panel-wrapper {
   .us-content {
     max-height: 100vh;
@@ -206,7 +210,7 @@ definePageMeta({
       max-height: calc(100vh - 60px);
     }
     &.isMobile {
-      max-height: calc(100vh - 78px);
+      max-height: calc(100vh - var(--mobile-menu-height));
     }
     overflow-y: scroll;
 

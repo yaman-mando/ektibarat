@@ -1,5 +1,11 @@
 <template>
-  <div class="sci-item">
+  <div
+    class="sci-item"
+    :class="[
+      { 'cursor-pointer': !isDisabled },
+      { '!bg-[#F5F7FA]': isDisabled },
+    ]"
+  >
     <div class="flex gap-2 items-center justify-center">
       <img
         :src="iconSvgPath"
@@ -31,8 +37,11 @@ const props = withDefaults(
     label: string;
     options: { key: string | number; description: string }[];
     selectedValues?: Array<string> | Array<number>;
+    isDisabled?: boolean;
   }>(),
-  {}
+  {
+    isDisabled: false,
+  }
 );
 
 const emit = defineEmits<{

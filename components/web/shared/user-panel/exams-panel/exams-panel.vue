@@ -276,6 +276,10 @@
                        المستوى الذي تريده
                         لهذا التدريب"
                       iconSvgPath="/images/svg/layer-group-solid.svg"
+                      :isDisabled="
+                        !userServicesState.LEVELQUESTIONPRACTICE.isActive ||
+                        appAuth.notSubscribedUser
+                      "
                       :selectedValues="selectedDifficultValues"
                       :options="levelOptions"
                       @select="onSelectDifficult($event)"
@@ -2154,7 +2158,9 @@ export default {
 .us-content {
   &:has(.pa-fo) {
     --fo-height: 100px;
-    max-height: calc(100vh - var(--fo-height)) !important;
+    max-height: calc(
+      100vh - var(--fo-height) - var(--mobile-menu-height)
+    ) !important;
   }
 }
 </style>
