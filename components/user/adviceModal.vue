@@ -1,7 +1,7 @@
 <template>
-    <div class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center" @click.self="closeModal">
+    <div class="fixed inset-0 z-50 bg-black/60 flex justify-center overflow-auto" @click.self="closeModal">
         <transition name="grow-fade">
-            <div v-if="visible" class="bg-white dark:bg-dark-800 rounded-lg shadow-lg w-full max-w-2xl p-6 relative"
+            <div v-if="visible" class="bg-white dark:bg-dark-800 rounded-lg shadow-lg p-6 relative w-[700px] max-w-[95vw] h-fit m-auto"
                 style="box-shadow: 0px 0px 10px 0px #00000026">
                 <div class="flex justify-between items-center border-b pb-3 mb-4">
                     <h2 class="text-xl font-bold text-gray-800 dark:text-white">نصائح اختبارات</h2>

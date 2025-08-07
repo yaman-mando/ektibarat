@@ -1,5 +1,10 @@
 <template>
-  <user-panel-wrapper>
+  <user-panel-wrapper content-class="max-w-[1060px] !mx-auto lg:px-0 px-[5px]" 
+  :has-l-info="windowSize.isDesktop" :has-r-info="windowSize.isDesktop"
+  :page-name="`تحليل قسم: ${mainCategory?.categoryName}`"
+  :withBackPage="true"
+  :has-prev="!windowSize.isDesktop"
+  >
     <!-- <div v-if="rotateWarning"
       class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 text-white text-center p-4">
       <div class="text-lg font-bold">
@@ -9,14 +14,15 @@
 
     <div>
       <div
-        class="flex items-center text-dark-2b font-medium gap-[5px] cursor-pointer mb-[20px] mt-[-60px]"
+      v-if="windowSize.isDesktop"
+        class="flex items-center text-dark-2b font-medium gap-[5px] cursor-pointer mb-[20px] md:mt-[-60px]"
         @click="toAnalytics"
       >
         <i class="fa fa-chevron-right"></i>
         <span>رجوع للخلف</span>
       </div>
 
-      <div class="mb-[15px]">
+      <div class="mb-[15px]" v-if="windowSize.isDesktop">
         <span class="text-[24px] font-bold text-blue-d6">
           تحليل قسم: {{ mainCategory?.categoryName }}
         </span>
@@ -24,7 +30,7 @@
 
       <div class="flex gap-[20px] flex-col md:flex-row">
         <div
-          class="bg-white dark:bg-dark-800 rounded-[8px] shadow-custom p-[10px] xl:p-[15px] flex flex-col items-center justify-center gap-[6px] xl:gap-2 w-full md:max-w-[340px] min-h-[180px] xl:min-h-[220px] text-[14px] xl:text-[16px]"
+          class="bg-white dark:bg-dark-800 rounded-[8px] shadow-custom p-[10px] xl:p-[15px] flex flex-col items-center justify-center gap-[6px] xl:gap-2 w-full md:max-w-[330px] min-h-[180px] xl:min-h-[220px] text-[14px] xl:text-[16px]"
         >
           <div class="flex items-center justify-between w-full">
             <div class="grid">
@@ -153,7 +159,7 @@
         </div>
 
         <div
-          class="w-full flex-2/3 2xl:min-w-[700px] h-[380px] bg-white shadow-md rounded-lg p-4 relative grid"
+          class="w-full flex-2/3 2xl:min-w-[710px] h-[380px] bg-white shadow-md rounded-lg p-4 relative grid"
         >
           <div
             class="flex justify-between items-baseline mb-[15px] flex-wrap gap-[10px] max-sm:justify-center"
@@ -215,8 +221,8 @@
               </span>
             </template>
 
-            <div class="max-w-[100vw] overflow-x-auto">
-              <div class="space-y-2 min-w-[900px]">
+            <div class="max-w-[100vw] overflow-x-auto custom-scroll">
+              <div class="space-y-2 min-w-[1020px]">
                 <div class="h-[70px] w-full flex items-center">
                   <div
                     class="bg-[#F5F7FA] h-[100%] flex-[75%] flex items-center border border-[#BCCCDB] !border-l-0 rounded-r-[8px] px-[15px] text-purple-78 text-[16px] font-bold"
@@ -374,6 +380,7 @@ const router = useRouter();
 const { data } = useAuth();
 const apexChartService = useApexChartService();
 const { $axios } = useNuxtApp();
+const windowSize = useWindowSize()
 
 const id = route.params.id;
 const selectedPeriod = ref(0);

@@ -60,3 +60,18 @@ span {
     color: var(--select-text);
   }
 }
+
+.custom-scroll {
+  scroll-behavior: smooth;
+}
+
+
+@media (hover: none) and (pointer: coarse) {
+  .custom-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .custom-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
