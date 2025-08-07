@@ -7,20 +7,9 @@
     class="exams-part relative"
   >
     <app-overlay v-if="examLoading" />
-    <div class="w-full flex items-center justify-between">
-      <h3 class="t-title">{{ texts.title }}</h3>
-      <app-button
-        v-if="selectedType != examTypes.exams"
-        class="sr-ho-button"
-        size="sm"
-        label="شرح الاستخدام"
-        colorType="success"
-        @click="startTour(true)"
-      />
-    </div>
     <template v-if="showRemainingCount">
       <div
-        class="ra-count flex flex-col lg:flex-row items-start justify-start lg:justify-between gap-[10px] my-2 px-[15px] py-[15px] rounded-[8px] border-[#EAB316] bg-[#FFFBEB] border"
+        class="ra-count flex flex-col lg:flex-row items-start justify-start lg:justify-between gap-[10px] mt-2 mb-[10px] lg:mb-[15px] px-[15px] py-[15px] rounded-[8px] border-[#EAB316] bg-[#FFFBEB] border"
       >
         <div class="flex gap-[15px]">
           <img
@@ -33,24 +22,36 @@
               لديك {{ userCurrentSub.remainTrainingCountPerDay }} محاولات تدريب
               مجانية لهذا اليوم
             </span>
-            <span class="text-[#92400E] text-[13px] lg:text-[14]">
+            <span class="text-[#92400E] text-[13px] lg:text-[14px]">
               اشترك في باقات اختبارات لتتدرب بلا حدود!
             </span>
           </div>
         </div>
         <nuxt-link
           class="flex items-center justify-center self-center"
-          :to="webUserDashboardPlan()"
+          :to="webPricesPathUtil()"
         >
           <app-button
             class="ra-bu"
-            label="اشترك الان"
+            label="اشترك الآن"
             iconEndClass="fa fa-chevron-left"
           />
         </nuxt-link>
       </div>
     </template>
-    <h4 class="t-text">
+
+    <div class="w-full flex items-center justify-between">
+      <h3 class="t-title">{{ texts.title }}</h3>
+      <app-button
+        v-if="selectedType != examTypes.exams"
+        class="sr-ho-button"
+        size="sm"
+        label="شرح الاستخدام"
+        colorType="success"
+        @click="startTour(true)"
+      />
+    </div>
+    <h4 class="t-text !text-[16px] lg:!text-[20px]">
       {{ staticData.topText }}
     </h4>
 
@@ -168,14 +169,14 @@
 
                 <div class="r-part">
                   <span class="r_tt">خصص تدريبك</span>
-                  <span class="me-t">
+                  <span class="me-t !text-[14px] lg:!text-[16px]">
                     تحكم بالأسئلة التي تريد أن تتدرب عليها
                   </span>
                 </div>
               </div>
             </prime-accordion-header>
             <prime-accordion-content>
-              <div class="__bank">
+              <div class="__bank !p-[10px] lg:!p-[20px 10px]">
                 <div class="select-items-wrapper">
                   <div class="select-items-wrapper__st">
                     <div class="relative">
@@ -189,7 +190,8 @@
                         color="blue"
                         :isActive="isRecentQuestionActive"
                         :isDisabled="
-                          !userServicesState.ROWNQUESTIONPRACTICE.isActive
+                          !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
+                          appAuth.notSubscribedUser
                         "
                         :hasNewBadge="true"
                         @click="onRecentSelect"
@@ -206,7 +208,8 @@
                         color="red"
                         :isActive="advancedFilter.onlyWrongQuestions"
                         :isDisabled="
-                          !userServicesState.ROWNQUESTIONPRACTICE.isActive
+                          !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
+                          appAuth.notSubscribedUser
                         "
                         @click="
                           () => (
@@ -227,7 +230,10 @@
                         label="تدرب على الأسئلة التي ميزتها بنجمة فقط"
                         color="yellow"
                         :isActive="advancedFilter.onlyFlaggedQuestions"
-                        :isDisabled="!userServicesState.FAVORITEUSAGE.isActive"
+                        :isDisabled="
+                          !userServicesState.FAVORITEUSAGE.isActive ||
+                          appAuth.notSubscribedUser
+                        "
                         @click="
                           () => (
                             (advancedFilter.onlyFlaggedQuestions =
@@ -248,7 +254,10 @@
                         label="تدرب على أسئلة التقفيلات فقط"
                         color="green"
                         :isActive="advancedFilter.onlyTakfelQuestions"
-                        :isDisabled="!userServicesState.TAKFELATUSAGE.isActive"
+                        :isDisabled="
+                          !userServicesState.TAKFELATUSAGE.isActive ||
+                          appAuth.notSubscribedUser
+                        "
                         @click="
                           () =>
                             (advancedFilter.onlyTakfelQuestions =
@@ -263,7 +272,9 @@
                     />
                     <app-select-card-options
                       title="مستوى الأسئلة"
-                      label="تحدى نفسك واختر المستوى الذي تريده لهذا التدريب"
+                      label="تحدى نفسك واختر
+                       المستوى الذي تريده
+                        لهذا التدريب"
                       iconSvgPath="/images/svg/layer-group-solid.svg"
                       :selectedValues="selectedDifficultValues"
                       :options="levelOptions"
@@ -271,7 +282,9 @@
                     />
                   </div>
                 </div>
-                <div class="qu-count">
+                <div
+                  class="qu-count font-bold text-[#4B5363] w-full lg:w-[330px] !justify-between"
+                >
                   <span class="la">عدد الأسئلة</span>
                   <form-select
                     v-model:selectedValues="form.questionCount"
@@ -762,7 +775,10 @@ import { RouteHelper } from '~/main/utils/route-helper';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import { appEvents } from '~/main/shared/events/app.events';
 import AppSelectCardItem from '~/components/web/shared/app-select-card-item.vue';
-import { webUserDashboardPlan } from '~/main/utils/web-routes.utils';
+import {
+  webPricesPathUtil,
+  webUserDashboardPlan,
+} from '~/main/utils/web-routes.utils';
 
 const SIMULATE_START_DELAY = 600;
 const TOGGLE_DELAY_GAP = 500;
@@ -839,7 +855,7 @@ export class examForm {
   onlyFlaggedQuestions = false;
   randomQuestionsSettings = [] as any[];
   questionsLevelsMin = 0;
-  questionCount: null | number = 50;
+  questionCount: null | number = 24;
   questionsLevelsMax = 10;
   customerId: any | null = null;
   sessionId: any | null = null;
@@ -905,8 +921,8 @@ export default {
 
     const questionCountOptions = [
       {
-        id: 25,
-        label: '25',
+        id: 24,
+        label: '24',
       },
       {
         id: 50,
@@ -1011,6 +1027,7 @@ export default {
   },
 
   methods: {
+    webPricesPathUtil,
     webUserDashboardPlan,
     onSelectDifficult(val: string | number) {
       const set = new Set(this.selectedDifficultValues);
@@ -2133,6 +2150,14 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.us-content {
+  &:has(.pa-fo) {
+    --fo-height: 100px;
+    max-height: calc(100vh - var(--fo-height)) !important;
+  }
+}
+</style>
 <style lang="scss" src="./exams-panel.scss" scoped></style>
 <style lang="scss">
 @import '@/assets/scss/lib/intro-lib';

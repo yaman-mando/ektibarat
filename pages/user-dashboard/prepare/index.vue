@@ -1,6 +1,19 @@
 <template>
-  <user-panel-wrapper contentClass="!pb-0">
-    <template #top-right></template>
+  <user-panel-wrapper
+    :hasLInfo="false"
+    :hasRInfo="false"
+    contentClass="!pb-0"
+    contentWrapperClass="!mb-0"
+  >
+    <template #top-right>
+      <app-button
+        label="رجوع للخلف"
+        iconStartClass="fa fa-chevron-right"
+        variant="clear"
+        size="md"
+        @click="router.back()"
+      />
+    </template>
 
     <div class="prepare-co space-y-10">
       <exams-panel :key="examPanelKey" />
@@ -18,6 +31,7 @@
 
 <script lang="ts" setup>
 const route = useRoute();
+const router = useRouter();
 const examPanelKey = ref<any>(Symbol());
 
 //store

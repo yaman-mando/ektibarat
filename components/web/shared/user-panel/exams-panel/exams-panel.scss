@@ -1,7 +1,6 @@
 @use '@/assets/scss/mixin' as *;
 
 .exams-part {
-  --fo-height: 100px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   padding: 20px 33px calc(var(--fo-height) + 20px) 33px;
@@ -331,6 +330,8 @@
     border-radius: 15px;
     :deep(.cw-bank) {
       border-radius: 15px;
+      --p-accordion-content-padding: 5px;
+
       .c-head {
         background: #bcccdb33;
         height: 50px;
@@ -378,7 +379,11 @@
     #bank-exam-collapse,
     #bank-training-collapse {
       .__bank {
-        padding: 20px 16px;
+        padding: 15px;
+
+        @include web-desktop-up() {
+          padding: 20px 10px;
+        }
         .__filter,
         .__filter_bank,
         .__filter_level {

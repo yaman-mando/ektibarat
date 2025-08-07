@@ -12,7 +12,7 @@
     <div class="train-with-us space-y-10">
       <div
         v-if="!showStepsSection"
-        class="qw"
+        class="qw w-full lg:w-[min(1060px,100vw)]"
       >
         <h1>كيف تبي تتدرب معنا؟</h1>
         <div class="qd-grid">
