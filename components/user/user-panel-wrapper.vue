@@ -26,11 +26,9 @@
 
     <div class="flex flex-1">
       <!-- Sidebar -->
-      <transition name="slide">
-        <aside class="fixed md:relative z-40 h-full md:h-auto">
-          <user-sidebar :hasMobileMenu="!hasPrev" />
-        </aside>
-      </transition>
+      <aside class="fixed md:relative z-40 h-full md:h-auto">
+        <user-sidebar :hasMobileMenu="!hasPrev" />
+      </aside>
 
       <div
         v-if="isSidebarOpen && !isDesktop"
@@ -40,9 +38,9 @@
 
       <div
         :class="[
-          {'isMobile':!windowSize.isDesktop && !hasPrev},
-            {'hasPrev':hasPrev},
-          
+          { isMobile: !windowSize.isDesktop && !hasPrev },
+          { hasPrev: hasPrev },
+
           { '!p-0 !bg-white': noSpaces },
         ]"
         class="us-content flex-1 bg-gray-fb dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-[40px] py-[30px] ml-0"
@@ -149,7 +147,7 @@ const props = withDefaults(
 const router = useRouter();
 const colorMode = useColorMode();
 const userPanelStore = useUserPanelStore();
-const windowSize = useWindowSize()
+const windowSize = useWindowSize();
 const isSidebarOpen = ref(false);
 const isDesktop = ref(false);
 
@@ -207,7 +205,7 @@ definePageMeta({
     &.hasPrev {
       max-height: calc(100vh - 60px);
     }
-    &.isMobile{
+    &.isMobile {
       max-height: calc(100vh - 78px);
     }
     overflow-y: scroll;

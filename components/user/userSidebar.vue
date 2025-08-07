@@ -107,13 +107,15 @@
               </div>
             </transition>
           </li>
-          <nuxt-link :to="webUserTrainingPlan()">
-            <li
+          <li class="relative">
+            <service-block v-if="appAuth.notSubscribedUser" />
+            <nuxt-link
+              :to="webUserTrainingPlan()"
               class="cursor-pointer hover:text-purple-600 text-[20px] font-medium color-dark-63"
             >
               خُطَطي التدريبية
-            </li>
-          </nuxt-link>
+            </nuxt-link>
+          </li>
 
           <li
             class="cursor-pointer hover:text-purple-600 text-[20px] font-medium color-dark-63"
@@ -181,6 +183,7 @@ import {
   webUserTrainingPlan,
   webUserTrainWithUs,
 } from '~/main/utils/web-routes.utils';
+import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
 
 const props = withDefaults(
   defineProps<{
@@ -194,6 +197,7 @@ const props = withDefaults(
 //composable
 const runtimeConfig = useRuntimeConfig();
 const { data, signOut } = useAuth();
+const { appAuth } = useSetupAuth();
 const route = useRoute();
 const router = useRouter();
 const userPanelStore = useUserPanelStore();
