@@ -265,6 +265,22 @@
                         "
                       />
                     </div>
+                    <div
+                      class="qu-count font-bold text-[#4B5363] !justify-between"
+                    >
+                      <span class="la">عدد الأسئلة</span>
+                      <form-select
+                        v-model:selectedValues="form.questionCount"
+                        inputId="questionCount"
+                        class="w-[130px] h-[45px]"
+                        :isDisabled="appAuth.notSubscribedUser"
+                        :list="questionCountOptions"
+                        :placeholder="'سؤال'"
+                        :isMulti="false"
+                        :clearable="false"
+                        :searchable="false"
+                      />
+                    </div>
                   </div>
                   <div class="relative">
                     <service-block
@@ -286,22 +302,7 @@
                     />
                   </div>
                 </div>
-                <div
-                  class="qu-count font-bold text-[#4B5363] w-full lg:w-[330px] !justify-between"
-                >
-                  <span class="la">عدد الأسئلة</span>
-                  <form-select
-                    v-model:selectedValues="form.questionCount"
-                    inputId="questionCount"
-                    class="w-[130px] h-[45px]"
-                    :isDisabled="appAuth.notSubscribedUser"
-                    :list="questionCountOptions"
-                    :placeholder="'سؤال'"
-                    :isMulti="false"
-                    :clearable="false"
-                    :searchable="false"
-                  />
-                </div>
+
                 <!--                <div class="__full-filter">-->
                 <!--                  <div-->
                 <!--                    v-if="!isTahsele"-->
@@ -2155,12 +2156,18 @@ export default {
 };
 </script>
 <style lang="scss">
+@use '@/assets/scss/mixin' as *;
+
 .us-content {
   &:has(.pa-fo) {
     --fo-height: 100px;
-    max-height: calc(
-      100vh - var(--fo-height) - var(--mobile-menu-height)
-    ) !important;
+    @include web-mobile-only() {
+      max-height: calc(
+        100vh - var(--fo-height) - var(--mobile-menu-height) - var(
+            --app-mobile-header-height
+          )
+      ) !important;
+    }
   }
 }
 </style>

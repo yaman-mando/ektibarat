@@ -6,6 +6,10 @@
       'min-h-screen flex flex-col',
     ]"
   >
+    <app-mobile-header
+      v-if="showMobileHeader && pageTitle"
+      :title="pageTitle"
+    />
     <!-- sidebar button in mobile -->
     <!-- <button class="md:hidden fixed top-4 right-4 z-50 bg-gray-700 text-white p-2 rounded shadow-md"
       @click="isSidebarOpen = !isSidebarOpen">
@@ -128,6 +132,8 @@ const props = withDefaults(
     contentWrapperClass?: string;
     hasRInfo?: boolean;
     hasLInfo?: boolean;
+    showMobileHeader?: boolean;
+    pageTitle?: string;
     withBackPage?: boolean;
     hasPrev?: boolean;
     noSpaces?: boolean;
@@ -200,7 +206,11 @@ definePageMeta({
 @import '/assets/scss/main';
 
 :root {
+  --app-mobile-header-height: 60px;
   --mobile-menu-height: 78px;
+  @include web-desktop-up() {
+    --app-mobile-header-height: 0px;
+  }
 }
 
 #user-panel-wrapper {
@@ -210,7 +220,9 @@ definePageMeta({
       max-height: calc(100vh - 60px);
     }
     &.isMobile {
-      max-height: calc(100vh - var(--mobile-menu-height));
+      max-height: calc(
+        100vh - var(--mobile-menu-height) - var(--app-mobile-header-height)
+      );
     }
     overflow-y: scroll;
 
