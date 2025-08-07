@@ -2,17 +2,17 @@
   <user-panel-wrapper
     :has-l-info="false"
     :has-r-info="false"
-    :no-spaces="!isDesktop"
-    :has-prev="!isDesktop"
+    :no-spaces="!windowSize.isDesktop"
+    :has-prev="!windowSize.isDesktop"
     :page-name="selectedName"
   >
     <div
       class="flex flex-wrap 2xl:flex-nowrap p-6 gap-[20px]"
-      :class="{ '!p-0': !isDesktop }"
+      :class="{ '!p-0': !windowSize.isDesktop }"
     >
       <main
         class="bg-white rounded-[8px] flex-2/3 sm:min-w-[400px] shadow-custom py-[30px] h-fit"
-        :class="{ '!py-0 !rounded-none !shadow-none': !isDesktop }"
+        :class="{ '!py-0 !rounded-none !shadow-none': !windowSize.isDesktop }"
       >
       <client-only>
         <component :is="currentComponent" />
@@ -20,7 +20,7 @@
       </main>
 
       <aside
-        v-if="isDesktop"
+        v-if="windowSize.isDesktop"
         class="2xl:max-w-[330px] flex-1/3 min-w-[250px] flex flex-col gap-[15px]"
       >
         <div
@@ -92,6 +92,7 @@ import contactUs from '~/components/user/personal-setting/contactUs.vue';
 const { signOut } = useAuth();
 const router = useRouter();
 const route = useRoute();
+const windowSize = useWindowSize()
 
 //enums
 const accountItems = [
@@ -123,7 +124,6 @@ const grades = [
 
 //data
 const selectedSection = <any>ref('info');
-const isDesktop = ref(false);
 
 //computed
 const currentComponent = computed(() => {
@@ -188,11 +188,5 @@ onMounted(() => {
   if (validSections.includes(querySection)) {
     selectedSection.value = querySection;
   }
-  const checkScreen = () => {
-    isDesktop.value = window.innerWidth >= 768;
-  };
-
-  checkScreen();
-  window.addEventListener('resize', checkScreen);
 });
 </script>

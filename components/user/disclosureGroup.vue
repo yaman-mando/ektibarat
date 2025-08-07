@@ -1,5 +1,12 @@
 <template>
-  <div class="rounded-[8px] shadow-custom overflow-hidden">
+  <div class="rounded-[8px] shadow-custom overflow-hidden"
+  :class="[
+      isResponsive ? 'overflow-x-auto custom-scroll' : ''
+    ]"
+  >
+    <div
+    :style="isResponsive ? { minWidth } : undefined"
+    >
     <!-- Header -->
     <button
       class="w-full h-[66px] px-[15px] flex items-center justify-between bg-white cursor-pointer"
@@ -45,6 +52,7 @@
       </div>
     </transition>
   </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -56,9 +64,19 @@ interface Props {
   index?: number;
   contentClass?: string;
   hideArrow?:boolean;
+  isResponsive?:boolean;
+  minWidth?:string,
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  defaultOpen: false,
+  onlyOneOpen: false,
+  contentClass: '',
+  hideArrow: false,
+  isResponsive: false,
+  minWidth: '950px',
+});
+
 const emit = defineEmits(['update:open']);
 
 const isOpen = ref(!!props.defaultOpen);
@@ -102,4 +120,21 @@ const handleToggle = () => {
     opacity ease-in 0.3s;
   overflow: hidden;
 }
+
+
+.custom-scroll {
+  scroll-behavior: smooth;
+}
+
+
+@media (hover: none) and (pointer: coarse) {
+  .custom-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .custom-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 </style>
