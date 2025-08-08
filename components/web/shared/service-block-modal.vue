@@ -4,47 +4,41 @@
     v-model:visible="isOpen"
     :closable="true"
     :showHeader="false"
-    class="mx-auto w-container sbm-modal-c"
+    class="mx-auto sbm-modal-c"
     hideFooter
     :dismissableMask="true"
     :modal="true"
     :closeOnEscape="true"
   >
-    <div class="flex items-center justify-end sbm-close-w">
-      <i
-        class="fa fa-close sbm-close-icon"
-        @click="hideModal"
-      ></i>
-    </div>
     <div class="sbm-wrapper">
       <img
         alt=""
-        class="sbm-wrapper__pic"
-        src="/images/service-lock-image.svg"
+        class="sbm-wrapper__pic !mb-[15px]"
+        src="/images/lock-circle-image.png"
       />
-      <span class="sbm-wrapper__la">غير متاح في الباقة الأساسية</span>
+      <span class="sbm-wrapper__la !text-[28px]">للمشتركين فقط</span>
       <div class="sbm-sf">
         <div class="sbm-sf__w">
-          <span class="sbm-sf__ll">
-            قم بترقية اشتراكك واحصل على جميع المزايا
-          </span>
           <div class="sbm-sf__items">
             <div
               v-for="item of staticItems"
               :key="item.label"
-              class="sbm-sf__items__el"
+              class="sbm-sf__items__el !gap-[10px]"
             >
-              <i class="fa fa-check"></i>
-              <span>{{ item.label }}</span>
+              <span class="w-[3px] h-[3px] rounded-[50%] bg-[#000]"></span>
+              <span class="!text-[16px]">{{ item.label }}</span>
             </div>
           </div>
-          <span class="sbm-sf__ll sq">وغيرها الكثير من المزايا...</span>
+          <span class="sbm-sf__ll sq !text-center font-bold !text-[16px]">
+            وغيرها الكثير من المزايا...
+          </span>
         </div>
       </div>
     </div>
     <div class="sbm-actions">
       <app-button
-        :label="'ترقية الاشتراك'"
+        class="!rounded-[8px] !w-[164px] !h-[43px] !bg-[linear-gradient(270deg,#24A7F1_0%,#0266D6_100%)] !border-transparent"
+        :label="'اشترك الآن'"
         :variant="'flat'"
         @click="upgradeClicked"
       />
@@ -78,25 +72,16 @@ export default {
     staticItems() {
       return [
         {
-          label: 'تحليل أداءك في جميع الأقسام',
+          label: 'تدريبات غير محدودة',
         },
         {
-          label: 'اكتشاف نقاط ضعفك وطرق معالجتها',
+          label: 'تحديد مستوى الأسئلة',
         },
         {
-          label: 'توقع نتيجتك في الاختبار الحقيقي',
+          label: 'تدرب على الأسئلة الحديثة والتقفيلات',
         },
         {
-          label: 'عرض القوانين والمهارات',
-        },
-        {
-          label: 'نصائح الذكاء الاصطناعي',
-        },
-        {
-          label: 'خيارات أكثر للتدرب على اختبارك',
-        },
-        {
-          label: 'محاكي الاختبار الحقيقي',
+          label: 'إمكانية مراجعة أخطاءك',
         },
       ];
     },
@@ -115,9 +100,9 @@ export default {
 </script>
 <style lang="scss">
 .sbm-modal-c {
-  width: 340px !important;
+  width: min(330px, 90vw) !important;
   margin: 0 auto;
-  max-width: 90vw;
+  --p-dialog-content-padding: 0;
 
   .sbm-close-w {
     position: absolute;
@@ -135,8 +120,7 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
-    margin-top: 25px;
-    gap: 15px;
+    margin-top: 30px;
 
     &__pic {
       display: block;
@@ -162,18 +146,7 @@ export default {
         display: flex;
         flex-direction: column;
         width: 100%;
-        padding: 12px 15px;
-        background: #bcccdb33;
-      }
-
-      &__ll {
-        display: block;
-        font-size: 16px;
-        text-align: center;
-        font-weight: bold;
-        &.sq {
-          font-size: 14px;
-        }
+        padding: 0 15px;
       }
 
       &__items {
