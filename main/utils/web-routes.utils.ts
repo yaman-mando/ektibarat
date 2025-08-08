@@ -5,6 +5,7 @@ import {
 } from '~/main/constants/user-panel-items';
 import type { GlobalTypes } from '~/main/constants/global-types';
 import { StaticTracksRoutersEnum } from '~/main/constants/static-tracks-routers.enum';
+import { UserRoles } from '~/core/auth/constants/user-roles';
 
 export const webHomePathUtil = () => '/';
 export const webErrorPathUtil = () => '/404';
@@ -68,3 +69,8 @@ export const webPartnerShipsPathUtil = () => '/partnerships';
 
 export const webStudentTrainingPathUtil = (id: string) =>
   `/student/training/${id}`;
+
+//route guard
+export const webUserTrainingPlanGuardUtil = (userRole: UserRoles) => {
+  return ![UserRoles.teacher, UserRoles.schoolManager].includes(userRole);
+};

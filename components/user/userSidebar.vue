@@ -108,15 +108,17 @@
               </div>
             </transition>
           </li>
-          <li class="relative">
-            <service-block v-if="appAuth.notSubscribedUser" />
-            <nuxt-link
-              :to="webUserTrainingPlan()"
-              class="cursor-pointer hover:text-purple-600 text-[20px] font-medium color-dark-63"
-            >
-              خُطَطي التدريبية
-            </nuxt-link>
-          </li>
+          <template v-if="showMyTrainPlanItem">
+            <li class="relative">
+              <service-block v-if="appAuth.notSubscribedUser" />
+              <nuxt-link
+                :to="webUserTrainingPlan()"
+                class="cursor-pointer hover:text-purple-600 text-[20px] font-medium color-dark-63"
+              >
+                خُطَطي التدريبية
+              </nuxt-link>
+            </li>
+          </template>
 
           <li
             class="cursor-pointer hover:text-purple-600 text-[20px] font-medium color-dark-63"
@@ -182,9 +184,11 @@ import {
   webHomePathUtil,
   webUserSteps,
   webUserTrainingPlan,
+  webUserTrainingPlanGuardUtil,
   webUserTrainWithUs,
 } from '~/main/utils/web-routes.utils';
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
+import { UserRoles } from '~/core/auth/constants/user-roles';
 
 const props = withDefaults(
   defineProps<{
@@ -208,6 +212,10 @@ const { filteredMenu, filteredMenuMobile } = useFilteredMenu();
 const userData = computed(() => data.value as UserInfoDataModel);
 const selectedGlobal = computed(() => {
   return userPanelStore.globalType;
+});
+
+const showMyTrainPlanItem = computed(() => {
+  return webUserTrainingPlanGuardUtil(userData.value.role);
 });
 
 const filteredMenuModel = computed(() => {
