@@ -1,12 +1,15 @@
 <template>
   <user-panel-wrapper
     :hasLInfo="false"
-    :hasRInfo="false"
+    :hasRInfo="windowSize.isDesktop"
+    :showMobileHeader="true"
+    pageTitle="التدريب الشخصي"
     contentClass="!pb-0"
     contentWrapperClass="!mb-0"
   >
     <template #top-right>
       <app-button
+        class="!mb-[20px]"
         label="رجوع للخلف"
         iconStartClass="fa fa-chevron-right"
         variant="clear"
@@ -30,6 +33,7 @@
 </template>
 
 <script lang="ts" setup>
+const windowSize = useWindowSize();
 const route = useRoute();
 const router = useRouter();
 const examPanelKey = ref<any>(Symbol());

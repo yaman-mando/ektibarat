@@ -6,6 +6,10 @@
       'min-h-screen flex flex-col',
     ]"
   >
+    <app-mobile-header
+      v-if="showMobileHeader && pageTitle"
+      :title="pageTitle"
+    />
     <!-- sidebar button in mobile -->
     <!-- <button class="md:hidden fixed top-4 right-4 z-50 bg-gray-700 text-white p-2 rounded shadow-md"
       @click="isSidebarOpen = !isSidebarOpen">
@@ -26,11 +30,9 @@
 
     <div class="flex flex-1">
       <!-- Sidebar -->
-      <transition name="slide">
-        <aside class="fixed md:relative z-40 h-full md:h-auto">
-          <user-sidebar :hasMobileMenu="!hasPrev" />
-        </aside>
-      </transition>
+      <aside class="fixed md:relative z-40 h-full md:h-auto">
+        <user-sidebar :hasMobileMenu="!hasPrev" />
+      </aside>
 
       <div
         v-if="isSidebarOpen && !isDesktop"
@@ -40,9 +42,9 @@
 
       <div
         :class="[
-          {'isMobile':!windowSize.isDesktop && !hasPrev},
-            {'hasPrev':hasPrev},
-          
+          { isMobile: !windowSize.isDesktop && !hasPrev },
+          { hasPrev: hasPrev },
+
           { '!p-0 !bg-white': noSpaces },
         ]"
         class="us-content flex-1 bg-gray-fb dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-[40px] py-[30px] ml-0"
@@ -130,6 +132,8 @@ const props = withDefaults(
     contentWrapperClass?: string;
     hasRInfo?: boolean;
     hasLInfo?: boolean;
+    showMobileHeader?: boolean;
+    pageTitle?: string;
     withBackPage?: boolean;
     hasPrev?: boolean;
     noSpaces?: boolean;
@@ -149,7 +153,7 @@ const props = withDefaults(
 const router = useRouter();
 const colorMode = useColorMode();
 const userPanelStore = useUserPanelStore();
-const windowSize = useWindowSize()
+const windowSize = useWindowSize();
 const isSidebarOpen = ref(false);
 const isDesktop = ref(false);
 
@@ -201,14 +205,24 @@ definePageMeta({
 @import 'assets/font-icons/ek-icon-v1.0/style.css';
 @import '/assets/scss/main';
 
+:root {
+  --app-mobile-header-height: 60px;
+  --mobile-menu-height: 78px;
+  @include web-desktop-up() {
+    --app-mobile-header-height: 0px;
+  }
+}
+
 #user-panel-wrapper {
   .us-content {
     max-height: 100vh;
     &.hasPrev {
       max-height: calc(100vh - 60px);
     }
-    &.isMobile{
-      max-height: calc(100vh - 78px);
+    &.isMobile {
+      max-height: calc(
+        100vh - var(--mobile-menu-height) - var(--app-mobile-header-height)
+      );
     }
     overflow-y: scroll;
 
