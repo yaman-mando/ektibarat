@@ -178,123 +178,123 @@
             <prime-accordion-content>
               <div class="__bank !p-[10px] lg:!p-[20px 10px]">
                 <div class="select-items-wrapper">
-                  <div class="select-items-wrapper__st">
-                    <div class="relative">
-                      <service-block
-                        v-if="
-                          !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
-                          appAuth.notSubscribedUser
-                        "
-                      />
-                      <app-select-card-item
-                        title="أحدث 1000 سؤال"
-                        iconSvgPath="/images/svg/sparkles_icon.svg"
-                        label="تدرب على أحدث الأسئلة والتسريبات فقط"
-                        color="blue"
-                        :isActive="isRecentQuestionActive"
-                        :isDisabled="
-                          !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
-                          appAuth.notSubscribedUser
-                        "
-                        :hasNewBadge="true"
-                        @click="onRecentSelect"
-                      />
-                    </div>
-                    <div class="relative">
-                      <service-block
-                        v-if="
-                          !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
-                          appAuth.notSubscribedUser
-                        "
-                      />
-                      <app-select-card-item
-                        title="الأسئلة التي أخطأت فيها"
-                        iconSvgPath="/images/png/sub.png"
-                        label="تدرب على الأسئلة التي أخطأت فيها فقط"
-                        color="red"
-                        :isActive="advancedFilter.onlyWrongQuestions"
-                        :isDisabled="
-                          !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
-                          appAuth.notSubscribedUser
-                        "
-                        @click="
-                          () => (
-                            (advancedFilter.onlyWrongQuestions =
-                              !advancedFilter.onlyWrongQuestions),
-                            (form.onlyWrongQuestions = !form.onlyWrongQuestions)
-                          )
-                        "
-                      />
-                    </div>
-                    <div class="relative">
-                      <service-block
-                        v-if="
-                          !userServicesState.FAVORITEUSAGE.isActive ||
-                          appAuth.notSubscribedUser
-                        "
-                      />
-                      <app-select-card-item
-                        title="الأسئلة المميزة بنجمة فقط"
-                        iconSvgPath="/images/svg/star-solid.svg"
-                        label="تدرب على الأسئلة التي ميزتها بنجمة فقط"
-                        color="yellow"
-                        :isActive="advancedFilter.onlyFlaggedQuestions"
-                        :isDisabled="
-                          !userServicesState.FAVORITEUSAGE.isActive ||
-                          appAuth.notSubscribedUser
-                        "
-                        @click="
-                          () => (
-                            (advancedFilter.onlyFlaggedQuestions =
-                              !advancedFilter.onlyFlaggedQuestions),
-                            (form.onlyFlaggedQuestions =
-                              !form.onlyFlaggedQuestions)
-                          )
-                        "
-                      />
-                    </div>
-                    <div class="relative">
-                      <service-block
-                        v-if="
-                          !userServicesState.TAKFELATUSAGE.isActive ||
-                          appAuth.notSubscribedUser
-                        "
-                      />
-                      <app-select-card-item
-                        title="أسئلة التقفيلات فقط"
-                        iconSvgPath="/images/svg/hundred-points.svg"
-                        label="تدرب على أسئلة التقفيلات فقط"
-                        color="green"
-                        :isActive="advancedFilter.onlyTakfelQuestions"
-                        :isDisabled="
-                          !userServicesState.TAKFELATUSAGE.isActive ||
-                          appAuth.notSubscribedUser
-                        "
-                        @click="
-                          () =>
-                            (advancedFilter.onlyTakfelQuestions =
-                              !advancedFilter.onlyTakfelQuestions)
-                        "
-                      />
-                    </div>
-                    <div
-                      class="qu-count font-bold text-[#4B5363] !justify-between"
-                    >
-                      <span class="la">عدد الأسئلة</span>
-                      <form-select
-                        v-model:selectedValues="form.questionCount"
-                        inputId="questionCount"
-                        class="w-[130px] h-[45px]"
-                        :isDisabled="appAuth.notSubscribedUser"
-                        :list="questionCountOptions"
-                        :placeholder="'سؤال'"
-                        :isMulti="false"
-                        :clearable="false"
-                        :searchable="false"
-                      />
-                    </div>
+                  <div class="relative lg:col-start-1">
+                    <service-block
+                      v-if="
+                        !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
+                        appAuth.notSubscribedUser
+                      "
+                    />
+                    <app-select-card-item
+                      title="أحدث 1000 سؤال"
+                      iconSvgPath="/images/svg/sparkles_icon.svg"
+                      label="تدرب على أحدث الأسئلة والتسريبات فقط"
+                      color="blue"
+                      :isActive="isRecentQuestionActive"
+                      :isDisabled="
+                        !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
+                        appAuth.notSubscribedUser
+                      "
+                      :hasNewBadge="true"
+                      @click="onRecentSelect"
+                    />
                   </div>
-                  <div class="relative">
+                  <div class="relative lg:col-start-2">
+                    <service-block
+                      v-if="
+                        !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
+                        appAuth.notSubscribedUser
+                      "
+                    />
+                    <app-select-card-item
+                      title="الأسئلة التي أخطأت فيها"
+                      iconSvgPath="/images/png/sub.png"
+                      label="تدرب على الأسئلة التي أخطأت فيها فقط"
+                      color="red"
+                      :isActive="advancedFilter.onlyWrongQuestions"
+                      :isDisabled="
+                        !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
+                        appAuth.notSubscribedUser
+                      "
+                      @click="
+                        () => (
+                          (advancedFilter.onlyWrongQuestions =
+                            !advancedFilter.onlyWrongQuestions),
+                          (form.onlyWrongQuestions = !form.onlyWrongQuestions)
+                        )
+                      "
+                    />
+                  </div>
+                  <div class="relative lg:col-start-1">
+                    <service-block
+                      v-if="
+                        !userServicesState.FAVORITEUSAGE.isActive ||
+                        appAuth.notSubscribedUser
+                      "
+                    />
+                    <app-select-card-item
+                      title="الأسئلة المميزة بنجمة فقط"
+                      iconSvgPath="/images/svg/star-solid.svg"
+                      label="تدرب على الأسئلة التي ميزتها بنجمة فقط"
+                      color="yellow"
+                      :isActive="advancedFilter.onlyFlaggedQuestions"
+                      :isDisabled="
+                        !userServicesState.FAVORITEUSAGE.isActive ||
+                        appAuth.notSubscribedUser
+                      "
+                      @click="
+                        () => (
+                          (advancedFilter.onlyFlaggedQuestions =
+                            !advancedFilter.onlyFlaggedQuestions),
+                          (form.onlyFlaggedQuestions =
+                            !form.onlyFlaggedQuestions)
+                        )
+                      "
+                    />
+                  </div>
+                  <div class="relative lg:col-start-2">
+                    <service-block
+                      v-if="
+                        !userServicesState.TAKFELATUSAGE.isActive ||
+                        appAuth.notSubscribedUser
+                      "
+                    />
+                    <app-select-card-item
+                      title="أسئلة التقفيلات فقط"
+                      iconSvgPath="/images/svg/hundred-points.svg"
+                      label="تدرب على أسئلة التقفيلات فقط"
+                      color="green"
+                      :isActive="advancedFilter.onlyTakfelQuestions"
+                      :isDisabled="
+                        !userServicesState.TAKFELATUSAGE.isActive ||
+                        appAuth.notSubscribedUser
+                      "
+                      @click="
+                        () =>
+                          (advancedFilter.onlyTakfelQuestions =
+                            !advancedFilter.onlyTakfelQuestions)
+                      "
+                    />
+                  </div>
+                  <div
+                    class="qu-count order-10 lg:order-none font-bold text-[#4B5363] !justify-between"
+                  >
+                    <span class="la">عدد الأسئلة</span>
+                    <form-select
+                      v-model:selectedValues="form.questionCount"
+                      inputId="questionCount"
+                      class="w-[130px] h-[45px]"
+                      :isDisabled="appAuth.notSubscribedUser"
+                      :list="questionCountOptions"
+                      :placeholder="'سؤال'"
+                      :isMulti="false"
+                      :clearable="false"
+                      :searchable="false"
+                    />
+                  </div>
+                  <div
+                    class="relative lg:col-start-3 lg:row-start-1 lg:row-end-3"
+                  >
                     <service-block
                       v-if="
                         !userServicesState.LEVELQUESTIONPRACTICE.isActive ||
