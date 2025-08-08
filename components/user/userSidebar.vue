@@ -184,6 +184,7 @@ import {
   webHomePathUtil,
   webUserSteps,
   webUserTrainingPlan,
+  webUserTrainingPlanGuardUtil,
   webUserTrainWithUs,
 } from '~/main/utils/web-routes.utils';
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
@@ -214,9 +215,7 @@ const selectedGlobal = computed(() => {
 });
 
 const showMyTrainPlanItem = computed(() => {
-  return ![UserRoles.teacher, UserRoles.schoolManager].includes(
-    userData.value.role
-  );
+  return webUserTrainingPlanGuardUtil(userData.value.role);
 });
 
 const filteredMenuModel = computed(() => {
