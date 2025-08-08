@@ -13,7 +13,7 @@
                 fill="transparent" :r="radius" :cx="center" :cy="center" />
 
 
-            <circle :class="['animated-circle', strokeClass]" :stroke="strokeComputed" :stroke-width="strokeWidth" fill="transparent"
+            <circle v-if="!isLock" :class="['animated-circle', strokeClass]" :stroke="strokeComputed" :stroke-width="strokeWidth" fill="transparent"
                 :r="radius" :cx="center" :cy="center" :stroke-dasharray="circumference"
                 :stroke-dashoffset="dashOffset" :key="percentage"
                  />
@@ -22,7 +22,8 @@
 
         <div v-if="showText" class="absolute inset-0 flex items-center justify-center" :class="textClass"
             :style="!textClass ? { color: textColor, fontSize: textSize + 'px' } : { fontSize: textSize + 'px' }">
-            <span>{{ percentage }}%</span>
+            <span v-if="isLock" class="text-gray-8f"><i class="fa fa-lock"></i></span>
+            <span v-else>{{ percentage }}%</span>
         </div>
     </div>
 </template>
@@ -45,6 +46,7 @@ const props = withDefaults(
         strokeClass?: string;
         bgClass?: string;
         textClass?: string;
+        isLock?:boolean
     }>(),
     {
         size: 60,
@@ -59,6 +61,7 @@ const props = withDefaults(
         strokeClass: '',
         bgClass: '',
         textClass: '',
+        isLock:false
     }
 );
 

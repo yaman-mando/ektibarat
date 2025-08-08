@@ -220,9 +220,7 @@ definePageMeta({
       max-height: calc(100vh - 60px);
     }
     &.isMobile {
-      max-height: calc(
-        100vh - var(--mobile-menu-height) - var(--app-mobile-header-height)
-      );
+      max-height: calc(100vh - var(--mobile-menu-height));
     }
     overflow-y: scroll;
 

@@ -134,30 +134,7 @@
           <!-- plane square -->
           <div class="min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid relative">
             <!-- not subscribe -->
-            <div v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe">
-              <div class="flex items-center justify-baseline">
-                <span class="font-bold text-[18px] text-blue-d6">خطة التدريب</span>
-              </div>
-              <div class="border border-purple-e0 rounded-[8px] mt-[15px] py-[22px] px-[20px]">
-                <div class="grid justify-items-center gap-y-[18px]">
-                  <div class="flex gap-x-[10px] items-center">
-                    <i class="fas fa-lock text-[22px] text-purple-e0"></i>
-                    <span class=" text-purple-e0 text-[30px] font-bold">للمشتركين فقط</span>
-                  </div>
-                  <div class="text-black text-[18px] font-medium text-center">
-                    خطة مخصصة لك
-                    <br>
-                    لتضمن أعلى درجة في أقل وقت
-                  </div>
-                  <button @click="toPricesPage()" style="background: linear-gradient(270deg, #24A7F1 0%, #0266D6 100%);"
-                    class="flex justify-center items-center gap-x-[12px] h-[36px] w-[164px] rounded-[8px] text-white text-[14px] font-bold cursor-pointer">
-                    <span>اشترك الآن</span>
-                    <i class="fa fa-chevron-left"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
+             <no-sub-plane v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" />
             <template v-else>
               <app-overlay msg="جاري جلب بيانات الخطة ..." v-if="panelStore.fetching.studentPlanInfo" />
               <!-- First line -->
@@ -276,27 +253,7 @@
             v-if="panelStore.fetching.studentAnalyzeChart && userData.planSubscribed !== planSubscribedEnum.notSubscribe" />
 
           <!-- For unsubscribed user -->
-          <div v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe"
-            class="absolute bottom-0 w-full 2xl:min-w-[700px] h-full z-50 flex items-center justify-center backdrop-blur-[5px]">
-            <div class="grid justify-items-center gap-y-[30px] text-center">
-              <div class="flex gap-x-[10px] items-center">
-                <i class="fas fa-lock text-[22px] text-purple-e0"></i>
-                <span class="text-dark-2b text-[22px] sm:text-[28px] font-bold">
-                  للمشتركين فقط
-                </span>
-              </div>
-              <div class="text-black text-[16px] sm:text-[18px] font-medium">
-                تحليلات شاملة لمستواك<br />ونقاط قوتك وضعفك
-              </div>
-              <button style="background: linear-gradient(270deg, #24a7f1 0%, #0266d6 100%)"
-                class="flex justify-center items-center gap-x-[12px] h-[36px] w-[164px] rounded-[8px] text-white text-[14px] font-bold cursor-pointer"
-                @click="toPricesPage()">
-                <span>اشترك الآن</span>
-                <i class="fa fa-chevron-left"></i>
-              </button>
-            </div>
-          </div>
-
+           <no-sub-plane v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" />
           <!-- Header: Categories and Period -->
           <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
             <div class="flex gap-[12px] flex-wrap overflow-x-auto sm:overflow-visible p-[10px] sm:p-0">
@@ -844,9 +801,7 @@ function openSubscribeModal() {
   showSubscribeModal.value = true
 }
 
-function toPricesPage() {
-  router.push(RouteHelper.webPrices())
-}
+
 
 function scrollToRecommendations() {
   const target = document.getElementById("recommendations");

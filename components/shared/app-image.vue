@@ -12,13 +12,13 @@
         >
           <source
             v-if="!hasError"
-            :srcset="imageUrl(imgSrc, folderName, item.size, 'webp')"
+            :srcset="isExternal?imgSrc:imageUrl(imgSrc, folderName, item.size, 'webp')"
             :media="'(max-width:' + item.value + 'px)'"
             type="image/webp"
           />
           <source
             v-if="!hasError"
-            :srcset="imageUrl(imgSrc, folderName, item.size, 'jpg')"
+            :srcset="isExternal?imgSrc:imageUrl(imgSrc, folderName, item.size, 'jpg')"
             :media="'(max-width:' + item.value + 'px)'"
             type="image/jpg"
           />
@@ -44,7 +44,7 @@
         v-if="!hasError"
         onmousedown="return false"
         :alt="alt"
-        :src="imageUrl(imgSrc, folderName, maxSize, imageExt)"
+        :src="isExternal?imgSrc:imageUrl(imgSrc, folderName, maxSize, imageExt)"
         @error="onError($event)"
       />
       <img
@@ -61,6 +61,7 @@
 export default {
   props: {
     isWide: Boolean,
+    isExternal:Boolean,
     maxSize: {
       type: String,
     },

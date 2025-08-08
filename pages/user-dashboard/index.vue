@@ -9,7 +9,7 @@
         <app-slider class="mt-[20px]" v-if="sliders" :slides="sliders" :delay-action="6000" :tagFilter="0" />
 
         <!-- التحليلات -->
-        <div class="flex 2xl:flex-nowrap flex-wrap mt-[20px] gap-[20px]">
+        <div v-if="userData.role === UserRoles.student" class="flex 2xl:flex-nowrap flex-wrap mt-[20px] gap-[20px]">
             <!-- مربع اختبار القدرات -->
             <div class=" flex-2/3 p-[18px_15px] rounded-lg bg-white dark:bg-gray-800 shadow-custom grid gap-[10px]">
                 <div class="flex items-center justify-between">
@@ -25,8 +25,9 @@
                     </div>
 
                     <!-- نسبة الأداء -->
-                    <app-circule-progress-bar :percentage="analyzeInfo?.studentRate??0" :gradientColors="['#58CC02', '#4E9818']" :strokeWidth="9"
-                        :textSize="16" textClass="text-blue-d6" />
+                    <app-circule-progress-bar :isLock="userData.planSubscribed === planSubscribedEnum.notSubscribe"
+                        :percentage="analyzeInfo?.studentRate ?? 0" :gradientColors="['#58CC02', '#4E9818']"
+                        :strokeWidth="9" :textSize="16" textClass="text-blue-d6" />
 
                 </div>
 
@@ -48,12 +49,13 @@
                                 <div>
                                     <span class="text-red-5e text-[14px] font-medium">{{ cat.wrongAnswersCount }}</span>
                                     |
-                                    <span class="text-green-8c text-[14px] font-medium">{{ cat.correctAnswersCount }}</span>
+                                    <span class="text-green-8c text-[14px] font-medium">{{ cat.correctAnswersCount
+                                        }}</span>
                                 </div>
                             </div>
                             <div class="flex flex-col items-center">
                                 <span class="text-purple-78 text-[14px] font-bold">مدة التدريب</span>
-                                <span class="text-gray-63 text-[14px]">{{ formatTime(cat.totalTime)}} ساعة</span>
+                                <span class="text-gray-63 text-[14px]">{{ formatTime(cat.totalTime) }} ساعة</span>
                             </div>
                         </div>
                     </div>
@@ -61,126 +63,112 @@
 
                 <!-- زر التحليلات -->
                 <div class="w-full flex justify-center">
-                    <app-g-button
-                    width="150px"
-                    height="44px"
-                    bg-class="bg-blue-d6"
-                    radius="8px"
-                    text-color="text-white"
-                    text-size="16px"
-                    font-weight="font-medium"
-                     >
-                     التحليلات
-                     </app-g-button> 
+                    <app-g-button @click="toAnalytics" width="150px" height="44px" bg-class="bg-blue-d6" radius="8px" text-color="text-white"
+                        text-size="16px" font-weight="font-medium">
+                        التحليلات
+                    </app-g-button>
 
                 </div>
             </div>
 
             <!-- مربع التقدم بالخطة -->
             <div class="flex-1/3 min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid relative">
-                <app-overlay msg="جاري جلب بيانات الخطة ..." v-if="panelStore.fetching.planInfoSimple" />
-                <!-- First line -->
-                <div class="flex items-center justify-between h-[50px]">
-                    <div class="flex flex-col items-start">
-                        <span class="text-blue-d6 font-bold text-[16px] 2xl:text-[18px]">
-                            الالتزام بالخطة
-                        </span>
-                        <span class="flex gap-x-[5px] items-center">
-                            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="4" cy="4" r="4" :fill="levelColor" />
-                            </svg>
-                            <span class="text-[14px] 2xl:text-[16px] font-medium" :style="{ color: levelColor }">
-                                {{ level }}
+                <!-- not subscribe -->
+                <no-sub-plane v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" />
+                <template v-else>
+                    <app-overlay msg="جاري جلب بيانات الخطة ..." v-if="panelStore.fetching.planInfoSimple" />
+                    <!-- First line -->
+                    <div class="flex items-center justify-between h-[50px]">
+                        <div class="flex flex-col items-start">
+                            <span class="text-blue-d6 font-bold text-[16px] 2xl:text-[18px]">
+                                الالتزام بالخطة
                             </span>
-                        </span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <span class="text-[40px] 2xl:text-[48px] leading-[42px] font-bold text-dark-63">
-                            <span>{{ planInfo?.totalPercentage }}</span>
-                            <span class="text-[26px] 2xl:text-[30px]">%</span>
-                        </span>
-                        <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">
-                            {{ formatTime(planInfo?.timeDone) }} | {{ formatTime(planInfo?.timeRequired) }}
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Progress bar -->
-                <div class="mt-[15px] h-[84px] grid items-center relative">
-                    <div style="box-shadow: 2px 2px 4px 0px #00000026 inset" class="relative h-[20px] bg-[#F0F0F0]">
-                        <!-- Green bar -->
-                        <div style="background: linear-gradient(90deg, #58CC02 0%, #4E9818 100%)"
-                            class="absolute top-0 bottom-0 right-0" :style="{ width: `${planInfo?.percentageDone}%` }">
+                            <span class="flex gap-x-[5px] items-center">
+                                <svg width="8" height="8" viewBox="0 0 8 8" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="4" cy="4" r="4" :fill="levelColor" />
+                                </svg>
+                                <span class="text-[14px] 2xl:text-[16px] font-medium" :style="{ color: levelColor }">
+                                    {{ level }}
+                                </span>
+                            </span>
                         </div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[40px] 2xl:text-[48px] leading-[42px] font-bold text-dark-63">
+                                <span>{{ planInfo?.totalPercentage }}</span>
+                                <span class="text-[26px] 2xl:text-[30px]">%</span>
+                            </span>
+                            <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">
+                                {{ formatTime(planInfo?.timeDone) }} | {{ formatTime(planInfo?.timeRequired) }}
+                            </span>
+                        </div>
+                    </div>
 
-                        <!-- Orange bar -->
-                        <div style="
+                    <!-- Progress bar -->
+                    <div class="mt-[15px] h-[84px] grid items-center relative">
+                        <div style="box-shadow: 2px 2px 4px 0px #00000026 inset" class="relative h-[20px] bg-[#F0F0F0]">
+                            <!-- Green bar -->
+                            <div style="background: linear-gradient(90deg, #58CC02 0%, #4E9818 100%)"
+                                class="absolute top-0 bottom-0 right-0"
+                                :style="{ width: `${planInfo?.percentageDone}%` }">
+                            </div>
+
+                            <!-- Orange bar -->
+                            <div style="
                     background: linear-gradient(
                       90deg,
                       #fdc830 0%,
                       #ce9800 100%
                     );
                   " class="absolute top-0 bottom-0"
-                            :style="{ width: `${planInfo?.percentageRequired ?? 0 - planInfo?.percentageDone ?? 0}%`, right: `${planInfo?.percentageDone ?? 0}%` }">
+                                :style="{ width: `${planInfo?.percentageRequired ?? 0 - planInfo?.percentageDone ?? 0}%`, right: `${planInfo?.percentageDone ?? 0}%` }">
+                            </div>
+                        </div>
+
+                        <!-- "You are here" indicator -->
+                        <div v-if="planInfo?.percentageDone > 0"
+                            :style="{ right: `calc(${planInfo?.percentageDone ?? 0}% - 30px)` }"
+                            class="absolute -top-[10px] h-[27px] grid gap-y-[5px] justify-items-center w-[40px]">
+                            <div class="text-[10px] 2xl:text-[12px] text-black font-medium">أنت هنا</div>
+                            <svg width="16" height="14" viewBox="0 0 16 14" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 14L0 0L16 0L8 14Z" fill="#00C48C" />
+                            </svg>
+                        </div>
+
+                        <!-- Target indicator -->
+                        <div v-if="planInfo?.percentageRequired > 0"
+                            :style="{ right: `calc(${planInfo?.percentageRequired ?? 0}% - 45px)` }"
+                            class="absolute bottom-0 h-[27px] grid gap-y-[5px] justify-items-center w-[80px]">
+                            <svg width="16" height="14" viewBox="0 0 16 14" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 0L16 14H0L8 0Z" fill="#EAB316" />
+                            </svg>
+                            <div class="text-[10px] 2xl:text-[12px] h-[8px] text-black font-medium">
+                                الإنجاز المقرر
+                            </div>
                         </div>
                     </div>
 
-                    <!-- "You are here" indicator -->
-                    <div v-if="planInfo?.percentageDone > 0"
-                        :style="{ right: `calc(${planInfo?.percentageDone ?? 0}% - 30px)` }"
-                        class="absolute -top-[10px] h-[27px] grid gap-y-[5px] justify-items-center w-[40px]">
-                        <div class="text-[10px] 2xl:text-[12px] text-black font-medium">أنت هنا</div>
-                        <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 14L0 0L16 0L8 14Z" fill="#00C48C" />
-                        </svg>
+                    <div class="flex items-center justify-center gap-x-[20px]">
+                        <app-g-button width="150px" height="44px" bg-class="bg-transparent" :border="true"
+                            border-color="border-purple-8c" radius="8px" text-color="text-purple-8c" text-size="16px"
+                            font-weight="font-medium">
+                            خطتي
+                        </app-g-button>
+                        <app-g-button @click="toTraining" width="150px" height="44px" bg-class="bg-purple-78" radius="8px"
+                            text-color="text-white" text-size="16px" font-weight="font-medium">
+                            تدرب
+                        </app-g-button>
                     </div>
-
-                    <!-- Target indicator -->
-                    <div v-if="planInfo?.percentageRequired > 0"
-                        :style="{ right: `calc(${planInfo?.percentageRequired ?? 0}% - 45px)` }"
-                        class="absolute bottom-0 h-[27px] grid gap-y-[5px] justify-items-center w-[80px]">
-                        <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 0L16 14H0L8 0Z" fill="#EAB316" />
-                        </svg>
-                        <div class="text-[10px] 2xl:text-[12px] h-[8px] text-black font-medium">
-                            الإنجاز المقرر
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-center gap-x-[20px]">
-                    <app-g-button
-                    width="150px"
-                    height="44px"
-                    bg-class="bg-transparent"
-                    :border="true"
-                    border-color="border-purple-8c"
-                    radius="8px"
-                    text-color="text-purple-8c"
-                    text-size="16px"
-                    font-weight="font-medium"
-                     >
-                     خطتي
-                     </app-g-button>
-                    <app-g-button
-                    width="150px"
-                    height="44px"
-                    bg-class="bg-purple-78"
-                    radius="8px"
-                    text-color="text-white"
-                    text-size="16px"
-                    font-weight="font-medium"
-                     >
-                     تدرب
-                     </app-g-button>
-                </div>
+                </template>
             </div>
         </div>
 
         <!-- أحدث المقالات -->
-         <div class="grid gap-y-[25px] mt-[40px] mb-[30px]">
+        <div class="grid gap-y-[25px] mt-[40px] mb-[30px]">
             <span class=" text-blue-d6 text-[24px] font-bold">أحدث المقالات</span>
-        <app-blogs v-if="blogs" :blogs="blogs" />
+            <app-blogs v-if="blogs" :blogs="blogs" />
         </div>
 
     </user-panel-wrapper>
@@ -188,11 +176,16 @@
 
 <script lang="ts" setup>
 import { useUserPanelStore } from '~/store/user-panel';
-import { onMounted, computed } from 'vue';
+import { computed } from 'vue';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
+import { planSubscribedEnum } from '~/main/constants/global.enums';
+import { RouteHelper } from '~/main/utils/route-helper';
+import { webUserTrainWithUs } from '~/main/utils/web-routes.utils';
+import { UserRoles } from '~/core/auth/constants/user-roles';
 
 const panelStore = useUserPanelStore();
 const { data } = useAuth();
+const router = useRouter()
 
 panelStore.getBlogs();
 panelStore.getHomeSlides();
@@ -242,17 +235,20 @@ const levelColor = computed(() => {
     }
 });
 
-const circumference = 2 * Math.PI * 28;
-const offset = computed(() => {
-    const percent = analyzeInfo.value?.studentRate ?? 0;
-    return circumference - (percent / 100) * circumference;
-});
-
 const formatTime = (minutes) => {
     const hrs = Math.floor(minutes / 60);
     const mins = Math.round(minutes % 60);
     return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
 };
+
+
+const toAnalytics = () =>{
+    router.push(RouteHelper.userAnalytics())
+}
+
+const toTraining = () =>{
+    router.push(webUserTrainWithUs())
+}
 
 </script>
 
