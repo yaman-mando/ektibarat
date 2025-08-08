@@ -13,6 +13,7 @@
       <lazy-vee-validate-provider>
         <template v-if="!successPaymentCase">
           <div
+            v-if="windowSize.isDesktop"
             class="rw-1 !mis-0"
             :class="{ 'is-sub': activeStep == steps.subscriptions }"
           >
@@ -1349,7 +1350,7 @@ export default {
 <style lang="scss" scoped>
 @use '@/assets/scss/mixin' as *;
 .subscriptions-part {
-  padding: 0 15px;
+  padding: 0 25px;
   width: 100%;
   margin-left: auto !important;
   margin-right: auto !important;
@@ -1432,8 +1433,9 @@ export default {
     &.is-sub {
       justify-content: flex-start;
       span {
+        color: var(--dark-63);
         font-size: 24px;
-        margin-inline-start: 34px;
+        //margin-inline-start: 34px;
         font-weight: bold;
       }
       @include mobile-down() {
@@ -1510,10 +1512,10 @@ export default {
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
-        padding: 0 32px 25px 31px;
-        margin-top: 25px;
+        padding: 20px 0;
+        margin-top: 15px;
         &:not(:last-child) {
-          border-bottom: 2px solid #bcccdb;
+          border-bottom: 1px solid #bcccdb;
         }
         ._rp {
           display: grid;
@@ -1525,13 +1527,13 @@ export default {
             ._title {
               font-size: 18px;
               font-weight: bold;
-              color: var(--purple-8c);
+              color: var(--purple-78);
             }
             ._type {
               padding: 3px 10px;
               border: 1px solid;
-              font-size: 11px;
-              font-weight: bold;
+              font-size: 12px;
+              font-weight: 500;
               color: var(--blue-d6);
               border-color: var(--blue-d6);
               border-radius: 12px;
@@ -1544,13 +1546,15 @@ export default {
           .c_date {
             font-size: 16px;
             color: var(--red-5e);
+            font-weight: 500;
           }
           .c_free {
             display: grid;
             row-gap: 8px;
             ._t1 {
               font-size: 16px;
-              color: var(--dark-2b);
+              font-weight: 500;
+              color: var(--dark-63);
             }
             ._t2 {
               font-weight: 500;
@@ -1564,14 +1568,14 @@ export default {
           button {
             font-size: 16px;
             font-weight: bold;
-            background: var(--purple-8c);
+            background: var(--purple-78);
             color: white;
             width: 100px;
             height: 40px;
-            border-radius: 3px;
+            border-radius: 8px;
           }
         }
-        @include mobile-down() {
+        @include web-mobile-only() {
           row-gap: 20px;
           justify-content: center;
           flex-direction: column;
@@ -2034,8 +2038,8 @@ export default {
     }
   }
 
-  @include tablet-down() {
-    padding: 15px 0 0;
+  @include web-mobile-only() {
+    padding: 0 15px;
     margin: 0 0 50px;
     .rw-1 {
       margin-inline-start: 15px;

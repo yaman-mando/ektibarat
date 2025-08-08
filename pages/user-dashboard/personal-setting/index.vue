@@ -1,5 +1,6 @@
 <template>
   <user-panel-wrapper
+    content-class="max-w-[1060px] !mx-auto"
     :has-l-info="false"
     :has-r-info="false"
     :no-spaces="!windowSize.isDesktop"
@@ -7,7 +8,7 @@
     :page-name="selectedName"
   >
     <div
-      class="flex flex-wrap 2xl:flex-nowrap p-6 gap-[20px]"
+      class="flex flex-wrap 2xl:flex-nowrap gap-[20px]"
       :class="{ '!p-0': !windowSize.isDesktop }"
     >
       <main

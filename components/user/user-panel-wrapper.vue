@@ -212,7 +212,7 @@ definePageMeta({
     }
     overflow-y: scroll;
 
-    @include tablet-down() {
+    @include web-mobile-only() {
       padding: 10px 5px;
     }
   }

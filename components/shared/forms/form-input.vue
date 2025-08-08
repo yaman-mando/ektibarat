@@ -182,9 +182,9 @@ defineExpose({
     justify-content: space-between;
 
     label {
-      font-size: 16px;
-      color: #252525;
-      font-weight: 400;
+      font-size: 18px;
+      color: var(--color-dark-2b);
+      font-weight: 500;
       margin-bottom: 8px;
     }
 

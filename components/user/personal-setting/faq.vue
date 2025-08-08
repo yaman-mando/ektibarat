@@ -1,6 +1,6 @@
 <template>
   <div class="faqs-page">
-    <h2 class="title md:visible hidden">الأسئلة الشائعة</h2>
+    <h2 v-if="windowSize.isDesktop" class="title">الأسئلة الشائعة</h2>
 
     <template v-if="listRequest.error.value">
       <lazy-error-block />
@@ -60,6 +60,7 @@ useHead({
 
 // store
 const commonQuestionsStore = useCommonQuestionsStore();
+const windowSize = useWindowSize()
 
 // data
 const search = ref<string | null>(null);
@@ -94,7 +95,7 @@ onMounted(() => {
 .faqs-page {
   padding: 15px;
 
-  @include tablet-up() {
+  @include web-desktop-up() {
     padding: 0 15px;
   }
 
@@ -122,6 +123,7 @@ onMounted(() => {
       align-items: center;
       column-gap: 10px;
       height: 64px;
+      cursor: pointer;
 
       .question-text {
         font-size: 18px;
@@ -130,9 +132,8 @@ onMounted(() => {
       }
 
       i {
-        font-size: 18px;
+        font-size: 16px;
         color: #24a7f1;
-        cursor: pointer;
       }
     }
 

@@ -60,6 +60,7 @@ const props = withDefaults(
     radius?: string | number | null;
     border?: string | null;
     otherStyle?: string | null;
+    byGender?:boolean;
   }>(),
   {
     url: null,
@@ -67,6 +68,7 @@ const props = withDefaults(
     withModal: false,
     width: '100',
     height: '100',
+    byGender:false
   }
 );
 
@@ -79,9 +81,9 @@ const hasError = ref(false);
 const imageUrlModel = computed(() => {
   //cases where there is no size or ext for image
   if (LIBRARY_TYPE_FOLDER_LIST.some((val) => val == props.folderName)) {
-    return getUrl(props.folderName, props.url);
+    return getUrl(props.folderName, props.url,null,null,props.byGender);
   }
-  return getUrl(props.folderName, props.url, props.size, props.ext);
+  return getUrl(props.folderName, props.url, props.size, props.ext,props.byGender);
 });
 
 //method
