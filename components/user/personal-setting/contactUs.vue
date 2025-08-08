@@ -5,7 +5,7 @@
   >
     <div class="contents">
       <div class="cl-captions">
-        <h3 class="title">اتصل بنا</h3>
+        <h3 v-if="windowSize.isDesktop" class="title">اتصل بنا</h3>
         <h3 class="desc">
           {{ jsonData.description }}
         </h3>
@@ -149,6 +149,7 @@ const authStore = useAuthStore();
 const contactFormStore = useContactFormStore();
 const toastMessage = useToastMessage();
 const imageUrl = useImageUrl();
+const windowSize = useWindowSize()
 
 //data
 const formRef = useTemplateRef('form_ref');

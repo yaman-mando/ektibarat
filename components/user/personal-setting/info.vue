@@ -1,6 +1,6 @@
 <template>
   <div class="u-wrapper">
-    <label class="text-dark-63 text-[24px] font-bold hidden md:inline-block">
+    <label v-if="windowSize.isDesktop" class="text-dark-63 text-[24px] font-bold hidden md:inline-block">
       المعلومات الشخصية
     </label>
 
@@ -18,7 +18,8 @@
               ImagesFolderName.Users,
               profileInfo.pictureUrl,
               ImageSize.original,
-              ImageExt.jpg
+              ImageExt.jpg,
+              true
             )
           "
           alt=""
@@ -64,7 +65,7 @@
             <form-input
               v-model:inputValue="profileInfo.lastName"
               inputId="secondname"
-              label="اسم العائلة"
+              label="الاسم الأخير"
               rules="required|no_special"
             />
           </div>
@@ -149,7 +150,7 @@
         <label class="text-dark-2b font-bold text-[16px]">رقم واتساب</label>
         <div class="w-[300px] m-auto grid gap-y-[20px] mt-[25px]">
           <div class="ac-control-wrapper m-0 !grid gap-y-[10px]">
-            <label for="telephone">رقم واتساب</label>
+            <label class="text-[18px] font-medium text-dark-2b" for="telephone">رقم واتساب</label>
             <phone-input
               :isEdit="true"
               :phoneNumber="profileInfo.phoneNumber"
@@ -324,7 +325,7 @@
 
         <div class="w-[300px] m-auto grid gap-y-[20px] mt-[25px]">
           <div class="grid gap-y-[10px]">
-            <label>المدينة</label>
+            <label class="text-[18px] font-medium text-dark-2b">المدينة</label>
             <v-select
               v-model="profileInfo.cityId"
               :options="cities"
@@ -345,7 +346,7 @@
           </div>
 
           <div class="grid gap-y-[10px]">
-            <label>المدرسة</label>
+            <label class="text-[18px] font-medium text-dark-2b">المدرسة</label>
             <v-select
               v-model="profileInfo.schoolId"
               :options="schools"
@@ -440,10 +441,10 @@
         v-slot="{ handleSubmit }"
         class="ac-wrapper name m-auto"
       >
-        <label class="text-dark-2b font-bold text-[16px]">الاسم</label>
+        <label class="text-dark-2b font-bold text-[16px]">الصف الدراسي</label>
         <div class="w-[300px] m-auto grid gap-y-[20px] mt-[25px]">
           <div class="grid gap-y-[10px]">
-            <label>الصف الدراسي</label>
+            <label class="text-[18px] font-medium text-dark-2b">الصف الدراسي</label>
             <v-select
               v-model="profileInfo.grades"
               :options="grades"
@@ -723,6 +724,7 @@ const toast = useToastMessage();
 const appAuth = useAuthStore();
 const globalStore = useGlobalUserStore();
 const imageUrlService = useImageUrl();
+const windowSize = useWindowSize()
 
 const activeSection = ref<string | null>(null);
 const profileInfo = reactive<profileForm>(new profileForm());
@@ -1062,7 +1064,8 @@ const openCropEdit = () => {
       ImagesFolderName.Users,
       profileInfo.pictureUrl,
       ImageSize.original,
-      ImageExt.jpg
+      ImageExt.jpg,
+      true
     ) ?? '';
   openCropper.value = true;
 };
@@ -1182,7 +1185,8 @@ onMounted(() => {
         span {
           display: block;
           font-size: 16px;
-          color: var(--black-24);
+          color: var(--dark-2b);
+          font-weight: 500;
         }
 
         .r-label-wrapper {
@@ -1220,8 +1224,9 @@ onMounted(() => {
           display: block;
           cursor: pointer;
           font-size: 16px;
+          font-weight: 500;
           line-height: 22px;
-          color: var(--purple-8c);
+          color: var(--purple-e0);
         }
 
         .add {
@@ -1408,7 +1413,7 @@ onMounted(() => {
     .ac-action {
       display: grid;
       grid-template-columns: repeat(2, auto);
-      grid-column-gap: 10px;
+      grid-column-gap: 20px;
       margin: 0 auto;
 
       .btn {
@@ -1455,9 +1460,9 @@ onMounted(() => {
   gap: 10px;
 
   .title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--dark-2b);
     text-align: center;
   }
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="px-[25px] hidden md:block">
+    <div class="px-[25px] hidden xl:block">
         <h2 class="text-[24px] font-bold text-gray-63 dark:text-gray-100 mb-4">التفضيلات</h2>
 
         <!-- Sound & Motivation Toggles -->
@@ -48,8 +48,8 @@
     </div>
 
     <!-- mobile -->
-    <div class="px-[15px] py-[20px] block md:hidden">
-        <h2 class="text-[24px] font-bold text-gray-63 dark:text-gray-100 mb-4">التفضيلات</h2>
+    <div class="px-[15px] py-[20px] block xl:hidden">
+        <h2 class="text-[24px] font-bold text-gray-63 dark:text-gray-100 mb-[10px]">التفضيلات</h2>
 
         <!-- Sound & Motivation Toggles -->
         <div class="mb-[30px] shadow-custom rounded-[8px]">
@@ -65,7 +65,7 @@
         </div>
 
         <!-- Notification Options -->
-        <h2 class="text-[24px] font-bold text-gray-63 dark:text-gray-100 mb-4">خصائص الإشعارات</h2>
+        <h2 class="text-[24px] font-bold text-gray-63 dark:text-gray-100 mb-[10px]">خصائص الإشعارات</h2>
         <div class="shadow-custom rounded-[8px]">
             <div v-for="(label, key) in notificationLabels" :key="key">
                 <div class="flex items-center justify-between h-[62px] px-[15px]">
@@ -86,7 +86,7 @@
         </div>
 
         <!-- Save Button -->
-        <div class="w-full text-left mt-[30px]">
+        <div class="w-full text-left mt-[20px]">
             <button :disabled="!hasChanges()"
                 class=" bg-purple-78 disabled:opacity-50 text-white w-full h-[44px] rounded-[8px] hover:bg-primary-dark cursor-pointer"
                 @click="saveChanges">
@@ -114,6 +114,7 @@ const original = ref<any>({})
 const showConfirmExit = ref(false)
 const { $axios } = useNuxtApp()
 const toast = useToastMessage()
+const windowSize = useWindowSize();
 
 const notificationLabels: Record<string, string> = {
     trainingReminders: 'تذكيرات التدريب',
@@ -172,19 +173,19 @@ const discardChanges = () => {
     pendingRoute = null
 }
 
-const getWhatsAppState = (val: number) => val === 2 || val === 3
-const getEmailState = (val: number) => val === 1 || val === 3
+const getWhatsAppState = (val: number) => val === 2 || val === 0
+const getEmailState = (val: number) => val === 1 || val === 0
 
 const toggleWhatsApp = (key: string) => {
     const val = form.value[key]
-    if (getWhatsAppState(val)) form.value[key] = getEmailState(val) ? 1 : 0
-    else form.value[key] = getEmailState(val) ? 3 : 2
+    if (getWhatsAppState(val)) form.value[key] = getEmailState(val) ? 1 : 3
+    else form.value[key] = getEmailState(val) ? 0 : 2
 }
 
 const toggleEmail = (key: string) => {
     const val = form.value[key]
-    if (getEmailState(val)) form.value[key] = getWhatsAppState(val) ? 2 : 0
-    else form.value[key] = getWhatsAppState(val) ? 3 : 1
+    if (getEmailState(val)) form.value[key] = getWhatsAppState(val) ? 2 : 3
+    else form.value[key] = getWhatsAppState(val) ? 0 : 1
 }
 
 const getBtnClass = (active: boolean, type = 'whatsapp') => {

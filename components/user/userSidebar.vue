@@ -58,6 +58,7 @@
           :url="userData?.pictureUrl"
           :size="imagesSize.xs"
           :ext="imageExt.jpg"
+          :byGender="true"
           width="40"
           height="40"
           radius="50%"

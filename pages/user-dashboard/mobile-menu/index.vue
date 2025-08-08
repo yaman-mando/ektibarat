@@ -17,7 +17,7 @@
             height="40"
             radius="50%"
           />
-          <span class="text-[18px] text-right text-purple-78 font-bold">
+          <span class="text-[18px] text-right text-purple-e0 font-bold">
             {{ userData.firstName + ' ' + userData.lastName }}
           </span>
         </div>
@@ -27,7 +27,7 @@
           @click="showExamOptions = !showExamOptions"
         >
           <span>تغيير الاختبار</span>
-          <span class="text-purple-78 font-medium">
+          <span class="text-purple-e0 text-[14px] font-medium">
             {{
               globalOptions.filter((k) => k.value === selectedGlobal)?.[0]
                 ?.label
@@ -93,7 +93,7 @@
       </div>
 
       <button
-        class="w-full h-[53px] flex items-center justify-center rounded-[8px] bg-white text-red-5e font-medium mt-[31px] shadow-custom cursor-pointer"
+        class="w-full h-[53px] flex items-center justify-center rounded-[8px] bg-white text-red-5e text-[20px] font-medium mt-[31px] shadow-custom cursor-pointer"
         @click="logout"
       >
         تسجيل الخروج
