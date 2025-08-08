@@ -6,7 +6,10 @@
     <div
       class="w-full grid grid-cols-[20px_1fr_20px] items-center justify-items-center"
     >
-      <i class="fa fa-chevron-right"></i>
+      <i
+        class="fa fa-chevron-right cursor-pointer"
+        @click="router.back()"
+      ></i>
       <h1 class="!m-0 text-center text-[#4B5363] text-[18px] font-bold">
         {{ title }}
       </h1>
@@ -22,6 +25,7 @@ const props = withDefaults(
   {}
 );
 
+const router = useRouter();
 const windowSize = useWindowSize();
 </script>
 <style scoped lang="scss">
