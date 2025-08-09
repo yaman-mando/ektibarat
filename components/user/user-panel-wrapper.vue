@@ -42,6 +42,7 @@
 
       <div
         :class="[
+          wrapperClass,
           { isMobile: !windowSize.isDesktop && !hasPrev },
           { hasPrev: hasPrev },
 
@@ -129,6 +130,7 @@ useHead({
 const props = withDefaults(
   defineProps<{
     contentClass?: string;
+    wrapperClass?: string;
     contentWrapperClass?: string;
     hasRInfo?: boolean;
     hasLInfo?: boolean;

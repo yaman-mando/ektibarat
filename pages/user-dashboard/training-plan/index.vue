@@ -1,12 +1,22 @@
 <template>
-  <user-panel-wrapper contentClass="!pb-0">
+  <user-panel-wrapper
+    contentClass="!pb-0 w-full lg:w-[min(1060px,100%)] mx-auto"
+    wrapperClass="!p-[15px]"
+    :hasRInfo="windowSize.isDesktop"
+    :hasLInfo="windowSize.isDesktop"
+    :hasPrev="!windowSize.isDesktop"
+    pageName="خطتي التدريبية"
+  >
     <div class="training-plan-page">
       <template v-if="loadingPage">
         <app-loading-spinner :showSpinner="true" />
       </template>
       <template v-else>
         <template v-if="info && detail">
-          <h1 class="text-[24px] text-[#0266D6] font-bold mb-[10px]">
+          <h1
+            v-if="windowSize.isDesktop"
+            class="text-[24px] text-[#0266D6] font-bold mb-[10px]"
+          >
             خطتي التدريبية
           </h1>
           <div class="z-w">
@@ -99,7 +109,7 @@
               >
                 <!-- First line -->
                 <div
-                  class="flex items-center justify-between h-[50px] mb-[24px]"
+                  class="flex items-center justify-between h-[50px] mb-[15px]"
                 >
                   <div class="flex flex-col items-start">
                     <span
@@ -211,7 +221,9 @@
               <div
                 class="items-start bg-white shadow-custom rounded-[8px] p-[20px_15px] grid"
               >
-                <div class="flex items-center justify-start gap-[10px]">
+                <div
+                  class="flex items-center justify-start gap-[10px] mb-[20px]"
+                >
                   <img
                     src="/images/commit-icon.png"
                     alt="commit"
@@ -221,7 +233,7 @@
                   </span>
                 </div>
                 <div
-                  class="progress-a-bar mt-[15px] h-[84px] grid items-center relative"
+                  class="progress-a-bar mt-[15px] mb-[10px] h-[84px] grid items-center relative"
                 >
                   <div
                     style="box-shadow: 2px 2px 4px 0px #00000026 inset"
@@ -265,7 +277,7 @@
                     class="absolute -top-[10px] h-[27px] grid gap-y-[5px] justify-items-center w-[40px]"
                   >
                     <div
-                      class="text-[10px] 2xl:text-[12px] text-black font-medium"
+                      class="text-[16px] text-black font-medium whitespace-nowrap"
                     >
                       أنت هنا
                     </div>
@@ -303,7 +315,7 @@
                       />
                     </svg>
                     <div
-                      class="text-[10px] 2xl:text-[12px] h-[8px] text-black font-medium"
+                      class="text-[16px] h-[8px] text-black font-medium whitespace-nowrap"
                     >
                       الإنجاز المقرر
                     </div>
@@ -331,9 +343,7 @@
                     />
                   </div>
 
-                  <span
-                    class="ml-2 text-orange-39 font-bold text-base md:text-[18px]"
-                  >
+                  <span class="ml-2 text-orange-39 font-bold text-[18px]">
                     توصيات اختبارات
                   </span>
                 </div>
@@ -382,9 +392,16 @@ import type {
   TrainingPlanDetailDataModel,
   TrainingPlanInfoDataModel,
 } from '~/main/modules/training-plan/data-access/training-plan.model';
-import { addDays } from 'date-fns';
+import { addMinutes, format, startOfDay, addDays } from 'date-fns';
 
 export default {
+  setup() {
+    const windowSize = useWindowSize();
+
+    return {
+      windowSize,
+    };
+  },
   data() {
     return {
       isOpenRecommendations: true,
@@ -435,9 +452,12 @@ export default {
   },
   methods: {
     formatTime(minutes) {
-      const hrs = Math.floor(minutes / 60);
-      const mins = Math.round(minutes % 60);
-      return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+      // Start from midnight
+      const baseDate = startOfDay(new Date());
+      const dateWithMinutes = addMinutes(baseDate, minutes);
+      const formatted = format(dateWithMinutes, 'HH:mm');
+
+      return formatted === '00:00' ? '--' : formatted;
     },
     async savePlan() {
       try {
