@@ -66,7 +66,7 @@
             <!-- left info -->
             <div
               v-if="hasLInfo"
-              class="flex items-center w-[300px] gap-x-[20px]"
+              class="flex items-center gap-x-[20px]"
             >
               <div class="flex items-center gap-x-[8px]">
                 <img

@@ -142,7 +142,7 @@
     </div>
   </aside>
   <div
-    v-else-if="hasMobileMenu"
+    v-else-if="hasMobileMenu && windowSize.isMobileSize"
     class="w-full fixed bottom-0 h-[78px] px-[15px] bg-white"
     style="box-shadow: 0px -2px 10px 0px #00000026"
   >

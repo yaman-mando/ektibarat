@@ -1,18 +1,26 @@
 <template>
-  <user-panel-wrapper contentClass="!pb-0">
-    <!--    <template #top-right>-->
-    <!--      <app-button-->
-    <!--        label="رجوع للخلف"-->
-    <!--        iconStartClass="fa fa-chevron-right"-->
-    <!--        variant="clear"-->
-    <!--        size="md"-->
-    <!--      />-->
-    <!--    </template>-->
+  <user-panel-wrapper
+    contentClass="!pb-0 w-full lg:w-[min(1060px,100%)] mx-auto"
+    contentWrapperClass="!mb-[25px]"
+    :hasRInfo="windowSize.isDesktop"
+    :hasLInfo="windowSize.isDesktop"
+    :hasPrev="!windowSize.isDesktop"
+    pageName="إنشاء خطة"
+  >
+    <template #top-right>
+      <app-button
+        label="رجوع للخلف"
+        iconStartClass="fa fa-chevron-right"
+        variant="clear"
+        size="md"
+        @click="appRouter.back()"
+      />
+    </template>
 
     <div class="train-with-us space-y-10">
       <div
         v-if="!showStepsSection"
-        class="qw w-full lg:w-[min(1060px,100vw)]"
+        class="qw w-full lg:w-[min(1060px,100%)]"
       >
         <h1>كيف تبي تتدرب معنا؟</h1>
         <div class="qd-grid">
@@ -183,7 +191,9 @@
                   :isDisabled="!form.neededDegree"
                   @click="submitRequiredDegree"
                 />
-                <div class="hidden absolute lg:flex bottom-[0px] left-[20px]">
+                <div
+                  class="hidden absolute lg:flex bottom-[0px] left-[20px] font-[500]"
+                >
                   <span
                     class="flex !text-center relative -left-[50px] -top-[50px] w-[220px] h-[90px] items-center justify-center text-[18px] rounded-[8px] bg-white shadow-[0_0_10px_0_rgba(0,0,0,0.15)]"
                   >
@@ -296,9 +306,13 @@ export default {
     definePageMeta({
       layout: 'empty-layout',
     });
+    const windowSize = useWindowSize();
+    const runtimeConfig = useRuntimeConfig();
     return {
       ...useSetupRoute(),
       ...useSetupAuth(),
+      runtimeConfig,
+      windowSize,
     };
   },
   data() {
@@ -403,19 +417,21 @@ export default {
     },
     smartClick() {
       if (
+        this.appAuth.user.planSubscribed ===
+          UserPlanSubscribedEnum.NotSubscribed ||
+        this.runtimeConfig.public.configData.byPassSubscribedUser
+      ) {
+        this.showStepsSection = true;
+        return;
+      }
+
+      if (
         [
           UserPlanSubscribedEnum.Finished,
           UserPlanSubscribedEnum.Subscribed,
         ].some((val) => val === this.appAuth.user.planSubscribed)
       ) {
-        this.appRouter.push(webUserSteps());
-      }
-
-      if (
-        this.appAuth.user.planSubscribed ===
-        UserPlanSubscribedEnum.NotSubscribed
-      ) {
-        this.showStepsSection = true;
+        return this.appRouter.push(webUserSteps());
       }
     },
   },
