@@ -55,11 +55,11 @@ const clearFirstRegisterDelaySub = new Subject<number>();
 onMounted(() => {
   globalStore.getUserCountry();
 
-  clearFirstRegisterDelaySub
-    .pipe(mergeMap((val) => of(val).pipe(delay(8000))))
-    .subscribe((userId) => {
-      localStorageStore.clearFirstRegister(userId);
-    });
+  // clearFirstRegisterDelaySub
+  //   .pipe(mergeMap((val) => of(val).pipe(delay(8000))))
+  //   .subscribe((userId) => {
+  //     localStorageStore.clearFirstRegister(userId);
+  //   });
 });
 
 //method
@@ -244,7 +244,7 @@ watch(
       const isFirstRegisterExist = localStorageStore.getFirstRegister(userId);
       if (!isFirstRegisterExist) {
         localStorageStore.setFirstRegister(userId);
-        clearFirstRegisterDelaySub.next(userId);
+        //clearFirstRegisterDelaySub.next(userId);
         showHelloModal();
       }
     }
