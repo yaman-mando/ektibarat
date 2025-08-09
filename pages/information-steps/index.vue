@@ -24,19 +24,19 @@
           <h2 class="text-[30px] sm:text-[40px] font-bold !text-center text-blue-d6">خلنا نتعرّف عليك</h2>
           <div class="flex gap-x-[10px] justify-center mt-[50px]">
             <input
-              :class="['border-gray-8f', 'border-[.5px]', 'rounded-[8px]', 'outline-0', 'pr-[15px]', 'h-[40px]', 'w-[145px]', { 'border-red-500': errors.firstName }]"
+              :class="['border-gray-8f', 'border-[.5px]', 'rounded-[8px]', 'outline-0', 'pr-[15px]', 'h-[40px]', 'w-[145px]']"
               v-model="form.firstName" placeholder="اكتب اسمك الأول" />
             <input
-              :class="['border-gray-8f', 'border-[.5px]', 'rounded-[8px]', 'outline-0', 'pr-[15px]', 'h-[40px]', 'w-[145px]', { 'border-red-500': errors.lastName }]"
+              :class="['border-gray-8f', 'border-[.5px]', 'rounded-[8px]', 'outline-0', 'pr-[15px]', 'h-[40px]', 'w-[145px]']"
               v-model="form.lastName" placeholder="اكتب اسمك الأخير" />
           </div>
 
           <div class="mt-[30px]">
             <p class="!text-center font-medium text-blue-d6 text-[20px]">اختر شخصيّتك</p>
             <div class="flex justify-center items-center gap-[20px] mt-[20px]">
-              <img :class="[avatarClass(0), errors.sex ? 'border-red-500 border-[3px]' : '']"
+              <img :class="[avatarClass(0)]"
                 src="/images/png/person.png" alt="male" @click="form.sex = 0" />
-              <img :class="[avatarClass(1), errors.sex ? 'border-red-500 border-[3px]' : '']"
+              <img :class="[avatarClass(1)]"
                 src="/images/png/female.png" alt="female" @click="form.sex = 1" />
             </div>
           </div>
@@ -48,23 +48,23 @@
               <label class="block text-[20px] font-medium text-dark-2b">مدينتك في السعودية</label>
               <v-select v-model="form.cityId" :options="cities" :reduce="city => city.id" label="label"
                 class="custom-select" @update:modelValue="fetchSchools(true)" :clearable="false"
-                placeholder="اختر مدينة" dir="rtl" :filterable="false" @search="handleSearch" :loading="loadingCities"
+                placeholder="اختر مدينتك" dir="rtl" :filterable="false" @search="handleSearch" :loading="loadingCities"
                 :class="[
                   'w-full',
                   'text-right',
                   'rtl',
-                  errors.cityId ? 'rounded-[6px] bg-gray-fa error' : ''
+                  errors.schoolId ? 'error' : ''
                 ]" />
             </div>
             <div class="space-y-[10px]">
               <label class="block text-[20px] font-medium text-dark-2b">مدرستك</label>
               <v-select v-model="form.schoolId" :options="schools" :reduce="school => school.id" label="label"
-                class="custom-select" :clearable="false" placeholder="اختر مدرسة" :disabled="!form.cityId"
+                class="custom-select" :clearable="false" placeholder="اختر المدرسة" :disabled="!form.cityId"
                 style="direction: rtl" :class="[
                   'w-full',
                   'text-right',
                   'rtl',
-                  errors.schoolId ? 'rounded-[6px] bg-gray-fa error' : ''
+                  errors.schoolId ? 'bg-gray-fa error' : ''
                 ]" dir="rtl" />
             </div>
           </client-only>
@@ -89,7 +89,7 @@
             <div class="flex gap-[12px]">
               <div v-for="n in 5" :key="n" @click="form.qodoratAttempt = n; form.lastQodoratMark = null"
                 class="w-[50px] h-[50px] text-[26px] flex items-center justify-center rounded-full cursor-pointer"
-                :class="[form.qodoratAttempt === n ? 'bg-[#F8F3FF] border-1 border-purple-e0 text-purple-e0' : 'bg-[#F5F7FA] border-1 border-[#E5E5E5] text-dark-2b', errors.qodoratAttempt ? 'border-red-500 text-red-5e' : '']">
+                :class="[form.qodoratAttempt === n ? 'bg-[#F8F3FF] border-1 border-purple-e0 text-purple-e0' : 'bg-[#F5F7FA] border-1 border-[#E5E5E5] text-dark-2b']">
                 {{ n }}
               </div>
             </div>
@@ -99,7 +99,7 @@
             <label class="text-dark-2b text-[20px] font-medium">كم آخر درجة قدرات جبتها؟</label>
             <div class="relative w-[300px]">
               <input type="number" v-model.number="form.lastQodoratMark" min="1" max="100" @input="enforceRange"
-                :class="['input', 'outline-0', 'border', 'rounded-[6px]', 'w-full', 'h-[40px]', 'pr-[10px]', 'appearance-none', '[&::-webkit-inner-spin-button]:appearance-none', '[&::-webkit-outer-spin-button]:appearance-none', errors.lastQodoratMark ? 'border-red-500' : 'border-[#8F8F8F]']"
+                :class="['input', 'outline-0', 'border', 'rounded-[6px]', 'w-full', 'h-[40px]', 'pr-[10px]', 'appearance-none', '[&::-webkit-inner-spin-button]:appearance-none', '[&::-webkit-outer-spin-button]:appearance-none', 'border-[#8F8F8F]']"
                 placeholder="أدخل درجتك" />
               <span class="absolute left-2 top-1/2 -translate-y-1/2">%</span>
             </div>
@@ -225,10 +225,11 @@ const user = computed(() => authStore.state.userData as unknown as UserInfoDataM
 
 //methods
 const handleSearch = useDebounceFn(async (search: string) => {
-  console.log(search)
   if (search.length < 3) {
-    await fetchImportantCities();
-    return;
+    if(search.length === 2){
+     await fetchImportantCities();
+    }
+    return; 
   }
 
   loadingCities.value = true;
