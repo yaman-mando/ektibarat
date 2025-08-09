@@ -615,7 +615,7 @@
   }
 
   .qu-count {
-    margin-top: 20px;
+    //margin-top: 20px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -634,19 +634,11 @@
 
   .select-items-wrapper {
     display: grid;
-    grid-template-columns: 1fr;
+    //grid-template-columns: 1fr;
     @include ipad-up() {
-      grid-template-columns: 2fr 1fr;
+      //grid-template-columns: 2fr 1fr;
     }
     gap: 16px;
-    &__st {
-      display: grid;
-      grid-template-columns: 1fr;
-      @include ipad-up() {
-        grid-template-columns: 1fr 1fr;
-      }
-      gap: 12px;
-    }
   }
 
   @include ipad-down() {
