@@ -48,11 +48,12 @@
       </div>
 
       <!-- analytics info  -->
-      <div class="flex flex-col xl1200:flex-row gap-[20px]">
+      <div class="flex flex-col 2xl:flex-row gap-[20px]">
         <!-- analytics info right part -->
         <div class="flex flex-1/3 flex-col gap-y-[20px] w-full 2xl:min-w-[330px]">
           <!-- rate square -->
-          <div class="h-[160px] bg-white shadow-custom rounded-[8px] px-[15px] pt-[15px] pb-[7px] grid justify-items-center relative">
+          <div
+            class="h-[160px] bg-white shadow-custom rounded-[8px] px-[15px] pt-[15px] pb-[7px] grid justify-items-center relative">
             <app-overlay msg="جاري جلب البيانات ..."
               v-if="(!stdAnlyzeData?.analayzeStudentCategories && panelStore.fetching.studentAnalyze) && userData.planSubscribed !== planSubscribedEnum.notSubscribe" />
             <div class="absolute right-[15px] top-[20px]">
@@ -90,14 +91,15 @@
             <span class="text-center text-blue-d6 h-[30px] text-[18px] 2xl:text-[22px] font-bold">الدرجة
               المتوقعة</span>
 
-            <span class="text-center text-dark-63 h-[20px] text-[14px] 2xl:text-[16px] font-medium">في الاختبار
+            <span :class="{ 'mt-[-12px]': userData.planSubscribed === planSubscribedEnum.notSubscribe }"
+              class="text-center text-dark-63 h-[20px] text-[14px] 2xl:text-[16px] font-medium">في الاختبار
               الحقيقي</span>
 
             <!-- for unsubscribe user -->
             <div v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" @click="openSubscribeModal()"
-              class="absolute bottom-[7px] w-[300px] h-[78px] z-50 flex items-center justify-center backdrop-blur-[16px] cursor-pointer">
+              class="absolute bottom-[7px] px-[15px] w-full min-w-[300px] h-[76px] z-50 flex items-center justify-center backdrop-blur-[16px] cursor-pointer">
               <button
-                class="flex items-center gap-x-[10px] w-full h-[76px] px-6 border border-purple-e0 rounded-[8px] bg-transparent backdrop-blur-[16px] cursor-pointer">
+                class="flex items-center justify-center gap-x-[10px] w-full h-[76px] px-6 border border-purple-e0 rounded-[8px] bg-transparent backdrop-blur-[16px] cursor-pointer">
                 <i class="fas fa-lock text-[22px] text-purple-e0"></i>
                 <span class="text-dark-2b text-[28px] font-bold">
                   للمشتركين فقط
@@ -106,7 +108,7 @@
             </div>
 
             <div class="relative mt-auto w-full">
-              <div class="text-center text-green-8c font-bold leading-none mb-[-6px]">
+              <div class="text-center text-green-8c font-bold leading-none">
                 <span class="text-[22px] 2xl:text-[26px]"
                   v-if="(stdAnlyzeData?.levelRate ?? 0) === 0 && (stdAnlyzeData?.requiredGrade ?? 0) > 0">بانتظار تحديد
                   المستوى</span>
@@ -134,7 +136,7 @@
           <!-- plane square -->
           <div class="min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid relative">
             <!-- not subscribe -->
-             <no-sub-plane v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" />
+            <no-sub-plane v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" />
             <template v-else>
               <app-overlay msg="جاري جلب بيانات الخطة ..." v-if="panelStore.fetching.studentPlanInfo" />
               <!-- First line -->
@@ -247,69 +249,102 @@
         </div>
 
         <!-- analytics info left part - chart filter -->
-        <div class="w-full flex-2/3 2xl:min-w-[710px] h-auto bg-white shadow-md rounded-lg p-4 relative">
+        <div :class="userData.planSubscribed === planSubscribedEnum.notSubscribe ? 'p-0' : 'p-4'"
+          class="w-full flex-2/3 2xl:min-w-[710px] h-auto bg-white shadow-md rounded-lg relative">
           <!-- Overlay -->
           <app-overlay msg="جاري جلب بيانات المخطط ..."
             v-if="panelStore.fetching.studentAnalyzeChart && userData.planSubscribed !== planSubscribedEnum.notSubscribe" />
 
           <!-- For unsubscribed user -->
-           <no-sub-plane v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" />
-          <!-- Header: Categories and Period -->
-          <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-            <div class="flex gap-[12px] flex-wrap overflow-x-auto sm:overflow-visible p-[10px] sm:p-0">
-              <button v-for="(category, index) in stdChartData ? stdChartData.mainCategoriesRates : topCategories"
-                :key="category.categoryId ?? index" :class="[
-                  'rounded-[8px] min-w-[90px] h-[50px] text-[12px] sm:min-w-[100px] sm:h-[60px] sm:text-[13px] xl:min-w-[140px] xl:h-[80px] xl:text-[16px]',
-                  'shadow-custom font-medium cursor-pointer',
-                  selectedCategoryId === category.categoryId
-                    ? 'bg-blue-d6 text-white shadow-none'
-                    : 'bg-white text-dark-2b'
-                ]" class="category-button" @click="selectCategory(category.categoryId)">
-                <div class="grid items-center justify-items-center">
-                  <TextSlice :text="category.categoryName" :length="12" />
-                  <span class="font-bold text-[18px] sm:text-[22px] xl:text-[30px]">
-                    {{ category.rate }}
-                  </span>
-                </div>
+          <img @click="toPricesPage()" class=" cursor-pointer w-full h-full"
+            v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" src="/images/png/analysisChartNotSub.png"
+            alt="" />
+
+          <!-- <div v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe"
+            class="absolute bottom-0 w-full 2xl:min-w-[700px] h-full z-50 flex items-center justify-center">
+
+            
+            <div class="absolute inset-0 bottom-0 pointer-events-none backdrop-blur-[6px] top-auto h-[95%]"
+              style="background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 100%);">
+            </div>
+
+            <div class="grid justify-items-center gap-y-[30px] text-center relative z-10">
+              <div class="flex gap-x-[10px] items-center">
+                <i class="fas fa-lock text-[22px] text-purple-e0"></i>
+                <span class="text-dark-2b text-[22px] sm:text-[28px] font-bold">
+                  للمشتركين فقط
+                </span>
+              </div>
+              <div class="text-black text-[16px] sm:text-[18px] font-medium">
+                تحليلات شاملة لمستواك<br />ونقاط قوتك وضعفك
+              </div>
+              <button style="background: linear-gradient(270deg, #24a7f1 0%, #0266d6 100%)"
+                class="flex justify-center items-center gap-x-[12px] h-[36px] w-[164px] rounded-[8px] text-white text-[14px] font-bold cursor-pointer"
+                @click="toPricesPage()">
+                <span>اشترك الآن</span>
+                <i class="fa fa-chevron-left"></i>
               </button>
             </div>
+          </div> -->
 
-            <select v-model="selectedPeriodTable" @change="fetchStudentAnalyzeChart()"
-              class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm">
-              <option v-for="item in chartPeriodList" :key="item.id" :value="item.id">
-                الفترة: {{ item.label }}
-              </option>
-            </select>
-          </div>
 
-          <!-- Chart Wrapper with Horizontal Scroll on Mobile -->
-          <div class="relative max-w-full overflow-x-auto">
-            <component :is="apexChartService.apexComponent.value" v-if="apexChartService.apexComponent.value"
-              :key="chartKey" type="area" :height="'280px'" :options="chartOptions" :series="chartSeries" />
-          </div>
+          <template v-else>
+            <!-- Header: Categories and Period -->
+            <div class="flex flex-col sm:flex-row justify-between items-baseline mb-4 gap-4">
+              <div class="flex gap-[12px] flex-wrap overflow-x-auto sm:overflow-visible p-[10px] sm:p-0">
+                <button v-for="(category, index) in stdChartData ? stdChartData.mainCategoriesRates : topCategories"
+                  :key="category.categoryId ?? index" :class="[
+                    'rounded-[8px] min-w-[90px] h-[50px] text-[12px] sm:min-w-[100px] sm:h-[60px] sm:text-[13px] xl:min-w-[140px] xl:h-[80px] xl:text-[16px]',
+                    'shadow-custom font-medium cursor-pointer',
+                    selectedCategoryId === category.categoryId
+                      ? 'bg-blue-d6 text-white shadow-none'
+                      : 'bg-white text-dark-2b'
+                  ]" class="category-button" @click="selectCategory(category.categoryId)">
+                  <div class="grid items-center justify-items-center">
+                    <TextSlice :text="category.categoryName" :length="12" />
+                    <span class="font-bold text-[18px] sm:text-[22px] xl:text-[30px]">
+                      {{ category.rate }}
+                    </span>
+                  </div>
+                </button>
+              </div>
 
-          <!-- Stats Below Chart -->
-          <div
-            class="flex justify-around items-center justify-self-center text-sm text-gray-700 max-w-[88vw] w-[540px] h-[50px] border border-[#BCCCDB] rounded-[8px] p-2">
-            <div class="text-[11px] sm:text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
-              <span>الأسئلة</span>
-              <span class="text-dark-2b">{{ stdChartData?.totalQuestionsCount }}</span>
+              <select v-model="selectedPeriodTable" @change="fetchStudentAnalyzeChart()"
+                class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm">
+                <option v-for="item in chartPeriodList" :key="item.id" :value="item.id">
+                  الفترة: {{ item.label }}
+                </option>
+              </select>
             </div>
-            <div class="text-[11px] sm:text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
-              <span>الإجابات</span>
-              <span class="text-green-8c">{{ stdChartData?.correctCount }}
-                <span class="text-gray-8f px-1">|</span>
-                <span class="text-red-5e">{{ stdChartData?.wrongCount }}</span>
-              </span>
-            </div>
-            <div class="text-[11px] sm:text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
-              <span>مدة التدريب</span>
-              <span class="text-dark-2b">{{ formatTime(stdChartData?.totalPeriod) }}
-                <span class="text-gray-8f">ساعة </span>
-              </span>
-            </div>
-          </div>
 
+            <!-- Chart Wrapper with Horizontal Scroll on Mobile -->
+            <div class="relative max-w-full overflow-x-auto">
+              <component :is="apexChartService.apexComponent.value" v-if="apexChartService.apexComponent.value"
+                :key="chartKey" type="area" :height="'280px'" :options="chartOptions" :series="chartSeries" />
+            </div>
+
+            <!-- Stats Below Chart -->
+            <div
+              class="flex justify-around items-center justify-self-center text-sm text-gray-700 max-w-[88vw] w-[540px] h-[50px] border border-[#BCCCDB] rounded-[8px] p-2">
+              <div class="text-[11px] sm:text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
+                <span>الأسئلة</span>
+                <span class="text-dark-2b">{{ stdChartData?.totalQuestionsCount }}</span>
+              </div>
+              <div class="text-[11px] sm:text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
+                <span>الإجابات</span>
+                <span class="text-green-8c">{{ stdChartData?.correctCount }}
+                  <span class="text-gray-8f px-1">|</span>
+                  <span class="text-red-5e">{{ stdChartData?.wrongCount }}</span>
+                </span>
+              </div>
+              <div class="text-[11px] sm:text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
+                <span>مدة التدريب</span>
+                <span class="text-dark-2b">{{ formatTime(stdChartData?.totalPeriod) }}
+                  <span class="text-gray-8f">ساعة </span>
+                </span>
+              </div>
+            </div>
+          </template>
         </div>
 
       </div>
@@ -814,6 +849,10 @@ function toAnalyticsDetails(categoryId) {
   router.push(RouteHelper.userAnalyticsDetails(categoryId))
 }
 
+function toPricesPage() {
+  router.push(RouteHelper.webPrices())
+}
+
 function toTraining(parentId, catId) {
   router.push(
     `/user-dashboard/prepare?page=trainings&parentId=${parentId}&childId=${catId}`
@@ -869,7 +908,11 @@ const chartOptions = computed(() => ({
     },
   },
   markers: {
-    size: 8,
+    size: 0,
+    hover: {
+      size: 8,
+      sizeOffset: 0,
+    },
     colors: ['#0266D6'],
     strokeColors: '#fff',
     strokeWidth: 2,
