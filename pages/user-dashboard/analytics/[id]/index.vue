@@ -311,7 +311,7 @@
                       class="w-full h-[100%] flex justify-center items-center gap-[15px] flex-wrap"
                     >
                       <template
-                        v-if="child.hasNoMasteredSkills && child.rate === 100"
+                        v-if="child.rate === 100"
                       >
                         <span class="text-green-8c font-bold text-[16px]">
                           أنت متقن لهذا القسم
@@ -326,7 +326,7 @@
                             إعادة تأسيس
                           </button>
                         </template>
-                        <template v-if="!child.hasNoMasteredSkills">
+                        <template v-if="child.hasNoMasteredSkills">
                           <button
                             class="bg-red-5e text-white text-[14px] font-medium h-[32px] w-[70px] rounded-[4px] cursor-pointer"
                           >
