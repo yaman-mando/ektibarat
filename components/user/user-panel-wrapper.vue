@@ -42,6 +42,7 @@
 
       <div
         :class="[
+          wrapperClass,
           { isMobile: !windowSize.isDesktop && !hasPrev },
           { hasPrev: hasPrev },
 
@@ -66,7 +67,7 @@
             <!-- left info -->
             <div
               v-if="hasLInfo"
-              class="flex items-center w-[300px] gap-x-[20px]"
+              class="flex items-center gap-x-[20px]"
             >
               <div class="flex items-center gap-x-[8px]">
                 <img
@@ -129,6 +130,7 @@ useHead({
 const props = withDefaults(
   defineProps<{
     contentClass?: string;
+    wrapperClass?: string;
     contentWrapperClass?: string;
     hasRInfo?: boolean;
     hasLInfo?: boolean;
