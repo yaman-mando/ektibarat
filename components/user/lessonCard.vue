@@ -11,6 +11,10 @@
                 class="flex items-center justify-center w-9 h-9 rounded-full bg-white  text-[22px] text-yellow-30">
                 <i class="fa fa-star"></i>
             </span>
+            <span v-else-if="status === 'open'"
+                class="flex items-center justify-center w-9 h-9 rounded-full bg-[#BCCCDB33] text-[22px] text-gray-8f">
+                <i class="fa fa-star"></i>
+            </span>
             <span v-else class="flex items-center justify-center w-9 h-9 
                 rounded-full bg-[#BCCCDB33] text-[22px] text-gray-8f">
 
@@ -60,7 +64,7 @@ const props = defineProps<{
         isWatched: boolean
         isShow: boolean
     }
-    status: 'completed' | 'next' | 'locked'
+    status: 'completed' | 'next' | 'open' | 'locked'
 }>()
 
 const showSubscribeModal = ref(false)
@@ -71,7 +75,7 @@ const cardClass = computed(() => {
             return 'text-green-8c bg-gradient-to-r from-[#ECFFFA] to-[#ECFFFA]'
         case 'next':
             return 'text-yellow-16 bg-gradient-to-r from-[#FFF8E2] to-[#FFF8E2]'
-        case 'locked':
+        case 'locked': case 'open':
             return 'bg-white-ff text-gray-8f'
     }
 })
@@ -82,11 +86,8 @@ const textClass = computed(() => {
 
 const titleText = computed(() => {
     switch (props.lesson.type) {
-        case 1: {
+        case 1: case 2: {
             return props.lesson.title
-        }
-        case 2: {
-            return 'تدريبات القسم'
         }
         case 3: {
             return 'معلومات الحفظ'

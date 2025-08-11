@@ -23,6 +23,7 @@ export type lessonObj = {
   type: number;
   periodTime: number;
   isWatched: boolean;
+  isFree:boolean
 };
 
 export type lessonsModel = {
