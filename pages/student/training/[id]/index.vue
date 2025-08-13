@@ -17,9 +17,15 @@
                   class="e-bu"
                   label="إنهاء التدريب"
                   variant="outline"
-                  iconStartClass="ek-icon-exit-door"
                   @click="exitPage"
-                />
+                >
+                  <template #iconStart>
+                    <img
+                      alt="icon"
+                      src="/images/icons/arrow-right-from-bracket.svg"
+                    />
+                  </template>
+                </app-button>
                 <img
                   alt="Ekhtibarat"
                   src="/images/EkhtibaratLogoColor.webp"
@@ -126,7 +132,7 @@
                   "
                   :text="activeQuestionModel.articleUi"
                 />
-                <div class="aqs-w">
+                <div class="aqs-w !mt-[20px]">
                   <app-exam-part-question-part
                     ref="examPartQuestionRef"
                     :mainTitle="questionTitleModel"
@@ -157,6 +163,7 @@
                     <app-train-part-actions
                       ref="trainPartMobileRef"
                       class="w-container"
+                      :questionState="activeQuestionModel?.questionState"
                       :isActiveQuestionAnswered="isActiveQuestionAnswered"
                       :isActiveNext="canSelectNextQuestion"
                       :isActiveConfirm="canConfirmAnswerModel"
@@ -230,6 +237,7 @@
               <app-train-part-actions
                 ref="trainPartWebRef"
                 class="w-container"
+                :questionState="activeQuestionModel?.questionState"
                 :isActiveQuestionAnswered="isActiveQuestionAnswered"
                 :isActiveNext="canSelectNextQuestion"
                 :isActiveConfirm="canConfirmAnswerModel"

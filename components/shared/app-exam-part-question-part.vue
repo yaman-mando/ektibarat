@@ -159,7 +159,10 @@
                   v-if="!hideCounter"
                   class="cd-co-w"
                 >
-                  <i class="ek-icon-Icon-material-update"></i>
+                  <img
+                    src="/images/icons/stopwatch.svg"
+                    alt="icon"
+                  />
                   <span class="cd-co">{{ counterModel }}</span>
                 </div>
                 <div
@@ -1262,7 +1265,7 @@ export default {
         transition: ease-in-out background-color 0.1s;
 
         &:hover {
-          --hover-color: var(--yellow-30);
+          --hover-color: #fdc8304a;
           background-color: var(--hover-color);
           border-color: var(--hover-color);
         }

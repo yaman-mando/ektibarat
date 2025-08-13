@@ -12,8 +12,11 @@
       v-if="iconStartClass"
       :class="`app-button-icon  ${iconStartClass}`"
     ></i>
-    <span v-if="!noLabel" class="app-button-label-w">
-      <span :class="`app-button-label text-lg  ${labelClass}`">
+    <span
+      v-if="!noLabel"
+      class="app-button-label-w"
+    >
+      <span :class="`app-button-label text-lg leading-[1]  ${labelClass}`">
         {{ label }}
       </span>
       <span
@@ -45,7 +48,7 @@ withDefaults(
     size?: 'sm' | 'md' | 'lg' | string;
     isAnalytics?: boolean;
     rounded?: boolean;
-    noLabel?:boolean
+    noLabel?: boolean;
   }>(),
   {
     colorType: 'primary',
