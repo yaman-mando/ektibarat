@@ -328,3 +328,36 @@ export type slide = {
 }
 
 export type slidersResponse = slide[]
+
+
+
+export type TPstudentStatistics = {
+  totalQuestionsCount: number;
+  correctQuestionsCount: number;
+  wrongQuestionsCount: number;
+  subscriptionName: string;
+  levelRate: number;
+  planAdherence: number;
+  rate: number;
+  showRate: boolean;
+  trainingPeriod: number;
+}
+
+export type TPstudent = {
+  id: number;
+  studentId: number;
+  fullName: string;
+  phoneNumber: string;
+  statistics: TPstudentStatistics;
+  state: number;
+}
+
+export type TPstudentDataResponse = {
+  code: string;
+  discount: number;
+  studentsCount: number;
+  levelRateAvg: number;
+  predictedMarksAvg: number;
+  planAdherenceAvg: number;
+  studentsList: TPstudent[];
+}

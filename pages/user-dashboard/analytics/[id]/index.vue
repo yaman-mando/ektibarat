@@ -209,7 +209,7 @@
         </div>
       </div>
 
-      <div class="mt-5 flex flex-col gap-5">
+      <div class="mt-5 flex flex-col gap-5" v-if="tableCategories && tableCategories.length>0">
         <accordion-group>
           <disclosure-group
             :defaultOpen="true"

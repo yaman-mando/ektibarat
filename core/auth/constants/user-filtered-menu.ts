@@ -76,7 +76,7 @@ export const userMenuItems = [
   {
     name: 'لوحة المدرب',
     icon: '/images/svg/user-panel/teacher-panel.svg',
-    route: '/user-dashboard/analytics',
+    route: '/user-dashboard/teacher',
     isMobile: true,
     isDesktop: true,
     allowRoles: [UserRoles.teacher],
@@ -88,7 +88,7 @@ export const userMenuItems = [
     route: '/user-dashboard/school',
     isMobile: true,
     isDesktop: true,
-    allowRoles: [UserRoles.schoolManager, UserRoles.teacher],
+    allowRoles: [UserRoles.schoolManager],
     denyRoles: [],
   },
   {
