@@ -361,3 +361,17 @@ export type TPstudentDataResponse = {
   planAdherenceAvg: number;
   studentsList: TPstudent[];
 }
+
+export type financialDetail= {
+  createdDate: string;
+  studentName: string;
+  subscriptionName: string;
+  studentPaidAmount: number;
+  teacherAmount: number;
+}
+
+export type teachersFinancialResponse= {
+  subscriptionsCount: number;
+  code: string | null;
+  details: financialDetail[];
+}

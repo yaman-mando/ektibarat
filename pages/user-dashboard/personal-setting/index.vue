@@ -1,79 +1,49 @@
 <template>
-  <user-panel-wrapper
-    content-class="max-w-[1060px] !mx-auto"
-    :has-l-info="false"
-    :has-r-info="false"
-    :no-spaces="!windowSize.isDesktop"
-    :has-prev="!windowSize.isDesktop"
-    :page-name="selectedName"
-  >
-    <div
-      class="flex flex-wrap 2xl:flex-nowrap gap-[20px]"
-      :class="{ '!p-0': !windowSize.isDesktop }"
-    >
-      <main
-        class="bg-white rounded-[8px] flex-2/3 sm:min-w-[400px] shadow-custom py-[30px] h-fit"
-        :class="{ '!py-0 !rounded-none !shadow-none': !windowSize.isDesktop }"
-      >
-      <client-only>
-        <component :is="currentComponent" />
+  <user-panel-wrapper content-class="max-w-[1060px] !mx-auto" :has-l-info="false" :has-r-info="false"
+    :no-spaces="!windowSize.isDesktop" :has-prev="!windowSize.isDesktop" :page-name="selectedName">
+    <div class="flex flex-wrap 2xl:flex-nowrap gap-[20px]" :class="{ '!p-0': !windowSize.isDesktop }">
+      <main class="bg-white rounded-[8px] flex-2/3 sm:min-w-[400px] shadow-custom py-[30px] h-fit"
+        :class="{ '!py-0 !rounded-none !shadow-none': !windowSize.isDesktop }">
+        <client-only>
+          <component :is="currentComponent" />
         </client-only>
       </main>
 
-      <aside
-        v-if="windowSize.isDesktop"
-        class="2xl:max-w-[330px] flex-1/3 min-w-[250px] flex flex-col gap-[15px]"
-      >
-        <div
-          class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-[250px]"
-        >
+      <aside v-if="windowSize.isDesktop" class="2xl:max-w-[330px] flex-1/3 min-w-[250px] flex flex-col gap-[15px]">
+        <div class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-[311px]">
           <h2 class="text-purple-e0 font-bold text-[24px] mb-[10px]">حسابك</h2>
           <ul class="space-y-[10px]">
-            <li
-              v-for="item in accountItems"
-              :key="item.key"
-              @click="selectedSection = item.key"
-              :class="[
-                'cursor-pointer px-3 py-2 rounded-[4px] transition h-[50px] content-center',
-                selectedSection === item.key
-                  ? 'bg-gray-fa font-bold'
-                  : 'hover:bg-gray-50 text-dark-63 font-medium',
-              ]"
-            >
+            <li v-for="item in accountItems" :key="item.key" @click="selectedSection = item.key" :class="[
+              'cursor-pointer px-3 py-2 rounded-[4px] transition h-[50px] content-center',
+              selectedSection === item.key
+                ? 'bg-gray-fa font-bold'
+                : 'hover:bg-gray-50 text-dark-63 font-medium',
+            ]">
               {{ item.label }}
             </li>
           </ul>
         </div>
 
-        <div
-          class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-[250px]"
-        >
+        <div class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-[250px]">
           <h2 class="text-purple-e0 font-bold text-[24px] mb-[10px]">
             المساعدة
           </h2>
           <ul class="space-y-[10px]">
-            <li
-              v-for="item in helpItems"
-              :key="item.key"
-              @click="
-                item.link ? toPage(item.link) : (selectedSection = item.key)
-              "
-              :class="[
+            <li v-for="item in helpItems" :key="item.key" @click="
+              item.link ? toPage(item.link) : (selectedSection = item.key)
+              " :class="[
                 'cursor-pointer px-3 py-2 rounded transition h-[50px] content-center',
                 selectedSection === item.key
                   ? 'bg-gray-fa font-bold'
                   : 'hover:bg-gray-50 text-dark-63 font-medium',
-              ]"
-            >
+              ]">
               {{ item.label }}
             </li>
           </ul>
         </div>
 
-        <button
-          @click="logout"
-          class="bg-white text-red-500 hover:bg-red-50 transition shadow px-4 py-3 rounded-lg font-semibold cursor-pointer"
-        >
+        <button @click="logout"
+          class="bg-white text-red-500 hover:bg-red-50 transition shadow px-4 py-3 rounded-lg font-semibold cursor-pointer">
           تسجيل الخروج
         </button>
       </aside>
@@ -88,6 +58,7 @@ import faq from '~/components/user/personal-setting/faq.vue';
 import preferences from '~/components/user/personal-setting/preferences.vue';
 import support from '~/components/user/personal-setting/support.vue';
 import contactUs from '~/components/user/personal-setting/contactUs.vue';
+import partner from '~/components/user/personal-setting/partner.vue';
 
 //use
 const { signOut } = useAuth();
@@ -100,6 +71,7 @@ const accountItems = [
   { key: 'info', label: 'المعلومات الشخصية' },
   { key: 'subscriptions', label: 'الاشتراكات' },
   { key: 'preferences', label: 'التفضيلات' },
+  { key: 'partner', label: 'شريك اختبارات' },
 ];
 
 const helpItems = [
@@ -112,6 +84,7 @@ const validSections: any = [
   'info',
   'subscriptions',
   'preferences',
+  'partner',
   'faq',
   'support',
   'contact',
@@ -135,6 +108,8 @@ const currentComponent = computed(() => {
       return subscriptions;
     case 'preferences':
       return preferences;
+    case 'partner':
+      return partner;
     case 'faq':
       return faq;
     case 'support':

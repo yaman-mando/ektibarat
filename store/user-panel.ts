@@ -5,6 +5,7 @@ import type {
   lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, recommendationsResponse, schoolDashboardData, similarVidModel,
   slidersResponse,
   stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeForTeacherResponse, studentAnalyzeResponse, studentStages,
+  teachersFinancialResponse,
   TPstudentDataResponse,
   trainingAnalyzeSimpleResponse, trainingPlanInfoSimpleResponse, trainingPlanSummaryResponse
 }
@@ -35,7 +36,8 @@ interface UserPanelState {
     blogs: boolean,
     homeSliders: boolean,
     trainingAnalyzeSimple: boolean,
-    planInfoSimple: boolean
+    planInfoSimple: boolean,
+    teachersFinancial:boolean
   }
   globalType: number,
   lessonsCategories: lessonsCategoriesDataModel[] | null,
@@ -60,7 +62,8 @@ interface UserPanelState {
   blogs: blogsListResponse | null,
   homeSliders: slidersResponse | null,
   trainingAnalyzeSimple: trainingAnalyzeSimpleResponse | null,
-  planInfoSimple: trainingPlanInfoSimpleResponse | null
+  planInfoSimple: trainingPlanInfoSimpleResponse | null,
+  teachersFinancial:teachersFinancialResponse | null
 }
 
 
@@ -89,7 +92,8 @@ export const useUserPanelStore = defineStore('userPanel', {
       blogs: false,
       homeSliders: false,
       trainingAnalyzeSimple: false,
-      planInfoSimple: false
+      planInfoSimple: false,
+      teachersFinancial:false,
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
@@ -114,7 +118,8 @@ export const useUserPanelStore = defineStore('userPanel', {
     blogs: null,
     homeSliders: null,
     trainingAnalyzeSimple: null,
-    planInfoSimple: null
+    planInfoSimple: null,
+    teachersFinancial:null
   }),
 
   actions: {
@@ -577,6 +582,23 @@ export const useUserPanelStore = defineStore('userPanel', {
         return null
       } finally {
         this.fetching.planInfoSimple = false
+      }
+    },
+
+
+    async getTeachersFinancialList(): Promise<teachersFinancialResponse | null> {
+      try {
+        this.fetching.teachersFinancial = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/teachersFinancial/all`)
+        this.teachersFinancial = data
+        return data
+      } catch (e) {
+        this.teachersFinancial = null
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.teachersFinancial = false
       }
     },
 
