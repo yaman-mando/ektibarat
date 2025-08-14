@@ -59,7 +59,7 @@
                 <li v-for="content in userPanelStore.lessonDetails.videoContents" :key="content.id"
                   class="flex items-center gap-x-[8px]">
                   <span class="text-blue-d6 text-[20px] cursor-pointer" @click="onTimeClick(content.from)">
-                    {{ formatTimestamp(content.from) }}
+                    {{ content.from }}
                   </span>
                   <span class="text-gray-2b text-[20px]">
                     {{ content.title }}

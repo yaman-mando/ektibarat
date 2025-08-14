@@ -14,14 +14,14 @@
 
                 <div class="flex items-center gap-x-[8px]">
                     <img class="rounded-[8px]"
-                        :src="`http://media.ekhtibarat.com/dev/lessons/image/${nextLesson.iconUrl}.png`">
+                        :src="`https://media.ekhtibarat.com/dev/LessonsVideos/${nextLesson.videoLink}/vtt/cover-min.jpg`">
 
                     <div class="grid gap-y-[5px]">
                         <span :class="textClass" class="leading-[1.2]">
                             <text-slice :length="20" :text="nextLesson.title" />
                         </span>
-                        <span class="text-[16px] font-medium text-gray-8f leading-[1.2]">{{
-                            formatDuration(nextLesson.periodTime) }}</span>
+                        <span class="text-[16px] font-medium text-gray-8f leading-[1.2]">
+                            {{ nextLesson.periodTime }}</span>
                         <!-- <span class="flex items-center gap-[6px] text-[14px] text-gray-8f">
                         <i class="fa-solid fa-clock text-[12px]"></i>
                         {{ formatDuration(nextLesson.periodTime) }}
@@ -53,7 +53,7 @@
 
                         <div class="flex items-center gap-x-[8px]">
                             <img class="rounded-[8px]"
-                                :src="`http://media.ekhtibarat.com/dev/lessons/image/${lesson.iconUrl}.png`">
+                                :src="`https://media.ekhtibarat.com/dev/LessonsVideos/${lesson.videoLink}/vtt/cover-min.jpg`">
 
                             <!-- <span v-if="lesson.status === 'locked'"
                             class="flex items-center justify-center w-9 h-9 rounded-full bg-[#BCCCDB33] text-[22px] text-gray-8f">
@@ -80,8 +80,7 @@
                                     <i v-if="lesson.status === 'watched'"
                                         class="fa fa-check rounded-full p-[2px] border text-[12px] mr-[5px]"></i>
                                 </span>
-                                <span class="text-[16px] font-medium text-gray-8f leading-[1.2]">{{
-                                    formatDuration(lesson.periodTime) }}</span>
+                                <span class="text-[16px] font-medium text-gray-8f leading-[1.2]"> {{ lesson.periodTime }}</span>
                                 <!-- <span class="flex items-center gap-[6px] text-[14px] text-gray-8f">
                                 <i class="fa-solid fa-clock text-[12px]"></i>
                                 {{ formatDuration(nextLesson.periodTime) }}

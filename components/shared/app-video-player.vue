@@ -214,7 +214,7 @@ const pathModel = computed(() => {
 });
 
 const videoSource = reactive({
-  poster: '/images/poster/elephants-dream.jpg',
+  poster: `${pathModel.value}/vtt/cover.jpg`,
   sources: [
     {
       src: `${pathModel.value}/360p.m3u8`,
@@ -263,6 +263,37 @@ function onPlayerPause() {
 
 async function onPlayerReady(event: { target: { player: any } }) {
   player = event.target.player;
+  const token = authStore.state.token; // حسب اسم الحقل عندك
+
+  if (player.tech().vhs?.xhr) {
+    player.tech().vhs.xhr.beforeRequest = function(options: any) {
+      const url = options.uri || options.url; // حسب نسخة Video.js
+
+      // أضف التوكن فقط إذا كان الطلب ملف .key
+      if (url && url.endsWith('getKey')) {
+        options.headers = options.headers || {};
+        options.headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      return options;
+    };
+  }
+ // كل مرة يتغير فيها المصدر (مثل تغيير الجودة)
+  player.on('loadstart', () => {
+  if (player.tech().vhs?.xhr) {
+    player.tech().vhs.xhr.beforeRequest = function(options: any) {
+      const url = options.uri || options.url; // حسب نسخة Video.js
+
+      // أضف التوكن فقط إذا كان الطلب ملف .key
+      if (url && url.endsWith('getKey')) {
+        options.headers = options.headers || {};
+        options.headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      return options;
+    };
+  }
+  });
 
   // Fetch and parse chapter VTT
   const response = await fetch(`${pathModel.value}/vtt/chapters.vtt`);
@@ -322,6 +353,8 @@ async function onPlayerReady(event: { target: { player: any } }) {
       window.location.origin
     ).href,
     showTimestamp: true,
+     width: 160,
+    height: 90
   });
 
   // Add dynamic watermark with a custom number
@@ -397,12 +430,22 @@ defineExpose({
 :root {
   --wt-opacity: 0;
 }
+.vjs-poster img{
+      object-fit: fill !important;
+
+}
 </style>
 <style lang="scss" scoped>
 :deep(#wt-c) {
   opacity: var(--wt-opacity);
 }
-
+.vjs-vtt-thumbnail-display {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.vjs-menu-button-popup .vjs-menu .vjs-menu-content{
+      width: 160px ;
+}
 .apv-w {
   display: flex;
   flex-direction: column;
@@ -435,7 +478,7 @@ defineExpose({
       .vjs-quality-selector-select {
         padding: 4px;
         background-color: var(--purple-8c);
-        color: white;
+        color: black !important;
         border: none;
         border-radius: 4px;
         font-size: 12px;
@@ -471,7 +514,9 @@ defineExpose({
     z-index: 10;
     transition: opacity 0.2s ease;
   }
-
+  :deep(.vjs-quality-selector option){
+    color: black;
+  }
   //chapter markers
   :deep(.vjs-progress-holder) {
     position: relative;

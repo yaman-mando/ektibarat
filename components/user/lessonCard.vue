@@ -37,7 +37,7 @@
                 <span :class="textClass">{{ titleText }}</span>
                 <span v-if="lesson.periodTime" class="flex items-center gap-[4px] text-[16px] font-medium text-gray-8f">
                     المدة: 
-                    {{ formatTime(lesson.periodTime) }}
+                    {{ lesson.periodTime }}
                 </span>
             </div>
         </div>
