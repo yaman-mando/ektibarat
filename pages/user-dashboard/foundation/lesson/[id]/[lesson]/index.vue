@@ -4,7 +4,7 @@
     :page-name="userPanelStore.lessonDetails?.title">
     <div class="flex flex-col justify-center gap-y-[20px] xl1200:flex-row gap-x-[30px]">
       <!-- Main Content -->
-      <main class="flex-1">
+      <main class="flex-2/3">
         <!-- Video Section -->
 
         <div v-if="windowSize.isDesktop"
@@ -21,7 +21,7 @@
         </div>
 
         <!-- Contents -->
-        <section class="px-[15px] xl:px-0">
+        <section class="px-[15px] xl:px-0 xl1200:mt-0 sm:mt-[10px]">
           <div class="flex items-center flex-wrap gap-y-[15px] justify-between">
             <div>
               <h1 class="sm:text-[26px] text-[22px] font-bold text-purple-8c dark:text-white mb-[5px]">
@@ -131,7 +131,7 @@
       </main>
 
       <!-- Sidebar -->
-      <aside class="w-full xl1200:w-1/3 space-y-4 px-[15px] xl:px-0">
+      <aside class="flex-1/3 w-full xl1200:w-1/3 space-y-4 px-[15px] xl:px-0">
         <lessons-list-side-bar v-if="userPanelStore.simillarVideos" :sectionTitle="userPanelStore.lessonDetails?.lessonCategoryTitle ?? 'لا يوجد'
           " :lessons="userPanelStore.simillarVideos" />
       </aside>

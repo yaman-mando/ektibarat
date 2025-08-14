@@ -443,9 +443,6 @@ defineExpose({
   opacity: 1 !important;
   visibility: visible !important;
 }
-.vjs-menu-button-popup .vjs-menu .vjs-menu-content{
-      width: 160px ;
-}
 .apv-w {
   display: flex;
   flex-direction: column;
@@ -460,6 +457,13 @@ defineExpose({
   //box-shadow: var(--shadow-light-1);
 
   :deep(.video-js) {
+    max-width: 100vw;
+    @media (max-width:1400px) {
+      width: 100%;
+    }
+    @media (max-width:700px) {
+      height: 56vw;
+    }
     .vjs-control {
       span::before {
         font-family: VideoJS, serif !important;
@@ -495,6 +499,11 @@ defineExpose({
 
       .vjs-quality-selector-select:hover {
         background-color: var(--purple-9c);
+      }
+    }
+    .vjs-control-bar{
+      .vjs-menu-content{
+        width: 160px ;
       }
     }
   }
