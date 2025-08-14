@@ -6,27 +6,41 @@
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
     justify-content: center;
-    padding: 25px 0;
+    padding: 15px 0;
+    @include web-desktop-up() {
+      padding: 25px 0;
+    }
 
     > img {
-      width: 160px;
-      height: 50px;
+      width: 55px;
+      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: auto;
+      @include web-desktop-up() {
+        width: 160px;
+        height: 50px;
+      }
     }
 
     .e-bu {
       height: 40px !important;
-      width: 160px !important;
-      border-radius: 20px !important;
+      width: 90px !important;
       border-width: 1px !important;
       background-color: transparent;
+      border-radius: 100px !important;
       justify-content: flex-start !important;
+      @include web-desktop-up() {
+        width: 160px !important;
+        border-radius: 20px !important;
+      }
       img {
-        padding-inline-start: 15px;
-        padding-inline-end: 15px;
+        padding-inline-start: 10px;
+        padding-inline-end: 5px;
+        @include web-desktop-up() {
+          padding-inline-end: 15px;
+        }
       }
       .app-button-icon {
         font-size: 20px;
@@ -111,17 +125,28 @@
         }
 
         .__q-feature {
-          width: 130px;
-          height: 40px;
-          border-radius: 20px;
+          width: 34px;
+          height: 34px;
+          border-radius: 8px;
           border-color: var(--yellow-16);
+          @include web-desktop-up() {
+            width: 130px;
+            height: 40px;
+            border-radius: 20px;
+          }
           .__q-fe-w {
             width: 100%;
             display: grid;
-            grid-template-columns: 14px 1fr;
+            grid-template-columns: 1fr;
             gap: 10px;
-            padding-inline-start: 10px;
+            @include web-desktop-up() {
+              grid-template-columns: 14px 1fr;
+              padding-inline-start: 10px;
+            }
             i {
+              display: flex;
+              align-items: center;
+              justify-content: center;
               font-size: 14px;
               color: var(--yellow-16);
               margin-inline-start: 0;
@@ -135,6 +160,8 @@
           }
 
           &.is-featured {
+            @include web-desktop-up() {
+            }
             background-color: var(--yellow-16);
             .__q-fe-w {
               i {
@@ -165,7 +192,10 @@
       border-top: none;
       .answer-select-wrapper {
         &.type-0 {
-          grid-template-columns: 1fr 1fr !important;
+          grid-template-columns: minmax(0, 1fr) !important;
+          @include web-desktop-up() {
+            grid-template-columns: 1fr 1fr !important;
+          }
         }
 
         .a-select-item.active.is-correct {
@@ -240,42 +270,19 @@
     max-height: 100vh;
     .sed-p1 {
       //padding-bottom: 10px !important;
+      @include web-mobile-only() {
+        padding-inline: 15px;
+      }
     }
     .sed-p2 {
       overflow-y: auto;
-      padding-bottom: 70px;
+      padding-bottom: 20px;
+      @include web-desktop-up() {
+        padding-bottom: 70px;
+      }
     }
     @include web-desktop-up() {
       margin-bottom: 30px;
-    }
-  }
-  .t-hero-m {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0 10px;
-    margin-top: 3px;
-    margin-bottom: 4px;
-    @include web-desktop-up() {
-      display: none;
-    }
-    .thm-label {
-      display: block;
-      text-align: center;
-      min-width: 92px;
-      min-height: 37px;
-      font-weight: 500;
-      color: var(--white-ff);
-      font-size: 18px;
-      padding: 5px 15px;
-      background-color: var(--dark-63);
-      border-radius: 7px;
-    }
-    .app-button {
-      .app-button-icon {
-        font-size: 16px;
-      }
     }
   }
   .s-hero {
@@ -459,6 +466,7 @@
 
   .tpa-w {
     background-color: var(--white-ff);
+    box-shadow: 0 -2px 10px 0 rgba(0, 0, 0, 0.15);
     @include web-desktop-up() {
       border-top: 1px solid var(--gray-f2);
       border-bottom: 1px solid var(--gray-f2);

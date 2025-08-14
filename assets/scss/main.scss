@@ -1,6 +1,11 @@
 :root {
   --web-font: 'Tajawal', 'Arial', 'Helvetica Neue', sans-serif !important;
   --abdo-font: 'AbdoLine', 'Arial', sans-serif !important;
+  --num-font: sans-serif !important;
+}
+
+.num-font {
+  font-family: var(--num-font);
 }
 
 .website-layout {
@@ -3958,5 +3963,4 @@
   .collapse {
     visibility: visible;
   }
-
 }

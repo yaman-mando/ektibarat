@@ -26,7 +26,7 @@
             <span>({{ questionNumber }})</span>
           </template>
           <template v-else>
-            <span>{{ mainTitle }}</span>
+            <span class="text-[18px] lg:text-[24px]">{{ mainTitle }}</span>
           </template>
         </div>
         <slot name="header"></slot>
@@ -152,7 +152,9 @@
                 >
                   <div class="__q-fe-w">
                     <i class="fa fa-star"></i>
-                    <span>{{ isFeatured ? 'مميز' : 'تمييز بنجمة' }}</span>
+                    <span v-if="!windowSize.isMobileSize">
+                      {{ isFeatured ? 'مميز' : 'تمييز بنجمة' }}
+                    </span>
                   </div>
                 </div>
                 <div
@@ -463,6 +465,7 @@
               alt="clock image"
             />
           </template>
+          <slot name="endContent"></slot>
         </div>
         <div class="a-answer-w">
           <slot></slot>
@@ -1163,13 +1166,14 @@ export default {
   }
 
   .exam-question-wrapper {
+    border-radius: 8px;
+    box-shadow: 0 0 15px #00000033;
+    overflow: hidden;
     @include web-desktop-up() {
       display: grid;
       grid-template-rows: auto 1fr;
       height: 100%;
       border-radius: 15px;
-      box-shadow: 0 0 15px #00000033;
-      overflow: hidden;
 
       &.hasTags {
         grid-template-rows: auto auto auto 1fr;

@@ -159,8 +159,12 @@ function onLawsClick() {
 <style lang="scss" scoped>
 @use '@/assets/scss/mixin' as *;
 .tpa-main {
-  padding-top: 25px !important;
-  padding-bottom: 25px !important;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+  @include web-desktop-up() {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+  }
   display: flex;
   align-items: center;
   justify-content: center;
@@ -189,10 +193,21 @@ function onLawsClick() {
       align-items: center;
       justify-content: center;
       column-gap: 20px;
-      .app-button {
-        width: 200px;
+      :deep(.app-button) {
+        width: 160px;
         height: 50px;
         border-radius: 8px;
+        @include web-desktop-up() {
+          width: 200px;
+          height: 50px;
+        }
+
+        .app-button-label {
+          font-size: 16px !important;
+          @include web-desktop-up() {
+            font-size: 18px !important;
+          }
+        }
       }
       button {
         @include web-desktop-up() {
