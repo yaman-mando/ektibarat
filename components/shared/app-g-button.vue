@@ -1,5 +1,6 @@
 <template>
   <button
+    :disabled="disabled"
     :class="buttonClass"
     :style="buttonStyle"
     @click="onClick"
@@ -29,7 +30,10 @@ interface Props {
   darkMode?: boolean;
   lightMode?: boolean;
 
-  onClick?: () => void;
+  disabled?:boolean
+
+  //onClick?: () => void;
+  onClick?: (payload?: any) => void;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -46,12 +50,14 @@ const props = withDefaults(defineProps<Props>(), {
   borderColor: 'border-gray-300',
   darkMode: false,
   lightMode: false,
+  disabled:false
+
 });
 
 const emit = defineEmits(['click']);
 
 function onClick() {
-  if (props.onClick) props.onClick();
+  //if (props.onClick) props.onClick();
   emit('click');
 }
 
@@ -63,6 +69,8 @@ const buttonClass = computed(() => {
     'items-center',
     'justify-center',
     'cursor-pointer',
+    'disabled:opacity-50',
+    'disabled:cursor-default',
     props.textColor,
     props.textSize,
     props.fontWeight,

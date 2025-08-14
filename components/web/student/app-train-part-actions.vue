@@ -20,8 +20,7 @@
           :isDisabled="!isActiveNext"
           label="السؤال التالي"
           labelClass="text-lg text-white font-bold"
-          iconEndClass="fa-solid fa-chevron-left text-white absolute left-5"
-          colorType="blue"
+          :colorType="colorTypeModel"
           @click="onNext"
         />
       </div>
@@ -99,6 +98,7 @@
 </template>
 <script lang="ts" setup>
 import { useGlobalStore } from '~/main/useGlobalStore';
+import { QuestionStateEnum } from '~/main/modules/students-exam/data-access/constats/question-state.enum';
 
 const emit = defineEmits([
   'confirmAction',
@@ -117,6 +117,7 @@ const props = withDefaults(
     isLoadingConfirm?: boolean;
     questionId?: string | number;
     canShowLaw?: boolean;
+    questionState?: number;
   }>(),
   {}
 );
@@ -125,6 +126,20 @@ const props = withDefaults(
 const globalStore = useGlobalStore();
 
 //data
+const colorTypeModel = computed(() => {
+  const state = props.questionState;
+  if (!state) return 'blue';
+
+  if (state === QuestionStateEnum.correct) {
+    return 'success';
+  }
+
+  if (state === QuestionStateEnum.wrong) {
+    return 'warn';
+  }
+
+  return 'blue';
+});
 const staticLocales = computed(() => globalStore.staticState.locales);
 
 function onConfirm() {
@@ -177,7 +192,7 @@ function onLawsClick() {
       .app-button {
         width: 200px;
         height: 50px;
-        border-radius: 25px;
+        border-radius: 8px;
       }
       button {
         @include web-desktop-up() {
@@ -215,17 +230,25 @@ function onLawsClick() {
 
     ::v-deep {
       .app-button {
-        width: 150px !important;
+        width: 130px !important;
         height: 50px !important;
         border-radius: 25px;
         .app-button-icon {
-          font-size: 20px;
           position: absolute;
           inset-inline-start: 15px;
+          border-radius: 50%;
+          border: 1px solid;
+          display: flex;
+          width: 24px;
+          height: 24px;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
         }
         .app-button-label {
-          padding-inline-start: 20px;
+          padding-inline-start: 32px;
           font-size: 18px;
+          font-weight: bold;
         }
       }
     }

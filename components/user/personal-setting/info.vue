@@ -11,36 +11,19 @@
       <div class="img-group relative">
         <app-overlay v-if="isUpload" />
 
-        <img
-          class="profile-img"
-          :src="
-            imageUrlService.getUrl(
-              ImagesFolderName.Users,
-              profileInfo.pictureUrl,
-              ImageSize.original,
-              ImageExt.jpg,
-              true
-            )
-          "
-          alt=""
-        />
+        <img class="profile-img" :src="imageUrlService.getUrl(
+          ImagesFolderName.Users,
+          profileInfo.pictureUrl,
+          ImageSize.original,
+          ImageExt.jpg,
+          true
+        )
+          " alt="" />
 
-        <input
-          ref="file_ref"
-          accept="image/*"
-          hidden
-          type="file"
-          @input="uploadPhoto"
-        />
+        <input ref="file_ref" accept="image/*" hidden type="file" @input="uploadPhoto" />
 
-        <div
-          class="edit-icon"
-          @click="profileInfo.pictureUrl ? openCropEdit() : fileRef?.click()"
-        >
-          <i
-            class="fa"
-            :class="profileInfo.pictureUrl ? 'fa-pencil' : 'fa-add'"
-          ></i>
+        <div class="edit-icon" @click="profileInfo.pictureUrl ? openCropEdit() : fileRef?.click()">
+          <i class="fa" :class="profileInfo.pictureUrl ? 'fa-pencil' : 'fa-add'"></i>
         </div>
       </div>
     </div>
@@ -48,43 +31,25 @@
 
     <!--                        name-->
     <template v-if="activeSection === editSections.name">
-      <vee-form
-        v-slot="{ handleSubmit }"
-        class="ac-wrapper name m-auto"
-      >
+      <vee-form v-slot="{ handleSubmit }" class="ac-wrapper name m-auto">
         <label class="text-dark-2b font-bold text-[16px]">الاسم</label>
         <div class="w-[300px] m-auto grid gap-y-[20px] mt-[25px]">
           <div class="ac-control-wrapper m-0">
-            <form-input
-              v-model:inputValue="profileInfo.firstName"
-              inputId="FirstName"
-              label="الاسم الأول"
-              rules="required|no_special"
-            />
+            <form-input v-model:inputValue="profileInfo.firstName" inputId="FirstName" label="الاسم الأول"
+              rules="required|no_special" />
 
-            <form-input
-              v-model:inputValue="profileInfo.lastName"
-              inputId="secondname"
-              label="الاسم الأخير"
-              rules="required|no_special"
-            />
+            <form-input v-model:inputValue="profileInfo.lastName" inputId="secondname" label="الاسم الأخير"
+              rules="required|no_special" />
           </div>
           <div class="m-note">
             <span>أدخل اسمك الصحيح باللغة العربية أو الإنجليزية</span>
             <span>لا يُسمح باستخدام الرموز</span>
           </div>
           <div class="ac-action">
-            <button
-              class="btn cancel"
-              type="button"
-              @click="closeSection"
-            >
+            <button class="btn cancel" type="button" @click="closeSection">
               <span>إلغاء</span>
             </button>
-            <button
-              class="btn save"
-              @click.prevent="handleSubmit(sendForm)"
-            >
+            <button class="btn save" @click.prevent="handleSubmit(sendForm)">
               <span>حفظ</span>
             </button>
           </div>
@@ -96,43 +61,28 @@
         <div class="r-element">
           <div class="r-1">
             <span class="r-label">الاسم</span>
-            <span
-              v-if="
-                appAuth.state.userData?.firstName ||
-                appAuth.state.userData?.lastName
-              "
-              class="r-val"
-            >
+            <span v-if="
+              appAuth.state.userData?.firstName ||
+              appAuth.state.userData?.lastName
+            " class="r-val">
               {{
                 getText(appAuth.state.userData?.firstName) +
                 ' ' +
                 getText(appAuth.state.userData?.lastName)
               }}
             </span>
-            <span
-              v-else
-              class="r-val"
-            >
+            <span v-else class="r-val">
               لا يوجد
             </span>
           </div>
-          <div
-            class="r-action"
-            @click="setActiveSection(editSections.name)"
-          >
-            <span
-              v-if="
-                appAuth.state.userData?.firstName ||
-                appAuth.state.userData?.lastName
-              "
-              class="edit"
-            >
+          <div class="r-action" @click="setActiveSection(editSections.name)">
+            <span v-if="
+              appAuth.state.userData?.firstName ||
+              appAuth.state.userData?.lastName
+            " class="edit">
               تعديل
             </span>
-            <span
-              v-else
-              class="add"
-            >
+            <span v-else class="add">
               إضافة
             </span>
           </div>
@@ -143,19 +93,13 @@
 
     <!--                      phone-->
     <template v-if="activeSection === editSections.phone">
-      <vee-form
-        v-slot="{ handleSubmit, meta }"
-        class="ac-wrapper name m-auto"
-      >
+      <vee-form v-slot="{ handleSubmit, meta }" class="ac-wrapper name m-auto">
         <label class="text-dark-2b font-bold text-[16px]">رقم واتساب</label>
         <div class="w-[300px] m-auto grid gap-y-[20px] mt-[25px]">
           <div class="ac-control-wrapper m-0 !grid gap-y-[10px]">
             <label class="text-[18px] font-medium text-dark-2b" for="telephone">رقم واتساب</label>
-            <phone-input
-              :isEdit="true"
-              :phoneNumber="profileInfo.phoneNumber"
-              @onInputPhone="(val) => (profileInfo.phoneNumber = val)"
-            />
+            <phone-input :isEdit="true" :phoneNumber="profileInfo.phoneNumber"
+              @onInputPhone="(val) => (profileInfo.phoneNumber = val)" />
           </div>
 
           <div class="m-note">
@@ -165,22 +109,13 @@
 
           <div class="ac-action">
             <app-overlay v-if="processing" />
-            <button
-              class="btn cancel"
-              type="button"
-              @click="closeSection"
-            >
+            <button class="btn cancel" type="button" @click="closeSection">
               <span>إلغاء</span>
             </button>
-            <button
-              :disabled="
-                !meta.valid ||
-                isPhoneConfirmed() ||
-                profileInfo.phoneNumber == null
-              "
-              class="btn save"
-              @click.prevent="callApiChangePhone"
-            >
+            <button :disabled="!meta.valid ||
+              isPhoneConfirmed() ||
+              profileInfo.phoneNumber == null
+              " class="btn save" @click.prevent="callApiChangePhone">
               <span>حفظ</span>
             </button>
           </div>
@@ -192,34 +127,18 @@
         <div class="r-element">
           <div class="r-1">
             <span class="r-label">رقم واتساب</span>
-            <span
-              v-if="appAuth.state.userData?.phoneNumber"
-              class="r-val direction-ltr"
-              style="direction: ltr"
-            >
+            <span v-if="appAuth.state.userData?.phoneNumber" class="r-val direction-ltr" style="direction: ltr">
               +{{ appAuth.state.userData?.phoneNumber }}
             </span>
-            <span
-              v-else
-              class="r-val"
-            >
+            <span v-else class="r-val">
               لا يوجد
             </span>
           </div>
-          <div
-            class="r-action"
-            @click="setActiveSection(editSections.phone)"
-          >
-            <span
-              v-if="appAuth.state.userData?.phoneNumber"
-              class="edit"
-            >
+          <div class="r-action" @click="setActiveSection(editSections.phone)">
+            <span v-if="appAuth.state.userData?.phoneNumber" class="edit">
               تعديل
             </span>
-            <span
-              v-else
-              class="add"
-            >
+            <span v-else class="add">
               إضافة
             </span>
           </div>
@@ -230,22 +149,14 @@
 
     <!--                      email-->
     <template v-if="activeSection === editSections.email">
-      <vee-form
-        v-slot="{ handleSubmit, meta: formMeta }"
-        class="ac-wrapper name m-auto"
-      >
+      <vee-form v-slot="{ handleSubmit, meta: formMeta }" class="ac-wrapper name m-auto">
         <label class="text-dark-2b font-bold text-[16px]">
           البريد الإلكتروني
         </label>
         <div class="w-[300px] m-auto grid gap-y-[20px] mt-[25px]">
           <div class="ac-control-wrapper m-0">
-            <form-input
-              v-model:inputValue="profileInfo.email"
-              :rules="{ required: true, email: true }"
-              inputId="email"
-              inputType="email"
-              label="البريد الألكتروني"
-            />
+            <form-input v-model:inputValue="profileInfo.email" :rules="{ required: true, email: true }" inputId="email"
+              inputType="email" label="البريد الألكتروني" />
           </div>
           <div class="m-note">
             <span>سنرسل رمز التحقق إلى بريدك الإلكتروني الجديد</span>
@@ -253,22 +164,13 @@
           </div>
           <div class="ac-action">
             <app-overlay v-if="processing" />
-            <button
-              class="btn cancel"
-              type="button"
-              @click="closeSection"
-            >
+            <button class="btn cancel" type="button" @click="closeSection">
               <span>إلغاء</span>
             </button>
-            <button
-              :disabled="
-                !formMeta.valid ||
-                isMailConfirmed() ||
-                profileInfo.email == null
-              "
-              class="btn save"
-              @click.prevent="sendMail"
-            >
+            <button :disabled="!formMeta.valid ||
+              isMailConfirmed() ||
+              profileInfo.email == null
+              " class="btn save" @click.prevent="sendMail">
               <span>حفظ</span>
             </button>
           </div>
@@ -280,33 +182,18 @@
         <div class="r-element">
           <div class="r-1">
             <span class="r-label">البريد الإلكتروني</span>
-            <span
-              v-if="appAuth.state.userData?.email"
-              class="r-val"
-            >
+            <span v-if="appAuth.state.userData?.email" class="r-val">
               {{ appAuth.state.userData?.email }}
             </span>
-            <span
-              v-else
-              class="r-val"
-            >
+            <span v-else class="r-val">
               لا يوجد
             </span>
           </div>
-          <div
-            class="r-action"
-            @click="setActiveSection(editSections.email)"
-          >
-            <span
-              v-if="appAuth.state.userData?.email"
-              class="edit"
-            >
+          <div class="r-action" @click="setActiveSection(editSections.email)">
+            <span v-if="appAuth.state.userData?.email" class="edit">
               تعديل
             </span>
-            <span
-              v-else
-              class="add"
-            >
+            <span v-else class="add">
               إضافة
             </span>
           </div>
@@ -317,68 +204,40 @@
 
     <!--   school  -->
     <template v-if="activeSection === editSections.school">
-      <vee-form
-        v-slot="{ handleSubmit }"
-        class="ac-wrapper name m-auto"
-      >
+      <vee-form v-slot="{ handleSubmit }" class="ac-wrapper name m-auto">
         <label class="text-dark-2b font-bold text-[16px]">المدرسة</label>
 
         <div class="w-[300px] m-auto grid gap-y-[20px] mt-[25px]">
           <div class="grid gap-y-[10px]">
             <label class="text-[18px] font-medium text-dark-2b">المدينة</label>
-            <v-select
-              v-model="profileInfo.cityId"
-              :options="cities"
-              :reduce="(city) => city.id"
-              label="label"
-              :clearable="false"
-              placeholder="اختر مدينة"
-              :class="[
+            <v-select v-model="profileInfo.cityId" :options="cities" :reduce="city => city.id" label="label"
+              :loading="loadingCities" class="custom-select" @update:modelValue="fetchSchools(true)" :clearable="false"
+              placeholder="اختر مدينة" dir="rtl" :filterable="false" @search="handleSearch" :class="[
                 'w-full',
                 'bg-white',
                 !profileInfo.cityId ? 'border border-red-500 rounded' : '',
                 'text-right',
                 'rtl',
-              ]"
-              dir="rtl"
-              @update:modelValue="fetchSchools(true)"
-            />
+              ]" />
           </div>
 
           <div class="grid gap-y-[10px]">
             <label class="text-[18px] font-medium text-dark-2b">المدرسة</label>
-            <v-select
-              v-model="profileInfo.schoolId"
-              :options="schools"
-              :reduce="(school) => school.id"
-              label="label"
-              :clearable="false"
-              placeholder="اختر مدرسة"
-              :disabled="!profileInfo.cityId"
-              style="direction: rtl"
-              :class="[
+            <v-select v-model="profileInfo.schoolId" :options="schools" :reduce="(school) => school.id" label="label"
+              :clearable="false" class="custom-select" placeholder="اختر مدرسة" :disabled="!profileInfo.cityId" style="direction: rtl" :class="[
                 'w-full',
                 'bg-white',
-                !profileInfo.schoolId ? 'border border-red-500 rounded' : '',
+                !profileInfo.schoolId ? '!bg-gray-fa error' : '',
                 'text-right',
                 'rtl',
-              ]"
-              dir="rtl"
-            />
+              ]" dir="rtl" />
           </div>
           <div class="ac-action">
-            <button
-              class="btn cancel"
-              type="button"
-              @click="closeSection"
-            >
+            <button class="btn cancel" type="button" @click="closeSection">
               <span>إلغاء</span>
             </button>
-            <button
-              :disabled="!profileInfo.cityId || !profileInfo.schoolId"
-              class="btn save"
-              @click.prevent="handleSubmit(sendForm)"
-            >
+            <button :disabled="!profileInfo.cityId || !profileInfo.schoolId" class="btn save"
+              @click.prevent="handleSubmit(sendForm)">
               <span>حفظ</span>
             </button>
           </div>
@@ -390,43 +249,28 @@
         <div class="r-element">
           <div class="r-1">
             <span class="r-label">المدرسة</span>
-            <span
-              v-if="
-                appAuth.state.userData?.schoolId ||
-                appAuth.state.userData?.cityId
-              "
-              class="r-val"
-            >
+            <span v-if="
+              appAuth.state.userData?.schoolId ||
+              appAuth.state.userData?.cityId
+            " class="r-val">
               {{
                 getText(getShoolLabel(appAuth.state.userData?.schoolId)) +
                 ' - ' +
                 getText(getCityLabel(appAuth.state.userData?.cityId))
               }}
             </span>
-            <span
-              v-else
-              class="r-val"
-            >
+            <span v-else class="r-val">
               لا يوجد
             </span>
           </div>
-          <div
-            class="r-action"
-            @click="setActiveSection(editSections.school)"
-          >
-            <span
-              v-if="
-                appAuth.state.userData?.schoolId ||
-                appAuth.state.userData?.cityId
-              "
-              class="edit"
-            >
+          <div class="r-action" @click="setActiveSection(editSections.school)">
+            <span v-if="
+              appAuth.state.userData?.schoolId ||
+              appAuth.state.userData?.cityId
+            " class="edit">
               تعديل
             </span>
-            <span
-              v-else
-              class="add"
-            >
+            <span v-else class="add">
               إضافة
             </span>
           </div>
@@ -437,44 +281,25 @@
 
     <!--   grade  -->
     <template v-if="activeSection === editSections.grade">
-      <vee-form
-        v-slot="{ handleSubmit }"
-        class="ac-wrapper name m-auto"
-      >
+      <vee-form v-slot="{ handleSubmit }" class="ac-wrapper name m-auto">
         <label class="text-dark-2b font-bold text-[16px]">الصف الدراسي</label>
         <div class="w-[300px] m-auto grid gap-y-[20px] mt-[25px]">
           <div class="grid gap-y-[10px]">
             <label class="text-[18px] font-medium text-dark-2b">الصف الدراسي</label>
-            <v-select
-              v-model="profileInfo.grades"
-              :options="grades"
-              :reduce="(grade) => grade.id"
-              label="label"
-              :clearable="false"
-              placeholder="اختر الصف"
-              :class="[
+            <v-select v-model="profileInfo.grades" :options="grades" :reduce="(grade) => grade.id" label="label"
+              :clearable="false" placeholder="اختر الصف" :class="[
                 'w-full',
                 'bg-white',
                 !profileInfo.grades ? 'border border-red-500 rounded' : '',
                 'text-right',
                 'rtl',
-              ]"
-              dir="rtl"
-            />
+              ]" dir="rtl" />
           </div>
           <div class="ac-action">
-            <button
-              class="btn cancel"
-              type="button"
-              @click="closeSection"
-            >
+            <button class="btn cancel" type="button" @click="closeSection">
               <span>إلغاء</span>
             </button>
-            <button
-              :disabled="!profileInfo.grades"
-              class="btn save"
-              @click.prevent="handleSubmit(sendForm)"
-            >
+            <button :disabled="!profileInfo.grades" class="btn save" @click.prevent="handleSubmit(sendForm)">
               <span>حفظ</span>
             </button>
           </div>
@@ -486,36 +311,21 @@
         <div class="r-element">
           <div class="r-1">
             <span class="r-label">الصف الدراسي</span>
-            <span
-              v-if="
-                appAuth.state.userData?.schoolId ||
-                appAuth.state.userData?.cityId
-              "
-              class="r-val"
-            >
+            <span v-if="
+              appAuth.state.userData?.schoolId ||
+              appAuth.state.userData?.cityId
+            " class="r-val">
               {{ getText(getGradeLabel(appAuth.state.userData?.grades)) }}
             </span>
-            <span
-              v-else
-              class="r-val"
-            >
+            <span v-else class="r-val">
               لا يوجد
             </span>
           </div>
-          <div
-            class="r-action"
-            @click="setActiveSection(editSections.grade)"
-          >
-            <span
-              v-if="appAuth.state.userData?.grades"
-              class="edit"
-            >
+          <div class="r-action" @click="setActiveSection(editSections.grade)">
+            <span v-if="appAuth.state.userData?.grades" class="edit">
               تعديل
             </span>
-            <span
-              v-else
-              class="add"
-            >
+            <span v-else class="add">
               إضافة
             </span>
           </div>
@@ -525,57 +335,26 @@
     <!--                        end grade-->
 
     <client-only>
-      <app-image-cropper
-        v-model:openCropper="openCropper"
-        :hasDelete="true"
-        :img="img"
-        :ratio="1"
-        @cropImg="cropImg"
-        @onDelete="deleteImg"
-      />
+      <app-image-cropper v-model:openCropper="openCropper" :hasDelete="true" :img="img" :ratio="1" @cropImg="cropImg"
+        @onDelete="deleteImg" />
     </client-only>
 
-    <lazy-prime-dialog
-      id="modal-edit-mail"
-      v-model:visible="openMailModal"
-      :closable="true"
-      :closeOnEscape="true"
-      :dismissableMask="false"
-      :modal="true"
-      :showHeader="false"
-      header="تعديل البريد الالكتروني"
-      @afterHide="closeMailModal()"
-    >
-      <i
-        class="fa fa-close"
-        @click="closeMailModal()"
-      ></i>
-      <div
-        :class="{ 'wrong-code': wrongCode }"
-        class="code-part"
-      >
+    <lazy-prime-dialog id="modal-edit-mail" v-model:visible="openMailModal" :closable="true" :closeOnEscape="true"
+      :dismissableMask="false" :modal="true" :showHeader="false" header="تعديل البريد الالكتروني"
+      @afterHide="closeMailModal()">
+      <i class="fa fa-close" @click="closeMailModal()"></i>
+      <div :class="{ 'wrong-code': wrongCode }" class="code-part">
         <p class="t-1">تغيير البريد الإلكتروني</p>
 
         <span class="t-2">أدخل رمز التحقق المرسل إلى بريدك الإلكتروني</span>
         <span class="t-3">{{ profileInfo.email }}</span>
         <div class="w-full relative">
           <app-overlay v-if="processing" />
-          <code-input
-            :fieldHeight="45"
-            :fieldWidth="45"
-            :fields="4"
-            :radius="8"
-            :required="true"
-            class="t-code-input"
-            style="direction: ltr"
-            @complete="sendCode"
-          />
+          <code-input :fieldHeight="45" :fieldWidth="45" :fields="4" :radius="8" :required="true" class="t-code-input"
+            style="direction: ltr" @complete="sendCode" />
         </div>
 
-        <p
-          v-if="wrongCode"
-          class="wrong-code"
-        >
+        <p v-if="wrongCode" class="wrong-code">
           الكود غير صحيح يرجي التحقق
         </p>
 
@@ -583,103 +362,59 @@
           تحقق من البريد العشوائي في حال لم تجد الرسالة
         </span>
 
-        <timer-active
-          v-if="requestData && requestData.countRegisterTries <= 3 && isWaiting"
-          v-model:isActive="isWaiting"
-        />
+        <timer-active v-if="requestData && requestData.countRegisterTries <= 3 && isWaiting"
+          v-model:isActive="isWaiting" />
 
         <template v-if="requestData">
-          <span
-            v-if="requestData && requestData.countRegisterTries > 3"
-            class="tries-limit"
-          >
+          <span v-if="requestData && requestData.countRegisterTries > 3" class="tries-limit">
             بإمكانك إعادة إرسال الرسالة بعد 8 ساعات
           </span>
 
-          <span
-            :class="{
-              disable:
-                (requestData && requestData.countRegisterTries > 3) ||
-                isWaiting,
-            }"
-            class="re-send"
-            @click="
+          <span :class="{
+            disable:
+              (requestData && requestData.countRegisterTries > 3) ||
+              isWaiting,
+          }" class="re-send" @click="
               requestData.countRegisterTries <= 3 && !isWaiting
                 ? sendMail()
                 : {}
-            "
-          >
+              ">
             إعادة إرسال
           </span>
         </template>
       </div>
     </lazy-prime-dialog>
 
-    <lazy-prime-dialog
-      id="modal-edit-phone"
-      v-model:visible="openPhoneModal"
-      :closable="false"
-      :closeOnEscape="true"
-      :dismissableMask="false"
-      :modal="true"
-      :showHeader="false"
-      header="تعديل رقم الهاتف"
-      @afterHide="closePhoneModal()"
-    >
-      <i
-        class="fa fa-close"
-        @click="closePhoneModal()"
-      ></i>
-      <div
-        :class="{ 'wrong-code': wrongCode }"
-        class="code-part"
-      >
+    <lazy-prime-dialog id="modal-edit-phone" v-model:visible="openPhoneModal" :closable="false" :closeOnEscape="true"
+      :dismissableMask="false" :modal="true" :showHeader="false" header="تعديل رقم الهاتف"
+      @afterHide="closePhoneModal()">
+      <i class="fa fa-close" @click="closePhoneModal()"></i>
+      <div :class="{ 'wrong-code': wrongCode }" class="code-part">
         <p class="t-1">تغيير رقم الواتساب</p>
 
         <span class="t-2">أدخل رمز التحقق المرسل إلى رقمك في واتساب</span>
         <span class="t-3">{{ profileInfo.phoneNumber }}+</span>
         <div class="w-full relative">
           <app-overlay v-if="processing" />
-          <code-input
-            :fieldHeight="45"
-            :fieldWidth="45"
-            :fields="4"
-            :radius="8"
-            :required="true"
-            class="t-code-input"
-            style="direction: ltr"
-            @complete="sendCode"
-          />
+          <code-input :fieldHeight="45" :fieldWidth="45" :fields="4" :radius="8" :required="true" class="t-code-input"
+            style="direction: ltr" @complete="sendCode" />
         </div>
-        <p
-          v-if="wrongCode"
-          class="wrong-code"
-        >
+        <p v-if="wrongCode" class="wrong-code">
           الكود غير صحيح يرجي التحقق
         </p>
         <template v-if="requestDataPhone">
-          <span
-            v-if="requestDataPhone.countRegisterTries > 3"
-            class="tries-limit"
-          >
+          <span v-if="requestDataPhone.countRegisterTries > 3" class="tries-limit">
             بإمكانك إعادة إرسال الرسالة بعد 8 ساعات
           </span>
-          <timer-active
-            v-if="requestDataPhone.countRegisterTries <= 3 && isWaiting"
-            v-model:isActive="isWaiting"
-          />
+          <timer-active v-if="requestDataPhone.countRegisterTries <= 3 && isWaiting" v-model:isActive="isWaiting" />
 
-          <span
-            :class="{
-              disable: requestDataPhone.countRegisterTries > 3 || isWaiting,
-            }"
-            class="re-send"
-            @click="
+          <span :class="{
+            disable: requestDataPhone.countRegisterTries > 3 || isWaiting,
+          }" class="re-send" @click="
               requestDataPhone.countRegisterTries <= 3 && !isWaiting
                 ? callApiChangePhone()
                 : {}
-            "
-          >
+              ">
             إعادة إرسال
           </span>
         </template>
@@ -745,6 +480,7 @@ const isWaiting = ref(false);
 const openCropper = ref(false);
 const img = ref('');
 const isUpload = ref(false);
+const loadingCities = ref(false);
 
 const requestData = ref<any | null>(null);
 const requestDataPhone = ref<any | null>(null);
@@ -787,6 +523,7 @@ const closeSection = () => {
   profileInfo.cityId = appAuth.state.userData?.cityId;
   profileInfo.schoolId = appAuth.state.userData?.schoolId;
   profileInfo.grades = appAuth.state.userData?.grades;
+  fetchSchools()
 };
 
 const sendForm = async () => {
@@ -871,10 +608,10 @@ const getCityLabel = (cityId) => {
 };
 
 const fetchSchools = async (isReset: boolean = false) => {
-  const res = await globalStore.getShoolsList({ id: profileInfo.cityId });
   if (isReset) {
     profileInfo.schoolId = null;
   }
+  const res = await globalStore.getShoolsList({ id: profileInfo.cityId });
   schools.value = res;
 };
 
@@ -1120,15 +857,47 @@ const deleteImg = () => {
   sendForm();
 };
 
+const handleSearch = useDebounceFn(async (search: string) => {
+  if (search.length < 3) {
+    console.log(cities.value)
+    if(search.length === 2 || (search.length === 0 && (!cities.value || cities.value?.length===0))){
+     await fetchImportantCities();
+    }
+    return; 
+  }
+
+  loadingCities.value = true;
+  try {
+    const res = await globalStore.getCitiesList(search);
+
+
+    cities.value = res?.slice(0, 10) ?? res;
+  } finally {
+    loadingCities.value = false;
+  }
+}, 1000); // debounce 1
+
+const fetchImportantCities = async () => {
+  loadingCities.value = true;
+  try {
+    const res = await globalStore.getCitiesList();
+    cities.value = res?.slice(0, 10) ?? res;
+  } finally {
+    loadingCities.value = false;
+  }
+};
+
+
+
 const togglePassword1 = () =>
-  (password1Type.value =
-    password1Type.value === 'password' ? 'text' : 'password');
+(password1Type.value =
+  password1Type.value === 'password' ? 'text' : 'password');
 const togglePassword2 = () =>
-  (password2Type.value =
-    password2Type.value === 'password' ? 'text' : 'password');
+(password2Type.value =
+  password2Type.value === 'password' ? 'text' : 'password');
 const togglePassword3 = () =>
-  (password3Type.value =
-    password3Type.value === 'password' ? 'text' : 'password');
+(password3Type.value =
+  password3Type.value === 'password' ? 'text' : 'password');
 
 onMounted(() => {
   fillProfileInfo();
@@ -1430,6 +1199,9 @@ onMounted(() => {
           font-size: 16px;
           font-weight: 500;
           color: white;
+          &:disabled{
+            opacity: .5;
+          }
         }
 
         &.cancel {

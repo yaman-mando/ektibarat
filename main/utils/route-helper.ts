@@ -262,8 +262,18 @@ export class RouteHelper {
     return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.school.root}`
   }
 
+
   static studentAnalytics(id){
     return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.school.root}/${APP_ROUTES.userDashboard.school.studentAnalytics.root}/${id}`
+  }
+
+
+  static teacherPanel(){
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.teacher.root}`
+  }
+  
+  static studentAnalyticsForTeacher(id){
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.teacher.root}/${APP_ROUTES.userDashboard.teacher.studentAnalytics.root}/${id}`
   }
 
   static webExamQuestionToday(id, socialType = [], isAdmin = false) {

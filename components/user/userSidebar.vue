@@ -146,7 +146,7 @@
     class="w-full fixed bottom-0 h-[78px] px-[15px] bg-white"
     style="box-shadow: 0px -2px 10px 0px #00000026"
   >
-    <div class="flex items-center justify-between h-full">
+    <div class="flex items-center h-full" :class="filteredMobileMenuModel.length>3?'justify-between':'justify-around'">
       <template
         v-for="item in filteredMobileMenuModel"
         :key="item.name"

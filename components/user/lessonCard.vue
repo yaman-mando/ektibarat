@@ -1,7 +1,7 @@
 <!-- LessonCard.vue -->
 <template>
     <div class="rounded-[8px] cursor-pointer p-[15px_17px] flex items-center justify-between h-[70px] border-[1px]"
-        @click="status !== 'locked' ? toLessonDetails() : openSubscribeModal()" :class="cardClass">
+        @click="onCardClick" :class="cardClass">
         <div class="flex items-center gap-x-[10px]">
             <span v-if="status === 'completed'"
                 class="flex items-center justify-center w-9 h-9 rounded-full bg-white text-green-8c text-[22px]">
@@ -36,34 +36,31 @@
             <div class="grid">
                 <span :class="textClass">{{ titleText }}</span>
                 <span v-if="lesson.periodTime" class="flex items-center gap-[4px] text-[16px] font-medium text-gray-8f">
-                    المدة: 
+                    المدة:
                     {{ lesson.periodTime }}
                 </span>
             </div>
         </div>
         <i class="fa fa-chevron-left"></i>
         <!-- subscribe modal -->
-      <SubscribeModal v-if="showSubscribeModal" @update:show="($event) => { showSubscribeModal = $event }"
-        :show="showSubscribeModal" />
+        <SubscribeModal v-if="showSubscribeModal" @update:show="($event) => { showSubscribeModal = $event }"
+            :show="showSubscribeModal" />
     </div>
 </template>
 
 <script setup lang="ts">
 import Tooltip from '~/components/user/toolTip.vue'
+import type { lessonObj } from '~/main/modules/user-panel/data-access/user-panel.model';
+import JSZip from "jszip"
+import { saveAs } from "file-saver"
 
 
 const router = useRouter()
 const route = useRoute()
+const runtimeConfig = useRuntimeConfig();
 
 const props = defineProps<{
-    lesson: {
-        id: number
-        title: string
-        type: number
-        periodTime: number
-        isWatched: boolean
-        isShow: boolean
-    }
+    lesson: lessonObj
     status: 'completed' | 'next' | 'open' | 'locked'
 }>()
 
@@ -97,6 +94,82 @@ const titleText = computed(() => {
     }
 })
 
+function onCardClick() {
+    if (props.status === 'locked') {
+        openSubscribeModal()
+        return
+    }
+
+    switch (props.lesson.type) {
+        case 1:
+            toLessonDetails()
+            break
+
+        case 2:
+            handleExamClick(props.lesson.examId ?? 0)
+            break
+
+        case 3:
+            downloadAttachments(props.lesson.attachmentIds)
+            break
+
+        default:
+            toLessonDetails()
+    }
+}
+
+function handleExamClick(examId: string | number) {
+    console.log("exam Id:", examId)
+
+}
+
+function downloadAttachments(files: string[]) {
+    if (!files || files.length === 0) return
+
+    if (files.length === 1) {
+        const url = `${runtimeConfig.public.baseImageUrl}/Lessons/File/${files[0]}`
+        triggerDownload(url, files[0])
+    } else {
+        downloadMultipleAsZip(files)
+    }
+}
+
+async function triggerDownload(url: string, filename: string) {
+    try {
+        const response = await fetch(url)
+        const blob = await response.blob()
+
+        const link = document.createElement('a')
+        const objectUrl = URL.createObjectURL(blob)
+
+        link.href = objectUrl
+        link.download = filename
+        document.body.appendChild(link)
+        link.click()
+
+
+        document.body.removeChild(link)
+        URL.revokeObjectURL(objectUrl)
+    } catch (err) {
+        console.error("خطأ أثناء تنزيل الملف:", err)
+    }
+}
+
+async function downloadMultipleAsZip(files: string[]) {
+    const zip = new JSZip()
+    const folder = zip.folder("attachments")
+
+    for (const file of files) {
+        const url = `${runtimeConfig.public.baseImageUrl}/Lessons/File/${file}`
+        const response = await fetch(url)
+        const blob = await response.blob()
+        folder?.file(file, blob)
+    }
+
+    const content = await zip.generateAsync({ type: "blob" })
+    saveAs(content, "attachments.zip")
+}
+
 function formatTime(seconds: number) {
     const m = Math.floor(seconds / 60)
     const s = seconds % 60
@@ -111,6 +184,6 @@ function toLessonDetails() {
 }
 
 function openSubscribeModal() {
-  showSubscribeModal.value = true
+    showSubscribeModal.value = true
 }
 </script>

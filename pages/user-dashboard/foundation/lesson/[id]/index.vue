@@ -182,10 +182,10 @@ const toFoundation = () => {
   router.push(`/user-dashboard/foundation`);
 };
 
-//type=1 training,type=2 file to save,type=3 videos
+//type=1 videos,type=2 training ,type=3 file to save
 //if type2 + type3 behind div is tow part
 const lessonGroups = computed(() => {
-  const groups: any[][] = [];
+  const groups: lessonObj[][] = [];
   const lessons = sortedLessons.value;
   let i = 0;
   if (!lessons) return groups;

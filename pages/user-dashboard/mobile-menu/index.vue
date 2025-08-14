@@ -136,6 +136,11 @@ const accountItems = [
     label: 'التفضيلات',
     link: '/user-dashboard/personal-setting?section=preferences',
   },
+  {
+    key: 'partner',
+    label: 'شريك اختبارات',
+    link: '/user-dashboard/personal-setting?section=partner',
+  },
 ];
 
 const helpItems = [

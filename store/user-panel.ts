@@ -1,10 +1,15 @@
+import { da } from "date-fns/locale"
 import { GlobalSub } from "~/main/modules/user-panel/data-access/user-panel.enum"
-import type { blogsListResponse, categoriesListForModal, categoryAnalysisList, categoryInfoForStep, chartDataList, idLabelList,
-   lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, recommendationsResponse, schoolDashboardData, similarVidModel, 
-   slidersResponse, 
-   stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeForTeacherResponse, studentAnalyzeResponse, studentStages,
-   trainingAnalyzeSimpleResponse, trainingPlanInfoSimpleResponse, trainingPlanSummaryResponse } 
-   from "~/main/modules/user-panel/data-access/user-panel.model"
+import type {
+  blogsListResponse, categoriesListForModal, categoryAnalysisList, categoryInfoForStep, chartDataList, idLabelList,
+  lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, recommendationsResponse, schoolDashboardData, similarVidModel,
+  slidersResponse,
+  stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeForTeacherResponse, studentAnalyzeResponse, studentStages,
+  teachersFinancialResponse,
+  TPstudentDataResponse,
+  trainingAnalyzeSimpleResponse, trainingPlanInfoSimpleResponse, trainingPlanSummaryResponse
+}
+  from "~/main/modules/user-panel/data-access/user-panel.model"
 
 
 interface UserPanelState {
@@ -19,6 +24,7 @@ interface UserPanelState {
     analyticsDetails: boolean,
     analyzeDetailsChartForStudent: boolean,
     schoolDashboard: boolean,
+    teacherDashboar: boolean,
     teachersOfManager: boolean,
     studentAnalyze: boolean,
     studentAnalyzeChart: boolean,
@@ -30,7 +36,8 @@ interface UserPanelState {
     blogs: boolean,
     homeSliders: boolean,
     trainingAnalyzeSimple: boolean,
-    planInfoSimple: boolean
+    planInfoSimple: boolean,
+    teachersFinancial:boolean
   }
   globalType: number,
   lessonsCategories: lessonsCategoriesDataModel[] | null,
@@ -43,6 +50,7 @@ interface UserPanelState {
   analyticsDetails: categoryAnalysisList | null,
   analyzeDetailsChartForStudent: chartDataList | null | any
   schoolDashboardData: schoolDashboardData | null,
+  teacherDashboardData: TPstudentDataResponse | null,
   teachersOfManager: idLabelList | null,
   studentAnalyze: studentAnalyzeResponse | null,
   studentAnalyzeChart: studentAnalyzeChartResponse | null,
@@ -54,7 +62,8 @@ interface UserPanelState {
   blogs: blogsListResponse | null,
   homeSliders: slidersResponse | null,
   trainingAnalyzeSimple: trainingAnalyzeSimpleResponse | null,
-  planInfoSimple: trainingPlanInfoSimpleResponse | null
+  planInfoSimple: trainingPlanInfoSimpleResponse | null,
+  teachersFinancial:teachersFinancialResponse | null
 }
 
 
@@ -71,6 +80,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       analyticsDetails: false,
       analyzeDetailsChartForStudent: false,
       schoolDashboard: false,
+      teacherDashboar: false,
       teachersOfManager: false,
       studentAnalyze: false,
       studentAnalyzeChart: false,
@@ -81,8 +91,9 @@ export const useUserPanelStore = defineStore('userPanel', {
       studentPlanInfoForTeacher: false,
       blogs: false,
       homeSliders: false,
-      trainingAnalyzeSimple:false,
-      planInfoSimple:false
+      trainingAnalyzeSimple: false,
+      planInfoSimple: false,
+      teachersFinancial:false,
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
@@ -95,6 +106,7 @@ export const useUserPanelStore = defineStore('userPanel', {
     analyticsDetails: null,
     analyzeDetailsChartForStudent: null,
     schoolDashboardData: null,
+    teacherDashboardData: null,
     teachersOfManager: null,
     studentAnalyze: null,
     studentAnalyzeChart: null,
@@ -105,8 +117,9 @@ export const useUserPanelStore = defineStore('userPanel', {
     studentPlanInfoForTeacher: null,
     blogs: null,
     homeSliders: null,
-    trainingAnalyzeSimple:null,
-      planInfoSimple:null
+    trainingAnalyzeSimple: null,
+    planInfoSimple: null,
+    teachersFinancial:null
   }),
 
   actions: {
@@ -298,6 +311,61 @@ export const useUserPanelStore = defineStore('userPanel', {
       }
     },
 
+
+    async getTeacherDashboardData(): Promise<TPstudentDataResponse | null> {
+      try {
+        this.fetching.teacherDashboar = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/teachersStudents/list?grade=${this.globalType}`)
+        this.teacherDashboardData = data
+        return data
+      } catch (e) {
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.teacherDashboar = false
+      }
+    },
+
+    async deleteStudentFromTeacherDashboard(stdId): Promise<boolean> {
+      try {
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.delete(`/teachersStudents/${stdId}`)
+        if (data.isDeleted) {
+          const index = this.teacherDashboardData?.studentsList.findIndex(res => res.id === stdId)
+          if (index !== undefined && index > -1 ) {
+            this.teacherDashboardData?.studentsList.splice(index, 1)
+          }
+        }
+        return data.isDeleted
+      } catch (e) {
+        console.error(e)
+        return false
+      }
+    },
+
+    async acceptStudentInTeacherDashboard(stdId: number, state: number): Promise<boolean> {
+      try {
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.post(`/teachersStudents/accept`, { id: stdId, state })
+
+        if (data.state === state) {
+          const index = this.teacherDashboardData?.studentsList.findIndex(res => res.id === stdId)
+          if (index !== undefined && index > -1 && this.teacherDashboardData?.studentsList) {
+            this.teacherDashboardData.studentsList[index].state = state
+          }
+          return true
+        }
+
+        return false
+      } catch (e) {
+        console.error(e)
+        return false
+      }
+    },
+
+
+
     async getTeachersOfManager(): Promise<idLabelList | null> {
       try {
         this.fetching.teachersOfManager = true
@@ -484,7 +552,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       }
     },
 
-     async getSimpleTrainingAnalyze(): Promise<trainingAnalyzeSimpleResponse | null> {
+    async getSimpleTrainingAnalyze(): Promise<trainingAnalyzeSimpleResponse | null> {
       try {
         this.fetching.trainingAnalyzeSimple = true
         const { $axios } = useNuxtApp()
@@ -514,6 +582,23 @@ export const useUserPanelStore = defineStore('userPanel', {
         return null
       } finally {
         this.fetching.planInfoSimple = false
+      }
+    },
+
+
+    async getTeachersFinancialList(): Promise<teachersFinancialResponse | null> {
+      try {
+        this.fetching.teachersFinancial = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/teachersFinancial/all`)
+        this.teachersFinancial = data
+        return data
+      } catch (e) {
+        this.teachersFinancial = null
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.teachersFinancial = false
       }
     },
 
