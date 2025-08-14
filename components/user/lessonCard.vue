@@ -45,6 +45,10 @@
         <!-- subscribe modal -->
         <SubscribeModal v-if="showSubscribeModal" @update:show="($event) => { showSubscribeModal = $event }"
             :show="showSubscribeModal" />
+
+        <ConfirmDialog v-model:visible="showConfirmTraining" :title="'تأكيد'"
+            :message="'سوف تبدأ بالتدريب هل أنت موافق؟'" :confirmText="'نعم'" :cancelText="'لا'"
+            :onConfirm="() => { handleExamClick(props.lesson.examId ?? 0) }" />
     </div>
 </template>
 
@@ -58,6 +62,7 @@ import { saveAs } from "file-saver"
 const router = useRouter()
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig();
+const { $axios } = useNuxtApp()
 
 const props = defineProps<{
     lesson: lessonObj
@@ -65,6 +70,8 @@ const props = defineProps<{
 }>()
 
 const showSubscribeModal = ref(false)
+const showConfirmTraining = ref(false)
+const selectedExamId = ref(null)
 
 const cardClass = computed(() => {
     switch (props.status) {
@@ -106,7 +113,7 @@ function onCardClick() {
             break
 
         case 2:
-            handleExamClick(props.lesson.examId ?? 0)
+            showConfirmTraining.value = true
             break
 
         case 3:
@@ -118,8 +125,14 @@ function onCardClick() {
     }
 }
 
-function handleExamClick(examId: string | number) {
-    console.log("exam Id:", examId)
+const handleExamClick = async (examId: string | number) => {
+    const { data } = await $axios.post('/studentsExam', {
+        examId: examId,
+        willDo: true,
+    });
+    if (data.id) {
+        await router.push(`/student/training/${data.id}`);
+    }
 
 }
 
