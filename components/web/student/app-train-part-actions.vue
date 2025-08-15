@@ -32,10 +32,11 @@
           >
             <template #trigger="{ bindTrigger }">
               <app-button
+                class="ce-bt"
                 v-bind="bindTrigger"
                 variant="outline"
                 iconStartClass="fa-solid fa-question"
-                label="مساعدة"
+                :label="windowSize.isMobileSize ? '' : 'مساعدة'"
                 labelClass="text-lg text-orange-39"
               />
             </template>
@@ -123,6 +124,7 @@ const props = withDefaults(
 );
 
 //compo
+const windowSize = useWindowSize();
 const globalStore = useGlobalStore();
 
 //data
@@ -174,17 +176,10 @@ function onLawsClick() {
     width: 100%;
     display: grid;
     align-items: center;
-    //justify-content: space-between;
     grid-template-columns: repeat(3, 1fr);
+    gap: 35px;
     @include web-desktop-up() {
-      //display: grid;
-      //grid-template-columns: minmax(0, 60%) 1fr;
-      //column-gap: 20px;
-    }
-    @include web-xl-up() {
-      //display: grid;
-      //grid-template-columns: minmax(0, 70%) 1fr;
-      //column-gap: 36px;
+      gap: 0;
     }
 
     .tpa-buttons {
@@ -229,7 +224,6 @@ function onLawsClick() {
   }
 
   .c-e-wrapper {
-    display: none;
     @include web-desktop-up() {
       display: flex;
       justify-content: flex-end;
@@ -245,12 +239,21 @@ function onLawsClick() {
 
     ::v-deep {
       .app-button {
-        width: 130px !important;
-        height: 50px !important;
         border-radius: 25px;
+        width: 50px !important;
+        height: 50px !important;
+        border-width: 1px !important;
+        @include web-desktop-up() {
+          width: 130px !important;
+          height: 50px !important;
+        }
         .app-button-icon {
-          position: absolute;
-          inset-inline-start: 15px;
+          position: relative;
+          inset-inline-start: 0;
+          @include web-desktop-up() {
+            position: absolute;
+            inset-inline-start: 15px;
+          }
           border-radius: 50%;
           border: 1px solid;
           display: flex;
@@ -259,6 +262,12 @@ function onLawsClick() {
           align-items: center;
           justify-content: center;
           font-size: 16px;
+        }
+        .app-button-label-w {
+          display: none;
+          @include web-desktop-up() {
+            display: flex;
+          }
         }
         .app-button-label {
           padding-inline-start: 32px;

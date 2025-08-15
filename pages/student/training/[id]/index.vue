@@ -135,7 +135,13 @@
                       @onAnswerChange="onAnswerChange($event)"
                     />
                     <template #endContent>
-                      <template v-if="windowSize.isMobileSize">
+                      <template
+                        v-if="
+                          windowSize.isMobileSize &&
+                          !!activePartModel?.isCategoryText &&
+                          !!activeQuestionModel?.articleUi
+                        "
+                      >
                         <div
                           class="relative start-[15px] cursor-pointer w-[125px] h-[34px] flex items-center justify-start rounded-[8px] !px-[10px] border border-[#7840E0] bg-[#F8F3FF]"
                           @click="onClickReadArticleButton"
@@ -154,34 +160,8 @@
                       </template>
                     </template>
                   </app-exam-part-question-part>
-                  <!--                  <div class="tpa-w w-mobile-only">-->
-                  <!--                    <app-train-part-actions-->
-                  <!--                      ref="trainPartMobileRef"-->
-                  <!--                      class="w-container"-->
-                  <!--                      :questionState="activeQuestionModel?.questionState"-->
-                  <!--                      :isActiveQuestionAnswered="isActiveQuestionAnswered"-->
-                  <!--                      :isActiveNext="canSelectNextQuestion"-->
-                  <!--                      :isActiveConfirm="canConfirmAnswerModel"-->
-                  <!--                      @confirmAction="onSelectAnswer(currentQuestionAnswerId)"-->
-                  <!--                      @nextAction="nextQuestion"-->
-                  <!--                      @complainAction="onComplaint"-->
-                  <!--                    />-->
-                  <!--                  </div>-->
                 </div>
 
-                <!--                <lazy-train-part-mobile-actions-->
-                <!--                  :questionId="currentQuestionDetailModel.questionId"-->
-                <!--                  :canShowLaw="-->
-                <!--                    currentQuestionDetailModel.isBelongToLaw &&-->
-                <!--                    userCurrentSub.trainingLawWatchingCount > 0-->
-                <!--                  "-->
-                <!--                  :canRemoveAnswer="canRemoveAnswerModel"-->
-                <!--                  :isLoadingRemoveAnswer="isLoadingRemoverAnswer"-->
-                <!--                  @showLawsAction="onShowLaws"-->
-                <!--                  @removeAction="removeAnswersTry"-->
-                <!--                  @showAnswerAction="onAnswerHelpAction"-->
-                <!--                  @complaintAction="onComplaint"-->
-                <!--                />-->
                 <lazy-modal-answer-feedback
                   v-if="!!activeQuestionModel"
                   v-model:isOpen="isOpenFeedbackModal"
