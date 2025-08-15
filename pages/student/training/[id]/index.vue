@@ -15,7 +15,7 @@
               <div class="st-h">
                 <app-button
                   class="e-bu"
-                  label="إنهاء التدريب"
+                  :label="windowSize.isMobileSize ? 'خروج' : 'إنهاء التدريب'"
                   variant="outline"
                   @click="exitPage"
                 >
@@ -27,15 +27,21 @@
                   </template>
                 </app-button>
                 <img
-                  alt="Ekhtibarat"
-                  src="/images/EkhtibaratLogoColor.webp"
+                  alt="Ekhtibarat logo"
+                  :src="
+                    windowSize.isMobileSize
+                      ? '/images/EkhtibaratCup.png'
+                      : '/images/EkhtibaratLogoColor.webp'
+                  "
                 />
                 <div class="ec-po">
                   <img
                     src="/images/svg/star-orange.svg"
                     alt="star point"
                   />
-                  <span>{{ Number(2988).toLocaleString() }}</span>
+                  <span class="num-font">
+                    {{ Number(2988).toLocaleString() }}
+                  </span>
                 </div>
               </div>
               <div class="st-progress-w">
@@ -52,7 +58,7 @@
                     <i
                       class="fa-solid fa-check text-xs !flex items-center justify-center text-white rounded-[50%] w-[20px] h-[20px] bg-green-8c"
                     ></i>
-                    <span class="">{{ correctAnswerCount }}</span>
+                    <span class="num-font">{{ correctAnswerCount }}</span>
                   </div>
                   <div class="tp-sep"></div>
                   <div
@@ -61,7 +67,7 @@
                     <i
                       class="fa-solid fa-xmark text-xs !flex items-center justify-center text-white rounded-[50%] w-[20px] h-[20px] bg-red-63"
                     ></i>
-                    <span class="">{{ wrongAnswerCount }}</span>
+                    <span class="num-font">{{ wrongAnswerCount }}</span>
                   </div>
                 </div>
               </div>
@@ -94,45 +100,15 @@
                 <!--              </div>-->
                 <!--            </client-only>-->
                 <app-overlay v-if="loadingPage" />
-                <div class="t-hero-m">
-                  <app-button
-                    label="إنهاء"
-                    variant="clear"
-                    size="sm"
-                    iconStartClass="ek-icon-exit-door"
-                    @click="exitPage"
-                  />
-                  <!--              <app-train-part-answers-status-->
-                  <!--                v-if="windowSize.isMobileSize && !!activePartModel"-->
-                  <!--                ref="answer_status_ref"-->
-                  <!--                class="w-mobile-only"-->
-                  <!--                :isMobile="true"-->
-                  <!--                :canRemoveAnswer="canRemoveAnswerModel"-->
-                  <!--                :isLoadingRemoveAnswer="isLoadingRemoverAnswer"-->
-                  <!--                :correctAnswerCount="correctAnswerCount"-->
-                  <!--                :wrongAnswerCount="wrongAnswerCount"-->
-                  <!--                :totalPointsCount="totalPointsCount"-->
-                  <!--                :questionMinSecond="currentQuestionDetailModel.questionMinTime"-->
-                  <!--                :questionMaxSecond="currentQuestionDetailModel.questionMaxTime"-->
-                  <!--                :questionPointsSetting="activePartModel.pointsSettings"-->
-                  <!--                :questionId="currentQuestionDetailModel.questionId"-->
-                  <!--                :canShowLaw="-->
-                  <!--                  currentQuestionDetailModel.isBelongToLaw &&-->
-                  <!--                  userCurrentSub.trainingLawWatchingCount > 0-->
-                  <!--                "-->
-                  <!--                @showLawsAction="onShowLaws"-->
-                  <!--                @removeAction="removeAnswersTry"-->
-                  <!--                @showAnswerAction="onAnswerHelpAction"-->
-                  <!--              />-->
-                </div>
                 <app-exam-part-article
                   v-if="
+                    !windowSize.isMobileSize &&
                     !!activePartModel?.isCategoryText &&
                     !!activeQuestionModel?.articleUi
                   "
                   :text="activeQuestionModel.articleUi"
                 />
-                <div class="aqs-w !mt-[20px]">
+                <div class="aqs-w !mt-[15px] lg:!mt-[20px]">
                   <app-exam-part-question-part
                     ref="examPartQuestionRef"
                     :mainTitle="questionTitleModel"
@@ -158,56 +134,34 @@
                       "
                       @onAnswerChange="onAnswerChange($event)"
                     />
+                    <template #endContent>
+                      <template
+                        v-if="
+                          windowSize.isMobileSize &&
+                          !!activePartModel?.isCategoryText &&
+                          !!activeQuestionModel?.articleUi
+                        "
+                      >
+                        <div
+                          class="relative start-[15px] cursor-pointer w-[125px] h-[34px] flex items-center justify-start rounded-[8px] !px-[10px] border border-[#7840E0] bg-[#F8F3FF]"
+                          @click="onClickReadArticleButton"
+                        >
+                          <img
+                            class="w-[12px] h-[14px] mx-auto"
+                            src="/images/icons/align-right.svg"
+                            alt="align right"
+                          />
+                          <span
+                            class="text-[14px] whitespace-nowrap text-[#7840E0] pis-[10px] font-[500] text-start"
+                          >
+                            قراءة القطعة
+                          </span>
+                        </div>
+                      </template>
+                    </template>
                   </app-exam-part-question-part>
-                  <div class="tpa-w w-mobile-only">
-                    <app-train-part-actions
-                      ref="trainPartMobileRef"
-                      class="w-container"
-                      :questionState="activeQuestionModel?.questionState"
-                      :isActiveQuestionAnswered="isActiveQuestionAnswered"
-                      :isActiveNext="canSelectNextQuestion"
-                      :isActiveConfirm="canConfirmAnswerModel"
-                      @confirmAction="onSelectAnswer(currentQuestionAnswerId)"
-                      @nextAction="nextQuestion"
-                      @complainAction="onComplaint"
-                    />
-                  </div>
-                  <!--              <app-train-part-answers-status-->
-                  <!--                v-if="!windowSize.isMobileSize && !!activePartModel"-->
-                  <!--                ref="answer_status_ref"-->
-                  <!--                class="w-web-up-only"-->
-                  <!--                :canRemoveAnswer="canRemoveAnswerModel"-->
-                  <!--                :isLoadingRemoveAnswer="isLoadingRemoverAnswer"-->
-                  <!--                :correctAnswerCount="correctAnswerCount"-->
-                  <!--                :wrongAnswerCount="wrongAnswerCount"-->
-                  <!--                :totalPointsCount="totalPointsCount"-->
-                  <!--                :questionMinSecond="currentQuestionDetailModel.questionMinTime"-->
-                  <!--                :questionMaxSecond="currentQuestionDetailModel.questionMaxTime"-->
-                  <!--                :questionPointsSetting="activePartModel.pointsSettings"-->
-                  <!--                :questionId="currentQuestionDetailModel.questionId"-->
-                  <!--                :canShowLaw="-->
-                  <!--                  currentQuestionDetailModel.isBelongToLaw &&-->
-                  <!--                  userCurrentSub.trainingLawWatchingCount > 0-->
-                  <!--                "-->
-                  <!--                @removeAction="removeAnswersTry"-->
-                  <!--                @showAnswerAction="onAnswerHelpAction"-->
-                  <!--                @showLawsAction="onShowLaws"-->
-                  <!--              />-->
                 </div>
 
-                <lazy-train-part-mobile-actions
-                  :questionId="currentQuestionDetailModel.questionId"
-                  :canShowLaw="
-                    currentQuestionDetailModel.isBelongToLaw &&
-                    userCurrentSub.trainingLawWatchingCount > 0
-                  "
-                  :canRemoveAnswer="canRemoveAnswerModel"
-                  :isLoadingRemoveAnswer="isLoadingRemoverAnswer"
-                  @showLawsAction="onShowLaws"
-                  @removeAction="removeAnswersTry"
-                  @showAnswerAction="onAnswerHelpAction"
-                  @complaintAction="onComplaint"
-                />
                 <lazy-modal-answer-feedback
                   v-if="!!activeQuestionModel"
                   v-model:isOpen="isOpenFeedbackModal"
@@ -233,7 +187,7 @@
                 />
               </div>
             </div>
-            <div class="tpa-w w-web-up-only">
+            <div class="tpa-w">
               <app-train-part-actions
                 ref="trainPartWebRef"
                 class="w-container"
@@ -279,6 +233,31 @@
               :msg="passedAllowedUnderMinAnswerMsg"
             />
           </client-only>
+          <template v-if="windowSize.isMobileSize">
+            <client-only>
+              <prime-dialog
+                v-model:visible="isOpenArticleModal"
+                :showHeader="false"
+                :closeOnEscape="true"
+                :closable="true"
+                :dismissableMask="true"
+                :modal="true"
+                :class="`mx-auto w-container article-modal`"
+              >
+                <i
+                  class="fa fa-close text-[20px] relative end-[10px] block-start-[5px] !flex justify-self-end"
+                  @click="closeArticleModal"
+                ></i>
+                <app-exam-part-article
+                  v-if="
+                    !!activePartModel?.isCategoryText &&
+                    !!activeQuestionModel?.articleUi
+                  "
+                  :text="activeQuestionModel.articleUi"
+                />
+              </prime-dialog>
+            </client-only>
+          </template>
         </template>
       </template>
     </div>
@@ -704,6 +683,14 @@ const userCurrentSub = computed(
 );
 
 //method
+const isOpenArticleModal = ref(false);
+function onClickReadArticleButton() {
+  isOpenArticleModal.value = !isOpenArticleModal.value;
+}
+function closeArticleModal() {
+  isOpenArticleModal.value = false;
+}
+
 function getAllQuestionsInExam(
   exam: StudentsExamDataModel
 ): StudentsExamPartQuestionDataModel[] {
