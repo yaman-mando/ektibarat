@@ -3,19 +3,7 @@
     id="exam-layout"
     class="exam-layout"
   >
-    <div class="app-nuxt">
-      <div class="wrapper">
-        <div class="main-section">
-          <lazy-main-menu />
-          <div class="scroll-page">
-            <div class="page-contents">
-              <slot></slot>
-            </div>
-            <lazy-main-footer />
-          </div>
-        </div>
-      </div>
-    </div>
+    <slot></slot>
     <client-only>
       <lazy-surveys-modal ref="modal_surveys_ref" />
     </client-only>
