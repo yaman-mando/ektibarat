@@ -91,7 +91,7 @@ html {
     &.correct-answer,
     &.wrong-answer,
     &.active {
-      border-width: 3px !important;
+      border-width: 1px !important;
     }
   }
 }
