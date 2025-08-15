@@ -6,7 +6,11 @@
         </div>
 
         <!-- السلايدر -->
-        <app-slider class="mt-[20px]" v-if="sliders" :slides="sliders" :delay-action="6000" :tagFilter="0" />
+        <app-data-wrapper :loading="panelStore.fetching.homeSliders" :data="sliders" loading-type="text"
+            loadingText="جاري تحميل السلايدر ..."
+            empty-text="لا توجد صور سلايدر">
+            <app-slider class="mt-[20px]" v-if="sliders" :slides="sliders" :delay-action="6000" :tagFilter="0" />
+        </app-data-wrapper>
 
         <!-- التحليلات -->
         <div v-if="userData.role === UserRoles.student" class="flex 2xl:flex-nowrap flex-wrap mt-[20px] gap-[20px]">
@@ -50,7 +54,7 @@
                                     <span class="text-red-5e text-[14px] font-medium">{{ cat.wrongAnswersCount }}</span>
                                     |
                                     <span class="text-green-8c text-[14px] font-medium">{{ cat.correctAnswersCount
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <div class="flex flex-col items-center">
@@ -63,8 +67,8 @@
 
                 <!-- زر التحليلات -->
                 <div class="w-full flex justify-center">
-                    <app-g-button @click="toAnalytics" width="150px" height="44px" bg-class="bg-blue-d6" radius="8px" text-color="text-white"
-                        text-size="16px" font-weight="font-medium">
+                    <app-g-button @click="toAnalytics" width="150px" height="44px" bg-class="bg-blue-d6" radius="8px"
+                        text-color="text-white" text-size="16px" font-weight="font-medium">
                         التحليلات
                     </app-g-button>
 
@@ -156,8 +160,8 @@
                             font-weight="font-medium">
                             خطتي
                         </app-g-button>
-                        <app-g-button @click="toTraining" width="150px" height="44px" bg-class="bg-purple-78" radius="8px"
-                            text-color="text-white" text-size="16px" font-weight="font-medium">
+                        <app-g-button @click="toTraining" width="150px" height="44px" bg-class="bg-purple-78"
+                            radius="8px" text-color="text-white" text-size="16px" font-weight="font-medium">
                             تدرب
                         </app-g-button>
                     </div>
@@ -168,7 +172,11 @@
         <!-- أحدث المقالات -->
         <div class="grid gap-y-[25px] mt-[40px] mb-[30px]">
             <span class=" text-blue-d6 text-[24px] font-bold">أحدث المقالات</span>
-            <app-blogs v-if="blogs" :blogs="blogs" />
+            <app-data-wrapper :loading="panelStore.fetching.blogs" :data="blogs" loading-type="text"
+            loadingText="جاري تحميل المقالات ..."
+                empty-text="لا توجد بيانات متاحة">
+                <app-blogs v-if="blogs" :blogs="blogs" />
+            </app-data-wrapper>
         </div>
 
     </user-panel-wrapper>
@@ -242,11 +250,11 @@ const formatTime = (minutes) => {
 };
 
 
-const toAnalytics = () =>{
+const toAnalytics = () => {
     router.push(RouteHelper.userAnalytics())
 }
 
-const toTraining = () =>{
+const toTraining = () => {
     router.push(webUserTrainWithUs())
 }
 

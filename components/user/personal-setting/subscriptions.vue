@@ -434,6 +434,7 @@ import {
 } from '~/main/constants/payment-type.enum';
 import { appEvents } from '~/main/shared/events/app.events';
 import { defineRule, Form as VeeForm } from 'vee-validate';
+import { useUserPanelStore } from '~/store/user-panel';
 
 defineRule('verify_cready', (value: string, [email]: [string]) => {
   return RegExp(`[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}`).test(value);
@@ -528,6 +529,7 @@ export default {
   setup() {
     const windowSize = useWindowSize();
     const globalStore = useGlobalStore();
+    const panelStore = useUserPanelStore()
     const subscriptionsStore = useSubscriptionsStore();
     const runtimeConfig = useRuntimeConfig();
     return {
@@ -538,7 +540,7 @@ export default {
       ...useSetupAuth(),
       ...useSetupRoute(),
       runtimeConfig,
-      globalTypeUser: computed(() => globalStore.state.globalTypeUserValue),
+      globalTypeUser: computed(() => panelStore.globalType),
       currentUserSub: computed(
         () => subscriptionsStore.state.userCurrentSubVal!
       ),

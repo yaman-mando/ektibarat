@@ -85,7 +85,7 @@
                 />
                 <span class="text-[20px] font-bold text-orange-39">7</span>
               </div>
-              <app-dropdown
+              <!-- <app-dropdown
                 :modelValue="
                   globalOptions.filter((k) => k.value === selectedGlobal)?.[0]
                     .label
@@ -93,7 +93,7 @@
                 topLabel="تغيير الاختبار"
                 :options="globalOptions"
                 @select="handleSelectGlobal"
-              />
+              /> -->
             </div>
           </div>
 

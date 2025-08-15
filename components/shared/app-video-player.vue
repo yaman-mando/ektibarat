@@ -77,7 +77,7 @@ class QualitySelector extends Component {
   update(options: QualitySelectorOptions) {
     const select = this.el() as HTMLSelectElement;
     select.innerHTML = ''; // Clear existing options
-    options.sources.forEach((source, index) => {
+    options.sources?.forEach((source, index) => {
       const option = document.createElement('option');
       option.value = index.toString();
       option.text = source.label;
@@ -346,7 +346,6 @@ async function onPlayerReady(event: { target: { player: any } }) {
   });
 
   //vtt thumbnails
-  console.log(player);
   player.vttThumbnails({
     src: new URL(
       `${pathModel.value}/vtt/thumbnails.vtt`,

@@ -276,7 +276,7 @@ export const useUserPanelStore = defineStore('userPanel', {
         console.error(e)
         return null
       } finally {
-        this.fetching.lessonsDetails = false
+        this.fetching.analyticsDetails = false
       }
     },
 

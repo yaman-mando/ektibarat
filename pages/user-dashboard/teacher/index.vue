@@ -1,293 +1,295 @@
 <template>
   <user-panel-wrapper content-class="max-w-[1060px] !mx-auto lg:px-0 px-[5px]">
-    <app-loading-spinner v-if="panelStore.fetching.teacherDashboar" :showSpinnerOverlay="baseData != null"
-      :showSpinner="baseData == null" />
-    <template v-if="baseData != null">
-      <!-- Header -->
-      <div class="flex items-center justify-between mb-4">
-        <span class="text-[24px] font-bold text-blue-d6 dark:text-white">
-          لوحة المدرب
-        </span>
-      </div>
+    <app-data-wrapper :loading="panelStore.fetching.teacherDashboar" :data="baseData" loading-type="spinner-overlay"
+      empty-text="لا توجد بيانات متاحة">
 
-      <!-- teacher code -->
-      <div
-        class="rounded-[8px] bg-white   shadow-custom mb-[20px] flex items-center min-h-[105px] px-[47px] py-[10px] flex-wrap justify-between">
-        <div class="grid items-center justify-center justify-items-center flex-1/3">
-          <span class="text-[24px] font-bold text-purple-78">الكود الخاص بي</span>
-          <span class="text-[40px] font-bold text-red-5e">{{ baseData.code }}</span>
-        </div>
-        <div class="text-[16px] font-medium text-gray-63 text-right m-auto">
-          يستطيع الطالب الانضمام إلى مجموعتك من خلال إدخال هذا الكود في طلبه
-          <br>
-          عند اشتراك أي طالب في أحد باقات اختبارات باستخدام الكود الخاص بك
-          <br>
-          سيحصل الطالب على خصم 10% وستحصل أنت على مكافأة 10% من قيمة الاشتراك
-        </div>
-      </div>
-
-      <!-- Student Stats Boxes -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 xl1200:grid-cols-3 2xl:grid-cols-4 gap-4 mb-6 justify-items-center">
-        <div
-          class="grid content-between bg-blue-d6 text-white rounded-[8px] px-[15px] py-[20px] shadow-custom h-[146px] w-full">
-          <p class="text-[16px] font-bold">عدد الطلاب</p>
-          <span class="text-[56px] leading-none font-bold">
-            {{ baseData?.studentsCount }}
+      <template>
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-[24px] font-bold text-blue-d6 dark:text-white">
+            لوحة المدرب
           </span>
-          <p class="text-[12px] font-medium">طلاب لم ينهوا تحديد المستوى</p>
         </div>
 
+        <!-- teacher code -->
         <div
-          class="bg-white dark:bg-dark-700 rounded-[8px] shadow-custom grid content-between px-[15px] py-[20px] h-[146px] w-full">
-          <p class="text-[16px] font-bold text-dark-2b dark:text-gray-300">
-            متوسط تحديد المستوى
-          </p>
-          <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
-            <span class="text-[56px]">{{ formatNumber(baseData?.levelRateAvg) }}</span>
+          class="rounded-[8px] bg-white   shadow-custom mb-[20px] flex items-center min-h-[105px] px-[47px] py-[10px] flex-wrap justify-between">
+          <div class="grid items-center justify-center justify-items-center flex-1/3">
+            <span class="text-[24px] font-bold text-purple-78">الكود الخاص بي</span>
+            <span class="text-[40px] font-bold text-red-5e">{{ baseData?.code }}</span>
           </div>
-          <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
-            background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)" :value="baseData?.levelRateAvg || 0" />
-          <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
-            للطلاب الذين أنهوا تحديد المستوى
-          </span>
-        </div>
-
-        <div
-          class="bg-white dark:bg-dark-700 rounded-[8px] shadow-custom grid content-between px-[15px] py-[20px] h-[146px] w-full">
-          <p class="text-[16px] font-bold text-dark-2b dark:text-gray-300">
-            متوسط الدرجات المتوقعة
-          </p>
-          <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
-            <span class="text-[56px]">{{ baseData?.predictedMarksAvg.toFixed(0) }}</span>
+          <div class="text-[16px] font-medium text-gray-63 text-right m-auto">
+            يستطيع الطالب الانضمام إلى مجموعتك من خلال إدخال هذا الكود في طلبه
+            <br>
+            عند اشتراك أي طالب في أحد باقات اختبارات باستخدام الكود الخاص بك
+            <br>
+            سيحصل الطالب على خصم 10% وستحصل أنت على مكافأة 10% من قيمة الاشتراك
           </div>
-          <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
-            background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)" :value="baseData?.predictedMarksAvg || 0" />
-          <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
-            للطلاب الذين أنهوا تحديد المستوى
-          </span>
         </div>
 
-        <div
-          class="bg-white dark:bg-dark-700 rounded-[8px] shadow-custom grid content-between px-[15px] py-[20px] h-[146px] w-full">
-          <p class="text-[16px] font-bold text-dark-2b dark:text-gray-300">
-            متوسط نسبة الالتزام
-          </p>
-          <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
-            <span class="text-[56px]">{{ formatNumber(baseData?.planAdherenceAvg) }}%</span>
+        <!-- Student Stats Boxes -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl1200:grid-cols-3 2xl:grid-cols-4 gap-4 mb-6 justify-items-center">
+          <div
+            class="grid content-between bg-blue-d6 text-white rounded-[8px] px-[15px] py-[20px] shadow-custom h-[146px] w-full">
+            <p class="text-[16px] font-bold">عدد الطلاب</p>
+            <span class="text-[56px] leading-none font-bold">
+              {{ baseData?.studentsCount }}
+            </span>
+            <p class="text-[12px] font-medium">طلاب لم ينهوا تحديد المستوى</p>
           </div>
-          <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
-            background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)" :value="baseData?.planAdherenceAvg || 0" />
-          <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
-            لجميع الطلاب
-          </span>
-        </div>
-      </div>
 
-      <!-- Filters & accepted Table -->
-      <div class="max-w-[100vw] overflow-x-auto" v-if="filteredStudents && filteredStudents.length>0">
-        <div class="rounded-[8px] shadow-custom px-[15px] py-[20px] grid gap-y-[20px] bg-white min-w-[1030px]">
-          <!-- Filters -->
-          <div :class="{ 'justify-self-start': windowSize.isMobileSize }"
-            class="flex flex-col md:flex-row items-center justify-between gap-[20px]">
-            <div class="flex items-center gap-2" :class="{ 'w-[500px]': windowSize.isMobileSize }">
-              <button v-for="(status, i) in statusFilters" :key="i" :class="[
-                'rounded-[20px] border font-medium text-sm w-[110px] h-[40px] flex items-center justify-center cursor-pointer',
-                selectedStatuses.includes(status.value)
-                  ? `bg-${status.color} text-white border-${status.color}`
-                  : `bg-transparent text-${status.color} border-${status.color}`,
-              ]" @click="toggleStatus(status.value)">
-                {{ status.label }}
-                <span v-if="status.count !== null" class="ml-1">
-                  ({{ status.count }})
-                </span>
-              </button>
+          <div
+            class="bg-white dark:bg-dark-700 rounded-[8px] shadow-custom grid content-between px-[15px] py-[20px] h-[146px] w-full">
+            <p class="text-[16px] font-bold text-dark-2b dark:text-gray-300">
+              متوسط تحديد المستوى
+            </p>
+            <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
+              <span class="text-[56px]">{{ formatNumber(baseData?.levelRateAvg) }}</span>
             </div>
-
-            <div class="flex items-center gap-2 w-[500px] md:w-auto">
-              <input v-model="search" type="text" placeholder="البحث باسم الطالب"
-                class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm w-full dark:bg-dark-700 dark:text-white" />
-
-              <select v-model="filterForm.sortBy"
-                class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm dark:bg-dark-700 dark:text-white"
-                @change="fetchData">
-                <option value="0">
-                  ترتيب حسب: التقييم (من الأعلى إلى الأقل)
-                </option>
-                <option value="1">ترتيب حسب: عدد الأسئلة</option>
-              </select>
-            </div>
+            <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
+              background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)" :value="baseData?.levelRateAvg || 0" />
+            <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
+              للطلاب الذين أنهوا تحديد المستوى
+            </span>
           </div>
 
-          <!-- Table -->
-
-          <div class="space-y-2">
-            <!-- Header -->
-            <div class="h-[70px] w-full flex items-center">
-              <div class="bg-[#F5F7FA] h-[100%] flex-[80%] grid items-center border border-[#BCCCDB] !border-l-0 
-                rounded-r-[8px] px-[15px] text-purple-78 text-[16px] font-bold grid-cols-[20%_16%_16%_16%_16%_16%]">
-                <div class="">اسم الطالب</div>
-                <div class="text-center">عدد الأسئلة</div>
-                <div class="text-center">
-                  الإجابات
-                  <br />
-                  <span class="font-medium text-[12px]">صحيحة | خاطئة</span>
-                </div>
-                <div class="text-center">مدة التدريب</div>
-                <div class="text-center">الباقة</div>
-                <div class="text-center">التقييم</div>
-              </div>
-              <div
-                class="bg-[#F5F7FA] h-[100%] flex flex-[20%] items-center border border-[#BCCCDB] !border-r-0 rounded-l-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
-                <div class="w-full text-center">إجراءات</div>
-              </div>
+          <div
+            class="bg-white dark:bg-dark-700 rounded-[8px] shadow-custom grid content-between px-[15px] py-[20px] h-[146px] w-full">
+            <p class="text-[16px] font-bold text-dark-2b dark:text-gray-300">
+              متوسط الدرجات المتوقعة
+            </p>
+            <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
+              <span class="text-[56px]">{{ baseData?.predictedMarksAvg.toFixed(0) }}</span>
             </div>
+            <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
+              background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)" :value="baseData?.predictedMarksAvg || 0" />
+            <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
+              للطلاب الذين أنهوا تحديد المستوى
+            </span>
+          </div>
 
-            <!-- Rows -->
-            <div v-for="(std, i) in filteredStudents" :key="i" :class="['h-[60px] flex items-center']">
-              <div
-                class="grid flex-[80%] h-[100%] items-center rounded-r-[8px] border border-[#BCCCDB] !border-l-0 px-[15px] grid-cols-[20%_16%_16%_16%_16%_16%]"
-                :class="[i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]']">
-                <div class="text-gray-63 font-medium">
-                  {{ std.fullName }}
-                </div>
-                <div class="text-center">{{ std.statistics.totalQuestionsCount }}</div>
-                <div class="text-center">
-                  <span class="text-green-8c font-bold text-[14px]">
-                    {{ std.statistics.correctQuestionsCount }}
+          <div
+            class="bg-white dark:bg-dark-700 rounded-[8px] shadow-custom grid content-between px-[15px] py-[20px] h-[146px] w-full">
+            <p class="text-[16px] font-bold text-dark-2b dark:text-gray-300">
+              متوسط نسبة الالتزام
+            </p>
+            <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
+              <span class="text-[56px]">{{ formatNumber(baseData?.planAdherenceAvg) }}%</span>
+            </div>
+            <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
+              background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)" :value="baseData?.planAdherenceAvg || 0" />
+            <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
+              لجميع الطلاب
+            </span>
+          </div>
+        </div>
+
+        <!-- Filters & accepted Table -->
+        <div class="max-w-[100vw] overflow-x-auto" v-if="filteredStudents && filteredStudents.length > 0">
+          <div class="rounded-[8px] shadow-custom px-[15px] py-[20px] grid gap-y-[20px] bg-white min-w-[1030px]">
+            <!-- Filters -->
+            <div :class="{ 'justify-self-start': windowSize.isMobileSize }"
+              class="flex flex-col md:flex-row items-center justify-between gap-[20px]">
+              <div class="flex items-center gap-2" :class="{ 'w-[500px]': windowSize.isMobileSize }">
+                <button v-for="(status, i) in statusFilters" :key="i" :class="[
+                  'rounded-[20px] border font-medium text-sm w-[110px] h-[40px] flex items-center justify-center cursor-pointer',
+                  selectedStatuses.includes(status.value)
+                    ? `bg-${status.color} text-white border-${status.color}`
+                    : `bg-transparent text-${status.color} border-${status.color}`,
+                ]" @click="toggleStatus(status.value)">
+                  {{ status.label }}
+                  <span v-if="status.count !== null" class="ml-1">
+                    ({{ status.count }})
                   </span>
-                  |
-                  <span class="text-red-5e font-bold text-[14px]">
-                    {{ std.statistics.wrongQuestionsCount }}
-                  </span>
-                </div>
-                <div class="text-center">
-                  {{ formatTime(std.statistics.trainingPeriod) }} ساعة
-                </div>
-                <div class="text-center">{{ std.statistics.subscriptionName }}</div>
-                <div class="text-center">
-
-                  <app-g-progress-bar v-if="std.statistics.showRate" :animated="true"
-                    :bgClass="`bg-${getRateColor(std.statistics.rate)}`" :value="std.statistics.rate"
-                    :showText="true" />
-                  <subs-only-block v-else />
-                </div>
-              </div>
-              <div
-                class="flex flex-[20%] h-[100%] items-center justify-center px-[15px] gap-x-[12px] rounded-l-[8px] border border-[#BCCCDB]"
-                :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
-                <button @click="toAnalytics(std.studentId)"
-                  class="border border-purple-78 rounded-[4px] w-[88px] h-[32px] flex items-center justify-center gap-x-[8px] text-purple-78 text-[14px] font-medium cursor-pointer">
-                  التفاصيل
-                  <i class="fa fa-chevron-left"></i>
                 </button>
-                <app-g-button @click="toWhatsApp(std.phoneNumber)" :disabled="!std.phoneNumber" width="32px" font-weight="normal" height="32px"
-                  text-size="14px" radius="4px" bg-class="bg-transparent" text-color="text-green-66"
-                  border-color="border-green-66" :border="true">
-                  <i  class="fab fa-whatsapp" aria-hidden="true"></i>
-                </app-g-button>
-                <app-g-button @click="toDeleteStd(std)" width="32px" height="32px" radius="4px" text-size="14px"
-                  bg-class="bg-transparent" text-color="text-red-5e" border-color="border-red-5e" :border="true">
-                  <i class="fa fa-times"></i>
-                </app-g-button>
+              </div>
+
+              <div class="flex items-center gap-2 w-[500px] md:w-auto">
+                <input v-model="search" type="text" placeholder="البحث باسم الطالب"
+                  class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm w-full dark:bg-dark-700 dark:text-white" />
+
+                <select v-model="filterForm.sortBy"
+                  class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm dark:bg-dark-700 dark:text-white"
+                  @change="fetchData">
+                  <option value="0">
+                    ترتيب حسب: التقييم (من الأعلى إلى الأقل)
+                  </option>
+                  <option value="1">ترتيب حسب: عدد الأسئلة</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Table -->
+
+            <div class="space-y-2">
+              <!-- Header -->
+              <div class="h-[70px] w-full flex items-center">
+                <div class="bg-[#F5F7FA] h-[100%] flex-[80%] grid items-center border border-[#BCCCDB] !border-l-0 
+                rounded-r-[8px] px-[15px] text-purple-78 text-[16px] font-bold grid-cols-[20%_16%_16%_16%_16%_16%]">
+                  <div class="">اسم الطالب</div>
+                  <div class="text-center">عدد الأسئلة</div>
+                  <div class="text-center">
+                    الإجابات
+                    <br />
+                    <span class="font-medium text-[12px]">صحيحة | خاطئة</span>
+                  </div>
+                  <div class="text-center">مدة التدريب</div>
+                  <div class="text-center">الباقة</div>
+                  <div class="text-center">التقييم</div>
+                </div>
+                <div
+                  class="bg-[#F5F7FA] h-[100%] flex flex-[20%] items-center border border-[#BCCCDB] !border-r-0 rounded-l-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
+                  <div class="w-full text-center">إجراءات</div>
+                </div>
+              </div>
+
+              <!-- Rows -->
+              <div v-for="(std, i) in filteredStudents" :key="i" :class="['h-[60px] flex items-center']">
+                <div
+                  class="grid flex-[80%] h-[100%] items-center rounded-r-[8px] border border-[#BCCCDB] !border-l-0 px-[15px] grid-cols-[20%_16%_16%_16%_16%_16%]"
+                  :class="[i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]']">
+                  <div class="text-gray-63 font-medium">
+                    {{ std.fullName }}
+                  </div>
+                  <div class="text-center">{{ std.statistics.totalQuestionsCount }}</div>
+                  <div class="text-center">
+                    <span class="text-green-8c font-bold text-[14px]">
+                      {{ std.statistics.correctQuestionsCount }}
+                    </span>
+                    |
+                    <span class="text-red-5e font-bold text-[14px]">
+                      {{ std.statistics.wrongQuestionsCount }}
+                    </span>
+                  </div>
+                  <div class="text-center">
+                    {{ formatTime(std.statistics.trainingPeriod) }} ساعة
+                  </div>
+                  <div class="text-center">{{ std.statistics.subscriptionName }}</div>
+                  <div class="text-center">
+
+                    <app-g-progress-bar v-if="std.statistics.showRate" :animated="true"
+                      :bgClass="`bg-${getRateColor(std.statistics.rate)}`" :value="std.statistics.rate"
+                      :showText="true" />
+                    <subs-only-block v-else />
+                  </div>
+                </div>
+                <div
+                  class="flex flex-[20%] h-[100%] items-center justify-center px-[15px] gap-x-[12px] rounded-l-[8px] border border-[#BCCCDB]"
+                  :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
+                  <button @click="toAnalytics(std.studentId)"
+                    class="border border-purple-78 rounded-[4px] w-[88px] h-[32px] flex items-center justify-center gap-x-[8px] text-purple-78 text-[14px] font-medium cursor-pointer">
+                    التفاصيل
+                    <i class="fa fa-chevron-left"></i>
+                  </button>
+                  <app-g-button @click="toWhatsApp(std.phoneNumber)" :disabled="!std.phoneNumber" width="32px"
+                    font-weight="normal" height="32px" text-size="14px" radius="4px" bg-class="bg-transparent"
+                    text-color="text-green-66" border-color="border-green-66" :border="true">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                  </app-g-button>
+                  <app-g-button @click="toDeleteStd(std)" width="32px" height="32px" radius="4px" text-size="14px"
+                    bg-class="bg-transparent" text-color="text-red-5e" border-color="border-red-5e" :border="true">
+                    <i class="fa fa-times"></i>
+                  </app-g-button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- refuses students table -->
-      <div class="mt-5 flex flex-col gap-5" v-if="pendingStudents && pendingStudents.length>0">
-        <accordion-group>
-          <disclosure-group :defaultOpen="true" :onlyOneOpen="false">
-            <template #right>
-              <span class="text-[18px] font-bold text-orange-39">
-                طلاب بانتظار الموافقة
-                ({{ pendingStudents?.length }})
-              </span>
-            </template>
+        <!-- refuses students table -->
+        <div class="mt-5 flex flex-col gap-5" v-if="pendingStudents && pendingStudents.length > 0">
+          <accordion-group>
+            <disclosure-group :defaultOpen="true" :onlyOneOpen="false">
+              <template #right>
+                <span class="text-[18px] font-bold text-orange-39">
+                  طلاب بانتظار الموافقة
+                  ({{ pendingStudents?.length }})
+                </span>
+              </template>
 
-            <div class="max-w-[100vw] overflow-x-auto custom-scroll">
-              <div class="space-y-2 min-w-[1020px]">
-                <!-- Header -->
-                <div class="h-[70px] w-full flex items-center">
-                  <div class="bg-[#F5F7FA] h-[100%] flex-[80%] grid items-center border border-[#BCCCDB] !border-l-0 
+              <div class="max-w-[100vw] overflow-x-auto custom-scroll">
+                <div class="space-y-2 min-w-[1020px]">
+                  <!-- Header -->
+                  <div class="h-[70px] w-full flex items-center">
+                    <div class="bg-[#F5F7FA] h-[100%] flex-[80%] grid items-center border border-[#BCCCDB] !border-l-0 
                 rounded-r-[8px] px-[15px] text-purple-78 text-[16px] font-bold grid-cols-[20%_16%_16%_16%_16%_16%]">
-                    <div class="">اسم الطالب</div>
-                    <div class="text-center">عدد الأسئلة</div>
-                    <div class="text-center">
-                      الإجابات
-                      <br />
-                      <span class="font-medium text-[12px]">صحيحة | خاطئة</span>
+                      <div class="">اسم الطالب</div>
+                      <div class="text-center">عدد الأسئلة</div>
+                      <div class="text-center">
+                        الإجابات
+                        <br />
+                        <span class="font-medium text-[12px]">صحيحة | خاطئة</span>
+                      </div>
+                      <div class="text-center">مدة التدريب</div>
+                      <div class="text-center">الباقة</div>
+                      <div class="text-center">التقييم</div>
                     </div>
-                    <div class="text-center">مدة التدريب</div>
-                    <div class="text-center">الباقة</div>
-                    <div class="text-center">التقييم</div>
+                    <div
+                      class="bg-[#F5F7FA] h-[100%] flex flex-[20%] items-center border border-[#BCCCDB] !border-r-0 rounded-l-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
+                      <div class="w-full text-center">إجراءات</div>
+                    </div>
                   </div>
-                  <div
-                    class="bg-[#F5F7FA] h-[100%] flex flex-[20%] items-center border border-[#BCCCDB] !border-r-0 rounded-l-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
-                    <div class="w-full text-center">إجراءات</div>
-                  </div>
-                </div>
 
-                <!-- Rows -->
-                <div v-for="(std, i) in pendingStudents" :key="i" :class="['h-[60px] flex items-center']">
-                  <div
-                    class="grid flex-[80%] h-[100%] items-center rounded-r-[8px] border border-[#BCCCDB] !border-l-0 px-[15px] grid-cols-[20%_16%_16%_16%_16%_16%]"
-                    :class="[i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]']">
-                    <div class="text-gray-63 font-medium">
-                      {{ std.fullName }}
-                    </div>
-                    <div class="text-center">{{ std.statistics.totalQuestionsCount }}</div>
-                    <div class="text-center">
-                      <span class="text-green-8c font-bold text-[14px]">
-                        {{ std.statistics.correctQuestionsCount }}
-                      </span>
-                      |
-                      <span class="text-red-5e font-bold text-[14px]">
-                        {{ std.statistics.wrongQuestionsCount }}
-                      </span>
-                    </div>
-                    <div class="text-center">
-                      {{ formatTime(std.statistics.trainingPeriod) }} ساعة
-                    </div>
-                    <div class="text-center">{{ std.statistics.subscriptionName }}</div>
-                    <div class="text-center">
+                  <!-- Rows -->
+                  <div v-for="(std, i) in pendingStudents" :key="i" :class="['h-[60px] flex items-center']">
+                    <div
+                      class="grid flex-[80%] h-[100%] items-center rounded-r-[8px] border border-[#BCCCDB] !border-l-0 px-[15px] grid-cols-[20%_16%_16%_16%_16%_16%]"
+                      :class="[i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]']">
+                      <div class="text-gray-63 font-medium">
+                        {{ std.fullName }}
+                      </div>
+                      <div class="text-center">{{ std.statistics.totalQuestionsCount }}</div>
+                      <div class="text-center">
+                        <span class="text-green-8c font-bold text-[14px]">
+                          {{ std.statistics.correctQuestionsCount }}
+                        </span>
+                        |
+                        <span class="text-red-5e font-bold text-[14px]">
+                          {{ std.statistics.wrongQuestionsCount }}
+                        </span>
+                      </div>
+                      <div class="text-center">
+                        {{ formatTime(std.statistics.trainingPeriod) }} ساعة
+                      </div>
+                      <div class="text-center">{{ std.statistics.subscriptionName }}</div>
+                      <div class="text-center">
 
-                      <app-g-progress-bar v-if="std.statistics.showRate" :animated="true"
-                        :bgClass="`bg-${getRateColor(std.statistics.rate)}`" :value="std.statistics.rate"
-                        :showText="true" />
-                      <subs-only-block v-else />
+                        <app-g-progress-bar v-if="std.statistics.showRate" :animated="true"
+                          :bgClass="`bg-${getRateColor(std.statistics.rate)}`" :value="std.statistics.rate"
+                          :showText="true" />
+                        <subs-only-block v-else />
+                      </div>
                     </div>
-                  </div>
-                  <div
-                    class="flex flex-[20%] h-[100%] items-center justify-center px-[15px] gap-x-[12px] rounded-l-[8px] border border-[#BCCCDB]"
-                    :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
-                    <button @click="acceptStd(std.id)"
-                      class="border border-purple-78 rounded-[4px] w-[88px] h-[32px] flex items-center justify-center gap-x-[8px] text-purple-78 text-[14px] font-medium cursor-pointer">
-                      قبول
-                    </button>
-                    <app-g-button @click="toWhatsApp(std.phoneNumber)"  :disabled="!std.phoneNumber" width="32px" font-weight="normal" height="32px" text-size="14px" radius="4px"
-                      bg-class="bg-transparent" text-color="text-green-66" border-color="border-green-66"
-                      :border="true">
-                      <i class="fab fa-whatsapp" aria-hidden="true"></i>
-                    </app-g-button>
-                    <app-g-button @click="toDeleteStd(std)" width="32px" height="32px" radius="4px" text-size="14px" bg-class="bg-transparent"
-                      text-color="text-red-5e" border-color="border-red-5e" :border="true">
-                      <i class="fa fa-times"></i>
-                    </app-g-button>
+                    <div
+                      class="flex flex-[20%] h-[100%] items-center justify-center px-[15px] gap-x-[12px] rounded-l-[8px] border border-[#BCCCDB]"
+                      :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
+                      <button @click="acceptStd(std.id)"
+                        class="border border-purple-78 rounded-[4px] w-[88px] h-[32px] flex items-center justify-center gap-x-[8px] text-purple-78 text-[14px] font-medium cursor-pointer">
+                        قبول
+                      </button>
+                      <app-g-button @click="toWhatsApp(std.phoneNumber)" :disabled="!std.phoneNumber" width="32px"
+                        font-weight="normal" height="32px" text-size="14px" radius="4px" bg-class="bg-transparent"
+                        text-color="text-green-66" border-color="border-green-66" :border="true">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                      </app-g-button>
+                      <app-g-button @click="toDeleteStd(std)" width="32px" height="32px" radius="4px" text-size="14px"
+                        bg-class="bg-transparent" text-color="text-red-5e" border-color="border-red-5e" :border="true">
+                        <i class="fa fa-times"></i>
+                      </app-g-button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </disclosure-group>
-        </accordion-group>
-      </div>
+            </disclosure-group>
+          </accordion-group>
+        </div>
 
-      <delete-modal v-model:isOpen="isOpenDeleteModal" :isReject="false"
-                  :msg="deleteMsg" 
-                   @onConfirm="confirmDeleteStd" />
+        <delete-modal v-model:isOpen="isOpenDeleteModal" :isReject="false" :msg="deleteMsg"
+          @onConfirm="confirmDeleteStd" />
 
-    </template>
+      </template>
+
+    </app-data-wrapper>
     <!-- <div v-else class="h-[75vh] flex items-center justify-center text-[50px] font-bold text-red-5e">لا يوجد بيانات</div> -->
   </user-panel-wrapper>
 </template>
@@ -335,18 +337,18 @@ const toAnalytics = (studentId) => {
   router.push(RouteHelper.studentAnalyticsForTeacher(studentId))
 }
 
-function toDeleteStd(std:TPstudent){
-  stdToDelete.value  = std
+function toDeleteStd(std: TPstudent) {
+  stdToDelete.value = std
   isOpenDeleteModal.value = true
 }
 
-const deleteMsg = computed(()=>{
+const deleteMsg = computed(() => {
   const stdName = stdToDelete.value?.fullName
   const label = 'حذف الطالب :' + stdName
   return label
 })
 
-const confirmDeleteStd = async ()=> {
+const confirmDeleteStd = async () => {
   try {
     const res = await panelStore.deleteStudentFromTeacherDashboard(stdToDelete.value?.id)
     if (res) {
@@ -364,9 +366,9 @@ const confirmDeleteStd = async ()=> {
 }
 
 
-const acceptStd = async (stdId)=> {
+const acceptStd = async (stdId) => {
   try {
-    const res = await panelStore.acceptStudentInTeacherDashboard(stdId,1)
+    const res = await panelStore.acceptStudentInTeacherDashboard(stdId, 1)
     if (res) {
       toast.showSuccess({ summary: 'تم قبول الطالب بنجاح' })
       return

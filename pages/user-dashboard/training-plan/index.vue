@@ -8,10 +8,8 @@
     pageName="خطتي التدريبية"
   >
     <div class="training-plan-page">
-      <template v-if="loadingPage">
-        <app-loading-spinner :showSpinner="true" />
-      </template>
-      <template v-else>
+      <app-data-wrapper :loading="loadingPage" :data="info && detail" loading-type="spinner-overlay"
+      empty-text="لا توجد بيانات متاحة">
         <template v-if="info && detail">
           <h1
             v-if="windowSize.isDesktop"
@@ -383,7 +381,7 @@
             </section>
           </div>
         </template>
-      </template>
+      </app-data-wrapper>
     </div>
   </user-panel-wrapper>
 </template>

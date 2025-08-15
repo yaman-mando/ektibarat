@@ -20,14 +20,6 @@
 
     <div class="prepare-co space-y-10">
       <exams-panel :key="examPanelKey" />
-      <!--      <app-loading-spinner-->
-      <!--        v-if="userPanelStore.fetching.lessonsCategories"-->
-      <!--        text="جاري تحميل البيانات..."-->
-      <!--        :showText="false"-->
-      <!--        :showSpinner="false"-->
-      <!--        :showSkeleton="true"-->
-      <!--        :skeletonCount="16"-->
-      <!--      />-->
     </div>
   </user-panel-wrapper>
 </template>

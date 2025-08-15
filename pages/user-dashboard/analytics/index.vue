@@ -257,7 +257,8 @@
 
           <!-- For unsubscribed user -->
           <img @click="toPricesPage()" class=" cursor-pointer w-full h-full"
-            v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" src="/images/png/analysisChartNotSub.png"
+            v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" 
+            src="/images/png/analysisChartNotSub.png"
             alt="" />
 
           <!-- <div v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe"
@@ -568,7 +569,7 @@ const chartPeriodList = [
 const tablePeriodList = [
   { id: 0, label: 'كامل المدة' },
   { id: 1, label: 'اليوم' },
-  { id: 2, label: 'البارحة' },
+  { id: 2, label: 'الأمس' },
   { id: 3, label: 'الشهر الماضي' },
   { id: 4, label: '3 اشهر الماضية' },
   { id: 5, label: '6 اشهر الماضية' },
