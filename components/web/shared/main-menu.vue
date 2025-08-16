@@ -109,7 +109,7 @@
                           item.id === userPanelItems.teacherPanel,
                       },
                     ]"
-                    @click="goPanelPart(item.id)"
+                    @click="goToLink(item.id)"
                   >
                     <img
                       width="20"
@@ -312,7 +312,7 @@
                             item.id === userPanelItems.teacherPanel,
                         },
                       ]"
-                      @click="goPanelPart(item.id)"
+                      @click="goToLink(item.id)"
                     >
                       <img
                         width="20"
@@ -567,10 +567,20 @@ const activeList = ref<string | number | null>(null);
 const notificationCount = computed(() => {
   return 0;
 });
+
+
+const validSections: any = [
+  {id:1,link:'/user-dashboard/personal-setting'},
+  {id:3,link:'/user-dashboard/analytics'},
+  {id:5,link:'/user-dashboard/personal-setting?section=subscriptions'},
+  {id:7,link:'/user-dashboard/personal-setting?section=support'},
+  {id:9,link:'/user-dashboard/school'},
+  {id:10,link:'/user-dashboard/teacher'},
+  ];
+
 const listItemModel = computed<MenuItemUi[]>(() => [
   { id: 1, label: 'معلوماتي', icon: 'info' },
   { id: 3, label: 'التحليلات', icon: 'analytics' },
-  { id: 2, label: 'محاكي الاختبار', icon: 'exams' },
   {
     id: 5,
     label: 'الاشتراكات',
@@ -716,6 +726,12 @@ const hideSubMenu = () => {
     activeSub.value = null;
   }, 100);
 };
+
+const goToLink = (key) =>{
+  const link = validSections.filter(k=>k.id === key)[0].link
+  router.push(link);
+  hideList();
+}
 
 const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
   router.push({
