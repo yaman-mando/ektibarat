@@ -1625,7 +1625,8 @@ export default {
 
     .s1-info {
       display: grid;
-      grid-template-columns: 64.21% 31.17%;
+      grid-template-columns: 1fr;
+      grid-row-gap: 15px;
       column-gap: 4.61%;
       align-items: center;
       margin-top: 21px;
