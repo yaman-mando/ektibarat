@@ -32,7 +32,7 @@
           <div :class="windowSize.isDesktop ? 'space-y-[15px]' : 'space-y-[20px]'">
             <template v-for="(group, index) in lessonGroups" :key="index">
               <div v-if="group.length === 1">
-                <lesson-card :lesson="group[0]" :status="getStatus(group[0])" />
+                <lesson-card :key="index" :lesson="group[0]" :status="getStatus(group[0])" />
               </div>
               <div v-else class="flex flex-wrap gap-[15px]">
                 <lesson-card v-for="lesson in group" :key="lesson.id" :lesson="lesson" :status="getStatus(lesson)"

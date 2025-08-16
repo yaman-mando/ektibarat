@@ -1,7 +1,7 @@
 <!-- LessonCard.vue -->
 <template>
-    <div class="rounded-[8px] cursor-pointer p-[15px_17px] flex items-center justify-between h-[70px] border-[1px]"
-        @click="onCardClick" :class="cardClass">
+    <div class="rounded-[8px] p-[15px_17px] flex items-center justify-between h-[70px] border-[1px]"
+        @click="!showSpinner ? onCardClick() : {}" :class="[cardClass, showSpinner ? 'cursor-default' : 'cursor-pointer']">
         <div class="flex items-center gap-x-[10px]">
             <span v-if="status === 'completed'"
                 class="flex items-center justify-center w-9 h-9 rounded-full bg-white text-green-8c text-[22px]">
@@ -35,7 +35,8 @@
             </span>
             <div class="grid">
                 <span :class="textClass">{{ titleText }}</span>
-                <span v-if="lesson.periodTime" class="flex items-center gap-[4px] text-[16px] font-medium text-gray-8f">
+                <span v-if="lesson.periodTime && lesson.type === 1"
+                    class="flex items-center gap-[4px] text-[16px] font-medium text-gray-8f">
                     المدة:
                     {{ lesson.periodTime }}
                 </span>
@@ -45,7 +46,7 @@
         <!-- subscribe modal -->
         <SubscribeModal v-if="showSubscribeModal" @update:show="($event) => { showSubscribeModal = $event }"
             :show="showSubscribeModal" />
-
+        <AppSpinner v-if="showSpinner" />
         <ConfirmDialog v-model:visible="showConfirmTraining" :title="'تأكيد'"
             :message="'سوف تبدأ بالتدريب هل أنت موافق؟'" :confirmText="'نعم'" :cancelText="'لا'"
             :onConfirm="() => { handleExamClick(props.lesson.examId ?? 0) }" />
@@ -71,6 +72,7 @@ const props = defineProps<{
 
 const showSubscribeModal = ref(false)
 const showConfirmTraining = ref(false)
+const showSpinner = ref(false)
 const selectedExamId = ref(null)
 
 const cardClass = computed(() => {
@@ -126,12 +128,19 @@ function onCardClick() {
 }
 
 const handleExamClick = async (examId: string | number) => {
-    const { data } = await $axios.post('/studentsExam', {
-        examId: examId,
-        willDo: true,
-    });
-    if (data.id) {
-        await router.push(`/student/training/${data.id}`);
+    try {
+        showSpinner.value = true
+        const { data } = await $axios.post('/studentsExam', {
+            examId: examId,
+            willDo: true,
+        });
+        if (data.id) {
+            await router.push(`/student/training/${data.id}`);
+        }
+        showSpinner.value = false
+    }
+    catch (e) {
+        showSpinner.value = false
     }
 
 }
@@ -149,6 +158,7 @@ function downloadAttachments(files: string[]) {
 
 async function triggerDownload(url: string, filename: string) {
     try {
+        showSpinner.value = true
         const response = await fetch(url)
         const blob = await response.blob()
 
@@ -163,12 +173,15 @@ async function triggerDownload(url: string, filename: string) {
 
         document.body.removeChild(link)
         URL.revokeObjectURL(objectUrl)
+        showSpinner.value = false
     } catch (err) {
+        showSpinner.value = false
         console.error("خطأ أثناء تنزيل الملف:", err)
     }
 }
 
 async function downloadMultipleAsZip(files: string[]) {
+    showSpinner.value = true
     const zip = new JSZip()
     const folder = zip.folder("attachments")
 
@@ -181,6 +194,7 @@ async function downloadMultipleAsZip(files: string[]) {
 
     const content = await zip.generateAsync({ type: "blob" })
     saveAs(content, "attachments.zip")
+    showSpinner.value = false
 }
 
 function formatTime(seconds: number) {
