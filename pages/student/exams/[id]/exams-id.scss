@@ -3,6 +3,58 @@
 .student-exam-details {
   position: relative;
 
+  .st-h {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0;
+    @include web-desktop-up() {
+      padding: 25px 0;
+    }
+
+    > img {
+      width: 55px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      @include web-desktop-up() {
+        width: 160px;
+        height: 50px;
+      }
+    }
+
+    .e-bu {
+      justify-self: flex-end;
+      height: 40px !important;
+      width: 90px !important;
+      border-width: 1px !important;
+      background-color: transparent;
+      border-radius: 100px !important;
+      justify-content: flex-start !important;
+      @include web-desktop-up() {
+        width: 160px !important;
+        border-radius: 20px !important;
+      }
+      img {
+        padding-inline-start: 10px;
+        padding-inline-end: 5px;
+        @include web-desktop-up() {
+          padding-inline-end: 15px;
+        }
+      }
+      .app-button-icon {
+        font-size: 20px;
+      }
+      .app-button-label {
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+  }
+
   .sc-container {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

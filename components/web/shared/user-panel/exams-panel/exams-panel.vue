@@ -541,7 +541,7 @@
     </div>
     <div
       class="pa-fo"
-      :style="{ width: usContentWidth }"
+      :style="{ width: footerActionWidth }"
     >
       <div class="pa-fo-wrapper">
         <div class="pa-fo__st">
@@ -556,7 +556,6 @@
         </div>
         <div class="pa-fo__en">
           <app-button
-            v-if="!isExams"
             :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"
             :label="texts.btnText"
             colorType="blue"
@@ -778,12 +777,17 @@ export default {
       }
     });
 
+    const footerActionWidth = computed(() =>
+      usContentWidth.value === '0px' ? '100%' : usContentWidth.value
+    );
+
     const cssVars = computed(() => {
       return {
         '--us-content-width': usContentWidth.value,
       };
     });
     return {
+      footerActionWidth,
       usContentWidth,
       cssVars,
       questionCountOptions,

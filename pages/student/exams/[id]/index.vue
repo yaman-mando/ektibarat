@@ -8,28 +8,33 @@
       </template>
       <template v-else>
         <div class="sc-container">
-          <div v-if="isDev">
-            <lazy-app-button
-              size="sm"
-              label="end"
-              @click="confirmEndExam"
+          <app-overlay v-if="loadingPage" />
+
+          <div class="st-h w-container">
+            <div></div>
+            <img
+              alt="Ekhtibarat logo"
+              :src="
+                windowSize.isMobileSize
+                  ? '/images/EkhtibaratCup.png'
+                  : '/images/EkhtibaratLogoColor.webp'
+              "
             />
+            <app-button
+              class="e-bu"
+              :label="windowSize.isMobileSize ? 'خروج' : 'إنهاء الاختبار'"
+              variant="outline"
+              @click="confirmEndExam"
+            >
+              <template #iconStart>
+                <img
+                  alt="icon"
+                  src="/images/icons/arrow-right-from-bracket.svg"
+                />
+              </template>
+            </app-button>
           </div>
-          <!--      <div-->
-          <!--        v-if="$isDev"-->
-          <!--        class="flex flex-col"-->
-          <!--      >-->
-          <!--        <span>exam : {{ examInterval.currentTime }}</span>-->
-          <!--        <span v-if="examPartsInterval[activePartModel.id]">-->
-          <!--          active part : {{ examPartsInterval[activePartModel.id].currentTime }}-->
-          <!--        </span>-->
-          <!--        <span v-if="examQuestionsInterval[activeQuestionModel.id]">-->
-          <!--          active question :-->
-          <!--          {{ examQuestionsInterval[activeQuestionModel.id].currentTime }}-->
-          <!--        </span>-->
-          <!--      </div>-->
-          <lazy-app-overlay v-if="loadingPage" />
-          <div class="s-hero">
+          <div class="s-hero w-container">
             <div
               v-if="!!examDetail?.examParts && !!examDetail.examParts.length"
               class="s-end"

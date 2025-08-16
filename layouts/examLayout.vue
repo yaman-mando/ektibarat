@@ -3,19 +3,7 @@
     id="exam-layout"
     class="exam-layout"
   >
-    <div class="app-nuxt">
-      <div class="wrapper">
-        <div class="main-section">
-          <lazy-main-menu />
-          <div class="scroll-page">
-            <div class="page-contents">
-              <slot></slot>
-            </div>
-            <lazy-main-footer />
-          </div>
-        </div>
-      </div>
-    </div>
+    <slot></slot>
     <client-only>
       <lazy-surveys-modal ref="modal_surveys_ref" />
     </client-only>
@@ -24,36 +12,35 @@
 <script setup lang="ts">
 import { useStore } from 'vuex';
 
-
 const store = useStore();
 const modalSurveysRef = useTemplateRef('modal_surveys_ref');
-const openModalTimeoutId = ref<any>(null)
+const openModalTimeoutId = ref<any>(null);
 
-const openSurveysModal = ()=> {
+const openSurveysModal = () => {
   if (import.meta.client) {
-    modalSurveysRef.value?.showModal()
+    modalSurveysRef.value?.showModal();
   }
-}
+};
 
-const selectedSurveys = computed(() => store.state.selectedSurveys)
+const selectedSurveys = computed(() => store.state.selectedSurveys);
 
-watch(()=>
-  selectedSurveys,
+watch(
+  () => selectedSurveys,
   (newVal) => {
     if (openModalTimeoutId.value) {
-      clearTimeout(openModalTimeoutId.value)
-      openModalTimeoutId.value = null
+      clearTimeout(openModalTimeoutId.value);
+      openModalTimeoutId.value = null;
     }
 
-    if (!newVal) return
-    const waitTime = (newVal.value?.timeInitialize || 0) * 1000
+    if (!newVal) return;
+    const waitTime = (newVal.value?.timeInitialize || 0) * 1000;
     openModalTimeoutId.value = setTimeout(() => {
-      openSurveysModal()
-      openModalTimeoutId.value = null
-    }, waitTime)
+      openSurveysModal();
+      openModalTimeoutId.value = null;
+    }, waitTime);
   },
-  { immediate: true,deep:true }
-)
+  { immediate: true, deep: true }
+);
 
 //meta
 useHead({
@@ -135,7 +122,7 @@ html {
     &.correct-answer,
     &.wrong-answer,
     &.active {
-      border-width: 3px !important;
+      border-width: 1px !important;
     }
   }
 }

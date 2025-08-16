@@ -387,10 +387,10 @@ watch(
       align-items: center;
       justify-content: center;
       position: relative;
-      min-height: 80px;
+      min-height: 50px;
       width: 100%;
       @include web-desktop-up() {
-        min-height: 80px;
+        min-height: 70px;
       }
     }
   }
@@ -403,11 +403,11 @@ watch(
     }
     &.correct-answer {
       border-color: var(--green-8c);
-      border-width: 2px;
+      border-width: 1px;
     }
     &.wrong-answer {
       border-color: var(--red-63);
-      border-width: 2px;
+      border-width: 1px;
     }
 
     &.active {
@@ -472,9 +472,10 @@ watch(
     }
 
     &.active {
+      color: var(--purple-af);
       border-color: var(--purple-af);
-      border-width: 2px;
-      //box-shadow: 0 0 0 2px var(--purple-af);
+      border-width: 1px;
+      background-color: #f8f3ff;
     }
 
     .media-wrapper {
