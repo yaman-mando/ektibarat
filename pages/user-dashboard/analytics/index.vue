@@ -971,7 +971,7 @@ function fetchDefaultChartData() {
 }
 
 async function fetchStudentAnalyzeChart() {
-  if (userData.value.planSubscribed === planSubscribedEnum.notSubscribe) {
+  if (!isSubscribe) {
     fetchDefaultChartData()
     return
   }

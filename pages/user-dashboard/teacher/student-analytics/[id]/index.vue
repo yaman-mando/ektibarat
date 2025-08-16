@@ -542,8 +542,6 @@ import { RouteHelper } from '~/main/utils/route-helper';
 import { useUserPanelStore } from '~/store/user-panel';
 import type { analyzeStudentCategory, analyzeStudentCategoryForTable } from '~/main/modules/user-panel/data-access/user-panel.model';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
-import { UserRoles } from '~/core/auth/constants/user-roles';
-import { planSubscribedEnum } from '~/main/constants/global.enums';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 
 const apexChartService = useApexChartService();
@@ -970,7 +968,7 @@ function fetchDefaultChartData() {
 }
 
 async function fetchStudentAnalyzeChart() {
-  if (userData.value.planSubscribed === planSubscribedEnum.notSubscribe) {
+  if (!isSubscribe) {
     fetchDefaultChartData()
     return
   }

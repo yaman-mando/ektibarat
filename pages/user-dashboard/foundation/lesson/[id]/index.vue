@@ -58,8 +58,13 @@ import { useUserPanelStore } from '~/store/user-panel';
 import type { lessonObj } from '~/main/modules/user-panel/data-access/user-panel.model';
 import { definePageMeta } from '#imports';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
-import { planSubscribedEnum } from '~/main/constants/global.enums';
+import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
+
 const windowSize = useWindowSize();
+const subscriptionsStore = useSubscriptionsStore();
+const isSubscribe = computed(()=> {
+   return subscriptionsStore.state.userCurrentSubVal?.freeType === null
+})
 
 // const data = {
 //   id: 3,
@@ -180,7 +185,7 @@ function getStatus(lesson: lessonObj) {
   if (lesson.isWatched) return 'completed';
   if (index === firstLocked) return 'next';
   if (lesson.isFree) return 'open'
-  return userData.value.planSubscribed === planSubscribedEnum.subscribed ? 'open' : 'locked';
+  return isSubscribe ? 'open' : 'locked';
 }
 
 const toFoundation = () => {
