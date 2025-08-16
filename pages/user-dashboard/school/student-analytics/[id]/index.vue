@@ -67,7 +67,7 @@
           <div
             class="h-[160px] bg-white shadow-custom rounded-[8px] px-[15px] pt-[15px] pb-[7px] grid justify-items-center relative">
             <app-overlay msg="جاري جلب البيانات ..."
-              v-if="(!stdAnlyzeData?.analayzeStudentCategories && panelStore.fetching.studentAnalyze) && userData.planSubscribed !== planSubscribedEnum.notSubscribe" />
+              v-if="(!stdAnlyzeData?.analayzeStudentCategories && panelStore.fetching.studentAnalyze) && isSubscribe" />
             <div class="absolute right-[15px] top-[20px]">
               <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_608_900)">
@@ -108,7 +108,7 @@
               الحقيقي</span>
 
             <!-- for unsubscribe user -->
-            <div v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" @click="openSubscribeModal()"
+            <div v-if="!isSubscribe" @click="openSubscribeModal()"
               class="absolute bottom-[7px] px-[15px] w-full min-w-[300px] h-[76px] z-50 flex items-center justify-center backdrop-blur-[16px] cursor-pointer">
               <button
                 class="flex items-center justify-center gap-x-[10px] w-full h-[76px] px-6 border border-purple-e0 rounded-[8px] bg-transparent backdrop-blur-[16px] cursor-pointer">
@@ -148,7 +148,7 @@
           <!-- plane square -->
           <div class="min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid relative">
             <!-- not subscribe -->
-            <no-sub-plane v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" />
+            <no-sub-plane v-if="isSubscribe" />
 
             <template v-else>
               <app-overlay msg="جاري جلب بيانات الخطة ..." v-if="panelStore.fetching.studentPlanInfo" />
@@ -262,15 +262,15 @@
         </div>
 
         <!-- analytics info left part - chart filter -->
-        <div :class="userData.planSubscribed === planSubscribedEnum.notSubscribe ? 'p-0' : 'p-4'"
+        <div :class="!isSubscribe ? 'p-0' : 'p-4'"
           class="w-full flex-2/3 2xl:min-w-[710px] h-auto bg-white shadow-md rounded-lg relative">
           <!-- Overlay -->
           <app-overlay msg="جاري جلب بيانات المخطط ..."
-            v-if="panelStore.fetching.studentAnalyzeChart && userData.planSubscribed !== planSubscribedEnum.notSubscribe" />
+            v-if="panelStore.fetching.studentAnalyzeChart && isSubscribe" />
 
           <!-- For unsubscribed user -->
           <img @click="toPricesPage()" class=" cursor-pointer w-full h-full"
-            v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" src="/images/png/analysisChartNotSub.png"
+            v-if="!isSubscribe" src="/images/png/analysisChartNotSub.png"
             alt="" />
 
           <!-- <div v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe"
@@ -547,6 +547,7 @@ import type { analyzeStudentCategory, analyzeStudentCategoryForTable } from '~/m
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { UserRoles } from '~/core/auth/constants/user-roles';
 import { planSubscribedEnum } from '~/main/constants/global.enums';
+import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 
 const apexChartService = useApexChartService();
 const route = useRoute()
@@ -556,6 +557,11 @@ const windowsSize = useWindowSize()
 const { data } = useAuth()
 
 const userData = computed(() => data.value as UserInfoDataModel);
+
+const subscriptionsStore = useSubscriptionsStore();
+const isSubscribe = computed(()=> {
+   return subscriptionsStore.state.userCurrentSubVal?.freeType === null
+})
 
 const chartKey = Symbol();
 const studentId = Number(route.params.id)

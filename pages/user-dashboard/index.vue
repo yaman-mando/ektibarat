@@ -29,7 +29,7 @@
                     </div>
 
                     <!-- نسبة الأداء -->
-                    <app-circule-progress-bar :isLock="userData.planSubscribed === planSubscribedEnum.notSubscribe"
+                    <app-circule-progress-bar :isLock="!isSubscribe"
                         :percentage="analyzeInfo?.studentRate ?? 0" :gradientColors="['#58CC02', '#4E9818']"
                         :strokeWidth="9" :textSize="16" textClass="text-blue-d6" />
 
@@ -78,7 +78,7 @@
             <!-- مربع التقدم بالخطة -->
             <div class="flex-1/3 min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid relative">
                 <!-- not subscribe -->
-                <no-sub-plane v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe" />
+                <no-sub-plane v-if="!isSubscribe" />
                 <template v-else>
                     <app-overlay msg="جاري جلب بيانات الخطة ..." v-if="panelStore.fetching.planInfoSimple" />
                     <!-- First line -->
@@ -190,6 +190,7 @@ import { planSubscribedEnum } from '~/main/constants/global.enums';
 import { RouteHelper } from '~/main/utils/route-helper';
 import { webUserTrainWithUs } from '~/main/utils/web-routes.utils';
 import { UserRoles } from '~/core/auth/constants/user-roles';
+import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 
 const panelStore = useUserPanelStore();
 const { data } = useAuth();
@@ -199,6 +200,11 @@ panelStore.getBlogs();
 panelStore.getHomeSlides();
 panelStore.getSimpleTrainingAnalyze();
 panelStore.getSimplePlansInfo();
+
+const subscriptionsStore = useSubscriptionsStore();
+const isSubscribe = computed(()=> {
+   return subscriptionsStore.state.userCurrentSubVal?.freeType === null
+})
 
 const userData = computed(() => data.value as UserInfoDataModel);
 const blogs = computed(() => panelStore.blogs);
