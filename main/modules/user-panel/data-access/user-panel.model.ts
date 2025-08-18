@@ -84,7 +84,7 @@ export type stepCategoryInfo = {
   categoryId: number | null;
   categoryName: string | null;
   numberQuestion: number;
-  numberQuestionComplte: number;
+  numberQuestionComplete: number;
   time: number;
   isWrong: boolean;
 }

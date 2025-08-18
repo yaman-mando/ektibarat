@@ -63,7 +63,7 @@
             <div class="flex items-center justify-between mt-[10px] !p-[0px_12px]">
               <div class="grid justify-items-center gap-y-[6px]">
                 <span class="text-[16px] text-purple-78 font-bold">عدد الأسئلة</span>
-                <span class="text-[16px] text-gray-63 text-center">{{ step.categoryInfo.numberQuestion }}</span>
+                <span class="text-[16px] text-gray-63 text-center">{{ step.categoryInfo.numberQuestion - step.categoryInfo.numberQuestionComplete }}</span>
               </div>
               <div class="grid justify-items-center gap-y-[6px]">
                 <span class="text-[16px] text-purple-78 font-bold">الزمن المتوقع</span>
@@ -359,7 +359,7 @@ const getButtonStyle = (status, index) => ({
 // Calculate progress offset
 const progressOffset = (step) => {
   const total = step.categoryInfo?.numberQuestion || 1;
-  const complete = step.categoryInfo?.numberQuestionComplte || 0;
+  const complete = step.categoryInfo?.numberQuestionComplete || 0;
   const percent = Math.min(complete / total, 1);
   return circumference * (1 - percent);
 };

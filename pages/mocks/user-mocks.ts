@@ -319,7 +319,7 @@ export const mockCategoryInfo: stepCategoryInfo = {
   "categoryId": 101,
   "categoryName": "تجريب المسائل الهندسية",
   "numberQuestion": 188,
-  "numberQuestionComplte": 140,
+  "numberQuestionComplete": 140,
   "time": 1412,
   "isWrong": true
 }
