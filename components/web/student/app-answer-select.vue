@@ -342,7 +342,7 @@ watch(
 
   &.is-exam {
     @include web-desktop-up() {
-      column-gap: 48px;
+      //column-gap: 48px;
     }
 
     &.type-0 {
