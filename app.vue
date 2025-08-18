@@ -170,22 +170,23 @@ const signInAction = async (data: SignInActionDataUiModel) => {
       token: data.token,
       refreshToken: data.refreshToken!,
     });
-    const userData = authStore.state.userData;
-    if (!userData) {
-      await auth.getSession();
+    
+    if (!userData.value) {
+     await auth.getSession();
     }
-    if (userData?.id) {
-      localStorageStore.setRegisterInfo(userData.id, true);
+    if (userData.value?.id) {
+      localStorageStore.setRegisterInfo(userData.value?.id, true);
     }
     if (IS_PRODUCTION_APP) {
       handleClarityUser({ email: data.email, id: data.id });
       handleFcm(data.id);
     }
-    if (data.showWelcomeModal) {
+    
+    if (data.showWelcomeModal || (!userData.value?.firstName && !userData.value?.lastName)) {
       localStorageStore.setFirstRegister(data.id);
       router.push(RouteHelper.userInformationSteps())
       return
-    }
+      }
     await router.push(authStore.redirectUrlAfterLogin());
   } catch (e) {
     console.log(e);
@@ -245,7 +246,7 @@ watch(
       if (!isFirstRegisterExist) {
         localStorageStore.setFirstRegister(userId);
         //clearFirstRegisterDelaySub.next(userId);
-        showHelloModal();
+        //showHelloModal();
       }
     }
   },
