@@ -42,16 +42,16 @@
               <div class="w-container">
                 <div class="at-w">
                   <div class="at-t">
-                    <lazy-exam-part-nav
+                    <exam-part-nav
                       v-model:activePartIndex="activePartIndex"
                       :subjectName="examDetail.subjectName"
                       :examParts="examDetail.examParts"
                       :examTitle="examDetail.title"
                       @indexChanged="selectPart"
                     />
-                    <lazy-counter-part :counterValue="counterModel" />
+                    <counter-part :counterValue="counterModel" />
                   </div>
-                  <lazy-exam-part-nav-children
+                  <exam-part-nav-children
                     v-if="activeQuestionListModel"
                     v-model:activeItemIndex="activeQuestionIndex"
                     :list="activeQuestionListModel"

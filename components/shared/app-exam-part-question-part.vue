@@ -1334,7 +1334,7 @@ export default {
         transition: ease-in-out background-color 0.1s;
 
         &:hover {
-          --hover-color: var(--red-5e);
+          --hover-color: rgba(255, 55, 94, 0.33);
           background-color: var(--hover-color);
           border-color: var(--hover-color);
         }

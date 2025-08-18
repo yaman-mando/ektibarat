@@ -14,7 +14,7 @@
             <div class="w-full flex flex-col sed-p1 w-container">
               <div class="st-h">
                 <app-button
-                  class="e-bu"
+                  class="e-bu !justify-self-start"
                   :label="windowSize.isMobileSize ? 'خروج' : 'إنهاء التدريب'"
                   variant="outline"
                   @click="exitPage"

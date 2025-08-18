@@ -7,16 +7,18 @@
       :label="staticLocales.trainPage.previous"
       iconStartClass="fa-solid fa-chevron-right"
       :isDisabled="!showPrev || loading"
-      :colorType="'primary'"
+      :colorType="'blue'"
       :variant="'outline'"
+      labelClass="text-lg text-white font-bold"
       @click="onPrevClick"
     />
     <template v-if="showEndExam">
       <app-button
         :label="staticLocales.trainPage.end"
         :isDisabled="!showEndExam"
-        :colorType="'primary'"
+        :colorType="'blue'"
         :variant="'flat'"
+        labelClass="text-lg text-white font-bold"
         @click="onEnd"
       />
     </template>
@@ -25,8 +27,9 @@
         :label="staticLocales.trainPage.next"
         iconEndClass="fa-solid fa-chevron-left"
         :isDisabled="!showNext || loading"
-        :colorType="'primary'"
+        :colorType="'blue'"
         :variant="'flat'"
+        labelClass="text-lg text-white font-bold"
         @click="onNextClick"
       />
     </template>
@@ -81,9 +84,20 @@ export default {
     column-gap: 36px;
   }
 
-  button {
+  :deep(.app-button) {
+    width: 160px;
+    height: 50px;
+    border-radius: 100px;
     @include web-desktop-up() {
-      width: 190px;
+      width: 200px;
+      height: 50px;
+    }
+
+    .app-button-label {
+      font-size: 16px !important;
+      @include web-desktop-up() {
+        font-size: 18px !important;
+      }
     }
   }
 }

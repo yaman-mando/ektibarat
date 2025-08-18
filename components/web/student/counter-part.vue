@@ -1,7 +1,11 @@
 <template>
   <div class="cd-co-w">
-    <i class="em-icon-Icon-material-update"></i>
-    <span class="cd-co">{{ counterModel }}</span>
+    <img
+      class="w-[14px] flex items-center justify-center"
+      src="/images/icons/stopwatch-white.svg"
+      alt="clock"
+    />
+    <span class="cd-co num-font">{{ counterModel }}</span>
   </div>
 </template>
 
@@ -33,32 +37,22 @@ export default {
 @use '@/assets/scss/mixin' as *;
 
 .cd-co-w {
-  line-height: 1;
   color: #fff;
   display: flex;
   align-items: center;
-  gap: 5px;
-  border: 1px solid transparent;
-  border-radius: 8px;
+  gap: 9px;
+  border: 1px solid #fff;
+  border-radius: 100px;
   justify-content: center;
-  font-size: 24px;
   width: 100px;
-  height: 37px;
+  height: 40px;
   @include web-desktop-up() {
-    border-color: #fff;
-    width: 120px;
-    height: 48px;
-    font-size: 30px;
-  }
-  i {
-    font-size: 18px;
   }
   .cd-co {
     width: auto;
-    margin-bottom: -7px;
+    font-size: 20px;
     @include web-desktop-up() {
-      width: 70px;
-      margin-bottom: -5px;
+      //width: 70px;
     }
     display: block;
     font-weight: bold;
