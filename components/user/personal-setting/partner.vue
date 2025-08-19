@@ -1,7 +1,9 @@
 <template>
     <div class="grid w-full">
         <span v-if="windowSize.isDesktop" class="text-[18px] sm:text-[24px] font-bold text-dark-63 ms-[25px]">المشتركون
-            عبر الكود الخاص بي</span>
+            عبر الكود الخاص بي
+            <span class="font-bold text-red-5e mr-1">{{ baseData?.code }}</span>
+        </span>
         <AppLoadingSpinner :showSpinner="true" v-if="panelStore.fetching.teachersFinancial"></AppLoadingSpinner>
         <template v-else>
             <div v-if="windowSize.isDesktop" class="flex items-center gap-x-[20px] sm:gap-x-[54px] ms-[25px] mt-[10px]">
@@ -89,6 +91,12 @@
                 </div>
 
             </div>
+
+            <span v-if="!windowSize.isDesktop"
+                class="text-[18px] sm:text-[24px] font-bold text-dark-63 ms-[25px]">المشتركون
+                عبر الكود الخاص بي
+                <span class="font-bold text-red-5e mr-1">{{ baseData?.code }}</span>
+            </span>
 
         </template>
     </div>
