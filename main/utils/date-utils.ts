@@ -194,3 +194,48 @@ export const dateDayUi = (date) => {
     fns_format({ date, format: appDateFormat.default })
   );
 };
+
+
+export const formatStoMMHH = (seconds?: number) => {
+  if (!seconds || seconds < 60) {
+    return '--'; 
+  }
+
+  const totalSeconds = Math.floor(seconds);
+  const hrs = Math.floor(totalSeconds / 3600);
+  const mins = Math.floor((totalSeconds % 3600) / 60);
+
+  return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+};
+
+export const formatStoMMHHWithText = (seconds?: number, showText = true,alter='--') => {
+  if (!seconds || seconds < 60) {
+    return alter; 
+  }
+
+  const totalSeconds = Math.floor(seconds); 
+  const hrs = Math.floor(totalSeconds / 3600);
+  const mins = Math.floor((totalSeconds % 3600) / 60);
+
+  if (hrs < 1) {
+    return `${String(mins).padStart(2, '0')}${showText ? ' دقيقة' : ''}`;
+  }
+
+  return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}${showText ? ' ساعة' : ''}`;
+};
+
+
+export function formatNumberFloatWithComma(num,comma=2) {
+  if (Number.isInteger(num)) {
+    return num.toString();
+  } else {
+    return num.toFixed(comma).replace(/\.?0+$/, '');
+  }
+}
+
+export function formatNoData(data: any,alter='--') {
+  if (!data || data <= 0) {
+    return alter
+  }
+  return data
+}
