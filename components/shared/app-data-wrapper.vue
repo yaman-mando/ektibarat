@@ -10,7 +10,7 @@
 
     <!-- حالة لا توجد بيانات -->
     <div
-      v-else-if="isEmpty"
+      v-if="isEmpty && !loading"
       class="flex w-full justify-center items-center py-10 text-gray-500 dark:text-gray-300"
     >
       {{ emptyText }}
@@ -18,7 +18,7 @@
 
     <!-- حالة عرض البيانات -->
     
-      <slot v-else />
+      <slot v-else-if="!(loading && loadingType !== 'spinner-overlay')" />
     
   
 </template>

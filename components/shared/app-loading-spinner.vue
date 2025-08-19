@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col items-center justify-center gap-4 py-6 relative">
+  <div class="w-full flex flex-col items-center justify-center relative">
 
     <!-- Spinner -->
     <div v-if="showSpinner" class="h-[75vh] flex items-center">
