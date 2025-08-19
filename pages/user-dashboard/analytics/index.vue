@@ -183,8 +183,10 @@
                       #fdc830 0%,
                       #ce9800 100%
                     );
-                  " class="absolute top-0 bottom-0"
-                    :style="{ width: `${stdPlaneInfo?.percentageRequired ?? 0 - stdPlaneInfo?.percentageDone ?? 0}%`, right: `${stdPlaneInfo?.percentageDone ?? 0}%` }">
+                  " class="absolute top-0 bottom-0" :style="{
+                    width: `${(stdPlaneInfo?.percentageRequired ?? 0) - (stdPlaneInfo?.percentageDone ?? 0)}%`,
+                    right: `${stdPlaneInfo?.percentageDone ?? 0}%`
+                  }">
                   </div>
                 </div>
 
@@ -310,7 +312,7 @@
                   <div class="grid items-center justify-items-center">
                     <TextSlice :text="category.categoryName" :length="12" />
                     <span class="font-bold text-[18px] sm:text-[22px] xl:text-[30px]">
-                      {{ customFormat(category.rate)}}
+                      {{ customFormat(category.rate) }}
                     </span>
                   </div>
                 </button>
@@ -341,7 +343,7 @@
                 <span>الإجابات</span>
                 <span class="text-green-8c">{{ customFormat(stdChartData?.correctCount) }}
                   <span class="text-gray-8f px-1">|</span>
-                  <span class="text-red-5e">{{ customFormat(stdChartData?.wrongCount)}}</span>
+                  <span class="text-red-5e">{{ customFormat(stdChartData?.wrongCount) }}</span>
                 </span>
               </div>
               <div class="text-[11px] sm:text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
@@ -828,10 +830,10 @@ const topCategories = computed(() =>
 
 const formatTime = (seconds?: number) => {
   if (!seconds || seconds < 60) {
-    return '--'; // أقل من دقيقة أو غير موجود
+    return '--';
   }
 
-  const totalSeconds = Math.floor(seconds); // معالجة الفلوت
+  const totalSeconds = Math.floor(seconds);
   const hrs = Math.floor(totalSeconds / 3600);
   const mins = Math.floor((totalSeconds % 3600) / 60);
 
@@ -840,10 +842,10 @@ const formatTime = (seconds?: number) => {
 
 const formatTimeWithText = (seconds?: number, showText = true) => {
   if (!seconds || seconds < 60) {
-    return '--'; // أقل من دقيقة أو غير موجود
+    return '--';
   }
 
-  const totalSeconds = Math.floor(seconds); // معالجة الفلوت
+  const totalSeconds = Math.floor(seconds);
   const hrs = Math.floor(totalSeconds / 3600);
   const mins = Math.floor((totalSeconds % 3600) / 60);
 

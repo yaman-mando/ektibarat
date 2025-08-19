@@ -7,8 +7,7 @@
 
         <!-- السلايدر -->
         <app-data-wrapper :loading="panelStore.fetching.homeSliders" :data="sliders" loading-type="text"
-            loadingText="جاري تحميل السلايدر ..."
-            empty-text="لا توجد صور سلايدر">
+            loadingText="جاري تحميل السلايدر ..." empty-text="لا توجد صور سلايدر">
             <app-slider class="mt-[20px]" v-if="sliders" :slides="sliders" :delay-action="6000" :tagFilter="0" />
         </app-data-wrapper>
 
@@ -29,9 +28,9 @@
                     </div>
 
                     <!-- نسبة الأداء -->
-                    <app-circule-progress-bar :isLock="!isSubscribe"
-                        :percentage="analyzeInfo?.studentRate ?? 0" :gradientColors="['#58CC02', '#4E9818']"
-                        :strokeWidth="9" :textSize="16" textClass="text-blue-d6" />
+                    <app-circule-progress-bar :isLock="!isSubscribe" :percentage="analyzeInfo?.studentRate ?? 0"
+                        :gradientColors="['#58CC02', '#4E9818']" :strokeWidth="9" :textSize="16"
+                        textClass="text-blue-d6" />
 
                 </div>
 
@@ -46,20 +45,24 @@
                         <div class="flex justify-between text-sm text-gray-700 dark:text-gray-200">
                             <div class="flex flex-col items-center">
                                 <span class=" text-purple-78 text-[14px] font-bold">الأسئلة</span>
-                                <span class=" text-gray-63 text-[14px]">{{ cat.questionsCount }}</span>
+                                <span class=" text-gray-63 text-[14px]">{{
+                                    dateFormat.formatNoData(cat.questionsCount) }}</span>
                             </div>
                             <div class="flex flex-col items-center">
                                 <span class="text-purple-78 text-[14px] font-bold">الإجابات</span>
                                 <div>
-                                    <span class="text-red-5e text-[14px] font-medium">{{ cat.wrongAnswersCount }}</span>
+                                    <span class="text-red-5e text-[14px] font-medium">{{
+                                        dateFormat.formatNoData(cat.wrongAnswersCount) }}</span>
                                     |
-                                    <span class="text-green-8c text-[14px] font-medium">{{ cat.correctAnswersCount
+                                    <span class="text-green-8c text-[14px] font-medium">{{
+                                        dateFormat.formatNoData(cat.correctAnswersCount)
                                     }}</span>
                                 </div>
                             </div>
                             <div class="flex flex-col items-center">
                                 <span class="text-purple-78 text-[14px] font-bold">مدة التدريب</span>
-                                <span class="text-gray-63 text-[14px]">{{ formatTime(cat.totalTime) }} ساعة</span>
+                                <span class="text-gray-63 text-[14px]">{{
+                                    dateFormat.formatStoMMHHWithText(cat.totalTime) }}</span>
                             </div>
                         </div>
                     </div>
@@ -99,11 +102,12 @@
                         </div>
                         <div class="flex flex-col items-center">
                             <span class="text-[40px] 2xl:text-[48px] leading-[42px] font-bold text-dark-63">
-                                <span>{{ planInfo?.totalPercentage }}</span>
+                                <span>{{ dateFormat.formatNoData(planInfo?.totalPercentage) }}</span>
                                 <span class="text-[26px] 2xl:text-[30px]">%</span>
                             </span>
                             <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">
-                                {{ formatTime(planInfo?.timeDone) }} | {{ formatTime(planInfo?.timeRequired) }}
+                                {{ dateFormat.formatStoMMHH(planInfo?.timeDone) }} | {{
+                                    dateFormat.formatStoMMHH(planInfo?.timeRequired) }}
                             </span>
                         </div>
                     </div>
@@ -124,8 +128,10 @@
                       #fdc830 0%,
                       #ce9800 100%
                     );
-                  " class="absolute top-0 bottom-0"
-                                :style="{ width: `${planInfo?.percentageRequired ?? 0 - planInfo?.percentageDone ?? 0}%`, right: `${planInfo?.percentageDone ?? 0}%` }">
+                  " class="absolute top-0 bottom-0" :style="{
+                    width: `${(planInfo?.percentageRequired ?? 0) - (planInfo?.percentageDone ?? 0)}%`,
+                    right: `${planInfo?.percentageDone ?? 0}%`
+                }">
                             </div>
                         </div>
 
@@ -173,8 +179,7 @@
         <div class="grid gap-y-[25px] mt-[40px] mb-[30px]">
             <span class=" text-blue-d6 text-[24px] font-bold">أحدث المقالات</span>
             <app-data-wrapper :loading="panelStore.fetching.blogs" :data="blogs" loading-type="text"
-            loadingText="جاري تحميل المقالات ..."
-                empty-text="لا توجد بيانات متاحة">
+                loadingText="جاري تحميل المقالات ..." empty-text="لا توجد بيانات متاحة">
                 <app-blogs v-if="blogs" :blogs="blogs" />
             </app-data-wrapper>
         </div>
@@ -191,6 +196,7 @@ import { RouteHelper } from '~/main/utils/route-helper';
 import { webUserTrainWithUs } from '~/main/utils/web-routes.utils';
 import { UserRoles } from '~/core/auth/constants/user-roles';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
+import * as dateFormat from '~/main/utils/date-utils'
 
 const panelStore = useUserPanelStore();
 const { data } = useAuth();
@@ -202,8 +208,8 @@ panelStore.getSimpleTrainingAnalyze();
 panelStore.getSimplePlansInfo();
 
 const subscriptionsStore = useSubscriptionsStore();
-const isSubscribe = computed(()=> {
-   return subscriptionsStore.state.userCurrentSubVal?.freeType === null
+const isSubscribe = computed(() => {
+    return subscriptionsStore.state.userCurrentSubVal?.freeType === null
 })
 
 const userData = computed(() => data.value as UserInfoDataModel);
