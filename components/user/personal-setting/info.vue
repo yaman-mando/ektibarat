@@ -224,13 +224,14 @@
           <div class="grid gap-y-[10px]">
             <label class="text-[18px] font-medium text-dark-2b">المدرسة</label>
             <v-select v-model="profileInfo.schoolId" :options="schools" :reduce="(school) => school.id" label="label"
-              :clearable="false" class="custom-select" placeholder="اختر مدرسة" :disabled="!profileInfo.cityId" style="direction: rtl" :class="[
+              :clearable="false" class="custom-select" placeholder="اختر مدرسة" :disabled="!profileInfo.cityId"
+              style="direction: rtl" :class="[
                 'w-full',
                 'bg-white',
                 !profileInfo.schoolId ? '!bg-gray-fa error' : '',
                 'text-right',
                 'rtl',
-              ]" dir="rtl" />
+              ]" dir="rtl" :loading="loadingSchools" :filterable="false" @search="handleSchoolSearch" />
           </div>
           <div class="ac-action">
             <button class="btn cancel" type="button" @click="closeSection">
@@ -375,10 +376,10 @@
               (requestData && requestData.countRegisterTries > 3) ||
               isWaiting,
           }" class="re-send" @click="
-              requestData.countRegisterTries <= 3 && !isWaiting
-                ? sendMail()
-                : {}
-              ">
+            requestData.countRegisterTries <= 3 && !isWaiting
+              ? sendMail()
+              : {}
+            ">
             إعادة إرسال
           </span>
         </template>
@@ -411,10 +412,10 @@
           <span :class="{
             disable: requestDataPhone.countRegisterTries > 3 || isWaiting,
           }" class="re-send" @click="
-              requestDataPhone.countRegisterTries <= 3 && !isWaiting
-                ? callApiChangePhone()
-                : {}
-              ">
+            requestDataPhone.countRegisterTries <= 3 && !isWaiting
+              ? callApiChangePhone()
+              : {}
+            ">
             إعادة إرسال
           </span>
         </template>
@@ -481,6 +482,7 @@ const openCropper = ref(false);
 const img = ref('');
 const isUpload = ref(false);
 const loadingCities = ref(false);
+const loadingSchools = ref(false);
 
 const requestData = ref<any | null>(null);
 const requestDataPhone = ref<any | null>(null);
@@ -523,7 +525,8 @@ const closeSection = () => {
   profileInfo.cityId = appAuth.state.userData?.cityId;
   profileInfo.schoolId = appAuth.state.userData?.schoolId;
   profileInfo.grades = appAuth.state.userData?.grades;
-  fetchSchools()
+  fetchCities()
+  if(profileInfo.cityId) fetchSchools()
 };
 
 const sendForm = async () => {
@@ -859,11 +862,10 @@ const deleteImg = () => {
 
 const handleSearch = useDebounceFn(async (search: string) => {
   if (search.length < 3) {
-    console.log(cities.value)
-    if(search.length === 2 || (search.length === 0 && (!cities.value || cities.value?.length===0))){
-     await fetchImportantCities();
+    if (search.length === 2 || (search.length === 0 && (!cities.value || cities.value?.length === 0))) {
+      await fetchImportantCities();
     }
-    return; 
+    return;
   }
 
   loadingCities.value = true;
@@ -874,6 +876,29 @@ const handleSearch = useDebounceFn(async (search: string) => {
     cities.value = res?.slice(0, 10) ?? res;
   } finally {
     loadingCities.value = false;
+  }
+}, 1000); // debounce 1
+
+const handleSchoolSearch = useDebounceFn(async (search: string) => {
+  if (!profileInfo.cityId) return; 
+
+  if (search.length < 3) {
+
+    if (search.length === 2 || (search.length === 0 && (!schools.value || schools.value?.length === 0))) {
+      await fetchSchools(true);
+    }
+    return;
+  }
+
+  loadingSchools.value = true;
+  try {
+    const res = await globalStore.getShoolsList({
+      id: profileInfo.cityId,
+      predicate:search,
+    });
+    schools.value = res?.slice(0, 10) ?? res;
+  } finally {
+    loadingSchools.value = false;
   }
 }, 1000); // debounce 1
 
@@ -902,6 +927,7 @@ const togglePassword3 = () =>
 onMounted(() => {
   fillProfileInfo();
   fetchCities();
+  if(profileInfo.cityId)
   fetchSchools();
 });
 </script>
@@ -1199,7 +1225,8 @@ onMounted(() => {
           font-size: 16px;
           font-weight: 500;
           color: white;
-          &:disabled{
+
+          &:disabled {
             opacity: .5;
           }
         }

@@ -58,14 +58,16 @@
             </div>
             <div class="space-y-[10px]">
               <label class="block text-[20px] font-medium text-dark-2b">مدرستك</label>
-              <v-select v-model="form.schoolId" :options="schools" :reduce="school => school.id" label="label"
-                class="custom-select" :clearable="false" placeholder="اختر المدرسة" :disabled="!form.cityId"
-                style="direction: rtl" :class="[
-                  'w-full',
-                  'text-right',
-                  'rtl',
-                  errors.schoolId ? 'bg-gray-fa error' : ''
-                ]" dir="rtl" />
+             <v-select v-model="form.schoolId" :options="schools" :reduce="(school) => school.id" label="label"
+              :clearable="false" class="custom-select" placeholder="اختر مدرسة" :disabled="!form.cityId"
+              style="direction: rtl" :class="[
+                'w-full',
+                'bg-white',
+                !form.schoolId ? '!bg-gray-fa error' : '',
+                'text-right',
+                'rtl',
+              ]" dir="rtl" :loading="loadingSchools" :filterable="false" @search="handleSchoolSearch" />
+                
             </div>
           </client-only>
         </div>
@@ -148,6 +150,7 @@ const authStore = useAuthStore();
 const toastMessage = useToastMessage()
 const globalStore = useGlobalUserStore();
 const loadingCities = ref(false);
+const loadingSchools = ref(false);
 
 
 const step = ref(1);
@@ -240,6 +243,29 @@ const handleSearch = useDebounceFn(async (search: string) => {
     cities.value = res?.slice(0, 10) ?? res;
   } finally {
     loadingCities.value = false;
+  }
+}, 1000); // debounce 1
+
+const handleSchoolSearch = useDebounceFn(async (search: string) => {
+  if (!form.value.cityId) return; 
+
+  if (search.length < 3) {
+
+    if (search.length === 2 || (search.length === 0 && (!schools.value || schools.value?.length === 0))) {
+      await fetchSchools(true);
+    }
+    return;
+  }
+
+  loadingSchools.value = true;
+  try {
+    const res = await globalStore.getShoolsList({
+      id: form.value.cityId,
+      predicate:search,
+    });
+    schools.value = res?.slice(0, 10) ?? res;
+  } finally {
+    loadingSchools.value = false;
   }
 }, 1000); // debounce 1
 
