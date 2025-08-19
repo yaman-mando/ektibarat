@@ -173,35 +173,35 @@
               <div class="space-y-2 min-w-[1020px]">
                 <div class="h-[70px] w-full flex items-center">
                   <div
-                    class="bg-[#F5F7FA] h-[100%] flex-[75%] flex items-center border border-[#BCCCDB] !border-l-0 rounded-r-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
-                    <div class="w-[40%]">القسم الفرعي</div>
-                    <div class="w-[20%] text-center">عدد الأسئلة</div>
-                    <div class="w-[20%] text-center">
+                    class="bg-[#F5F7FA] h-[100%] flex-[70%] flex items-center border border-[#BCCCDB] !border-l-0 rounded-r-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
+                    <div class="w-[25%]">القسم الفرعي</div>
+                    <div class="w-[15%] text-center">عدد الأسئلة</div>
+                    <div class="w-[15%] text-center">
                       الإجابات
                       <br />
                       <span class="font-medium text-[12px]">صحيحة | خاطئة</span>
                     </div>
-                    <div class="w-[20%] text-center">زمن الإجابة والمتوسط</div>
-                    <div class="w-[20%] text-center">مدة التدريب</div>
-                    <div class="w-[20%] text-center">التقييم</div>
+                    <div class="w-[15%] text-center">زمن الإجابة والمتوسط</div>
+                    <div class="w-[15%] text-center">مدة التدريب</div>
+                    <div class="w-[15%] text-center">التقييم</div>
                   </div>
                   <div
-                    class="bg-[#F5F7FA] h-[100%] flex flex-[25%] items-center border border-[#BCCCDB] !border-r-0 rounded-l-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
+                    class="bg-[#F5F7FA] h-[100%] flex flex-[30%] items-center border border-[#BCCCDB] !border-r-0 rounded-l-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
                     <div class="w-full text-center">توصيات</div>
                   </div>
                 </div>
 
                 <div v-for="(child, i) in tableCategories" :key="i" :class="['h-[60px] flex items-center']">
                   <div
-                    class="flex flex-[75%] h-[100%] items-center rounded-r-[8px] border border-[#BCCCDB] !border-l-0 px-[15px]"
+                    class="flex flex-[70%] h-[100%] items-center rounded-r-[8px] border border-[#BCCCDB] !border-l-0 px-[15px]"
                     :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
-                    <div class="w-[40%] text-gray-63 font-medium">
+                    <div class="w-[25%] text-gray-63 font-medium">
                       {{ child.categoryName }}
                     </div>
-                    <div class="w-[20%] text-center">
+                    <div class="w-[15%] text-center">
                       {{ child.questionsCount }}
                     </div>
-                    <div class="w-[20%] text-center">
+                    <div class="w-[15%] text-center">
                       <span class="text-green-8c font-bold text-[14px]">
                         {{ child.correctAnswersCount }}
                       </span>
@@ -210,19 +210,19 @@
                         {{ child.wrongAnswersCount }}
                       </span>
                     </div>
-                    <div class="w-[20%] text-center">
+                    <div class="w-[15%] text-center">
                       <span class="text-green-8c font-bold text-[14px]">
-                        {{ formatTime(child.allStudentsTimeTakenRate) }}
+                        {{ formatTime(child.studentTimeTakenRate) }}
                       </span>
                       |
                       <span class="text-red-5e font-bold text-[14px]">
-                        {{ formatTime(child.studentTimeTakenRate) }}
+                        {{ formatTime(child.allStudentsTimeTakenRate) }}
                       </span>
                     </div>
-                    <div class="w-[20%] text-center">
+                    <div class="w-[15%] text-center">
                       {{ formatTime(child.totalTime) }} ساعة
                     </div>
-                    <div class="w-[20%] text-center">
+                    <div class="w-[15%] text-center">
                       <div class="w-full bg-gray-200 h-[18px] rounded-[4px] dark:bg-dark-600">
                         <div :class="`bg-${getRateColor(child.rate)}`"
                           class="h-[18px] rounded-[4px] flex items-center justify-center"
@@ -235,7 +235,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="flex flex-[25%] h-[100%] items-center rounded-l-[8px] border border-[#BCCCDB]"
+                  <div class="flex flex-[30%] h-[100%] items-center rounded-l-[8px] border border-[#BCCCDB]"
                     :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
                     <div class="w-full h-[100%] flex justify-center items-center gap-[15px] flex-wrap">
                       <template v-if="child.rate === 100">
@@ -257,12 +257,7 @@
                             للحفظ
                           </button>
                         </template>
-                        <template v-if="
-                          userData.planSubscribed ===
-                          planSubscribedEnum.notSubscribe ||
-                          userData.planSubscribed ===
-                          planSubscribedEnum.finished
-                        ">
+                        <template v-if="userData.planSubscribed !== planSubscribedEnum.subscribed">
                           <button
                             class="bg-purple-78 text-white text-[14px] font-medium h-[32px] w-[60px] rounded-[4px] cursor-pointer">
                             تدرب

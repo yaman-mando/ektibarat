@@ -165,12 +165,15 @@
                   </span>
                 </div>
                 <div class="flex flex-col items-center">
-                  <span class="text-[40px] 2xl:text-[48px] leading-[42px] font-bold text-dark-63">
+                  <span v-if="stdPlaneInfo?.totalPercentage && stdPlaneInfo?.totalPercentage > 0"
+                    class="text-[40px] 2xl:text-[48px] leading-[42px] font-bold text-dark-63">
                     <span>{{ stdPlaneInfo?.totalPercentage }}</span>
                     <span class="text-[26px] 2xl:text-[30px]">%</span>
                   </span>
+                  <span v-else>--</span>
                   <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">
-                    {{ formatTime(stdPlaneInfo?.timeDone) }} | {{ formatTime(stdPlaneInfo?.timeRequired) }}
+                    {{ dateFormat.formatStoMMHH(stdPlaneInfo?.timeDone) }} | {{
+                      dateFormat.formatStoMMHH(stdPlaneInfo?.timeRequired) }}
                   </span>
                 </div>
               </div>
@@ -190,8 +193,10 @@
                       #fdc830 0%,
                       #ce9800 100%
                     );
-                  " class="absolute top-0 bottom-0"
-                    :style="{ width: `${stdPlaneInfo?.percentageRequired ?? 0 - stdPlaneInfo?.percentageDone ?? 0}%`, right: `${stdPlaneInfo?.percentageDone ?? 0}%` }">
+                  " class="absolute top-0 bottom-0" :style="{
+                    width: `${(stdPlaneInfo?.percentageRequired ?? 0) - (stdPlaneInfo?.percentageDone ?? 0)}%`,
+                    right: `${stdPlaneInfo?.percentageDone ?? 0}%`
+                  }">
                   </div>
                 </div>
 
@@ -226,8 +231,8 @@
                   </div>
                   <div class="flex flex-col items-center text-[12px] 2xl:text-[14px] font-medium text-gray-8f">
                     <span>آخر الشهر</span>
-                    <span>{{ formatTime(stdPlaneInfo?.lastMonth.timeDone) }} | {{
-                      formatTime(stdPlaneInfo?.lastMonth.timeRequired) }}</span>
+                    <span>{{ dateFormat.formatStoMMHH(stdPlaneInfo?.lastMonth.timeDone) }} | {{
+                      dateFormat.formatStoMMHH(stdPlaneInfo?.lastMonth.timeRequired) }}</span>
                   </div>
                 </div>
                 <div class="flex items-center gap-x-[8px] text-right pr-[5px] border-r-[3px] border-r-purple-e0">
@@ -236,8 +241,8 @@
                   </div>
                   <div class="flex flex-col items-center text-[12px] 2xl:text-[14px] font-medium text-gray-8f">
                     <span>آخر أسبوع</span>
-                    <span>{{ formatTime(stdPlaneInfo?.lastWeek.timeDone) }} | {{
-                      formatTime(stdPlaneInfo?.lastWeek.timeRequired) }}</span>
+                    <span>{{ dateFormat.formatStoMMHH(stdPlaneInfo?.lastWeek.timeDone) }} | {{
+                      dateFormat.formatStoMMHH(stdPlaneInfo?.lastWeek.timeRequired) }}</span>
                   </div>
                 </div>
               </div>
@@ -262,13 +267,11 @@
         <div :class="!isSubscribe ? 'p-0' : 'p-4'"
           class="w-full flex-2/3 2xl:min-w-[710px] h-auto bg-white shadow-md rounded-lg relative">
           <!-- Overlay -->
-          <app-overlay msg="جاري جلب بيانات المخطط ..."
-            v-if="panelStore.fetching.studentAnalyzeChart && isSubscribe" />
+          <app-overlay msg="جاري جلب بيانات المخطط ..." v-if="panelStore.fetching.studentAnalyzeChart && isSubscribe" />
 
           <!-- For unsubscribed user -->
-          <img @click="toPricesPage()" class=" cursor-pointer w-full h-full"
-            v-if="!isSubscribe" src="/images/png/analysisChartNotSub.png"
-            alt="" />
+          <img @click="toPricesPage()" class=" cursor-pointer w-full h-full" v-if="!isSubscribe"
+            src="/images/png/analysisChartNotSub.png" alt="" />
 
           <!-- <div v-if="userData.planSubscribed === planSubscribedEnum.notSubscribe"
             class="absolute bottom-0 w-full 2xl:min-w-[700px] h-full z-50 flex items-center justify-center">
@@ -313,7 +316,7 @@
                   <div class="grid items-center justify-items-center">
                     <TextSlice :text="category.categoryName" :length="12" />
                     <span class="font-bold text-[18px] sm:text-[22px] xl:text-[30px]">
-                      {{ category.rate }}
+                      {{ dateFormat.formatNoData(category.rate) }}
                     </span>
                   </div>
                 </button>
@@ -338,19 +341,22 @@
               class="flex justify-around items-center justify-self-center text-sm text-gray-700 max-w-[88vw] w-[540px] h-[50px] border border-[#BCCCDB] rounded-[8px] p-2">
               <div class="text-[11px] sm:text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
                 <span>الأسئلة</span>
-                <span class="text-dark-2b">{{ stdChartData?.totalQuestionsCount }}</span>
+                <span class="text-dark-2b">{{ dateFormat.formatNoData(stdChartData?.totalQuestionsCount) }}</span>
               </div>
               <div class="text-[11px] sm:text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
                 <span>الإجابات</span>
-                <span class="text-green-8c">{{ stdChartData?.correctCount }}
+                <span class="text-green-8c">{{ dateFormat.formatNoData(stdChartData?.correctCount) }}
                   <span class="text-gray-8f px-1">|</span>
-                  <span class="text-red-5e">{{ stdChartData?.wrongCount }}</span>
+                  <span class="text-red-5e">{{ dateFormat.formatNoData(stdChartData?.wrongCount) }}</span>
                 </span>
               </div>
               <div class="text-[11px] sm:text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
                 <span>مدة التدريب</span>
-                <span class="text-dark-2b">{{ formatTime(stdChartData?.totalPeriod) }}
-                  <span class="text-gray-8f">ساعة </span>
+                <span class="text-dark-2b">{{ dateFormat.formatStoMMHH(stdChartData?.totalPeriod) }}
+                  <span class="text-gray-8f" v-if="stdChartData?.totalPeriod">
+                    <template v-if="stdChartData?.totalPeriod < 3600">دقيقة</template>
+                    <template v-else>ساعة</template>
+                  </span>
                 </span>
               </div>
             </div>
@@ -387,22 +393,25 @@
                 </div>
                 <div class="text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
                   <span class="font-bold text-purple-78">الأسئلة</span>
-                  <span class="text-dark-2b">{{ item.questionsCount }}</span>
+                  <span class="text-dark-2b">{{ dateFormat.formatNoData(item.questionsCount) }}</span>
                 </div>
                 <div class="text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
                   <span class="font-bold text-purple-78">الإجابات</span>
                   <span class="text-green-8c">
-                    {{ item.correctAnswersCount }}
+                    {{ dateFormat.formatNoData(item.correctAnswersCount) }}
                     <span class="text-gray-8f px-1">|</span>
                     <span class="text-red-5e">
-                      {{ item.wrongAnswersCount }}
+                      {{ dateFormat.formatNoData(item.wrongAnswersCount) }}
                     </span>
                   </span>
                 </div>
                 <div class="text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
                   <span class="font-bold text-purple-78">مدة التدريب</span>
-                  <span class="text-dark-2b">{{ formatTime(item.totalTime) }}
-                    <span class="text-gray-8f">ساعة </span>
+                  <span class="text-dark-2b">{{ dateFormat.formatStoMMHH(item.totalTime) }}
+                    <span class="text-gray-8f" v-if="item.totalTime">
+                      <template v-if="item.totalTime < 3600">دقيقة</template>
+                      <template v-else>ساعة</template>
+                    </span>
                   </span>
                 </div>
               </div>
@@ -453,27 +462,28 @@
                     {{ child.categoryName }}
                   </div>
                   <div class="w-[20%] text-gray-63 font-medium text-center">
-                    {{ child.questionsCount }}
+                    {{ dateFormat.formatNoData(child.questionsCount) }}
                   </div>
                   <div class="w-[20%] text-center">
                     <span class="text-green-8c font-bold text-[14px]">
-                      {{ child.correctAnswersCount }}
+                      {{ dateFormat.formatNoData(child.correctAnswersCount) }}
                     </span>
                     |
                     <span class="text-red-5e font-bold text-[14px]">
-                      {{ child.wrongAnswersCount }}
+                      {{ dateFormat.formatNoData(child.wrongAnswersCount) }}
                     </span>
                   </div>
                   <div class="w-[20%] text-center">
                     <span class="text-green-8c font-bold text-[14px]">
-                      {{ formatTime(child.allStudentsTimeTakenRate) }}
+                      {{ dateFormat.formatStoMMHH(child.studentTimeTakenRate) }}
                     </span>
                     |
                     <span class="text-red-5e font-bold text-[14px]">
-                      {{ formatTime(child.studentTimeTakenRate) }}
+                      {{ dateFormat.formatStoMMHH(child.allStudentsTimeTakenRate) }}
                     </span>
                   </div>
-                  <div class="w-[20%] text-gray-63 font-medium text-center">{{ formatTime(child.totalTime) }} ساعة
+                  <div class="w-[20%] text-gray-63 font-medium text-center">{{
+                    dateFormat.formatStoMMHHWithText(child.totalTime) }}
                   </div>
                 </div>
 
@@ -543,6 +553,8 @@ import { useUserPanelStore } from '~/store/user-panel';
 import type { analyzeStudentCategory, analyzeStudentCategoryForTable } from '~/main/modules/user-panel/data-access/user-panel.model';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
+import * as dateFormat from '~/main/utils/date-utils'
+
 
 const apexChartService = useApexChartService();
 const route = useRoute()
@@ -554,8 +566,8 @@ const { data } = useAuth()
 const userData = computed(() => data.value as UserInfoDataModel);
 
 const subscriptionsStore = useSubscriptionsStore();
-const isSubscribe = computed(()=> {
-   return subscriptionsStore.state.userCurrentSubVal?.freeType === null
+const isSubscribe = computed(() => {
+  return subscriptionsStore.state.userCurrentSubVal?.freeType === null
 })
 
 const chartKey = Symbol();
@@ -841,6 +853,16 @@ const chartOptions = computed(() => ({
     zoom: { enabled: false },
     fontFamily: 'Tajawal, sans-serif',
   },
+  noData: {
+    text: 'لا توجد قيم كافية لعرض الرسم البياني',
+    align: 'center',
+    verticalAlign: 'middle',
+    style: {
+      color: '#6b7280',
+      fontSize: '14px',
+      fontFamily: 'Tajawal, sans-serif',
+    }
+  },
   xaxis: {
     type: 'datetime',
     labels: {
@@ -848,7 +870,6 @@ const chartOptions = computed(() => ({
       rotate: -45,
       style: { fontSize: '12px' },
       formatter: (val) => formatDate(val),
-
     },
     tickAmount: windowsSize.isDesktop ? 6 : 2,
     tooltip: { enabled: false },
@@ -858,7 +879,7 @@ const chartOptions = computed(() => ({
       formatter: (val) => `${Math.round(val)}`,
     },
     forceNiceScale: true,
-    decimalsInFloat: 0
+    decimalsInFloat: 0,
   },
   dataLabels: { enabled: false },
   stroke: {
@@ -879,10 +900,7 @@ const chartOptions = computed(() => ({
   },
   markers: {
     size: 0,
-    hover: {
-      size: 8,
-      sizeOffset: 0,
-    },
+    hover: { size: 8, sizeOffset: 0 },
     colors: ['#0266D6'],
     strokeColors: '#fff',
     strokeWidth: 2,
@@ -900,10 +918,8 @@ const chartOptions = computed(() => ({
       formatter: (val: number) => `${Math.round(val)}`
     }
   },
-  grid: {
-    strokeDashArray: 4
-  },
-  colors: ['#0266D6']
+  grid: { strokeDashArray: 4 },
+  colors: ['#0266D6'],
 }));
 
 const backendDays = 45;
@@ -975,15 +991,13 @@ async function fetchStudentAnalyzeChart() {
   await panelStore.getStudentAnalyzeChartForTeacher(selectedPeriodTable.value, selectedCategoryId.value, studentId)
   const data = stdChartData.value?.chartData
     .filter(item => item.count > 0)
-    .map(item => {
-      if (item.date)
-        return { x: formatDate(item?.date), y: item.count };
-    });
+    .map(item => item.date ? { x: formatDate(item.date), y: item.count } : null)
+    .filter(Boolean);
 
   chartSeries.value = [
     {
       name: 'النقاط',
-      data
+      data: (data && data.length >= 2) ? data : []
     }
   ];
 }
