@@ -1,3 +1,10 @@
+export type pagination = {
+  currentPage: number;
+  perPage: number;
+  totalCount: number;
+  totalPages: number
+}
+
 export type lessonsCategoriesDataModel = {
   id: number;
   subjectId: number;
@@ -23,7 +30,7 @@ export type lessonObj = {
   type: number;
   periodTime: number;
   isWatched: boolean;
-  isFree:boolean
+  isFree: boolean
 };
 
 export type lessonsModel = {
@@ -173,11 +180,16 @@ export type studentSchoolDashbord = {
 }
 
 export type schoolDashboardData = {
-  data: studentSchoolDashbord[];
-  levelRateAvg: number;
-  planAdherenceAvg: number;
-  predictedMarksAvg: number;
-  studentsCount: number;
+  data: {
+    data: any
+    page: studentSchoolDashbord[];
+  } & pagination
+  main: {
+    levelRateAvg: number;
+    planAdherenceAvg: number;
+    predictedMarksAvg: number;
+    studentsCount: number;
+  }
 }
 
 export type analyzeStudentCategory = {
@@ -362,7 +374,7 @@ export type TPstudentDataResponse = {
   studentsList: TPstudent[];
 }
 
-export type financialDetail= {
+export type financialDetail = {
   createdDate: string;
   studentName: string;
   subscriptionName: string;
@@ -370,7 +382,7 @@ export type financialDetail= {
   teacherAmount: number;
 }
 
-export type teachersFinancialResponse= {
+export type teachersFinancialResponse = {
   subscriptionsCount: number;
   code: string | null;
   details: financialDetail[];

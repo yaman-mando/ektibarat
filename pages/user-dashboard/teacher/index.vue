@@ -3,7 +3,7 @@
     <app-data-wrapper :loading="panelStore.fetching.teacherDashboar" :data="baseData" loading-type="spinner-overlay"
       empty-text="لا توجد بيانات متاحة">
 
-      <template>
+      
         <!-- Header -->
         <div class="flex items-center justify-between mb-4">
           <span class="text-[24px] font-bold text-blue-d6 dark:text-white">
@@ -287,7 +287,6 @@
         <delete-modal v-model:isOpen="isOpenDeleteModal" :isReject="false" :msg="deleteMsg"
           @onConfirm="confirmDeleteStd" />
 
-      </template>
 
     </app-data-wrapper>
     <!-- <div v-else class="h-[75vh] flex items-center justify-center text-[50px] font-bold text-red-5e">لا يوجد بيانات</div> -->

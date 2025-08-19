@@ -300,7 +300,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       try {
         this.fetching.schoolDashboard = true
         const { $axios } = useNuxtApp()
-        const { data } = await $axios.post(`/dashboard/showSchoolDashboard`, payload)
+        const { data } = await $axios.post(`/dashboard/showSchoolDashboard?PageNumber=${payload.pageNumber}&PageSize=${payload.pageSize}`, payload.body)
         this.schoolDashboardData = data
         return data
       } catch (e) {

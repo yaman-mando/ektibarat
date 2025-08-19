@@ -88,7 +88,7 @@ export const userMenuItems = [
     route: '/user-dashboard/school',
     isMobile: true,
     isDesktop: true,
-    allowRoles: [UserRoles.schoolManager],
+    allowRoles: [UserRoles.schoolManager,UserRoles.teacher],
     denyRoles: [],
   },
   {
