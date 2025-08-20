@@ -4,6 +4,7 @@ import {
 } from '~/main/constants/user-panel-items';
 import { RouteHelper } from '~/main/utils/route-helper';
 import { UserRoles } from './user-roles';
+import { webUserPanelExamSimulatorPathUtil } from '~/main/utils/web-routes.utils';
 
 export const userMenuItemsIds = {
   train: 'train',
@@ -40,7 +41,7 @@ export const userMenuItems = [
   {
     name: 'محاكي الاختبار',
     icon: '/images/svg/user-panel/studying-exam.svg',
-    route: `/user-dashboard/prepare?page=${UserPanelItemsRecord[UserPanelItems.exams]}`,
+    route: webUserPanelExamSimulatorPathUtil(),
     isMobile: false,
     isDesktop: false,
     allowRoles: [],
@@ -88,13 +89,13 @@ export const userMenuItems = [
     route: '/user-dashboard/school',
     isMobile: true,
     isDesktop: true,
-    allowRoles: [UserRoles.schoolManager,UserRoles.teacher],
+    allowRoles: [UserRoles.schoolManager, UserRoles.teacher],
     denyRoles: [],
   },
   {
     name: 'الاشتراكات',
     icon: '/images/svg/user-panel/king.svg',
-    route:'/user-dashboard/personal-setting?section=subscriptions',
+    route: '/user-dashboard/personal-setting?section=subscriptions',
     isMobile: false,
     isDesktop: true,
     allowRoles: [],

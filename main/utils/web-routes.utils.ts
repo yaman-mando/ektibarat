@@ -23,6 +23,8 @@ export const webPricesPathUtil = () => '/prices';
 export const webGeneralSelectionPathUtil = () => '/general-selection';
 export const webUserPanelTraining = () =>
   `/user-dashboard/prepare?page=trainings`;
+export const webUserPanelExamSimulatorPathUtil = () =>
+  `/user-dashboard/exam-simulator?page=exams`;
 export const webUserTrainWithUs = () => `/user-dashboard/train-with-us`;
 export const webUserSteps = () => `/user-dashboard/steps`;
 export const webUserTrainingPlan = () => `/user-dashboard/training-plan`;

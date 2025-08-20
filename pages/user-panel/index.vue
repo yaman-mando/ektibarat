@@ -1,18 +1,41 @@
 <template>
   <client-only>
-    <div v-if="file1Static && !!appAuth.user" class="relative">
-      <app-overlay v-if="analyticsLoading" msg="جاري تحميل البيانات ..." />
+    <div
+      v-if="file1Static && !!appAuth.user"
+      class="relative"
+    >
+      <app-overlay
+        v-if="analyticsLoading"
+        msg="جاري تحميل البيانات ..."
+      />
       <lazy-vee-validate-provider>
         <template v-if="isSubsPage">
           <lazy-web-subs-ad />
         </template>
-        <div v-if="ads && ads.length > 0 && !hideAds" class="rw-ads">
-          <template v-for="ad of ads" :key="ad">
-            <img v-if="ad" :alt="ad" :src="getFileUrl(pictureTypes.jsonFiles, fileTypes.photo, ad)" />
+        <div
+          v-if="ads && ads.length > 0 && !hideAds"
+          class="rw-ads"
+        >
+          <template
+            v-for="ad of ads"
+            :key="ad"
+          >
+            <img
+              v-if="ad"
+              :alt="ad"
+              :src="getFileUrl(pictureTypes.jsonFiles, fileTypes.photo, ad)"
+            />
           </template>
-          <app-button label="إخفاء" size="sm" @click="hideAds = true" />
+          <app-button
+            label="إخفاء"
+            size="sm"
+            @click="hideAds = true"
+          />
         </div>
-        <div v-if="failPayment && activeList === userPanelItems.subscriptionList" class="fail-payment">
+        <div
+          v-if="failPayment && activeList === userPanelItems.subscriptionList"
+          class="fail-payment"
+        >
           <span class="c-title">
             <i class="fa fa-info-circle"></i>
             <span>فشلت عملية الدفع</span>
@@ -23,31 +46,57 @@
           </span>
         </div>
         <client-only>
-          <div v-if="!isHideSocialPart && windowSize.isMobileSize" class="!my-5 !px-4">
+          <div
+            v-if="!isHideSocialPart && windowSize.isMobileSize"
+            class="!my-5 !px-4"
+          >
             <lazy-web-social-box />
           </div>
         </client-only>
-        <div :class="{
-          isExam: [userPanelItems.exams, userPanelItems.trainings].includes(
-            activeList
-          ),
-        }" class="user-panel">
+        <div
+          :class="{
+            isExam: [userPanelItems.exams, userPanelItems.trainings].includes(
+              activeList
+            ),
+          }"
+          class="user-panel"
+        >
           <div class="rw-user-panel">
-            <div v-if="!windowSize.isMobileSize" class="rw-panel hide-to-tablet">
+            <div
+              v-if="!windowSize.isMobileSize"
+              class="rw-panel hide-to-tablet"
+            >
               <div class="img-group relative">
                 <app-overlay v-if="isUpload" />
-                <img :src="imageUrlService.getUrl(
-                  ImagesFolderName.Users,
-                  profileInfo.pictureUrl,
-                  ImageSize.original,
-                  ImageExt.jpg
-                )
-                  " alt="" @click="
+                <img
+                  :src="
+                    imageUrlService.getUrl(
+                      ImagesFolderName.Users,
+                      profileInfo.pictureUrl,
+                      ImageSize.original,
+                      ImageExt.jpg
+                    )
+                  "
+                  alt=""
+                  @click="
                     profileInfo.pictureUrl ? openCropEdit() : fileRef?.click()
-                    " />
-                <div v-if="!isUpload" class="c-btn">
-                  <input ref="file_ref" accept="image/*" hidden type="file" @input="uploadPhoto" />
-                  <div class="change-image" @click="fileRef?.click()">
+                  "
+                />
+                <div
+                  v-if="!isUpload"
+                  class="c-btn"
+                >
+                  <input
+                    ref="file_ref"
+                    accept="image/*"
+                    hidden
+                    type="file"
+                    @input="uploadPhoto"
+                  />
+                  <div
+                    class="change-image"
+                    @click="fileRef?.click()"
+                  >
                     <i class="fa fa-camera"></i>
                     <span v-if="profileInfo.pictureUrl">تغيير الصورة</span>
                     <span v-else>تعيين صورة</span>
@@ -64,7 +113,11 @@
               <span class="user-name">{{ appAuth.user.userName }}</span>
 
               <div class="pt-3 type-switch">
-                <custom-switch v-model:active="selectedGlobalType" :leftLabel="'تحصيلي'" :rightLabel="'قدرات'" />
+                <custom-switch
+                  v-model:active="selectedGlobalType"
+                  :leftLabel="'تحصيلي'"
+                  :rightLabel="'قدرات'"
+                />
               </div>
 
               <div class="exams-btn">
@@ -76,23 +129,41 @@
               </div>
 
               <div class="action-list">
-                <template v-for="item in listItemModel" :key="item.id">
-                  <div v-if="allowShowItem(item)" :class="[
-                    { active: activeList === item.id },
-                    {
-                      'is-red':
-                        item.id === userPanelItems.teachers ||
-                        item.id === userPanelItems.teacherPanel,
-                    },
-                  ]" class="list-item" @click="activeList = item.id">
+                <template
+                  v-for="item in listItemModel"
+                  :key="item.id"
+                >
+                  <div
+                    v-if="allowShowItem(item)"
+                    :class="[
+                      { active: activeList === item.id },
+                      {
+                        'is-red':
+                          item.id === userPanelItems.teachers ||
+                          item.id === userPanelItems.teacherPanel,
+                      },
+                    ]"
+                    class="list-item"
+                    @click="activeList = item.id"
+                  >
                     <div class="r-part">
-                      <img :alt="item.icon" :src="`/images/icons/menu/${item.icon}.svg`" width="16" />
+                      <img
+                        :alt="item.icon"
+                        :src="`/images/icons/menu/${item.icon}.svg`"
+                        width="16"
+                      />
                       <span class="label">{{ item.label }}</span>
-                      <span v-if="item.badgeLabel" class="r-part__badge">
+                      <span
+                        v-if="item.badgeLabel"
+                        class="r-part__badge"
+                      >
                         {{ item.badgeLabel }}
                       </span>
                     </div>
-                    <div v-if="item.id == 7 && notificationCount > 0" class="c-notification">
+                    <div
+                      v-if="item.id == 7 && notificationCount > 0"
+                      class="c-notification"
+                    >
                       <span>{{ notificationCount }}</span>
                     </div>
                     <i class="fa fa-chevron-left"></i>
@@ -101,15 +172,34 @@
               </div>
             </div>
             <client-only>
-              <web-social-box v-if="!windowSize.isMobileSize" class="!mt-5" />
+              <web-social-box
+                v-if="!windowSize.isMobileSize"
+                class="!mt-5"
+              />
             </client-only>
-            <div v-if="!!news && news.length > 0" class="rw-news">
-              <div v-for="(item, index) of news" :key="item.title" class="cl-news">
+            <div
+              v-if="!!news && news.length > 0"
+              class="rw-news"
+            >
+              <div
+                v-for="(item, index) of news"
+                :key="item.title"
+                class="cl-news"
+              >
                 <span class="c-title">{{ item.title }}</span>
-                <span :class="{ all: readMore.includes(index) }" class="c-short-desc">
-                  <text-slice :length="150" :text="item.description" />
+                <span
+                  :class="{ all: readMore.includes(index) }"
+                  class="c-short-desc"
+                >
+                  <text-slice
+                    :length="150"
+                    :text="item.description"
+                  />
                 </span>
-                <a :href="item.link" class="readMore">
+                <a
+                  :href="item.link"
+                  class="readMore"
+                >
                   اقرأ المزيد
                 </a>
               </div>
@@ -118,28 +208,52 @@
           <div v-if="activeList === userPanelItems.learningPanel">
             <lazy-learning-panel />
           </div>
-          <div v-else :class="[
-            { isAnalytics: activeList === userPanelItems.analytics },
-            {
-              isTeachers:
-                activeList === userPanelItems.teachers ||
-                activeList === userPanelItems.teacherPanel,
-            },
-          ]" class="rw-info">
+          <div
+            v-else
+            :class="[
+              { isAnalytics: activeList === userPanelItems.analytics },
+              {
+                isTeachers:
+                  activeList === userPanelItems.teachers ||
+                  activeList === userPanelItems.teacherPanel,
+              },
+            ]"
+            class="rw-info"
+          >
             <template v-if="activeList === userPanelItems.profile">
-              <div v-if="windowSize.isMobileSize" class="user-group hide-from-tablet">
+              <div
+                v-if="windowSize.isMobileSize"
+                class="user-group hide-from-tablet"
+              >
                 <div class="img-group">
                   <app-overlay v-if="isUpload" />
-                  <img :src="imageUrlService.getUrl(
-                    ImagesFolderName.Users,
-                    profileInfo.pictureUrl,
-                    ImageSize.original,
-                    ImageExt.jpg
-                  )
-                    " alt="" @click="profileInfo.pictureUrl ? openCropEdit() : ''" />
-                  <div v-if="!isUpload" class="c-btn">
-                    <input ref="file_ref" accept="image/*" hidden type="file" @input="uploadPhoto" />
-                    <div class="change-image" @click="fileRef?.click()">
+                  <img
+                    :src="
+                      imageUrlService.getUrl(
+                        ImagesFolderName.Users,
+                        profileInfo.pictureUrl,
+                        ImageSize.original,
+                        ImageExt.jpg
+                      )
+                    "
+                    alt=""
+                    @click="profileInfo.pictureUrl ? openCropEdit() : ''"
+                  />
+                  <div
+                    v-if="!isUpload"
+                    class="c-btn"
+                  >
+                    <input
+                      ref="file_ref"
+                      accept="image/*"
+                      hidden
+                      type="file"
+                      @input="uploadPhoto"
+                    />
+                    <div
+                      class="change-image"
+                      @click="fileRef?.click()"
+                    >
                       <i class="fa fa-camera"></i>
                       <span v-if="profileInfo.pictureUrl">تغيير الصورة</span>
                       <span v-else>تعيين صورة</span>
@@ -148,7 +262,9 @@
                 </div>
 
                 <span class="full-name">
-                  <template v-if="appAuth.user.firstName || appAuth.user.lastName">
+                  <template
+                    v-if="appAuth.user.firstName || appAuth.user.lastName"
+                  >
                     {{
                       getText(appAuth.user.firstName) +
                       ' ' +
@@ -163,13 +279,24 @@
               <div class="u-wrapper">
                 <!--                        name-->
                 <template v-if="activeSection === editSections.name">
-                  <vee-form v-slot="{ handleSubmit }" class="ac-wrapper name">
+                  <vee-form
+                    v-slot="{ handleSubmit }"
+                    class="ac-wrapper name"
+                  >
                     <div class="ac-control-wrapper">
-                      <form-input v-model:inputValue="profileInfo.firstName" inputId="FirstName" label="الاسم الأول"
-                        rules="required|no_special" />
+                      <form-input
+                        v-model:inputValue="profileInfo.firstName"
+                        inputId="FirstName"
+                        label="الاسم الأول"
+                        rules="required|no_special"
+                      />
 
-                      <form-input v-model:inputValue="profileInfo.lastName" inputId="secondname" label="اسم العائلة"
-                        rules="required|no_special" />
+                      <form-input
+                        v-model:inputValue="profileInfo.lastName"
+                        inputId="secondname"
+                        label="اسم العائلة"
+                        rules="required|no_special"
+                      />
                     </div>
                     <div class="m-note">
                       <span>
@@ -178,10 +305,17 @@
                       <span>لا يسمح باستخدام الرموز.</span>
                     </div>
                     <div class="ac-action">
-                      <button class="btn save" @click.prevent="handleSubmit(sendForm)">
+                      <button
+                        class="btn save"
+                        @click.prevent="handleSubmit(sendForm)"
+                      >
                         <span>حفظ</span>
                       </button>
-                      <button class="btn cancel" type="button" @click="closeSection">
+                      <button
+                        class="btn cancel"
+                        type="button"
+                        @click="closeSection"
+                      >
                         <span>إلغاء</span>
                       </button>
                     </div>
@@ -192,22 +326,37 @@
                     <div class="r-element">
                       <div class="r-1">
                         <span class="r-label">الاسم</span>
-                        <span v-if="appAuth.user.firstName || appAuth.user.lastName" class="r-val">
+                        <span
+                          v-if="appAuth.user.firstName || appAuth.user.lastName"
+                          class="r-val"
+                        >
                           {{
                             getText(appAuth.user.firstName) +
                             ' ' +
                             getText(appAuth.user.lastName)
                           }}
                         </span>
-                        <span v-else class="r-val">
+                        <span
+                          v-else
+                          class="r-val"
+                        >
                           لا يوجد
                         </span>
                       </div>
-                      <div class="r-action" @click="setActiveSection(editSections.name)">
-                        <span v-if="appAuth.user.firstName || appAuth.user.lastName" class="edit">
+                      <div
+                        class="r-action"
+                        @click="setActiveSection(editSections.name)"
+                      >
+                        <span
+                          v-if="appAuth.user.firstName || appAuth.user.lastName"
+                          class="edit"
+                        >
                           تعديل
                         </span>
-                        <span v-else class="add">
+                        <span
+                          v-else
+                          class="add"
+                        >
                           إضافة
                         </span>
                       </div>
@@ -217,19 +366,42 @@
                 <!--                        end name-->
                 <!--                        password-->
                 <template v-if="activeSection === editSections.password">
-                  <vee-form ref="reset_password_ref" v-slot="{ handleSubmit }" as="div" class="w-full">
-                    <form class="ac-wrapper password" @submit.prevent="handleSubmit(changePassword)">
+                  <vee-form
+                    ref="reset_password_ref"
+                    v-slot="{ handleSubmit }"
+                    as="div"
+                    class="w-full"
+                  >
+                    <form
+                      class="ac-wrapper password"
+                      @submit.prevent="handleSubmit(changePassword)"
+                    >
                       <span class="ac-title">كلمة المرور</span>
                       <div class="ac-control-wrapper">
-                        <form-input ref="old_password_field_ref" v-model:inputValue="password.oldPassword"
-                          inputId="old-password" inputType="password" label="الكلمة الحالية" rules="required" />
+                        <form-input
+                          ref="old_password_field_ref"
+                          v-model:inputValue="password.oldPassword"
+                          inputId="old-password"
+                          inputType="password"
+                          label="الكلمة الحالية"
+                          rules="required"
+                        />
 
-                        <form-input v-model:inputValue="password.newPassword" :inputType="password2Type"
-                          inputId="new-password" label="الكلمة الجديدة" rules="required|verify_password|min:8" />
+                        <form-input
+                          v-model:inputValue="password.newPassword"
+                          :inputType="password2Type"
+                          inputId="new-password"
+                          label="الكلمة الجديدة"
+                          rules="required|verify_password|min:8"
+                        />
 
-                        <form-input v-model:inputValue="password.newPasswordConfirm" :inputType="password3Type"
-                          inputId="confirmNewPassword" label="تأكيد الكلمة الجديدة"
-                          rules="required|confirmed:@new-password" />
+                        <form-input
+                          v-model:inputValue="password.newPasswordConfirm"
+                          :inputType="password3Type"
+                          inputId="confirmNewPassword"
+                          label="تأكيد الكلمة الجديدة"
+                          rules="required|confirmed:@new-password"
+                        />
                       </div>
                       <div class="m-note">
                         <span>
@@ -241,10 +413,17 @@
                         </span>
                       </div>
                       <div class="ac-action">
-                        <button class="btn save" type="submit">
+                        <button
+                          class="btn save"
+                          type="submit"
+                        >
                           <span>حفظ</span>
                         </button>
-                        <button class="btn cancel" type="button" @click="closeSection">
+                        <button
+                          class="btn cancel"
+                          type="button"
+                          @click="closeSection"
+                        >
                           <span>إلغاء</span>
                         </button>
                       </div>
@@ -257,12 +436,18 @@
                       <div class="r-1">
                         <span class="r-label">كلمة المرور</span>
                         <div class="r-val password">
-                          <span v-for="item in Array(9)" :key="item">
+                          <span
+                            v-for="item in Array(9)"
+                            :key="item"
+                          >
                             &#8226;
                           </span>
                         </div>
                       </div>
-                      <div class="r-action" @click="setActiveSection(editSections.password)">
+                      <div
+                        class="r-action"
+                        @click="setActiveSection(editSections.password)"
+                      >
                         <span class="edit">تعديل</span>
                       </div>
                     </div>
@@ -272,12 +457,24 @@
 
                 <!--                      email-->
                 <template v-if="activeSection === editSections.email">
-                  <vee-form v-slot="{ handleSubmit, meta: formMeta }" as="div" class="w-full">
-                    <form class="ac-wrapper email" @submit.prevent="handleSubmit(sendMail)">
+                  <vee-form
+                    v-slot="{ handleSubmit, meta: formMeta }"
+                    as="div"
+                    class="w-full"
+                  >
+                    <form
+                      class="ac-wrapper email"
+                      @submit.prevent="handleSubmit(sendMail)"
+                    >
                       <span class="ac-title">البريد الإلكتروني</span>
                       <div class="ac-control-wrapper">
-                        <form-input v-model:inputValue="profileInfo.email" :rules="{ required: true, email: true }"
-                          inputId="email" inputType="email" label="البريد الألكتروني" />
+                        <form-input
+                          v-model:inputValue="profileInfo.email"
+                          :rules="{ required: true, email: true }"
+                          inputId="email"
+                          inputType="email"
+                          label="البريد الألكتروني"
+                        />
                       </div>
                       <div class="m-note">
                         <span>
@@ -290,13 +487,22 @@
                       </div>
                       <div class="ac-action relative">
                         <app-overlay v-if="processing" />
-                        <button :disabled="!formMeta.valid ||
-                          isMailConfirmed() ||
-                          profileInfo.email == null
-                          " class="btn save" type="submit">
+                        <button
+                          :disabled="
+                            !formMeta.valid ||
+                            isMailConfirmed() ||
+                            profileInfo.email == null
+                          "
+                          class="btn save"
+                          type="submit"
+                        >
                           <span>تأكيد</span>
                         </button>
-                        <button class="btn cancel" type="button" @click="closeSection">
+                        <button
+                          class="btn cancel"
+                          type="button"
+                          @click="closeSection"
+                        >
                           <span>إلغاء</span>
                         </button>
                       </div>
@@ -308,18 +514,33 @@
                     <div class="r-element">
                       <div class="r-1">
                         <span class="r-label">البريد الإلكتروني</span>
-                        <span v-if="appAuth.user.email" class="r-val">
+                        <span
+                          v-if="appAuth.user.email"
+                          class="r-val"
+                        >
                           {{ appAuth.user.email }}
                         </span>
-                        <span v-else class="r-val">
+                        <span
+                          v-else
+                          class="r-val"
+                        >
                           لا يوجد
                         </span>
                       </div>
-                      <div class="r-action" @click="setActiveSection(editSections.email)">
-                        <span v-if="appAuth.user.email" class="edit">
+                      <div
+                        class="r-action"
+                        @click="setActiveSection(editSections.email)"
+                      >
+                        <span
+                          v-if="appAuth.user.email"
+                          class="edit"
+                        >
                           تعديل
                         </span>
-                        <span v-else class="add">
+                        <span
+                          v-else
+                          class="add"
+                        >
                           إضافة
                         </span>
                       </div>
@@ -330,27 +551,47 @@
 
                 <!--                      phone-->
                 <template v-if="activeSection === editSections.phone">
-                  <vee-form v-slot="{ handleSubmit, meta }" as="div" class="w-full">
-                    <form class="ac-wrapper phone" @submit.prevent="handleSubmit(callApiChangePhone)">
+                  <vee-form
+                    v-slot="{ handleSubmit, meta }"
+                    as="div"
+                    class="w-full"
+                  >
+                    <form
+                      class="ac-wrapper phone"
+                      @submit.prevent="handleSubmit(callApiChangePhone)"
+                    >
                       <span class="ac-title">رقم واتساب</span>
                       <div class="ac-control-wrapper">
                         <div class="ac-control">
                           <label for="telephone">رقم واتساب</label>
-                          <phone-input :isEdit="true" :phoneNumber="profileInfo.phoneNumber" @onInputPhone="
-                            (val) => (profileInfo.phoneNumber = val)
-                          " />
+                          <phone-input
+                            :isEdit="true"
+                            :phoneNumber="profileInfo.phoneNumber"
+                            @onInputPhone="
+                              (val) => (profileInfo.phoneNumber = val)
+                            "
+                          />
                         </div>
                       </div>
 
                       <div class="ac-action relative">
                         <app-overlay v-if="processing" />
-                        <button :disabled="!meta.valid ||
-                          isPhoneConfirmed() ||
-                          profileInfo.phoneNumber == null
-                          " class="btn save" type="submit">
+                        <button
+                          :disabled="
+                            !meta.valid ||
+                            isPhoneConfirmed() ||
+                            profileInfo.phoneNumber == null
+                          "
+                          class="btn save"
+                          type="submit"
+                        >
                           <span>تأكيد</span>
                         </button>
-                        <button class="btn cancel" type="button" @click="closeSection">
+                        <button
+                          class="btn cancel"
+                          type="button"
+                          @click="closeSection"
+                        >
                           <span>إلغاء</span>
                         </button>
                       </div>
@@ -362,18 +603,34 @@
                     <div class="r-element">
                       <div class="r-1">
                         <span class="r-label">رقم واتساب</span>
-                        <span v-if="appAuth.user.phoneNumber" class="r-val direction-ltr" style="direction: ltr">
+                        <span
+                          v-if="appAuth.user.phoneNumber"
+                          class="r-val direction-ltr"
+                          style="direction: ltr"
+                        >
                           +{{ appAuth.user.phoneNumber }}
                         </span>
-                        <span v-else class="r-val">
+                        <span
+                          v-else
+                          class="r-val"
+                        >
                           لا يوجد
                         </span>
                       </div>
-                      <div class="r-action" @click="setActiveSection(editSections.phone)">
-                        <span v-if="appAuth.user.phoneNumber" class="edit">
+                      <div
+                        class="r-action"
+                        @click="setActiveSection(editSections.phone)"
+                      >
+                        <span
+                          v-if="appAuth.user.phoneNumber"
+                          class="edit"
+                        >
                           تعديل
                         </span>
-                        <span v-else class="add">
+                        <span
+                          v-else
+                          class="add"
+                        >
                           إضافة
                         </span>
                       </div>
@@ -382,10 +639,12 @@
                 </template>
               </div>
             </template>
-            <template v-if="
-              allowShowItem({ roles: [roles.student] }) &&
-              activeList === userPanelItems.studentTraining
-            ">
+            <template
+              v-if="
+                allowShowItem({ roles: [roles.student] }) &&
+                activeList === userPanelItems.studentTraining
+              "
+            >
               <lazy-student-training />
             </template>
             <template v-if="activeList === userPanelItems.analytics">
@@ -409,30 +668,54 @@
             <template v-if="activeList === userPanelItems['passed-training']">
               <lazy-passed-training-panel />
             </template>
-            <template v-if="
-              allowShowItem({ roles: [roles.student] }) &&
-              activeList === userPanelItems.teachers
-            ">
+            <template
+              v-if="
+                allowShowItem({ roles: [roles.student] }) &&
+                activeList === userPanelItems.teachers
+              "
+            >
               <lazy-teachers-panel />
             </template>
-            <template v-if="
-              allowShowItem({ roles: [roles.teacher] }) &&
-              activeList === userPanelItems.teacherPanel
-            ">
+            <template
+              v-if="
+                allowShowItem({ roles: [roles.teacher] }) &&
+                activeList === userPanelItems.teacherPanel
+              "
+            >
               <lazy-teacher-info-panel />
             </template>
           </div>
 
           <client-only>
-            <app-image-cropper v-model:openCropper="openCropper" :hasDelete="true" :img="img" :ratio="1"
-              @cropImg="cropImg" @onDelete="deleteImg" />
+            <app-image-cropper
+              v-model:openCropper="openCropper"
+              :hasDelete="true"
+              :img="img"
+              :ratio="1"
+              @cropImg="cropImg"
+              @onDelete="deleteImg"
+            />
           </client-only>
 
-          <lazy-prime-dialog id="modal-edit-mail" v-model:visible="openMailModal" :closable="true" :closeOnEscape="true"
-            :dismissableMask="false" :modal="true" :showHeader="false" header="تعديل البريد الالكتروني"
-            @afterHide="closeMailModal()">
-            <i class="fa fa-close" @click="closeMailModal()"></i>
-            <div :class="{ 'wrong-code': wrongCode }" class="code-part">
+          <lazy-prime-dialog
+            id="modal-edit-mail"
+            v-model:visible="openMailModal"
+            :closable="true"
+            :closeOnEscape="true"
+            :dismissableMask="false"
+            :modal="true"
+            :showHeader="false"
+            header="تعديل البريد الالكتروني"
+            @afterHide="closeMailModal()"
+          >
+            <i
+              class="fa fa-close"
+              @click="closeMailModal()"
+            ></i>
+            <div
+              :class="{ 'wrong-code': wrongCode }"
+              class="code-part"
+            >
               <p class="t-1">تغيير البريد الإلكتروني</p>
 
               <span class="t-2">
@@ -441,11 +724,23 @@
               <span class="t-3">{{ profileInfo.email }}</span>
               <div class="w-full relative">
                 <app-overlay v-if="processing" />
-                <code-input ref="codeInputRef" :fieldHeight="45" :fieldWidth="45" :fields="4" :radius="8"
-                  :required="true" class="t-code-input" style="direction: ltr" @complete="sendCode" />
+                <code-input
+                  ref="codeInputRef"
+                  :fieldHeight="45"
+                  :fieldWidth="45"
+                  :fields="4"
+                  :radius="8"
+                  :required="true"
+                  class="t-code-input"
+                  style="direction: ltr"
+                  @complete="sendCode"
+                />
               </div>
 
-              <p v-if="wrongCode" class="wrong-code">
+              <p
+                v-if="wrongCode"
+                class="wrong-code"
+              >
                 الكود غير صحيح يرجي التحقق
               </p>
 
@@ -453,64 +748,109 @@
                 تحقق من البريد العشوائي في حال لم تجد الرسالة
               </span>
 
-              <timer-active v-if="
-                requestData &&
-                requestData.countRegisterTries <= 3 &&
-                isWaiting
-              " v-model:isActive="isWaiting" />
+              <timer-active
+                v-if="
+                  requestData &&
+                  requestData.countRegisterTries <= 3 &&
+                  isWaiting
+                "
+                v-model:isActive="isWaiting"
+              />
 
               <template v-if="requestData">
-                <span v-if="requestData && requestData.countRegisterTries > 3" class="tries-limit">
+                <span
+                  v-if="requestData && requestData.countRegisterTries > 3"
+                  class="tries-limit"
+                >
                   بإمكانك إعادة إرسال الرسالة بعد 8 ساعات
                 </span>
 
-                <span :class="{
-                  disable:
-                    (requestData && requestData.countRegisterTries > 3) ||
-                    isWaiting,
-                }" class="re-send" @click="
+                <span
+                  :class="{
+                    disable:
+                      (requestData && requestData.countRegisterTries > 3) ||
+                      isWaiting,
+                  }"
+                  class="re-send"
+                  @click="
                     requestData.countRegisterTries <= 3 && !isWaiting
                       ? sendMail()
                       : {}
-                    ">
+                  "
+                >
                   إعادة إرسال
                 </span>
               </template>
             </div>
           </lazy-prime-dialog>
 
-          <lazy-prime-dialog id="modal-edit-phone" v-model:visible="openPhoneModal" :closable="false"
-            :closeOnEscape="true" :dismissableMask="false" :modal="true" :showHeader="false" header="تعديل رقم الهاتف"
-            @afterHide="closePhoneModal()">
-            <i class="fa fa-close" @click="closePhoneModal()"></i>
-            <div :class="{ 'wrong-code': wrongCode }" class="code-part">
+          <lazy-prime-dialog
+            id="modal-edit-phone"
+            v-model:visible="openPhoneModal"
+            :closable="false"
+            :closeOnEscape="true"
+            :dismissableMask="false"
+            :modal="true"
+            :showHeader="false"
+            header="تعديل رقم الهاتف"
+            @afterHide="closePhoneModal()"
+          >
+            <i
+              class="fa fa-close"
+              @click="closePhoneModal()"
+            ></i>
+            <div
+              :class="{ 'wrong-code': wrongCode }"
+              class="code-part"
+            >
               <p class="t-1">تغيير رقم الواتساب</p>
 
               <span class="t-2">أدخل رمز التحقق المرسل إلى رقمك في واتساب</span>
               <span class="t-3">{{ profileInfo.phoneNumber }}+</span>
               <div class="w-full relative">
                 <app-overlay v-if="processing" />
-                <code-input ref="codeInputRef" :fieldHeight="45" :fieldWidth="45" :fields="4" :radius="8"
-                  :required="true" class="t-code-input" style="direction: ltr" @complete="sendCode" />
+                <code-input
+                  ref="codeInputRef"
+                  :fieldHeight="45"
+                  :fieldWidth="45"
+                  :fields="4"
+                  :radius="8"
+                  :required="true"
+                  class="t-code-input"
+                  style="direction: ltr"
+                  @complete="sendCode"
+                />
               </div>
-              <p v-if="wrongCode" class="wrong-code">
+              <p
+                v-if="wrongCode"
+                class="wrong-code"
+              >
                 الكود غير صحيح يرجي التحقق
               </p>
               <template v-if="requestDataPhone">
-                <span v-if="requestDataPhone.countRegisterTries > 3" class="tries-limit">
+                <span
+                  v-if="requestDataPhone.countRegisterTries > 3"
+                  class="tries-limit"
+                >
                   بإمكانك إعادة إرسال الرسالة بعد 8 ساعات
                 </span>
-                <timer-active v-if="requestDataPhone.countRegisterTries <= 3 && isWaiting"
-                  v-model:isActive="isWaiting" />
+                <timer-active
+                  v-if="requestDataPhone.countRegisterTries <= 3 && isWaiting"
+                  v-model:isActive="isWaiting"
+                />
 
-                <span :class="{
-                  disable:
-                    requestDataPhone.countRegisterTries > 3 || isWaiting,
-                }" class="re-send" @click="
+                <span
+                  :class="{
+                    disable:
+                      requestDataPhone.countRegisterTries > 3 || isWaiting,
+                  }"
+                  class="re-send"
+                  @click="
                     requestDataPhone.countRegisterTries <= 3 && !isWaiting
                       ? callApiChangePhone()
                       : {}
-                    ">
+                  "
+                >
                   إعادة إرسال
                 </span>
               </template>
@@ -554,7 +894,9 @@ import { useGlobalStore } from '~/main/useGlobalStore';
 import { fileTypes } from '~/main/constants/file-types.enum';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import type { FormInput } from '#components';
-const codeInputRef = ref<InstanceType<typeof import('~/components/shared/forms/code-input.vue')['default']> | null>(null);
+const codeInputRef = ref<InstanceType<
+  (typeof import('~/components/shared/forms/code-input.vue'))['default']
+> | null>(null);
 
 class PasswordFrom {
   oldPassword = null;
@@ -1317,19 +1659,10 @@ export default {
       });
     },
 
-    goExam() {
-      this.appRouter.push({
-        path: '/user-panel',
-        query: {
-          page: UserPanelItemsRecord[UserPanelItems.exams],
-        },
-      });
-    },
-
     toUserDashboard() {
       this.appRouter.push({
-        path: '/user-dashboard/foundation'
-      })
+        path: '/user-dashboard/foundation',
+      });
     },
 
     checkNotification() {

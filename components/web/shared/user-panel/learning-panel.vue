@@ -506,15 +506,6 @@ export default {
       });
     },
 
-    goExam() {
-      this.appRouter.push({
-        path: '/user-panel',
-        query: {
-          page: UserPanelItemsRecord[UserPanelItems.exams],
-        },
-      });
-    },
-
     goAnalytics() {
       this.appRouter.push({
         path: '/user-panel',
