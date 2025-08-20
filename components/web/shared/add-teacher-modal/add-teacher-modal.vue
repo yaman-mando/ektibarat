@@ -106,7 +106,7 @@
               >
                 <app-overlay v-if="processCode" />
                 <code-input
-                  ref="code-input"
+                  ref="codeInputRef"
                   :fields="4"
                   :fieldWidth="45"
                   :fieldHeight="45"
@@ -199,6 +199,7 @@
 import { defineRule, Form as VeeForm } from 'vee-validate';
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
 import { deepCloneUtil, deepEqualUtil } from '~/main/utils/lodash.utils';
+const codeInputRef = ref<InstanceType<typeof import('~/components/shared/forms/code-input.vue')['default']> | null>(null);
 
 const inCompleteType = {
   none: 0,
@@ -502,6 +503,7 @@ export default {
     },
 
     reSendAction() {
+      codeInputRef.value?.reset();
       if (this.incomplete === inCompleteType.phone) {
         this.requestChangePhone(this.form.phoneNumber);
         return;

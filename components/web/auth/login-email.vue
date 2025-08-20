@@ -1,17 +1,9 @@
 <template>
   <lazy-vee-validate-provider>
-    <vee-form
-      v-bind="attrs"
-      ref="pageForm"
-      class="w-full flex flex-col items-start justify-start"
-    >
+    <vee-form v-bind="attrs" ref="pageForm" class="w-full flex flex-col items-start justify-start">
       <template v-if="!isCodeStep">
-        <form-input
-          v-model:inputValue="email"
-          label="البريد الالكتروني"
-          :rules="{ required: true, email: true }"
-          inputId="email"
-        />
+        <form-input v-model:inputValue="email" label="البريد الالكتروني" :rules="{ required: true, email: true }"
+          inputId="email" />
         <span class="note">سيتم إرسال رمز الدخول إلى بريدك الإلكتروني</span>
       </template>
 
@@ -22,40 +14,20 @@
           </span>
           <span class="user-data">
             {{ email }}
-            <button
-              class="change-method"
-              @click="backToEmail"
-            >
+            <button class="change-method" @click="backToEmail">
               تغيير
             </button>
           </span>
         </div>
-        <code-input
-          :fields="4"
-          :fieldWidth="50"
-          :fieldHeight="45"
-          :radius="8"
-          :required="true"
-          style="direction: ltr"
-          @complete="onCompleteCode"
-        />
+        <code-input ref="codeInputRef" :fields="4" :fieldWidth="50" :fieldHeight="45" :radius="8" :required="true"
+          style="direction: ltr" @complete="onCompleteCode" />
       </template>
-      <span
-        v-if="fullTries"
-        class="__triesNote"
-      >
+      <span v-if="fullTries" class="__triesNote">
         لقد استنفذت عدد المحاولات المسموح بها لإرسال الكود يرجى إعادة المحاولة
         بعد مرور 8 ساعات
       </span>
-      <app-button
-        type="submit"
-        :isLoading="isLoading"
-        :isDisabled="fullTries"
-        class="!w-full !mt-6"
-        :label="isCodeStep ? 'إعادة إرسال الكود' : 'إرسال'"
-      
-        @click="submit"
-      />
+      <app-button type="submit" :isLoading="isLoading" :isDisabled="fullTries" class="!w-full !mt-6"
+        :label="isCodeStep ? 'إعادة إرسال الكود' : 'إرسال'" @click="submit" />
     </vee-form>
   </lazy-vee-validate-provider>
 </template>
@@ -77,6 +49,8 @@ const fullTries = ref(false);
 const pageForm = ref<InstanceType<typeof VeeForm> | null>();
 const email = ref<string | null>(null);
 const isCodeStep = ref<boolean>(false);
+const codeInputRef = ref<InstanceType<typeof import('~/components/shared/forms/code-input.vue')['default']> | null>(null);
+
 
 const backToEmail = () => {
   resetForm();
@@ -113,7 +87,7 @@ const submit = async () => {
 
   const { valid } = await formRef.validate();
   if (!valid) return;
-
+  codeInputRef.value?.reset();
   loginOTP({ input: email.value!, code: null });
 };
 

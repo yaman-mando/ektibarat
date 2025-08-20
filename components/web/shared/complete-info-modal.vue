@@ -1,56 +1,23 @@
 <template>
-  <lazy-prime-dialog
-    :visible="isOpenModal"
-    :modal="true"
-    :showHeader="false"
-    :closable="true"
-    :dismissableMask="false"
-    class="complete-info-modal"
-    @afterHide="closeModal()"
-  >
+  <lazy-prime-dialog :visible="isOpenModal" :modal="true" :showHeader="false" :closable="true" :dismissableMask="false"
+    class="complete-info-modal" @afterHide="closeModal()">
     <lazy-vee-validate-provider>
-      <i
-        class="fa fa-times"
-        @click="closeModal"
-      ></i>
+      <i class="fa fa-times" @click="closeModal"></i>
       <div class="steps">
-        <vee-form
-          ref="form_ref"
-          class="complete-info-form w-full"
-        >
+        <vee-form ref="form_ref" class="complete-info-form w-full">
           <template v-if="activeStep === 1">
             <span class="__text1">يرجى استكمال المعلومات الخاصة بكم</span>
             <span class="__text2">قبل الانتقال لعملية الدفع</span>
-            <form-input
-              v-if="!hasFirstName"
-              v-model:inputValue="form.firstName"
-              inputTabIndex="1"
-              label="الاسم الأول"
-              :inputId="'firstName'"
-              :rules="{ required: true }"
-            />
+            <form-input v-if="!hasFirstName" v-model:inputValue="form.firstName" inputTabIndex="1" label="الاسم الأول"
+              :inputId="'firstName'" :rules="{ required: true }" />
 
-            <form-input
-              v-if="!hasLastName"
-              v-model:inputValue="form.lastName"
-              inputTabIndex="2"
-              label="الاسم الأخير"
-              :inputId="'lastName'"
-              :rules="{ required: true }"
-            />
+            <form-input v-if="!hasLastName" v-model:inputValue="form.lastName" inputTabIndex="2" label="الاسم الأخير"
+              :inputId="'lastName'" :rules="{ required: true }" />
 
-            <form-input
-              v-if="!hasEmail"
-              v-model:inputValue="email"
-              :inputId="'email'"
-              :rules="{ required: true, email: true }"
-              :label="'البريد الالكتروني'"
-            />
+            <form-input v-if="!hasEmail" v-model:inputValue="email" :inputId="'email'"
+              :rules="{ required: true, email: true }" :label="'البريد الالكتروني'" />
 
-            <span
-              v-if="!hasEmail && countRegisterTriesEmail > 3"
-              class="__triesNote __red"
-            >
+            <span v-if="!hasEmail && countRegisterTriesEmail > 3" class="__triesNote __red">
               لقد استنفذت عدد المحاولات المسموح بها لإرسال الكود يرجى إعادة
               المحاولة بعد مرور 8 ساعات
             </span>
@@ -63,72 +30,39 @@
               </span>
               <span class="__text5">التحقق من البريد الإلكتروني</span>
               <div class="cl-mail">
-                <a
-                  class="mail"
-                  @click="activeStep = 1"
-                >
+                <a class="mail" @click="activeStep = 1">
                   {{ email }}
                 </a>
               </div>
-              <div
-                class="code-part relative"
-                :class="{ 'wrong-code': wrongCode }"
-              >
+              <div class="code-part relative" :class="{ 'wrong-code': wrongCode }">
                 <app-overlay v-if="processCode" />
-                <code-input
-                  ref="code-input"
-                  className="w-full"
-                  :fields="4"
-                  :fieldWidth="45"
-                  :fieldHeight="45"
-                  :radius="8"
-                  :required="true"
-                  style="direction: ltr"
-                  @complete="sendCode"
-                />
+                <code-input ref="codeInputRef" className="w-full" :fields="4" :fieldWidth="45" :fieldHeight="45"
+                  :radius="8" :required="true" style="direction: ltr" @complete="sendCode" />
 
-                <p
-                  v-if="wrongCode"
-                  class="wrong-code"
-                >
+                <p v-if="wrongCode" class="wrong-code">
                   الكود خاطىء يرجى إدخال كود صحيح
                 </p>
               </div>
               <span class="__text6">
                 تحقق من البريد العشوائي في حال لم تجد الرسالة
               </span>
-              <timer-active
-                v-if="countRegisterTriesEmail <= 3 && isWaiting"
-                v-model:isActive="isWaiting"
-              />
-              <span
-                v-if="countRegisterTriesEmail > 3"
-                class="__triesNote __red"
-              >
+              <timer-active v-if="countRegisterTriesEmail <= 3 && isWaiting" v-model:isActive="isWaiting" />
+              <span v-if="countRegisterTriesEmail > 3" class="__triesNote __red">
                 لقد استنفذت عدد المحاولات المسموح بها لإرسال الكود يرجى إعادة
                 المحاولة بعد مرور 8 ساعات
               </span>
-              <span
-                :class="{ disabled: countRegisterTriesEmail > 3 || isWaiting }"
-                class="resend"
-                @click="
-                  countRegisterTriesEmail <= 3 && !isWaiting
-                    ? requestChangeMail
-                    : {}
-                "
-              >
+              <span :class="{ disabled: countRegisterTriesEmail > 3 || isWaiting }" class="resend" @click="
+                countRegisterTriesEmail <= 3 && !isWaiting
+                  ? requestChangeMail
+                  : {}
+                ">
                 إعادة إرسال
               </span>
             </div>
           </template>
 
-          <app-button
-            v-if="activeStep == 1"
-            :disabled="!hasEmail && countRegisterTriesEmail > 3"
-            class="next-btn"
-            :label="btnText"
-            @click="sendInfo"
-          />
+          <app-button v-if="activeStep == 1" :disabled="!hasEmail && countRegisterTriesEmail > 3" class="next-btn"
+            :label="btnText" @click="sendInfo" />
         </vee-form>
       </div>
     </lazy-vee-validate-provider>
@@ -139,6 +73,7 @@
 import { Form as VeeForm } from 'vee-validate';
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
 import { sleepUtil } from '~/main/utils/shared-utils';
+const codeInputRef = ref<InstanceType<typeof import('~/components/shared/forms/code-input.vue')['default']> | null>(null);
 
 const errTypes = {
   isExist: 1,
@@ -244,6 +179,7 @@ export default {
 
     requestChangeMail() {
       this.isWaiting = true;
+      codeInputRef.value?.reset();
       this.$axios
         .post(`/identity/requestChangeEmail`, { email: this.email })
         .then(({ data: res }) => {
@@ -308,6 +244,7 @@ export default {
   max-width: 95vw;
   margin: auto;
   border-radius: 15px;
+
   .fa-times {
     position: absolute;
     cursor: pointer;
@@ -323,6 +260,7 @@ export default {
       justify-content: center;
       width: 100%;
       margin-top: 25px;
+
       .__text1,
       .__text4 {
         font-size: 24px;
@@ -330,6 +268,7 @@ export default {
         color: var(--purple-8c);
         text-align: center;
       }
+
       .__text2 {
         font-size: 16px;
         font-weight: 500;
@@ -338,6 +277,7 @@ export default {
         text-align: center;
         margin: 35px 0;
       }
+
       .__text3 {
         font-size: 16px;
         font-weight: 500;
@@ -345,6 +285,7 @@ export default {
         text-align: center;
         margin-top: 25px;
       }
+
       .__text5 {
         font-size: 16px;
         font-weight: 500;
@@ -352,6 +293,7 @@ export default {
         text-align: center;
         margin-top: 35px;
       }
+
       .__text6 {
         font-size: 16px;
         color: var(--gray-63);
@@ -361,6 +303,7 @@ export default {
         right: 0;
         width: 100%;
       }
+
       .__text7 {
         font-size: 16px;
         color: var(--red-5e);
@@ -370,10 +313,12 @@ export default {
         right: 0;
         width: 100%;
       }
+
       .cl-mail {
         margin-top: 6px;
         margin-bottom: 35px;
         text-align: center;
+
         a {
           font-size: 16px;
           color: var(--purple-8c);
@@ -388,11 +333,13 @@ export default {
         text-align: center;
         margin-top: 110px;
         cursor: pointer;
+
         &.disabled {
           opacity: 0.5;
           pointer-events: none;
         }
       }
+
       .next-btn {
         margin-top: 20px;
         width: 330px;
@@ -428,6 +375,7 @@ export default {
           border-radius: 8px;
         }
       }
+
       label {
         font-size: 16px;
         color: #252525;

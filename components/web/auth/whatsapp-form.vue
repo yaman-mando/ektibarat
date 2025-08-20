@@ -1,17 +1,10 @@
 <template>
   <lazy-vee-validate-provider>
-    <vee-form
-      v-bind="attrs"
-      ref="pageForm"
-      class="w-full relative flex flex-col justify-start gap-6"
-    >
+    <vee-form v-bind="attrs" ref="pageForm" class="w-full relative flex flex-col justify-start gap-6">
       <lazy-app-overlay v-if="loginOtpReq.status.value === 'pending'" />
       <template v-if="!isCodeStep">
         <lazy-phone-input @onInputPhone="onChange($event)" />
-        <span
-          v-if="errorMessage"
-          class="err-msg"
-        >
+        <span v-if="errorMessage" class="err-msg">
           {{ errorMessage }}
         </span>
         <span class="note">سيتم إرسال رمز الدخول إلى الواتساب</span>
@@ -23,30 +16,16 @@
           </span>
           <span class="user-data">
             {{ data.phone }}
-            <button
-              class="change-method"
-              @click="backToInput"
-            >
+            <button class="change-method" @click="backToInput">
               تغيير
             </button>
           </span>
         </div>
-        <code-input
-          :fields="4"
-          :fieldWidth="50"
-          :fieldHeight="45"
-          :radius="8"
-          :required="true"
-          style="direction: ltr"
-          @complete="onCompleteCode"
-        />
+        <code-input ref="codeInputRef" :fields="4" :fieldWidth="50" :fieldHeight="45" :radius="8" :required="true"
+          style="direction: ltr" @complete="onCompleteCode" />
       </template>
-      <app-button
-        class="!w-full"
-        :isDisabled="!!errorMessage || fullTries"
-        :label="isCodeStep ? 'إعادة إرسال الكود' : 'إرسال'"
-        @click="onSubmitClick"
-      />
+      <app-button class="!w-full" :isDisabled="!!errorMessage || fullTries"
+        :label="isCodeStep ? 'إعادة إرسال الكود' : 'إرسال'" @click="onSubmitClick" />
     </vee-form>
   </lazy-vee-validate-provider>
 </template>
@@ -56,6 +35,7 @@ import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import type { FetchError } from 'ofetch';
 import type { AuthLoginOtpDataModel } from '~/core/auth/data-access/models/auth.model';
 import { authEvents } from '~/core/auth/data-access/services/useAuthEvents';
+const codeInputRef = ref<InstanceType<typeof import('~/components/shared/forms/code-input.vue')['default']> | null>(null);
 
 const attrs = useAttrs();
 //composable
@@ -98,7 +78,7 @@ const submit = async () => {
     const formRef = pageForm.value!;
     const { valid } = await formRef.validate();
     if (!valid) return;
-
+    codeInputRef.value?.reset();
     await loginOtpReq.execute();
     if (loginOtpReq.data.value) {
       onSuccess(loginOtpReq.data.value!);
@@ -153,6 +133,7 @@ const onSuccess = (res: AuthLoginOtpDataModel) => {
   font-weight: 500;
   line-height: 22px;
 }
+
 .rw-user-info {
   display: grid;
   justify-content: center;

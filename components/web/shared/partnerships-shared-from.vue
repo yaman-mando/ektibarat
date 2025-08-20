@@ -4,123 +4,57 @@
       <client-only>
         <div class="register-form">
           <div class="c-back-mobile">
-            <app-button
-              variant="clear"
-              size="md"
-              label="رجوع"
-              iconStartClass="fa fa-solid fa-arrow-right-from-bracket"
-              @click="toMain"
-            />
+            <app-button variant="clear" size="md" label="رجوع" iconStartClass="fa fa-solid fa-arrow-right-from-bracket"
+              @click="toMain" />
           </div>
           <client-only>
             <div class="rt-c">
               <h1>{{ labelTypes[selectedType] }}</h1>
-              <vee-form
-                ref="form_ref"
-                class="w-full"
-              >
+              <vee-form ref="form_ref" class="w-full">
                 <div class="rt-c__form">
                   <div class="w-full grid grid-cols-2 gap-5">
-                    <form-input
-                      v-model:inputValue="form.firstName"
-                      inputId="firstName"
-                      label="الاسم الأول"
-                      :rules="{
-                        required: true,
-                      }"
-                    />
-                    <form-input
-                      v-model:inputValue="form.lastname"
-                      inputId="lastname"
-                      label="اسم العائلة"
-                      :rules="{
-                        required: true,
-                      }"
-                    />
+                    <form-input v-model:inputValue="form.firstName" inputId="firstName" label="الاسم الأول" :rules="{
+                      required: true,
+                    }" />
+                    <form-input v-model:inputValue="form.lastname" inputId="lastname" label="اسم العائلة" :rules="{
+                      required: true,
+                    }" />
                   </div>
 
                   <!--   email  -->
-                  <form-input
-                    v-model:inputValue="form.email"
-                    class="w-full"
-                    inputId="email"
-                    label="البريد الإلكتروني"
+                  <form-input v-model:inputValue="form.email" class="w-full" inputId="email" label="البريد الإلكتروني"
                     :rules="{
                       required: true,
                       email: true,
-                    }"
-                    inputType="email"
-                  />
+                    }" inputType="email" />
 
-                  <phone-input
-                    ref="phone_input_ref"
-                    :key="phoneInputKey"
-                    class="w-full"
-                    :isEdit="true"
-                    :showLabel="true"
-                    :phoneNumber="form.phoneNumber"
-                    @onInputPhone="(val) => (form.phoneNumber = val)"
-                  />
+                  <phone-input ref="phone_input_ref" :key="phoneInputKey" class="w-full" :isEdit="true"
+                    :showLabel="true" :phoneNumber="form.phoneNumber"
+                    @onInputPhone="(val) => (form.phoneNumber = val)" />
 
-                  <lazy-form-select
-                    v-if="selectedType === PartnerShipFormTypesEnum.teacher"
-                    v-model:selectedValues="form.teacherQodoratType"
-                    :list="teacherQodoratType"
-                    :label="'التخصصات'"
-                    :placeholder="'اختر تخصصك'"
-                    :rules="{ required: true }"
-                    inputId="teacherQodoratType"
-                  />
+                  <lazy-form-select v-if="selectedType === PartnerShipFormTypesEnum.teacher"
+                    v-model:selectedValues="form.teacherQodoratType" :list="teacherQodoratType" :label="'التخصصات'"
+                    :placeholder="'اختر تخصصك'" :rules="{ required: true }" inputId="teacherQodoratType" />
 
-                  <lazy-form-select
-                    v-if="selectedType === PartnerShipFormTypesEnum.student"
-                    v-model:selectedValues="form.grade"
-                    :list="gradesList"
-                    :label="'الصف الدراسي'"
-                    :placeholder="'اختر صفك الدراسي'"
-                    :rules="{ required: true }"
-                    inputId="grade"
-                    :isMulti="false"
-                  />
+                  <lazy-form-select v-if="selectedType === PartnerShipFormTypesEnum.student"
+                    v-model:selectedValues="form.grade" :list="gradesList" :label="'الصف الدراسي'"
+                    :placeholder="'اختر صفك الدراسي'" :rules="{ required: true }" inputId="grade" :isMulti="false" />
 
-                  <template
-                    v-if="selectedType === PartnerShipFormTypesEnum.school"
-                  >
-                    <lazy-form-select
-                      v-model:selectedValues="form.city"
-                      :list="applicantCityType"
-                      :label="'المدينة'"
-                      :rules="{ required: true }"
-                      inputId="city"
-                      :isMulti="false"
-                    />
+                  <template v-if="selectedType === PartnerShipFormTypesEnum.school">
+                    <lazy-form-select v-model:selectedValues="form.city" :list="applicantCityType" :label="'المدينة'"
+                      :rules="{ required: true }" inputId="city" :isMulti="false" />
 
-                    <form-input
-                      v-model:inputValue="form.schoolName"
-                      inputId="schoolName"
-                      label="اسم المدرسة"
-                      :rules="{
-                        required: true,
-                      }"
-                    />
+                    <form-input v-model:inputValue="form.schoolName" inputId="schoolName" label="اسم المدرسة" :rules="{
+                      required: true,
+                    }" />
 
-                    <lazy-form-select
-                      v-model:selectedValues="form.applicantType"
-                      :list="applicantType"
-                      :label="'صفة مقدم الطلب'"
-                      :rules="{ required: true }"
-                      inputId="applicantType"
-                    />
+                    <lazy-form-select v-model:selectedValues="form.applicantType" :list="applicantType"
+                      :label="'صفة مقدم الطلب'" :rules="{ required: true }" inputId="applicantType" />
                   </template>
 
                   <lazy-web-register-privacy-message />
 
-                  <app-button
-                    :isLoading="isSaving"
-                    class="!w-full !mt-3"
-                    label="إرسال"
-                    @click="checkDataForSend"
-                  />
+                  <app-button :isLoading="isSaving" class="!w-full !mt-3" label="إرسال" @click="checkDataForSend" />
                 </div>
               </vee-form>
             </div>
@@ -128,46 +62,21 @@
         </div>
       </client-only>
 
-      <lazy-prime-dialog
-        id="modal-edit-mail"
-        v-model:visible="openMailModal"
-        header="تعديل البريد الالكتروني"
-        :showHeader="false"
-        :modal="true"
-        :dismissableMask="true"
-        :closeOnEscape="true"
-        :closable="true"
-        @afterHide="closeMailModal()"
-      >
-        <i
-          class="fa fa-close"
-          @click="closeMailModal()"
-        ></i>
-        <div
-          class="code-part"
-          :class="{ 'wrong-code': wrongCode }"
-        >
+      <lazy-prime-dialog id="modal-edit-mail" v-model:visible="openMailModal" header="تعديل البريد الالكتروني"
+        :showHeader="false" :modal="true" :dismissableMask="true" :closeOnEscape="true" :closable="true"
+        @afterHide="closeMailModal()">
+        <i class="fa fa-close" @click="closeMailModal()"></i>
+        <div class="code-part" :class="{ 'wrong-code': wrongCode }">
           <p class="t-1">التحقق من البريد الإلكتروني</p>
 
           <span class="t-2">أدخل رمز التحقق المرسل إلى بريدك الإلكتروني</span>
           <span class="t-3">{{ form.email }}</span>
           <div class="relative w-full">
             <app-overlay v-if="processing" />
-            <code-input
-              class="t-code-input"
-              :fields="4"
-              :fieldWidth="45"
-              :fieldHeight="45"
-              :radius="8"
-              :required="true"
-              style="direction: ltr"
-              @complete="sendCode"
-            />
+            <code-input ref="codeInputRef" class="t-code-input" :fields="4" :fieldWidth="45" :fieldHeight="45"
+              :radius="8" :required="true" style="direction: ltr" @complete="sendCode" />
           </div>
-          <p
-            v-if="wrongCode"
-            class="wrong-code"
-          >
+          <p v-if="wrongCode" class="wrong-code">
             الكود غير صحيح يرجي التحقق
           </p>
 
@@ -175,103 +84,55 @@
             تحقق من البريد العشوائي في حال لم تجد الرسالة
           </span>
 
-          <timer-active
-            v-if="
-              requestData && requestData.countRegisterTries <= 3 && isWaiting
-            "
-            v-model:isActive="isWaiting"
-          />
+          <timer-active v-if="
+            requestData && requestData.countRegisterTries <= 3 && isWaiting
+          " v-model:isActive="isWaiting" />
 
           <template v-if="requestData">
-            <span
-              v-if="requestData && requestData.countRegisterTries > 3"
-              class="tries-limit"
-            >
+            <span v-if="requestData && requestData.countRegisterTries > 3" class="tries-limit">
               بإمكانك إعادة إرسال الرسالة بعد 8 ساعات
             </span>
 
-            <app-button
-              label="إعادة إرسال"
-              size="sm"
-              variant="outline"
-              :isDisabled="
-                (requestData && requestData.countRegisterTries > 3) || isWaiting
-              "
-              @click="
+            <app-button label="إعادة إرسال" size="sm" variant="outline" :isDisabled="(requestData && requestData.countRegisterTries > 3) || isWaiting
+              " @click="
                 requestData.countRegisterTries <= 3 && !isWaiting
                   ? callApiChangeEmail()
                   : {}
-              "
-            />
+                " />
           </template>
         </div>
       </lazy-prime-dialog>
 
-      <lazy-prime-dialog
-        id="modal-edit-phone"
-        v-model:visible="openPhoneModal"
-        header="تعديل رقم الهاتف"
-        :showHeader="false"
-        :modal="true"
-        :dismissableMask="true"
-        :closeOnEscape="true"
-        :closable="true"
-        @afterHide="closePhoneModal()"
-      >
-        <i
-          class="fa fa-close"
-          @click="closePhoneModal()"
-        ></i>
-        <div
-          class="code-part"
-          :class="{ 'wrong-code': wrongCode }"
-        >
+      <lazy-prime-dialog id="modal-edit-phone" v-model:visible="openPhoneModal" header="تعديل رقم الهاتف"
+        :showHeader="false" :modal="true" :dismissableMask="true" :closeOnEscape="true" :closable="true"
+        @afterHide="closePhoneModal()">
+        <i class="fa fa-close" @click="closePhoneModal()"></i>
+        <div class="code-part" :class="{ 'wrong-code': wrongCode }">
           <p class="t-1">التحقق من رقم واتساب</p>
 
           <span class="t-2">أدخل رمز التحقق المرسل إلى رقمك في واتساب</span>
           <span class="t-3">{{ form.phoneNumber }}+</span>
           <div class="relative w-full">
             <app-overlay v-if="processing" />
-            <code-input
-              class="t-code-input"
-              :fields="4"
-              :fieldWidth="45"
-              :fieldHeight="45"
-              :radius="8"
-              :required="true"
-              style="direction: ltr"
-              @complete="sendCode"
-            />
+            <code-input ref="codeInputRef" class="t-code-input" :fields="4" :fieldWidth="45" :fieldHeight="45"
+              :radius="8" :required="true" style="direction: ltr" @complete="sendCode" />
           </div>
-          <p
-            v-if="wrongCode"
-            class="wrong-code"
-          >
+          <p v-if="wrongCode" class="wrong-code">
             الكود غير صحيح يرجي التحقق
           </p>
           <template v-if="requestDataPhone">
-            <span
-              v-if="requestDataPhone.countRegisterTries > 3"
-              class="tries-limit"
-            >
+            <span v-if="requestDataPhone.countRegisterTries > 3" class="tries-limit">
               بإمكانك إعادة إرسال الرسالة بعد 8 ساعات
             </span>
-            <timer-active
-              v-if="requestDataPhone.countRegisterTries <= 3 && isWaiting"
-              v-model:isActive="isWaiting"
-            />
+            <timer-active v-if="requestDataPhone.countRegisterTries <= 3 && isWaiting" v-model:isActive="isWaiting" />
 
-            <span
-              :class="{
-                disable: requestDataPhone.countRegisterTries > 3 || isWaiting,
-              }"
-              class="re-send"
-              @click="
+            <span :class="{
+              disable: requestDataPhone.countRegisterTries > 3 || isWaiting,
+            }" class="re-send" @click="
                 requestDataPhone.countRegisterTries <= 3 && !isWaiting
                   ? callApiChangePhone()
                   : {}
-              "
-            >
+                ">
               إعادة إرسال
             </span>
           </template>
@@ -295,6 +156,7 @@ import {
 import type { AxiosResponse } from 'axios';
 import { Form as VeeForm } from 'vee-validate';
 import type { PhoneInput } from '#components';
+const codeInputRef = ref<InstanceType<typeof import('~/components/shared/forms/code-input.vue')['default']> | null>(null);
 
 const defaultValues = {
   firstName: null as string | null,
@@ -515,6 +377,7 @@ export default {
     callApiChangeEmail() {
       this.processing = true;
       this.isWaiting = true;
+      codeInputRef.value?.reset();
       this.$axios
         .post(`/identity/requestChangeEmail`, {
           email: this.form.email,
@@ -550,6 +413,7 @@ export default {
     callApiChangePhone() {
       this.processing = true;
       this.isWaiting = true;
+      codeInputRef.value?.reset();
       this.$axios
         .post(`/identity/requestChangePhone`, {
           phone: this.form.phoneNumber,
@@ -647,12 +511,14 @@ export default {
 
 <style lang="scss" scoped>
 @use '@/assets/scss/mixin' as *;
+
 .partnerships-shared-form {
   .c-back-mobile {
     display: grid;
     align-items: center;
     justify-content: flex-start;
     row-gap: 15px;
+
     @include outline-btn(var(--purple-8c)) {
       height: auto !important;
       width: auto !important;
@@ -665,10 +531,12 @@ export default {
       justify-content: center;
       column-gap: 5.5px;
       padding: 0;
+
       span {
         font-size: 16px;
         color: var(--purple-8c);
       }
+
       img {
         width: 19px;
       }
@@ -687,6 +555,7 @@ export default {
     justify-content: center;
     width: 100%;
     margin: 25px auto;
+
     @media (max-width: 345px) {
       grid-template-columns: 97vw;
     }
@@ -788,12 +657,14 @@ export default {
   .code-part {
     display: grid;
     justify-content: center;
+
     .t-1 {
       font-size: 24px;
       font-weight: bold;
       color: var(--purple-8c);
       text-align: center;
     }
+
     .t-2 {
       margin-top: 35px;
       font-size: 16px;
@@ -801,6 +672,7 @@ export default {
       color: var(--gray-63);
       text-align: center;
     }
+
     .t-3 {
       margin-top: 6px;
       font-size: 16px;
@@ -808,9 +680,11 @@ export default {
       color: var(--purple-8c);
       text-align: center;
     }
+
     .t-code-input {
       margin-top: 30px;
     }
+
     .tries-limit {
       font-size: 16px;
       color: var(--gray-63);
@@ -824,6 +698,7 @@ export default {
       opacity: 0.75;
       margin-top: 15px;
     }
+
     .re-send {
       margin-top: 15px;
       text-align: center;
@@ -831,6 +706,7 @@ export default {
       color: var(--purple-8c);
       text-decoration-line: underline;
       cursor: pointer;
+
       &.disable {
         opacity: 0.5;
         pointer-events: none;
@@ -849,6 +725,7 @@ export default {
 
   .next-btn {
     text-align: end;
+
     @include normal-btn(white) {
       width: 90px;
       height: 39px;

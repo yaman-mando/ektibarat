@@ -351,8 +351,8 @@
         <span class="t-3">{{ profileInfo.email }}</span>
         <div class="w-full relative">
           <app-overlay v-if="processing" />
-          <code-input :fieldHeight="45" :fieldWidth="45" :fields="4" :radius="8" :required="true" class="t-code-input"
-            style="direction: ltr" @complete="sendCode" />
+          <code-input ref="codeInputRef" :fieldHeight="45" :fieldWidth="45" :fields="4" :radius="8" :required="true"
+            class="t-code-input" style="direction: ltr" @complete="sendCode" />
         </div>
 
         <p v-if="wrongCode" class="wrong-code">
@@ -397,8 +397,8 @@
         <span class="t-3">{{ profileInfo.phoneNumber }}+</span>
         <div class="w-full relative">
           <app-overlay v-if="processing" />
-          <code-input :fieldHeight="45" :fieldWidth="45" :fields="4" :radius="8" :required="true" class="t-code-input"
-            style="direction: ltr" @complete="sendCode" />
+          <code-input ref="codeInputRef" :fieldHeight="45" :fieldWidth="45" :fields="4" :radius="8" :required="true"
+            class="t-code-input" style="direction: ltr" @complete="sendCode" />
         </div>
         <p v-if="wrongCode" class="wrong-code">
           الكود غير صحيح يرجي التحقق
@@ -443,6 +443,7 @@ import { ImageExt } from '~/main/constants/image-ext';
 import { ImageSize } from '~/main/constants/image-size';
 import { ImagesFolderName } from '~/main/constants/images-folder-name';
 import { pictureTypes } from '~/main/constants/picture-types';
+const codeInputRef = ref<InstanceType<typeof import('~/components/shared/forms/code-input.vue')['default']> | null>(null);
 
 class PasswordFrom {
   oldPassword = null;
@@ -526,7 +527,7 @@ const closeSection = () => {
   profileInfo.schoolId = appAuth.state.userData?.schoolId;
   profileInfo.grades = appAuth.state.userData?.grades;
   fetchCities()
-  if(profileInfo.cityId) fetchSchools()
+  if (profileInfo.cityId) fetchSchools()
 };
 
 const sendForm = async () => {
@@ -642,6 +643,7 @@ const fillProfileInfo = () => {
 const sendMail = async () => {
   processing.value = true;
   isWaiting.value = true;
+  codeInputRef.value?.reset();
   try {
     const { data: response } = await $axios.post(
       '/identity/requestChangeEmail',
@@ -674,6 +676,7 @@ const callApiChangePhone = async () => {
   processing.value = true;
   isbuttonDisablePhone.value = true;
   isWaiting.value = true;
+  codeInputRef.value?.reset();
 
   try {
     const response = await $axios.post('/identity/requestChangePhone', {
@@ -880,7 +883,7 @@ const handleSearch = useDebounceFn(async (search: string) => {
 }, 1000); // debounce 1
 
 const handleSchoolSearch = useDebounceFn(async (search: string) => {
-  if (!profileInfo.cityId) return; 
+  if (!profileInfo.cityId) return;
 
   if (search.length < 3) {
 
@@ -894,7 +897,7 @@ const handleSchoolSearch = useDebounceFn(async (search: string) => {
   try {
     const res = await globalStore.getShoolsList({
       id: profileInfo.cityId,
-      predicate:search,
+      predicate: search,
     });
     schools.value = res?.slice(0, 10) ?? res;
   } finally {
@@ -927,8 +930,8 @@ const togglePassword3 = () =>
 onMounted(() => {
   fillProfileInfo();
   fetchCities();
-  if(profileInfo.cityId)
-  fetchSchools();
+  if (profileInfo.cityId)
+    fetchSchools();
 });
 </script>
 

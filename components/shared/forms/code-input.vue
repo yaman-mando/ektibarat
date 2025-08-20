@@ -80,6 +80,7 @@ const emit = defineEmits<{
   (e: 'change' | 'complete', value: string): void;
 }>();
 
+
 const KEY_CODE = { backspace: 8, left: 37, up: 38, right: 39, down: 40 };
 const values22 = ref<string[]>(Array(props.fields).fill(''));
 const inputRefs = reactive<HTMLInputElement[]>([]);
@@ -98,6 +99,13 @@ const triggerChange = (values = values22.value) => {
     emit('complete', val);
   }
 };
+
+const reset = () => {
+  values22.value = Array(props.fields).fill('');
+  triggerChange();
+  if (inputRefs[0]) inputRefs[0].focus();
+};
+defineExpose({ reset });
 
 const onValueChange = (e: Event) => {
   const input = e.target as HTMLInputElement;
