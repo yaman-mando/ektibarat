@@ -7,12 +7,17 @@ import type {
 import {
   webGeneralSelectionPathUtil,
   webUserPanelTraining,
+  webUserPanelTrainingWithQuery,
+  webUserSteps,
+  webUserTrainWithUs,
 } from '~/main/utils/web-routes.utils';
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { defineStore } from 'pinia';
 import { reactive, toRefs } from 'vue';
 import { UserRoles } from '~/core/auth/constants/user-roles';
 import { adminRootPathUtil } from '~/main/utils/admin-routes.utils';
+import SubscribesPanel from '~/components/web/shared/user-panel/subscribes-panel/subscribes-panel.vue';
+import { UserPlanSubscribedEnum } from '../../constants/user-plan-subscribed.enum';
 
 //store
 export const useAuthStore = defineStore('auth-store', () => {
@@ -63,7 +68,11 @@ export const useAuthStore = defineStore('auth-store', () => {
       return adminRootPathUtil();
     }
 
-    return webUserPanelTraining()
+    if(state.userData?.planSubscribed === UserPlanSubscribedEnum.Subscribed){
+      return webUserSteps()
+    }
+
+    return webUserTrainWithUs()
 
     // return globalStore.state.globalTypeUserValue
     //   ? webUserPanelTraining()
