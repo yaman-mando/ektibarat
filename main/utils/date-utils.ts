@@ -134,22 +134,15 @@ export const minutesToHHMM = (totalMin) => {
 };
 
 export const secondsToMMSS = (totalSeconds) => {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds - hours * 3600) / 60);
-  const seconds = Math.floor(totalSeconds - hours * 3600 - minutes * 60);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = Math.floor(totalSeconds % 60);
 
-  // Padding the values to ensure they are two digits
-  let parsedMinutes = '';
-  let parsedSeconds = '';
+  const parsedMinutes = String(minutes).padStart(2, '0');
+  const parsedSeconds = String(seconds).padStart(2, '0');
 
-  if (minutes < 10) {
-    parsedMinutes = '0' + minutes;
-  }
-  if (seconds < 10) {
-    parsedSeconds = '0' + seconds;
-  }
-  return parsedMinutes + ':' + parsedSeconds;
+  return `${parsedMinutes}:${parsedSeconds}`;
 };
+
 
 export const secondsToHHMMSS = (totalSeconds) => {
   totalSeconds = Number(totalSeconds);

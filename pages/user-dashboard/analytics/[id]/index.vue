@@ -68,7 +68,7 @@
                 <div class="text-purple-78 text-[15px] xl:text-[16px] font-bold">
                   الأسئلة
                 </div>
-                <div>{{ mainCategory?.questionsCount }}</div>
+                <div>{{ dateFormat.formatNoData(mainCategory?.questionsCount) }}</div>
               </div>
               <div class="flex-1 space-y-[4px]">
                 <div class="text-purple-78 text-[15px] xl:text-[16px] font-bold">
@@ -76,11 +76,11 @@
                 </div>
                 <div>
                   <span class="text-green-8c">
-                    {{ mainCategory?.correctAnswersCount }}
+                    {{ dateFormat.formatNoData(mainCategory?.correctAnswersCount) }}
                   </span>
                   |
                   <span class="text-red-5e">
-                    {{ mainCategory?.wrongAnswersCount }}
+                    {{ dateFormat.formatNoData(mainCategory?.wrongAnswersCount) }}
                   </span>
                 </div>
               </div>
@@ -88,7 +88,7 @@
                 <div class="text-purple-78 text-[15px] xl:text-[16px] font-bold">
                   مدة التدريب
                 </div>
-                <div>{{ formatTime(mainCategory?.totalTime || 0) }} ساعة</div>
+                <div>{{ dateFormat.formatStoMMHHWithText(mainCategory?.totalTime) }}</div>
               </div>
             </div>
 
@@ -167,108 +167,108 @@
               </span>
             </template>
 
-             <app-data-wrapper :loading="userPanelStore.fetching.analyticsDetails" :data="tableCategories"
-            loading-type="text" empty-text="لا توجد بيانات متاحة">
-            <div class="max-w-[100vw] overflow-x-auto custom-scroll">
-              <div class="space-y-2 min-w-[1020px]">
-                <div class="h-[70px] w-full flex items-center">
-                  <div
-                    class="bg-[#F5F7FA] h-[100%] flex-[70%] flex items-center border border-[#BCCCDB] !border-l-0 rounded-r-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
-                    <div class="w-[25%]">القسم الفرعي</div>
-                    <div class="w-[15%] text-center">عدد الأسئلة</div>
-                    <div class="w-[15%] text-center">
-                      الإجابات
-                      <br />
-                      <span class="font-medium text-[12px]">صحيحة | خاطئة</span>
+            <app-data-wrapper :loading="userPanelStore.fetching.analyticsDetails" :data="tableCategories"
+              loading-type="text" empty-text="لا توجد بيانات متاحة">
+              <div class="max-w-[100vw] overflow-x-auto custom-scroll">
+                <div class="space-y-2 min-w-[1020px]">
+                  <div class="h-[70px] w-full flex items-center">
+                    <div
+                      class="bg-[#F5F7FA] h-[100%] flex-[70%] flex items-center border border-[#BCCCDB] !border-l-0 rounded-r-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
+                      <div class="w-[25%]">القسم الفرعي</div>
+                      <div class="w-[15%] text-center">عدد الأسئلة</div>
+                      <div class="w-[15%] text-center">
+                        الإجابات
+                        <br />
+                        <span class="font-medium text-[12px]">صحيحة | خاطئة</span>
+                      </div>
+                      <div class="w-[15%] text-center">زمن الإجابة والمتوسط</div>
+                      <div class="w-[15%] text-center">مدة التدريب</div>
+                      <div class="w-[15%] text-center">التقييم</div>
                     </div>
-                    <div class="w-[15%] text-center">زمن الإجابة والمتوسط</div>
-                    <div class="w-[15%] text-center">مدة التدريب</div>
-                    <div class="w-[15%] text-center">التقييم</div>
+                    <div
+                      class="bg-[#F5F7FA] h-[100%] flex flex-[30%] items-center border border-[#BCCCDB] !border-r-0 rounded-l-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
+                      <div class="w-full text-center">توصيات</div>
+                    </div>
                   </div>
-                  <div
-                    class="bg-[#F5F7FA] h-[100%] flex flex-[30%] items-center border border-[#BCCCDB] !border-r-0 rounded-l-[8px] px-[15px] text-purple-78 text-[16px] font-bold">
-                    <div class="w-full text-center">توصيات</div>
-                  </div>
-                </div>
 
-                <div v-for="(child, i) in tableCategories" :key="i" :class="['h-[60px] flex items-center']">
-                  <div
-                    class="flex flex-[70%] h-[100%] items-center rounded-r-[8px] border border-[#BCCCDB] !border-l-0 px-[15px]"
-                    :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
-                    <div class="w-[25%] text-gray-63 font-medium">
-                      {{ child.categoryName }}
-                    </div>
-                    <div class="w-[15%] text-center">
-                      {{ child.questionsCount }}
-                    </div>
-                    <div class="w-[15%] text-center">
-                      <span class="text-green-8c font-bold text-[14px]">
-                        {{ child.correctAnswersCount }}
-                      </span>
-                      |
-                      <span class="text-red-5e font-bold text-[14px]">
-                        {{ child.wrongAnswersCount }}
-                      </span>
-                    </div>
-                    <div class="w-[15%] text-center">
-                      <span class="text-green-8c font-bold text-[14px]">
-                        {{ formatTime(child.studentTimeTakenRate) }}
-                      </span>
-                      |
-                      <span class="text-red-5e font-bold text-[14px]">
-                        {{ formatTime(child.allStudentsTimeTakenRate) }}
-                      </span>
-                    </div>
-                    <div class="w-[15%] text-center">
-                      {{ formatTime(child.totalTime) }} ساعة
-                    </div>
-                    <div class="w-[15%] text-center">
-                      <div class="w-full bg-gray-200 h-[18px] rounded-[4px] dark:bg-dark-600">
-                        <div :class="`bg-${getRateColor(child.rate)}`"
-                          class="h-[18px] rounded-[4px] flex items-center justify-center"
-                          :style="{ width: child.rate + '%' }">
-                          <span v-if="child.rate > 0" class="text-sm" :class="child.rate > 12 ? 'text-white' : 'text-black'
-                            ">
-                            {{ child.rate }}%
-                          </span>
+                  <div v-for="(child, i) in tableCategories" :key="i" :class="['h-[60px] flex items-center']">
+                    <div
+                      class="flex flex-[70%] h-[100%] items-center rounded-r-[8px] border border-[#BCCCDB] !border-l-0 px-[15px]"
+                      :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
+                      <div class="w-[25%] text-gray-63 font-medium">
+                        {{ child.categoryName }}
+                      </div>
+                      <div class="w-[15%] text-center">
+                        {{ dateFormat.formatNoData(child.questionsCount) }}
+                      </div>
+                      <div class="w-[15%] text-center">
+                        <span class="text-green-8c font-bold text-[14px]">
+                          {{ dateFormat.formatNoData(child.correctAnswersCount) }}
+                        </span>
+                        |
+                        <span class="text-red-5e font-bold text-[14px]">
+                          {{ dateFormat.formatNoData(child.wrongAnswersCount) }}
+                        </span>
+                      </div>
+                      <div class="w-[15%] text-center">
+                        <span class="text-green-8c font-bold text-[14px]">
+                          {{ dateFormat.secondsToMMSS(child.studentTimeTakenRate) }}
+                        </span>
+                        |
+                        <span class="text-red-5e font-bold text-[14px]">
+                          {{ dateFormat.secondsToMMSS(child.allStudentsTimeTakenRate) }}
+                        </span>
+                      </div>
+                      <div class="w-[15%] text-center">
+                        {{ dateFormat.formatStoMMHHWithText(child.totalTime) }}
+                      </div>
+                      <div class="w-[15%] text-center">
+                        <div class="w-full bg-gray-200 h-[18px] rounded-[4px] dark:bg-dark-600">
+                          <div :class="`bg-${getRateColor(child.rate)}`"
+                            class="h-[18px] rounded-[4px] flex items-center justify-center"
+                            :style="{ width: child.rate + '%' }">
+                            <span v-if="child.rate > 0" class="text-sm" :class="child.rate > 12 ? 'text-white' : 'text-black'
+                              ">
+                              {{ child.rate }}%
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="flex flex-[30%] h-[100%] items-center rounded-l-[8px] border border-[#BCCCDB]"
-                    :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
-                    <div class="w-full h-[100%] flex justify-center items-center gap-[15px] flex-wrap">
-                      <template v-if="child.rate === 100">
-                        <span class="text-green-8c font-bold text-[16px]">
-                          أنت متقن لهذا القسم
-                        </span>
-                      </template>
-                      <template v-else>
-                        <template v-if="child.rate < 60">
-                          <button
-                            class="bg-blue-d6 text-white text-[14px] font-medium h-[32px] w-[110px] rounded-[4px] cursor-pointer"
-                            @click="router.push(`/user-dashboard/foundation`)">
-                            إعادة تأسيس
-                          </button>
+                    <div class="flex flex-[30%] h-[100%] items-center rounded-l-[8px] border border-[#BCCCDB]"
+                      :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
+                      <div class="w-full h-[100%] flex justify-center items-center gap-[15px] flex-wrap">
+                        <template v-if="child.rate === 100">
+                          <span class="text-green-8c font-bold text-[16px]">
+                            أنت متقن لهذا القسم
+                          </span>
                         </template>
-                        <template v-if="child.hasNoMasteredSkills">
-                          <button
-                            class="bg-red-5e text-white text-[14px] font-medium h-[32px] w-[70px] rounded-[4px] cursor-pointer">
-                            للحفظ
-                          </button>
+                        <template v-else>
+                          <template v-if="child.rate < 60">
+                            <button
+                              class="bg-blue-d6 text-white text-[14px] font-medium h-[32px] w-[110px] rounded-[4px] cursor-pointer"
+                              @click="router.push(`/user-dashboard/foundation`)">
+                              إعادة تأسيس
+                            </button>
+                          </template>
+                          <template v-if="child.hasNoMasteredSkills">
+                            <button @click="openSkillsModal(child.categoryId)"
+                              class="bg-red-5e text-white text-[14px] font-medium h-[32px] w-[70px] rounded-[4px] cursor-pointer">
+                              للحفظ
+                            </button>
+                          </template>
+                          <template v-if="userData.planSubscribed !== planSubscribedEnum.subscribed">
+                            <button
+                              class="bg-purple-78 text-white text-[14px] font-medium h-[32px] w-[60px] rounded-[4px] cursor-pointer">
+                              تدرب
+                            </button>
+                          </template>
                         </template>
-                        <template v-if="userData.planSubscribed !== planSubscribedEnum.subscribed">
-                          <button
-                            class="bg-purple-78 text-white text-[14px] font-medium h-[32px] w-[60px] rounded-[4px] cursor-pointer">
-                            تدرب
-                          </button>
-                        </template>
-                      </template>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
             </app-data-wrapper>
           </disclosure-group>
         </accordion-group>
@@ -276,6 +276,7 @@
 
 
     </div>
+    <app-skills-modal v-model="isOpenSkillsModal" :skillId="selectedSkillId" />
     <advice-loading v-if="isLoadingAdvices" />
     <advice-modal v-if="showAdviceModal" :content="advicesModalData" @close="showAdviceModal = false" />
   </user-panel-wrapper>
@@ -288,6 +289,7 @@ import { ref, computed, onMounted } from 'vue';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { planSubscribedEnum } from '~/main/constants/global.enums';
 import { UserRoles } from '~/core/auth/constants/user-roles';
+import * as dateFormat from '~/main/utils/date-utils'
 
 const userPanelStore = useUserPanelStore();
 const route = useRoute();
@@ -304,6 +306,8 @@ const chartSeries = ref<any>([]);
 const isLoadingAdvices = ref(false);
 const showAdviceModal = ref(false);
 const advicesModalData = ref<any>(null);
+const selectedSkillId = ref<any>(null);
+const isOpenSkillsModal = ref(false);
 
 const chartPeriodList = [
   { id: 0, label: 'اسبوع' },
@@ -321,6 +325,7 @@ const chartOptions = ref({
   xaxis: {
     type: 'category',
     labels: {
+      show: chartSeries.value.length>0,
       rotate: -45,
 
       formatter: (val) => new Date(val).toLocaleDateString('en-US'),
@@ -367,18 +372,23 @@ async function fetchChartData() {
     period: selectedPeriod.value,
   });
 
-  const data = chartData.value
-    .filter((item) => item.count > 0)
-    .map((item) => {
-      return { x: new Date(item.date).getTime(), y: item.count };
-    });
+    const data = chartData.value?.chartData
+    .filter(item => item.count > 0)
+    .map(item => item.date ? { x: formatDate(item.date), y: item.count } : null)
+    .filter(Boolean);
 
-  chartSeries.value = [
+     chartSeries.value = [
     {
-      name: 'النشاط',
-      data,
-    },
+      name: 'النقاط',
+      data: (data && data.length >= 2) ? data : []
+    }
   ];
+
+}
+
+function formatDate(dateStr: string) {
+  const date = new Date(dateStr)
+  return date.toISOString().split('T')[0]
 }
 
 function toAnalytics() {
@@ -404,11 +414,6 @@ function getRateColor(rate) {
   return 'green-8c';
 }
 
-function formatTime(minutes) {
-  const hrs = Math.floor(minutes / 60);
-  const mins = Math.round(minutes % 60);
-  return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
-}
 
 function analyzeProgressNoteByValue(data) {
   if (!data || data.length === 0 || data.every((item) => item.count === 0))
@@ -435,6 +440,12 @@ function toTraining(parentId, catId) {
   router.push(
     `/user-dashboard/prepare?page=trainings&parentId=${parentId}&childId=${catId}`
   );
+}
+
+
+function openSkillsModal(id) {
+  selectedSkillId.value = id;
+  isOpenSkillsModal.value = true;
 }
 
 function getAdvices(catId) {

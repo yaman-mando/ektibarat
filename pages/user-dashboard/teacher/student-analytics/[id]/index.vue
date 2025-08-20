@@ -475,11 +475,11 @@
                   </div>
                   <div class="w-[20%] text-center">
                     <span class="text-green-8c font-bold text-[14px]">
-                      {{ dateFormat.formatStoMMHH(child.studentTimeTakenRate) }}
+                      {{ dateFormat.secondsToMMSS(child.studentTimeTakenRate) }}
                     </span>
                     |
                     <span class="text-red-5e font-bold text-[14px]">
-                      {{ dateFormat.formatStoMMHH(child.allStudentsTimeTakenRate) }}
+                      {{ dateFormat.secondsToMMSS(child.allStudentsTimeTakenRate) }}
                     </span>
                   </div>
                   <div class="w-[20%] text-gray-63 font-medium text-center">{{
@@ -866,7 +866,7 @@ const chartOptions = computed(() => ({
   xaxis: {
     type: 'datetime',
     labels: {
-      show: true,
+      show: chartSeries.value.length>0,
       rotate: -45,
       style: { fontSize: '12px' },
       formatter: (val) => formatDate(val),
