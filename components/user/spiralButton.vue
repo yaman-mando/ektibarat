@@ -67,7 +67,7 @@
               </div>
               <div class="grid justify-items-center gap-y-[6px]">
                 <span class="text-[16px] text-purple-78 font-bold">الزمن المتوقع</span>
-                <span class="text-[16px] text-gray-63 text-center">{{ formatTime(step.categoryInfo.time) }} ساعة</span>
+                <span class="text-[16px] text-gray-63 text-center">{{ dateFormat.formatStoMMHHWithText(step.categoryInfo.time) }}</span>
               </div>
             </div>
             <app-overlay v-if="examLoading" />
@@ -111,6 +111,7 @@ import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.mode
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { useStore } from 'vuex';
+import * as dateFormat from '~/main/utils/date-utils'
 
 // Define props
 const props = defineProps({
@@ -192,7 +193,7 @@ function toTrining(step: step) {
   form.value.randomQuestionsSettings.push({
     categoryId: step.categoryInfo?.categoryId,
     questionLevel: 0,
-    questionsCount: step.categoryInfo?.numberQuestion,
+    questionsCount: (step.categoryInfo?.numberQuestion ?? 0) - (step.categoryInfo?.numberQuestionComplete ?? 0),
   })
   form.value.stepId = step.id
   startTrainig()
