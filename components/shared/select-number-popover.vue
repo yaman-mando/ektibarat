@@ -25,11 +25,7 @@
       <div
         v-if="isOpen"
         ref="popover"
-        class="shadow-[0_0_5px_gray] border-0 rounded-[15px] overflow-visible"
-        :class="[
-          'absolute z-50 w-[200px] rounded border shadow bg-white overflow-auto max-h-[240px]',
-          positionClass,
-        ]"
+        class="fixed z-[9999] w-[200px] rounded-[15px] border border-white shadow bg-white overflow-auto max-h-[240px] overflow-visible"
         :style="popoverStyle"
       >
         <!-- Triangle Pointer -->
@@ -74,7 +70,6 @@ const popover = ref<HTMLElement | null>(null);
 const isOpen = ref(false);
 const isCentered = ref(false);
 const popoverStyle = ref<Record<string, string>>({});
-const positionClass = ref('');
 
 const numbers = computed(() => {
   const nums: number[] = [];
@@ -107,10 +102,9 @@ function positionPopover() {
   const rect = trigger.value.getBoundingClientRect();
   const viewportHeight = window.innerHeight;
 
-  // Estimate height dynamically if popover exists in DOM
-  const tempHeight = popover.value?.scrollHeight || 240; // fallback max
-
+  const tempHeight = popover.value?.scrollHeight || 240; // fallback
   const spaceBelow = viewportHeight - rect.bottom;
+
   isCentered.value = spaceBelow < tempHeight + 8;
 
   if (isCentered.value) {
@@ -119,14 +113,12 @@ function positionPopover() {
       left: '50%',
       transform: 'translate(-50%, -50%)',
     };
-    positionClass.value = 'fixed';
   } else {
     popoverStyle.value = {
-      top: `${rect.height + 20}px`,
-      left: '50%',
+      top: `${rect.bottom + 20}px`,
+      left: `${rect.left + rect.width / 2}px`,
       transform: 'translateX(-50%)',
     };
-    positionClass.value = 'absolute';
   }
 }
 

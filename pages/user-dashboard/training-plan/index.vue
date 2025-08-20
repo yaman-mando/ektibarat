@@ -8,8 +8,12 @@
     pageName="خطتي التدريبية"
   >
     <div class="training-plan-page">
-      <app-data-wrapper :loading="loadingPage" :data="info && detail" loading-type="spinner-overlay"
-      empty-text="لا توجد بيانات متاحة">
+      <app-data-wrapper
+        :loading="loadingPage"
+        :data="info && detail"
+        loadingType="spinner-overlay"
+        emptyText="لا توجد بيانات متاحة"
+      >
         <template v-if="info && detail">
           <h1
             v-if="windowSize.isDesktop"
@@ -75,7 +79,7 @@
                 <div class="t-w">
                   <div class="qt-a">
                     <div class="qt-a-lab">
-                      <strong>مدة التدريب الأسبوعية</strong>
+                      <strong>مدة التدريب اليومية</strong>
                       <span>
                         (المتوقعة وفق الخطة)
                         <span class="hidden lg:inline-block">:</span>
@@ -86,9 +90,11 @@
                         <app-spinner />
                       </template>
                       <template v-else>
-                        <strong>{{ requiredHours }}</strong>
+                        <strong class="num-font">
+                          {{ requiredHoursModel }}
+                        </strong>
                       </template>
-                      <span>ساعة في الأسبوع</span>
+                      <span>{{ unitLabel }} في اليوم</span>
                     </div>
                   </div>
                   <app-button
@@ -417,6 +423,20 @@ export default {
     };
   },
   computed: {
+    unitLabel() {
+      if (!this.requiredHours) return '';
+
+      if (this.requiredHours <= 60) return 'دقيقة';
+
+      return 'ساعة';
+    },
+    requiredHoursModel() {
+      if (!this.requiredHours) return null;
+
+      if (this.requiredHours <= 60) return this.requiredHours;
+
+      return this.formatTime(this.requiredHours);
+    },
     levelColor() {
       switch (this.level) {
         case 'جيد':
@@ -475,6 +495,8 @@ export default {
         const res = await this.$axios.post(`trainingPlansInfo/requiredHours`, {
           startDate: this.form.startDate,
           examDate: this.form.examDate,
+          degree: this.form.neededDegree,
+          grade: 13,
         });
         this.requiredHours = res.data.requiredHours;
       } finally {

@@ -1,28 +1,58 @@
 <template>
-  <user-panel-wrapper contentClass="!pb-0 w-full lg:w-[min(1060px,100%)] mx-auto" contentWrapperClass="!mb-[25px]"
-    :hasRInfo="windowSize.isDesktop" :hasLInfo="windowSize.isDesktop" :hasPrev="!windowSize.isDesktop"
-    pageName="إنشاء خطة">
+  <user-panel-wrapper
+    contentClass="!pb-0 w-full lg:w-[min(1060px,100%)] mx-auto"
+    contentWrapperClass="!mb-[25px]"
+    :hasRInfo="windowSize.isDesktop"
+    :hasLInfo="windowSize.isDesktop"
+    :hasPrev="!windowSize.isDesktop"
+    pageName="إنشاء خطة"
+  >
     <template #top-right>
-      <app-button label="رجوع للخلف" iconStartClass="fa fa-chevron-right" variant="clear" size="md"
-        @click="appRouter.back()" />
+      <app-button
+        label="رجوع للخلف"
+        iconStartClass="fa fa-chevron-right"
+        variant="clear"
+        size="md"
+        @click="appRouter.back()"
+      />
     </template>
 
     <div class="train-with-us space-y-10">
-      <div v-if="!showStepsSection" class="qw w-full lg:w-[min(1060px,100%)]">
+      <app-overlay v-if="loadingForm" />
+      <div
+        v-if="!showStepsSection"
+        class="qw w-full lg:w-[min(1060px,100%)]"
+      >
         <h1>كيف تبي تتدرب معنا؟</h1>
         <div class="qd-grid">
-          <div class="qd-item" @click="smartClick">
+          <div
+            class="qd-item"
+            @click="smartClick"
+          >
             <template v-if="!isSubscribe">
               <service-block />
-              <img class="absolute w-[24px] top-[10px] left-[10px]" src="/images/icons/lock-icon.png" alt="lock" />
+              <img
+                class="absolute w-[24px] top-[10px] left-[10px]"
+                src="/images/icons/lock-icon.png"
+                alt="lock"
+              />
             </template>
 
-            <img class="qd-badge" src="/images/badge.png" alt="" />
-            <span class="absolute right-[0px] top-[15px] rotate-[45deg] text-[12px] text-[#fff]">
+            <img
+              class="qd-badge"
+              src="/images/badge.png"
+              alt=""
+            />
+            <span
+              class="absolute right-[0px] top-[15px] rotate-[45deg] text-[12px] text-[#fff]"
+            >
               الافضل
             </span>
             <div class="qd-item__img">
-              <img src="/images/robot-head.png" alt="" />
+              <img
+                src="/images/robot-head.png"
+                alt=""
+              />
             </div>
             <div class="qd-item__content">
               <span class="qd-item-m1">مدربك الذكي</span>
@@ -35,13 +65,25 @@
               </span>
             </div>
           </div>
-          <nuxt-link :to="webUserPanelTraining()" class="qd-item blue">
-            <img class="qd-badge" src="/images/badge-blue.png" alt="" />
-            <span class="absolute right-[4px] top-[14px] rotate-[45deg] text-[12px] text-[#fff]">
+          <nuxt-link
+            :to="webUserPanelTraining()"
+            class="qd-item blue"
+          >
+            <img
+              class="qd-badge"
+              src="/images/badge-blue.png"
+              alt=""
+            />
+            <span
+              class="absolute right-[4px] top-[14px] rotate-[45deg] text-[12px] text-[#fff]"
+            >
               مجاني
             </span>
             <div class="qd-item__img">
-              <img src="/images/self-train.png" alt="" />
+              <img
+                src="/images/self-train.png"
+                alt=""
+              />
             </div>
             <div class="qd-item__content">
               <span class="qd-item-m1">التدريب الشخصي</span>
@@ -54,14 +96,28 @@
               </span>
             </div>
           </nuxt-link>
-          <nuxt-link :to="userPanelExamPath" class="qd-item orange">
+          <nuxt-link
+            :to="userPanelExamPath"
+            class="qd-item orange"
+          >
             <template v-if="!isSubscribe">
               <service-block />
-              <img class="absolute w-[24px] top-[10px] left-[10px]" src="/images/icons/lock-icon.png" alt="lock" />
+              <img
+                class="absolute w-[24px] top-[10px] left-[10px]"
+                src="/images/icons/lock-icon.png"
+                alt="lock"
+              />
             </template>
-            <img class="qd-badge hidden" src="/images/badge-blue.png" alt="" />
+            <img
+              class="qd-badge hidden"
+              src="/images/badge-blue.png"
+              alt=""
+            />
             <div class="qd-item__img">
-              <img src="/images/simu.png" alt="" />
+              <img
+                src="/images/simu.png"
+                alt=""
+              />
             </div>
             <div class="qd-item__content">
               <span class="qd-item-m1">محاكي الاختبار</span>
@@ -80,8 +136,16 @@
         <div class="st-q">
           <!--        top-->
           <div class="st-q-top">
-            <i class="fa fa-arrow-right st-q-icon" @click="previousStep"></i>
-            <app-progress-bar height="12px" :showLabel="false" :max="maxSteps" :value="form.currentStep" />
+            <i
+              class="fa fa-arrow-right st-q-icon"
+              @click="previousStep"
+            ></i>
+            <app-progress-bar
+              height="12px"
+              :showLabel="false"
+              :max="maxSteps"
+              :value="form.currentStep"
+            />
           </div>
           <!--        content-->
           <div class="st-q-content">
@@ -89,47 +153,91 @@
             <div :class="`st-q-date-content relative step-${form.currentStep}`">
               <template v-if="form.currentStep === 1">
                 <h1 class="st-q-title">متى أوّل يوم بتبدأ فيه دراسة؟</h1>
-                <app-date-picker :startDate="form.date!" :singleType="true" class="c-date" :min="today"
-                  @updateDate="dateChange($event)" />
-                <span v-if="dateMessage" class="st-q-note">
+                <app-date-picker
+                  :startDate="form.date!"
+                  :singleType="true"
+                  class="c-date"
+                  :min="today"
+                  @updateDate="dateChange($event)"
+                />
+                <span
+                  v-if="dateMessage"
+                  class="st-q-note"
+                >
                   {{ dateMessage }}
                 </span>
-                <app-button label="التالي" iconEndClass="fa fa-chevron-left" colorType="blue" :isDisabled="!form.date"
-                  @click="submitFirst" />
+                <app-button
+                  label="التالي"
+                  iconEndClass="fa fa-chevron-left"
+                  colorType="blue"
+                  :isDisabled="!form.date"
+                  @click="submitFirst"
+                />
               </template>
               <template v-if="form.currentStep === 2">
                 <h1 class="st-q-title step-2">كم الدرجة اللي تطمح تجيبها؟</h1>
                 <span class="st-q-title-meta">
                   بنعلمك متى تصير جاهز تختبر وتجيب الدرجة اللي تبيها
                 </span>
-                <select-number-popover v-model="form.neededDegree!" :start="85" :end="100" :step="1" />
-                <app-button label="التالي" iconEndClass="fa fa-chevron-left" colorType="blue"
-                  :isDisabled="!form.neededDegree" @click="submitRequiredDegree" />
-                <div class="hidden absolute lg:flex bottom-[0px] left-[20px] font-[500]">
+                <select-number-popover
+                  v-model="form.neededDegree!"
+                  :start="85"
+                  :end="100"
+                  :step="1"
+                />
+                <app-button
+                  label="التالي"
+                  iconEndClass="fa fa-chevron-left"
+                  colorType="blue"
+                  :isDisabled="!form.neededDegree"
+                  @click="submitRequiredDegree"
+                />
+                <div
+                  class="hidden absolute lg:flex bottom-[0px] left-[20px] font-[500]"
+                >
                   <span
-                    class="flex !text-center relative -left-[50px] -top-[50px] w-[220px] h-[90px] items-center justify-center text-[18px] rounded-[8px] bg-white shadow-[0_0_10px_0_rgba(0,0,0,0.15)]">
+                    class="flex !text-center relative -left-[50px] -top-[50px] w-[220px] h-[90px] items-center justify-center text-[18px] rounded-[8px] bg-white shadow-[0_0_10px_0_rgba(0,0,0,0.15)]"
+                  >
                     كفو يا بطل! هذا الطموح
                     <br />
                     ولا بلاش
                   </span>
-                  <img class="flex z-10 w-[155px] h-[155px] justify-center items-center flex-shrink-0 aspect-[1/1]"
-                    src="/images/robot-target.png" alt="target" />
+                  <img
+                    class="flex z-10 w-[155px] h-[155px] justify-center items-center flex-shrink-0 aspect-[1/1]"
+                    src="/images/robot-target.png"
+                    alt="target"
+                  />
                 </div>
               </template>
               <template v-if="form.currentStep === 3">
+                <app-overlay v-if="isLoadingDays || loadingRequiredHours" />
                 <h1 class="st-q-title step-2">
                   متى تتوقع تاريخ اختبارك الجاي؟
                 </h1>
                 <span class="st-q-title-meta">
                   بنستخدم هذا التاريخ عشان نحدد مدة دراستك
                 </span>
-                <app-date-picker :startDate="form.examDate!" :singleType="true" class="c-date" :min="minStartDate"
-                  @updateDate="examDateChange($event)" />
-                <span v-if="dateMessage" class="st-q-note">
+                <app-date-picker
+                  :startDate="form.examDate!"
+                  :singleType="true"
+                  class="c-date"
+                  :min="minStartDate"
+                  @updateDate="examDateChange($event)"
+                />
+                <span
+                  v-if="dateMessage"
+                  class="st-q-note"
+                >
                   {{ requiredHoursMessage }}
                 </span>
-                <app-button label="التالي" iconEndClass="fa fa-chevron-left" colorType="blue"
-                  :isDisabled="!form.examDate" :isLoading="loadingRequiredHours" @click="submit3" />
+                <app-button
+                  label="التالي"
+                  iconEndClass="fa fa-chevron-left"
+                  colorType="blue"
+                  :isDisabled="!form.examDate"
+                  :isLoading="loadingRequiredHours"
+                  @click="submit3"
+                />
               </template>
               <template v-if="form.currentStep === 4">
                 <h1 class="st-q-title step-2">معلومات خطتك</h1>
@@ -152,23 +260,31 @@
                       <td>{{ form.neededDegree }}</td>
                     </tr>
                     <tr>
-                      <td>ساعات التدريب الأسبوعية تقديريا</td>
-                      <td>{{ requiredHours }} ساعات</td>
+                      <td>ساعات التدريب اليومية تقديريا</td>
+                      <td>{{ requiredHoursModel }} {{ unitLabel }}</td>
                     </tr>
                   </tbody>
                 </table>
-                <app-button label="تثبيت الخطة" colorType="blue" :isLoading="loadingForm" @click="showConfirm" />
+                <app-button
+                  label="تثبيت الخطة"
+                  colorType="blue"
+                  :isLoading="loadingForm"
+                  @click="showConfirm"
+                />
               </template>
             </div>
           </div>
         </div>
       </template>
-      <confirm-plan v-model:show="isShownConfirm" @continue="submit4" />
+      <confirm-plan
+        v-model:show="isShownConfirm"
+        @continue="submit4"
+      />
     </div>
   </user-panel-wrapper>
 </template>
 <script lang="ts">
-import { addDays, isToday } from 'date-fns';
+import { addDays, addMinutes, format, isToday, startOfDay } from 'date-fns';
 import { dateUi } from '~/main/utils/date-utils';
 import ConfirmPlan from '~/components/user/confirm-plan.vue';
 import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
@@ -197,18 +313,20 @@ export default {
     const runtimeConfig = useRuntimeConfig();
     const subscriptionsStore = useSubscriptionsStore();
     const isSubscribe = computed(() => {
-      return subscriptionsStore.state.userCurrentSubVal?.freeType === null
-    })
+      return subscriptionsStore.state.userCurrentSubVal?.freeType === null;
+    });
     return {
       ...useSetupRoute(),
       ...useSetupAuth(),
       runtimeConfig,
       windowSize,
-      isSubscribe
+      isSubscribe,
     };
   },
   data() {
     return {
+      availableDays: null as number | null,
+      isLoadingDays: false,
       isShownConfirm: false,
       showStepsSection: false,
       requiredHours: null as number | null,
@@ -223,6 +341,20 @@ export default {
     };
   },
   computed: {
+    unitLabel() {
+      if (!this.requiredHours) return '';
+
+      if (this.requiredHours <= 60) return 'دقيقة';
+
+      return 'ساعة';
+    },
+    requiredHoursModel() {
+      if (!this.requiredHours) return null;
+
+      if (this.requiredHours <= 60) return this.requiredHours;
+
+      return this.formatTime(this.requiredHours);
+    },
     userPanelExamPath() {
       return webUserPanelTrainingWithQuery({
         page: UserPanelItemsRecord[UserPanelItems.exams],
@@ -230,14 +362,14 @@ export default {
     },
     requiredHoursMessage() {
       if (!this.requiredHours) return null;
-      return `تحتاج تتدرب معنا (${this.requiredHours}) ساعات كل أسبوع`;
+      return `تحتاج تتدرب معنا (${this.requiredHoursModel}) ${this.unitLabel} كل يوم`;
     },
     maxSteps() {
       return 4;
     },
     minStartDate() {
-      if (!this.form.date) return null;
-      return addDays(this.form.date, 10);
+      if (!this.form.date || !this.availableDays) return null;
+      return addDays(this.form.date, this.availableDays);
     },
     today() {
       return new Date();
@@ -253,8 +385,24 @@ export default {
   methods: {
     webUserPanelTraining,
     dateUi,
+    formatTime(minutes) {
+      // Start from midnight
+      const baseDate = startOfDay(new Date());
+      const dateWithMinutes = addMinutes(baseDate, minutes);
+      const formatted = format(dateWithMinutes, 'HH:mm');
+
+      return formatted === '00:00' ? '--' : formatted;
+    },
     async submitRequiredDegree() {
       this.form.currentStep++;
+
+      this.isLoadingDays = true;
+      const res = await this.$axios.post('trainingPlansInfo/availableDays', {
+        degree: this.form.neededDegree,
+        grade: 13,
+      });
+      this.availableDays = res.data.availableDays;
+      this.isLoadingDays = false;
     },
     showConfirm() {
       this.isShownConfirm = true;
@@ -262,6 +410,7 @@ export default {
     async submit4() {
       try {
         this.loadingForm = true;
+        this.isShownConfirm = false;
         const res = await this.$axios.put('trainingPlansInfo', {
           startDate: this.form.date,
           examDate: this.form.examDate,
@@ -280,6 +429,8 @@ export default {
         const res = await this.$axios.post(`trainingPlansInfo/requiredHours`, {
           startDate: this.form.date,
           examDate: this.form.examDate,
+          degree: this.form.neededDegree,
+          grade: 13,
         });
         this.requiredHours = res.data.requiredHours;
       } finally {
@@ -310,7 +461,7 @@ export default {
     smartClick() {
       if (
         this.appAuth.user.planSubscribed ===
-        UserPlanSubscribedEnum.NotSubscribed ||
+          UserPlanSubscribedEnum.NotSubscribed ||
         this.runtimeConfig.public.configData.byPassSubscribedUser
       ) {
         this.showStepsSection = true;
