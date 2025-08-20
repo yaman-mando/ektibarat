@@ -1,68 +1,122 @@
 <template>
-  <user-panel-wrapper contentClass="max-w-[1050px] mx-auto" :has-l-info="windowSize.isDesktop"
-    :has-r-info="windowSize.isDesktop" :withBackPage="true" :no-spaces="!windowSize.isDesktop"
-    :has-prev="!windowSize.isDesktop" :page-name="userPanelStore.lessonDetails?.title">
-
-    <app-data-wrapper :loading="userPanelStore.fetching.lessonsDetails" :data="userPanelStore.lessonDetails"
-      loading-type="spinner-overlay" empty-text="لا توجد بيانات متاحة">
-
-      <div class="flex flex-col justify-center gap-y-[20px] xl1200:flex-row gap-x-[30px]">
+  <user-panel-wrapper
+    contentClass="max-w-[1050px] mx-auto"
+    :hasLInfo="windowSize.isDesktop"
+    :hasRInfo="windowSize.isDesktop"
+    :withBackPage="true"
+    :noSpaces="!windowSize.isDesktop"
+    :hasPrev="!windowSize.isDesktop"
+    :pageName="userPanelStore.lessonDetails?.title"
+  >
+    <app-data-wrapper
+      :loading="userPanelStore.fetching.lessonsDetails"
+      :data="userPanelStore.lessonDetails"
+      loadingType="spinner-overlay"
+      emptyText="لا توجد بيانات متاحة"
+    >
+      <div
+        class="flex flex-col justify-center gap-y-[20px] xl1200:flex-row gap-x-[30px]"
+      >
         <!-- Main Content -->
         <main class="flex-2/3">
           <!-- Video Section -->
 
-          <div v-if="windowSize.isDesktop"
+          <div
+            v-if="windowSize.isDesktop"
             class="flex items-center cursor-pointer gap-x-[8px] text-[16px] font-medium text-dark-2b dark:text-white xl1200:mt-[-50px] w-fit"
-            @click="goBack()">
+            @click="goBack()"
+          >
             <i class="fa fa-chevron-right"></i>
             <span>رجوع للخلف</span>
           </div>
 
-          <div class="xl:my-[30px_15px] my-[0] mx-auto"
-            style="max-width: 700px;max-height: 395px;width: 100%;height: auto;">
-            <app-video-player v-if="videoPath" :height="windowSize.isDesktop ? 395 : 203" ref="video_ref"
-              :path="videoPath" />
+          <div
+            class="xl:my-[30px_15px] my-[0] mx-auto"
+            style="
+              max-width: 700px;
+              max-height: 395px;
+              width: 100%;
+              height: auto;
+            "
+          >
+            <app-video-player
+              v-if="videoPath"
+              ref="video_ref"
+              :height="windowSize.isDesktop ? 395 : 203"
+              :path="videoPath"
+            />
           </div>
 
           <!-- Contents -->
           <section class="px-[15px] xl:px-0 xl1200:mt-0 sm:mt-[10px]">
-            <div class="flex items-center flex-wrap gap-y-[15px] justify-between">
+            <div
+              class="flex items-center flex-wrap gap-y-[15px] justify-between"
+            >
               <div>
-                <h1 class="sm:text-[26px] text-[22px] font-bold text-purple-8c dark:text-white mb-[5px]">
+                <h1
+                  class="sm:text-[26px] text-[22px] font-bold text-purple-8c dark:text-white mb-[5px]"
+                >
                   {{ userPanelStore.lessonDetails?.lessonCategoryTitle }}
                 </h1>
-                <span class="sm:text-[20px] text-[18px] font-medium text-gray-63 dark:text-white">
+                <span
+                  class="sm:text-[20px] text-[18px] font-medium text-gray-63 dark:text-white"
+                >
                   {{ userPanelStore.lessonDetails?.title }}
                   | {{ userPanelStore.lessonDetails?.shortDescription }}
                 </span>
               </div>
-              <div v-if="windowSize.isDesktop" class="space-y-[8px]">
+              <div
+                v-if="windowSize.isDesktop"
+                class="space-y-[8px]"
+              >
                 <h1 class="text-[20px] font-bold text-gray-63 dark:text-white">
                   هل استفدت من الدرس؟
                 </h1>
                 <div class="flex gap-x-[12px] items-center">
-                  <button :disabled="loading" :class="buttonClasses" @click="sendFeedback(true)">
+                  <button
+                    :disabled="loading"
+                    :class="buttonClasses"
+                    @click="sendFeedback(true)"
+                  >
                     نعم، استفدت
                   </button>
-                  <button :class="buttonClasses" :disabled="loading" @click="sendFeedback(false)">
+                  <button
+                    :class="buttonClasses"
+                    :disabled="loading"
+                    @click="sendFeedback(false)"
+                  >
                     لا، لم أستفد
                   </button>
                 </div>
-                <p v-if="successMessage" class="text-green-600 !text-center">
+                <p
+                  v-if="successMessage"
+                  class="text-green-600 !text-center"
+                >
                   {{ successMessage }}
                 </p>
               </div>
             </div>
 
             <template v-if="userPanelStore.lessonDetails?.videoContents">
-              <div v-if="windowSize.isDesktop" class="mt-[13px] space-y-[11px]">
+              <div
+                v-if="windowSize.isDesktop"
+                class="mt-[13px] space-y-[11px]"
+              >
                 <h3 class="text-[20px] font-bold text-gray-63 dark:text-white">
                   محتويات المقطع
                 </h3>
                 <ul class="space-y-[8px]">
-                  <li v-for="content in userPanelStore.lessonDetails.videoContents" :key="content.id"
-                    class="flex items-center gap-x-[8px]">
-                    <span class="text-blue-d6 text-[20px] cursor-pointer" @click="onTimeClick(content.from)">
+                  <li
+                    v-for="content in userPanelStore.lessonDetails
+                      .videoContents"
+                    :key="content.id"
+                    class="flex items-center gap-x-[8px] cursor-pointer"
+                    @click="onTimeClick(content.from)"
+                  >
+                    <span
+                      class="text-blue-d6 text-[20px]"
+                      @click="onTimeClick(content.from)"
+                    >
                       {{ content.from }}
                     </span>
                     <span class="text-gray-2b text-[20px]">
@@ -71,38 +125,57 @@
                   </li>
                 </ul>
               </div>
-              <div class="mt-[20px]" v-else>
-                <disclosureGroup v-model:open="isDisclosureOpen" contentClass="!px-2" :hideArrow="true">
+              <div
+                v-else
+                class="mt-[20px]"
+              >
+                <disclosure-group
+                  v-model:open="isDisclosureOpen"
+                  contentClass="!px-2"
+                  :hideArrow="true"
+                >
                   <!-- head -->
                   <template #right>
                     <div class="flex items-center gap-[10px] cursor-pointer">
-                      <i :class="[
-                        'fa',
-                        isDisclosureOpen ? 'fa-minus' : 'fa-plus',
-                        'text-blue-f1',
-                        'text-[24px]'
-                      ]"></i>
-                      <span class="text-black font-bold text-[18px]">محتويات المقطع</span>
+                      <i
+                        :class="[
+                          'fa',
+                          isDisclosureOpen ? 'fa-minus' : 'fa-plus',
+                          'text-blue-f1',
+                          'text-[24px]',
+                        ]"
+                      ></i>
+                      <span class="text-black font-bold text-[18px]">
+                        محتويات المقطع
+                      </span>
                     </div>
                   </template>
 
                   <ul class="space-y-[8px]">
-                    <li v-for="content in userPanelStore.lessonDetails.videoContents" :key="content.id"
-                      class="flex items-center gap-x-[8px]">
-                      <span class="text-blue-d6 text-[16px] cursor-pointer" @click="onTimeClick(content.from)">
-                        {{ formatTimestamp(content.from) }}
+                    <li
+                      v-for="content in userPanelStore.lessonDetails
+                        .videoContents"
+                      :key="content.id"
+                      class="flex items-center gap-x-[8px] cursor-pointer"
+                      @click="onTimeClick(content.from)"
+                    >
+                      <span class="text-blue-d6 text-[16px]">
+                        {{ content.from }}
                       </span>
                       <span class="text-gray-2b text-[16px]">
                         {{ content.title }}
                       </span>
                     </li>
                   </ul>
-                </disclosureGroup>
+                </disclosure-group>
               </div>
             </template>
 
             <!-- mobile like dislike -->
-            <div v-if="!windowSize.isDesktop" class="space-y-[8px] mt-[20px]">
+            <div
+              v-if="!windowSize.isDesktop"
+              class="space-y-[8px] mt-[20px]"
+            >
               <div class="flex items-center justify-between">
                 <h1 class="text-[20px] font-bold text-gray-63 dark:text-white">
                   هل استفدت من الدرس؟
@@ -110,34 +183,48 @@
                 <div class="flex gap-x-[10px] items-center">
                   <button
                     class="cursor-pointer border border-dark-36 rounded-[4px] w-[38px] h-[38px] flex items-center justify-center"
-                    :class="{ '!border-green-8c': selected === true }" :disabled="loading || selected !== null"
-                    @click="sendFeedback(true)">
-                    <i class="fa fa-thumbs-up text-green-8c text-[16px]"
-                      :class="{ 'pulse-animation': selected === true }"></i>
+                    :class="{ '!border-green-8c': selected === true }"
+                    :disabled="loading || selected !== null"
+                    @click="sendFeedback(true)"
+                  >
+                    <i
+                      class="fa fa-thumbs-up text-green-8c text-[16px]"
+                      :class="{ 'pulse-animation': selected === true }"
+                    ></i>
                   </button>
 
                   <button
                     class="cursor-pointer border border-dark-36 rounded-[4px] w-[38px] h-[38px] flex items-center justify-center"
-                    :class="{ '!border-red-5e': selected === false }" :disabled="loading || selected !== null"
-                    @click="sendFeedback(false)">
-                    <i class="fa fa-thumbs-down text-red-5e text-[16px]"
-                      :class="{ 'pulse-animation': selected === false }"></i>
+                    :class="{ '!border-red-5e': selected === false }"
+                    :disabled="loading || selected !== null"
+                    @click="sendFeedback(false)"
+                  >
+                    <i
+                      class="fa fa-thumbs-down text-red-5e text-[16px]"
+                      :class="{ 'pulse-animation': selected === false }"
+                    ></i>
                   </button>
                 </div>
-
               </div>
-              <p v-if="successMessage" class="text-green-600 !text-center">
+              <p
+                v-if="successMessage"
+                class="text-green-600 !text-center"
+              >
                 {{ successMessage }}
               </p>
             </div>
-
           </section>
         </main>
 
         <!-- Sidebar -->
         <aside class="flex-1/3 w-full xl1200:w-1/3 space-y-4 px-[15px] xl:px-0">
-          <lessons-list-side-bar v-if="userPanelStore.simillarVideos" :sectionTitle="userPanelStore.lessonDetails?.lessonCategoryTitle ?? 'لا يوجد'
-            " :lessons="userPanelStore.simillarVideos" />
+          <lessons-list-side-bar
+            v-if="userPanelStore.simillarVideos"
+            :sectionTitle="
+              userPanelStore.lessonDetails?.lessonCategoryTitle ?? 'لا يوجد'
+            "
+            :lessons="userPanelStore.simillarVideos"
+          />
         </aside>
       </div>
     </app-data-wrapper>
@@ -149,6 +236,7 @@ import { ref } from 'vue';
 import { useUserPanelStore } from '~/store/user-panel';
 import LessonsListSideBar from '~/components/user/lessonsListSideBar.vue';
 import type { AppVideoPlayer } from '#components';
+import { millisecondsToSeconds } from 'date-fns';
 
 const config = useRuntimeConfig();
 const router = useRouter();
@@ -189,8 +277,14 @@ const sendFeedback = async (benefited: boolean) => {
   }
 };
 
-function onTimeClick(seconds) {
-  videoRef.value?.moveTo(seconds);
+function toSeconds(value: string): number {
+  const [mm, ss, ms] = value.split(':').map(Number);
+  const totalMs = mm * 60000 + ss * 1000 + ms;
+  return millisecondsToSeconds(totalMs);
+}
+
+function onTimeClick(secondsFormated: string) {
+  videoRef.value?.moveTo(toSeconds(secondsFormated));
 }
 
 function goBack() {
@@ -287,7 +381,6 @@ definePageMeta({
 
 <style scoped>
 @keyframes pulse {
-
   0%,
   100% {
     transform: scale(1);

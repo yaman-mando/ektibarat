@@ -185,9 +185,9 @@ videojs.registerComponent('ChapterMarkers', ChapterMarkers);
 const props = withDefaults(
   defineProps<{
     path: string;
-    height?:number;
+    height?: number;
   }>(),
-  {height:600}
+  { height: 600 }
 );
 
 const authStore = useAuthStore();
@@ -266,7 +266,7 @@ async function onPlayerReady(event: { target: { player: any } }) {
   const token = authStore.state.token; // حسب اسم الحقل عندك
 
   if (player.tech().vhs?.xhr) {
-    player.tech().vhs.xhr.beforeRequest = function(options: any) {
+    player.tech().vhs.xhr.beforeRequest = function (options: any) {
       const url = options.uri || options.url; // حسب نسخة Video.js
 
       // أضف التوكن فقط إذا كان الطلب ملف .key
@@ -278,21 +278,21 @@ async function onPlayerReady(event: { target: { player: any } }) {
       return options;
     };
   }
- // كل مرة يتغير فيها المصدر (مثل تغيير الجودة)
+  // كل مرة يتغير فيها المصدر (مثل تغيير الجودة)
   player.on('loadstart', () => {
-  if (player.tech().vhs?.xhr) {
-    player.tech().vhs.xhr.beforeRequest = function(options: any) {
-      const url = options.uri || options.url; // حسب نسخة Video.js
+    if (player.tech().vhs?.xhr) {
+      player.tech().vhs.xhr.beforeRequest = function (options: any) {
+        const url = options.uri || options.url; // حسب نسخة Video.js
 
-      // أضف التوكن فقط إذا كان الطلب ملف .key
-      if (url && url.endsWith('getKey')) {
-        options.headers = options.headers || {};
-        options.headers['Authorization'] = `Bearer ${token}`;
-      }
+        // أضف التوكن فقط إذا كان الطلب ملف .key
+        if (url && url.endsWith('getKey')) {
+          options.headers = options.headers || {};
+          options.headers['Authorization'] = `Bearer ${token}`;
+        }
 
-      return options;
-    };
-  }
+        return options;
+      };
+    }
   });
 
   // Fetch and parse chapter VTT
@@ -352,8 +352,8 @@ async function onPlayerReady(event: { target: { player: any } }) {
       window.location.origin
     ).href,
     showTimestamp: true,
-     width: 160,
-    height: 90
+    width: 160,
+    height: 90,
   });
 
   // Add dynamic watermark with a custom number
@@ -414,7 +414,7 @@ function updateQualitySelector() {
   }
 }
 
-function moveTo(seconds: any) {
+function moveTo(seconds: number) {
   if (seconds < player.duration()) {
     player.currentTime(seconds);
   }
@@ -429,9 +429,8 @@ defineExpose({
 :root {
   --wt-opacity: 0;
 }
-.vjs-poster img{
-      object-fit: fill !important;
-
+.vjs-poster img {
+  object-fit: fill !important;
 }
 </style>
 <style lang="scss" scoped>
@@ -448,8 +447,8 @@ defineExpose({
   align-items: center;
   justify-content: center;
   //border: 1px solid var(--purple-8c);
-  @media (min-width:959px) {
-   border-radius: 15px; 
+  @media (min-width: 959px) {
+    border-radius: 15px;
   }
   overflow: hidden;
   padding-bottom: 20px;
@@ -457,10 +456,10 @@ defineExpose({
 
   :deep(.video-js) {
     max-width: 100vw;
-    @media (max-width:1400px) {
+    @media (max-width: 1400px) {
       width: 100%;
     }
-    @media (max-width:700px) {
+    @media (max-width: 700px) {
       height: 56vw;
     }
     .vjs-control {
@@ -469,7 +468,7 @@ defineExpose({
       }
     }
 
-    .vjs-tech{
+    .vjs-tech {
       border: none;
     }
 
@@ -500,9 +499,9 @@ defineExpose({
         background-color: var(--purple-9c);
       }
     }
-    .vjs-control-bar{
-      .vjs-menu-content{
-        width: 160px ;
+    .vjs-control-bar {
+      .vjs-menu-content {
+        width: 160px;
       }
     }
   }
@@ -522,7 +521,7 @@ defineExpose({
     z-index: 10;
     transition: opacity 0.2s ease;
   }
-  :deep(.vjs-quality-selector option){
+  :deep(.vjs-quality-selector option) {
     color: black;
   }
   //chapter markers
