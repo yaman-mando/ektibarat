@@ -61,20 +61,12 @@
                   <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
                 </div>
 
-                <div v-if="stage.phase_id ===0" class="flex justify-center">
-                <app-g-button style="opacity: 1 !important"  :disabled="stage.steps?.[0]?.status === 0" width="190px" height="40px" radius="8px" text-color="text-white" 
-                :background="stage.steps?.[0]?.status === 0?'#BCCCDB':'#00C48C'">
-                  <div class="flex items-center justify-center gap-x-[10px] text-[16px] font-bold">
-                  <i class="fa-solid fa-table-list"></i>
-                  اختيار القسم التالي
-                  </div>
-                </app-g-button>
-                </div>
-
-                <spiralButton v-else :show-help-modal="props?.show_modal_need_help ?? false" :steps="stage.steps" />
+                
+                <spiralButton :for-part="stage.phase_id ===0" :show-help-modal="props?.show_modal_need_help ?? false" :steps="stage.steps" />
                 
               </div>
             </div>
+
           </ClientOnly>
         </div>
       </app-data-wrapper>
@@ -138,6 +130,8 @@ const updateActivePhaseOnScroll = () => {
     activePhase.value = closestStage;
   }
 };
+
+
 
 onMounted(async () => {
   await nextTick();

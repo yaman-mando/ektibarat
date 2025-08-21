@@ -1,5 +1,15 @@
 <template>
-  <div v-if="steps" class="relative w-full max-w-[650px] mx-auto flex justify-center"
+  <div v-if="forPart" class="flex justify-center">
+    <app-g-button @click="onClickPart(steps?.[0])" style="opacity: 1 !important" :disabled="steps?.[0]?.status === 0"
+      width="190px" height="40px" radius="8px" text-color="text-white"
+      :background="steps?.[0]?.status === 0 ? '#BCCCDB' : '#00C48C'">
+      <div class="flex items-center justify-center gap-x-[10px] text-[16px] font-bold">
+        <i class="fa-solid fa-table-list"></i>
+        اختيار القسم التالي
+      </div>
+    </app-g-button>
+  </div>
+  <div v-else-if="steps" class="relative w-full max-w-[650px] mx-auto flex justify-center"
     :style="{ height: `${steps.length * stepSpacing}px` }">
 
     <!-- Step rendering loop -->
@@ -63,11 +73,14 @@
             <div class="flex items-center justify-between mt-[10px] !p-[0px_12px]">
               <div class="grid justify-items-center gap-y-[6px]">
                 <span class="text-[16px] text-purple-78 font-bold">عدد الأسئلة</span>
-                <span class="text-[16px] text-gray-63 text-center">{{ step.categoryInfo.numberQuestion - step.categoryInfo.numberQuestionComplete }}</span>
+                <span class="text-[16px] text-gray-63 text-center">{{ step.categoryInfo.numberQuestion -
+                  step.categoryInfo.numberQuestionComplete }}</span>
               </div>
               <div class="grid justify-items-center gap-y-[6px]">
                 <span class="text-[16px] text-purple-78 font-bold">الزمن المتوقع</span>
-                <span class="text-[16px] text-gray-63 text-center">{{ dateFormat.formatStoMMHHWithText(step.categoryInfo.time) }}</span>
+                <span class="text-[16px] text-gray-63 text-center">{{
+                  dateFormat.formatStoMMHHWithText(step.categoryInfo.time)
+                }}</span>
               </div>
             </div>
             <app-overlay v-if="examLoading" />
@@ -82,22 +95,22 @@
 
     </div>
 
-    <!-- Help modal -->
-    <helpModal :show="toShowHelpModal" @continue="() => {
-      toShowHelpModal = false,
-        helpModalSeen = true,
-        onStepClick(pendingStepIndex, pendingStepData, pendingClickEvent)
-    }" />
-
-    <!-- Category selection modal -->
-    <selectCategoryModal v-if="pendingStepData" :stepId="pendingStepData?.id" :show="toShowSelectCategoryModal"
-      @update:show="toShowSelectCategoryModal = $event" @continue="() => {
-        toShowSelectCategoryModal = false,
-          onStepClick(pendingStepIndex, pendingStepData, pendingClickEvent)
-      }">
-    </selectCategoryModal>
-
   </div>
+  <!-- Help modal -->
+  <helpModal :show="toShowHelpModal" @continue="() => {
+    toShowHelpModal = false,
+      helpModalSeen = true,
+      onStepClick(pendingStepIndex, pendingStepData, pendingClickEvent)
+  }" />
+
+  <!-- Category selection modal -->
+  <selectCategoryModal v-if="pendingStepData" :stepId="pendingStepData?.id" :show="toShowSelectCategoryModal"
+    @update:show="toShowSelectCategoryModal = $event" @continue="() => {
+      toShowSelectCategoryModal = false,
+        onStepClick(pendingStepIndex, pendingStepData, pendingClickEvent)
+    }">
+  </selectCategoryModal>
+
 </template>
 
 <script lang="ts" setup>
@@ -123,6 +136,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
     required: true
+  },
+  forPart: {
+    type: Boolean,
+    default: false,
   }
 })
 
@@ -272,6 +289,12 @@ watch(activePopupIndex, async (newVal) => {
     document.getElementById(`popupRefs-${newVal}`)?.focus()
   }
 });
+
+
+const onClickPart = (stepData) => {
+  pendingStepData.value = stepData;
+  toShowSelectCategoryModal.value = true;
+}
 
 // Handle step click
 const onStepClick = async (index, stepData: step | null, event) => {
