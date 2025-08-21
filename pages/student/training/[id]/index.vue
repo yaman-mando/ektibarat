@@ -254,6 +254,7 @@
                     !!activeQuestionModel?.articleUi
                   "
                   :text="activeQuestionModel.articleUi"
+                  :withShadow="false"
                 />
               </prime-dialog>
             </client-only>

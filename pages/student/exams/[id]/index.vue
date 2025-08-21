@@ -61,8 +61,8 @@
             </div>
           </div>
           <div class="w-container">
-            <lazy-app-exam-part-article
-              v-if="activeQuestionModel?.articleUi"
+            <app-exam-part-article
+              v-if="!windowSize.isMobileSize && activeQuestionModel?.articleUi"
               :text="activeQuestionModel.articleUi"
             />
             <div class="w-full aa-q">
@@ -87,6 +87,32 @@
                   :disableImgModal="true"
                   @onAnswerChange="onAnswerChange($event)"
                 />
+
+                <template #endContent>
+                  <template
+                    v-if="
+                      windowSize.isMobileSize &&
+                      !!activePartModel?.isCategoryText &&
+                      !!activeQuestionModel?.articleUi
+                    "
+                  >
+                    <div
+                      class="relative start-[15px] cursor-pointer w-[125px] h-[34px] flex items-center justify-start rounded-[8px] !px-[10px] border border-[#7840E0] bg-[#F8F3FF]"
+                      @click="onClickReadArticleButton"
+                    >
+                      <img
+                        class="w-[12px] h-[14px] mx-auto"
+                        src="/images/icons/align-right.svg"
+                        alt="align right"
+                      />
+                      <span
+                        class="text-[14px] whitespace-nowrap text-[#7840E0] pis-[10px] font-[500] text-start"
+                      >
+                        قراءة القطعة
+                      </span>
+                    </div>
+                  </template>
+                </template>
               </lazy-app-exam-part-question-part>
             </div>
           </div>
@@ -153,6 +179,32 @@
           v-model:isOpen="isOpenCompleteInfoModal"
           @onConfirm="onCompleteInfo"
         />
+      </template>
+      <template v-if="windowSize.isMobileSize">
+        <client-only>
+          <prime-dialog
+            v-model:visible="isOpenArticleModal"
+            :showHeader="false"
+            :closeOnEscape="true"
+            :closable="true"
+            :dismissableMask="true"
+            :modal="true"
+            :class="`mx-auto w-container article-modal`"
+          >
+            <i
+              class="fa fa-close text-[20px] relative end-[10px] block-start-[5px] !flex justify-self-end"
+              @click="closeArticleModal"
+            ></i>
+            <app-exam-part-article
+              v-if="
+                !!activePartModel?.isCategoryText &&
+                !!activeQuestionModel?.articleUi
+              "
+              :text="activeQuestionModel.articleUi"
+              :withShadow="false"
+            />
+          </prime-dialog>
+        </client-only>
       </template>
     </div>
   </client-only>
@@ -228,6 +280,14 @@ export default {
     );
     const examDetail = ref<StudentsExamDataModel | null>(null);
 
+    const isOpenArticleModal = ref(false);
+    function onClickReadArticleButton() {
+      isOpenArticleModal.value = !isOpenArticleModal.value;
+    }
+    function closeArticleModal() {
+      isOpenArticleModal.value = false;
+    }
+
     definePageMeta({
       layout: 'exam-layout',
     });
@@ -240,6 +300,9 @@ export default {
     });
 
     return {
+      isOpenArticleModal,
+      onClickReadArticleButton,
+      closeArticleModal,
       examDetail,
       isDev: !IS_PRODUCTION_APP,
       windowSize,
