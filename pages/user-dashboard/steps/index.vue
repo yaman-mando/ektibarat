@@ -4,7 +4,7 @@
 
 
     <div class="flex flex-col xl1200:flex-row gap-[50px]">
-      
+
       <app-data-wrapper :loading="userPanelStore.fetching.studentStages" :data="userPanelStore.studentStages"
         loading-type="spinner-overlay" empty-text="لا توجد بيانات متاحة">
         <div class="flex-1 xl1200:mt-[-60px]" v-if="activePhase">
@@ -61,9 +61,10 @@
                   <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
                 </div>
 
-                
-                <spiralButton :for-part="stage.phase_id ===0" :show-help-modal="props?.show_modal_need_help ?? false" :steps="stage.steps" />
-                
+
+                <spiralButton :for-part="stage.phase_id === 0" :show-help-modal="props?.show_modal_need_help ?? false"
+                  :steps="stage.steps" />
+
               </div>
             </div>
 

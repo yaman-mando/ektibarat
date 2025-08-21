@@ -2,8 +2,8 @@ export type pagination = {
   currentPage: number;
   perPage: number;
   totalCount: number;
-  totalPages: number;
-};
+  totalPages: number
+}
 
 export type lessonsCategoriesDataModel = {
   id: number;
@@ -17,7 +17,7 @@ export type lessonsCategoriesDataModel = {
   totalLessonsCount: number;
   doneLessonsCount: number;
   children: lessonsCategoriesDataModel[];
-};
+}
 
 export type lessonObj = {
   id: number;
@@ -30,7 +30,7 @@ export type lessonObj = {
   type: number;
   periodTime: number;
   isWatched: boolean;
-  isFree: boolean;
+  isFree: boolean
 };
 
 export type lessonsModel = {
@@ -42,49 +42,50 @@ export type lessonsModel = {
 };
 
 export type videoContent = {
-  id: number;
-  title: string;
-  from: string;
-  to: string;
+  id: number
+  title: string
+  from: string
+  to: string
 };
 
 export type lessonDetailsModel = {
-  id: number;
-  groupLawId: number;
-  lessonsCategoriesId: number;
-  lessonCategoryTitle: string;
-  title: string;
-  shortDescription: string;
-  description: string;
-  iconUrl: string;
-  order: number;
-  examId: number | null;
-  attachmentIds: number[];
-  videoLink: string;
-  type: number;
-  periodTime: number;
-  videoContents: videoContent[];
-};
+  id: number
+  groupLawId: number
+  lessonsCategoriesId: number
+  lessonCategoryTitle: string
+  title: string
+  shortDescription: string
+  description: string
+  iconUrl: string
+  order: number
+  examId: number | null
+  attachmentIds: number[]
+  videoLink: string
+  type: number
+  periodTime: number
+  videoContents: videoContent[]
+}
 
 export type similarVidObj = {
-  iconUrl: string;
-  id: number;
-  periodTime: number;
-  title: string;
-  order: number;
-  videoLink: string;
-  isWatched: boolean;
-  isFree: boolean;
-  isActive: boolean;
-};
+  iconUrl: string,
+  id: number,
+  periodTime: number,
+  title: string,
+  order: number,
+  videoLink: string,
+  isWatched: boolean,
+  isFree: boolean,
+  isActive: boolean
+}
 
-export type similarVidModel = similarVidObj[];
+export type similarVidModel = similarVidObj[]
+
 
 export type categoryInfoForStep = {
   categoryId: number | null;
   questionsCount: number | null | any;
   stepId: number | null;
-};
+}
 
 export type stepCategoryInfo = {
   categoryId: number | null;
@@ -93,7 +94,7 @@ export type stepCategoryInfo = {
   numberQuestionComplete: number;
   time: number;
   isWrong: boolean;
-};
+}
 
 export type step = {
   id: number;
@@ -105,8 +106,8 @@ export type step = {
   text_after?: string;
   color_1: string;
   color_2: string;
-  type: number;
-};
+  type: number
+}
 
 export type stage = {
   phase_name: string;
@@ -117,19 +118,21 @@ export type stage = {
   color_1: string;
   color_2: string;
   steps: step[];
-};
+}
 
 export type studentStages = {
   active_step_id: number;
   active_phase_id: number;
   show_modal_need_help: boolean;
   stages: stage[];
-};
+}
+
 
 export type categoriesListForModal = {
-  name: string;
-  children: { id: number; label: string; disabled: boolean }[];
-}[];
+  name: string,
+  children: { id: number, label: string, disabled: boolean }[]
+}[]
+
 
 export type categoryAnalysisList = {
   allStudentsTimeTakenRate: number;
@@ -148,17 +151,18 @@ export type categoryAnalysisList = {
   studentTimeTakenRate: number;
   totalTime: number;
   wrongAnswersCount: number;
-}[];
+}[]
 
 export type chartDataList = {
   count: number;
-  date: string | null;
-}[];
+  date: string | null
+}[]
 
 export type idLabelList = {
-  id: number;
-  label: string;
-}[];
+  id: number,
+  label: string
+}[]
+
 
 export type studentSchoolDashbord = {
   studentId: number;
@@ -173,20 +177,20 @@ export type studentSchoolDashbord = {
   predictedMark: number;
   requiredGrade: number;
   planAdherence: number;
-};
+}
 
 export type schoolDashboardData = {
   data: {
-    data: any;
+    data: any
     page: studentSchoolDashbord[];
-  } & pagination;
+  } & pagination
   main: {
     levelRateAvg: number;
     planAdherenceAvg: number;
     predictedMarksAvg: number;
     studentsCount: number;
-  };
-};
+  }
+}
 
 export type analyzeStudentCategory = {
   categoryId: number;
@@ -202,7 +206,7 @@ export type analyzeStudentCategory = {
   rate: number;
   isEnabled: boolean;
   hasLawAnalyze: boolean;
-};
+}
 
 export type analyzeStudentCategoryForTable = {
   categoryId: number;
@@ -218,21 +222,21 @@ export type analyzeStudentCategoryForTable = {
   rate: number;
   isEnabled: boolean;
   hasLawAnalyze: boolean;
-  children: analyzeStudentCategory[];
-}[];
+  children: analyzeStudentCategory[]
+}[]
 
 export type studentAnalyzeResponse = {
   studentRate: number;
   levelRate: number;
   requiredGrade: number;
   analayzeStudentCategories: analyzeStudentCategory[];
-};
+}
 
 export type mainCategoryRate = {
   categoryId: number | null;
   categoryName: string;
   rate: number;
-};
+}
 
 export type studentAnalyzeChartResponse = {
   mainCategoriesRates: mainCategoryRate[];
@@ -241,22 +245,23 @@ export type studentAnalyzeChartResponse = {
   correctCount: number;
   totalPeriod: number;
   chartData: chartDataList;
-};
+}
 
 export type recommendation = {
   title: string;
   advices: string[];
-};
+}
 
 export type recommendationsResponse = {
   recommendations: recommendation[];
-};
+}
+
 
 export type timeStats = {
   percentage: number;
   timeRequired: number;
   timeDone: number;
-};
+}
 
 export type trainingPlanSummaryResponse = {
   examDate: string;
@@ -269,7 +274,7 @@ export type trainingPlanSummaryResponse = {
   percentageDone: number | any;
   percentageRequired: number | any;
   recommendations: recommendation;
-};
+}
 
 export type studentAnalyzeForTeacherResponse = {
   studentId: string | number;
@@ -277,22 +282,26 @@ export type studentAnalyzeForTeacherResponse = {
   pictureUrl: string;
   fullName: string;
   phoneNumber: string;
+  isSubscribed:boolean;
+  planSubscription:number;
   analyzes: {
     studentRate: number;
     levelRate: number;
     requiredGrade: number;
     analayzeStudentCategories: analyzeStudentCategory[];
-  }[];
-};
+  }[]
+}
+
 
 export type blog = {
   link: string;
   title: string;
   description: string;
-  source_url: string;
-};
+  source_url: string
+}
 
-export type blogsListResponse = blog[];
+export type blogsListResponse = blog[]
+
 
 export type trainingAnalyzeCategorySimple = {
   categoryId: number;
@@ -304,14 +313,14 @@ export type trainingAnalyzeCategorySimple = {
   rate: number;
   totalTime: number;
   sort: number;
-};
+}
 
 export type trainingAnalyzeSimpleResponse = {
   subjectId: number;
   subjectName: string;
   studentRate: number;
   trainingAnalyzeCategories: trainingAnalyzeCategorySimple[];
-};
+}
 
 export type trainingPlanInfoSimpleResponse = {
   totalPercentage: number;
@@ -319,20 +328,22 @@ export type trainingPlanInfoSimpleResponse = {
   percentageDone: number | any;
   timeRequired: number | any;
   timeDone: number;
-};
+}
 
 export type slide = {
-  createdDate: string;
-  goLinkUrl: string;
-  id: number;
-  imagePath: string;
-  imagePathMobile: string;
-  isExternalLink: boolean;
-  order: number;
-  tag: number;
-};
+  createdDate: string,
+  goLinkUrl: string,
+  id: number,
+  imagePath: string,
+  imagePathMobile: string,
+  isExternalLink: boolean,
+  order: number,
+  tag: number
+}
 
-export type slidersResponse = slide[];
+export type slidersResponse = slide[]
+
+
 
 export type TPstudentStatistics = {
   totalQuestionsCount: number;
@@ -344,7 +355,7 @@ export type TPstudentStatistics = {
   rate: number;
   showRate: boolean;
   trainingPeriod: number;
-};
+}
 
 export type TPstudent = {
   id: number;
@@ -353,7 +364,7 @@ export type TPstudent = {
   phoneNumber: string;
   statistics: TPstudentStatistics;
   state: number;
-};
+}
 
 export type TPstudentDataResponse = {
   code: string;
@@ -363,7 +374,7 @@ export type TPstudentDataResponse = {
   predictedMarksAvg: number;
   planAdherenceAvg: number;
   studentsList: TPstudent[];
-};
+}
 
 export type financialDetail = {
   createdDate: string;
@@ -371,10 +382,10 @@ export type financialDetail = {
   subscriptionName: string;
   studentPaidAmount: number;
   teacherAmount: number;
-};
+}
 
 export type teachersFinancialResponse = {
   subscriptionsCount: number;
   code: string | null;
   details: financialDetail[];
-};
+}
