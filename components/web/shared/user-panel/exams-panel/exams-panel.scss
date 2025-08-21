@@ -634,10 +634,6 @@
 
   .select-items-wrapper {
     display: grid;
-    //grid-template-columns: 1fr;
-    @include ipad-up() {
-      //grid-template-columns: 2fr 1fr;
-    }
     gap: 16px;
   }
 

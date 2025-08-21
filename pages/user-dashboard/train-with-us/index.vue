@@ -289,6 +289,7 @@ import { dateUi } from '~/main/utils/date-utils';
 import ConfirmPlan from '~/components/user/confirm-plan.vue';
 import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 import {
+  webUserPanelExamSimulatorPathUtil,
   webUserPanelTraining,
   webUserPanelTrainingWithQuery,
   webUserSteps,
@@ -356,9 +357,7 @@ export default {
       return this.formatTime(this.requiredHours);
     },
     userPanelExamPath() {
-      return webUserPanelTrainingWithQuery({
-        page: UserPanelItemsRecord[UserPanelItems.exams],
-      });
+      return webUserPanelExamSimulatorPathUtil();
     },
     requiredHoursMessage() {
       if (!this.requiredHours) return null;

@@ -45,7 +45,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 999;
   pointer-events: all;
 
   &.dark {

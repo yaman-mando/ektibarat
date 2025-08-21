@@ -2,7 +2,7 @@
   <div
     v-if="text"
     class="exam-part-article"
-    :class="{ 'is-img': forImage }"
+    :class="[{ 'is-img': forImage }, { 'with-shadow': withShadow }]"
   >
     <div class="exam-part-article-iw">
       <span
@@ -47,8 +47,11 @@ const props = withDefaults(
     text?: string;
     forImage?: boolean;
     noReadMore?: boolean;
+    withShadow?: boolean;
   }>(),
-  {}
+  {
+    withShadow: true,
+  }
 );
 
 //data
@@ -109,6 +112,12 @@ const trimmedTextModel = computed(() => {
     margin-top: 30px;
     margin-bottom: 0;
   }
+
+  &.with-shadow {
+    .exam-part-article-iw {
+      box-shadow: 0 0 15px #00000033 !important;
+    }
+  }
   .exam-part-article-iw {
     display: flex;
     flex-direction: column;
@@ -116,7 +125,6 @@ const trimmedTextModel = computed(() => {
     justify-content: flex-start;
     width: 100%;
     background-color: var(--white-ff);
-    box-shadow: 0 0 2px #ffffff;
     padding: 15px 10px;
     @include web-desktop-up() {
       border-radius: 15px;

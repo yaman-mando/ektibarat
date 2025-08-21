@@ -19,8 +19,7 @@
           />
           <div class="flex flex-col gap-[5px]">
             <span class="text-[#92400E] text-[14px] lg:text-[16px] font-bold">
-              لديك {{ userCurrentSub.remainTrainingCountPerDay }} محاولات تدريب
-              مجانية لهذا اليوم
+              {{ remainMessage }}
             </span>
             <span class="text-[#92400E] text-[13px] lg:text-[14px]">
               اشترك في باقات اختبارات لتتدرب بلا حدود!
@@ -181,7 +180,7 @@
                   <div class="relative lg:col-start-1">
                     <service-block
                       v-if="
-                        !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
+                        !userServicesState.BANKUSAGE.isActive ||
                         appAuth.notSubscribedUser
                       "
                     />
@@ -192,7 +191,7 @@
                       color="blue"
                       :isActive="isRecentQuestionActive"
                       :isDisabled="
-                        !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
+                        !userServicesState.BANKUSAGE.isActive ||
                         appAuth.notSubscribedUser
                       "
                       :hasNewBadge="true"
@@ -332,212 +331,52 @@
             class="cw-bank"
           >
             <prime-accordion-header class="c-head">
-              <div class="r-part">
-                <i class="ek-icon-sliders-solid"></i>
-                <span>خيارات متقدمة</span>
+              <div class="flex items-center justify-start gap-[10px]">
+                <template v-if="appAuth.notSubscribedUser">
+                  <img
+                    class="flex items-center justify-center"
+                    src="/images/icons/lock-icon.png"
+                    alt="locked"
+                  />
+                </template>
+                <div class="r-part">
+                  <span class="r_tt">خصص اختبارك</span>
+                  <span class="me-t !text-[14px] lg:!text-[16px]">
+                    تحكم بالأسئلة التي تريد أن تختبر فيها
+                  </span>
+                </div>
               </div>
             </prime-accordion-header>
             <prime-accordion-content>
-              <div class="__bank">
-                <div class="__filter">
-                  <div class="c1-wq">
-                    <div class="__c1">
-                      <i class="fa fa-folder-open"></i>
-                      <span>بنوك الأسئلة</span>
-                      <service-lock
-                        v-if="!userServicesState.BANKUSAGE.isActive"
-                      />
-                    </div>
-                    <div
-                      v-if="userCurrentSub"
-                      class="c1-wq__qe"
-                    >
-                      <span class="c1-wq__la">تم إضافة أسئلة جديدة بتاريخ</span>
-                      <span class="c1-wq__la">
-                        {{ formatDate(userCurrentSub.lastUpdateDate) }}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="__c2 relative">
+              <div class="__bank !p-[10px] lg:!p-[20px 10px]">
+                <div class="grid gap-[16px] grid-cols-1 lg:grid-cols-3">
+                  <div class="relative">
                     <service-block
-                      v-if="!userServicesState.BANKUSAGE.isActive"
+                      v-if="
+                        !userServicesState.BANKUSAGE.isActive ||
+                        appAuth.notSubscribedUser
+                      "
                     />
-                    <range-slider
-                      v-if="isCreated"
-                      v-model:minValue="advancedFilter.oBankMinValue"
-                      v-model:maxValue="advancedFilter.oBankMaxValue"
-                      :max="maxBank"
-                      :min="minBank"
-                      :minLabel="'أقدم'"
-                      :maxLabel="'أحدث'"
-                      :step="1"
-                      :rangeMargin="1"
-                      @onUpdateValue="UpdateBankValues"
+                    <app-select-card-item
+                      title="أحدث 1000 سؤال"
+                      iconSvgPath="/images/svg/sparkles_icon.svg"
+                      label="تدرب على أحدث الأسئلة والتسريبات فقط"
+                      color="blue"
+                      :isActive="isRecentQuestionActive"
+                      :isDisabled="
+                        !userServicesState.BANKUSAGE.isActive ||
+                        appAuth.notSubscribedUser
+                      "
+                      :hasNewBadge="true"
+                      @click="onRecentSelect"
                     />
                   </div>
-                </div>
-                <div class="__reset">
-                  <app-button
-                    variant="outline"
-                    colorType="warn"
-                    size="md"
-                    label="إعادة تعيين"
-                    @click="resetFilterBankValue()"
-                  />
                 </div>
               </div>
             </prime-accordion-content>
           </prime-accordion-panel>
         </prime-accordion>
       </div>
-
-      <div
-        v-if="!activeSwitch && isExams"
-        class="rw-info"
-      >
-        <span class="i-title">{{ texts.infoTitle }}</span>
-        <template v-if="publicExam">
-          <div class="i-items">
-            <template v-if="!isTahsele">
-              <div class="i-item hide-to-tablet">
-                <span class="i-label">كمي</span>
-                <span class="i-info">كامل القسم</span>
-              </div>
-
-              <div class="i-item hide-to-tablet">
-                <span class="i-label">لفظي</span>
-                <span class="i-info">كامل القسم</span>
-              </div>
-            </template>
-
-            <div class="i-item">
-              <span class="i-label">عدد الأسئلة</span>
-              <span class="i-info">{{ publicExam.questionsCount }}</span>
-            </div>
-            <div class="i-item">
-              <span class="i-label">{{ texts.timeText }}</span>
-              <span class="i-info">
-                {{ minutesToHHMM(publicExam.duration) }}
-              </span>
-            </div>
-          </div>
-          <div
-            v-if="activeAdvanced && advancedText && advancedText != ''"
-            class="i-items"
-          >
-            <div class="i-item">
-              <span class="i-label">خيارات متقدمة</span>
-              <span class="i-info">
-                {{ advancedText }}
-              </span>
-            </div>
-          </div>
-        </template>
-        <template v-else>
-          <div class="i-items">
-            <template v-if="!isTahsele">
-              <div class="i-item hide-to-tablet">
-                <span class="i-label">كمي</span>
-                <span class="i-info">-</span>
-              </div>
-
-              <div class="i-item hide-to-tablet">
-                <span class="i-label">لفظي</span>
-                <span class="i-info">-</span>
-              </div>
-            </template>
-
-            <div class="i-item">
-              <span class="i-label">عدد الأسئلة</span>
-              <span class="i-info">-</span>
-            </div>
-            <div class="i-item">
-              <span class="i-label">{{ texts.timeText }}</span>
-              <span class="i-info">-</span>
-            </div>
-          </div>
-        </template>
-        <service-block
-          v-if="
-            !activeSwitch &&
-            selectedType === examTypes.exams &&
-            (!userServicesState.FULLEXAM.isActive ||
-              !userCurrentSub.remainExamsCount)
-          "
-        />
-        <app-button
-          class="!mt-3"
-          :isDisabled="!publicExam"
-          :label="texts.btnText"
-          @click="checkAndStart('full')"
-        />
-      </div>
-
-      <!--      <div-->
-      <!--        v-else-->
-      <!--        :ref="trainingPanelTour.stepLast.ref"-->
-      <!--        class="rw-info training-case"-->
-      <!--        :class="{ all: activeSwitch }"-->
-      <!--        data-step="7"-->
-      <!--        :data-disable-interaction="true"-->
-      <!--        :data-position="isXlWindow ? 'right' : 'bottom'"-->
-      <!--        :data-title="trainingPanelTour.stepLast.title"-->
-      <!--        :data-intro="trainingPanelTour.stepLast.content"-->
-      <!--      >-->
-      <!--        <span class="i-title">{{ texts.infoTitle }}</span>-->
-      <!--        <template v-if="selectedLists.length > 0">-->
-      <!--          <div class="i-items">-->
-      <!--            <template v-if="categoryList && categoryList.length > 0">-->
-      <!--              <template-->
-      <!--                v-for="(card, index) of categoryList"-->
-      <!--                :key="`${card.label}_${index}`"-->
-      <!--              >-->
-      <!--                <div-->
-      <!--                  v-if="card.children.length > 0"-->
-      <!--                  class="i-item hide-to-tablet"-->
-      <!--                >-->
-      <!--                  <span class="i-label">{{ card.label }}</span>-->
-      <!--                  <span class="i-info">-->
-      <!--                    {{ getSelectPartCount(card.children) }}-->
-      <!--                  </span>-->
-      <!--                </div>-->
-      <!--              </template>-->
-      <!--            </template>-->
-      <!--            <div class="i-item">-->
-      <!--              <span class="i-label">عدد الأسئلة</span>-->
-      <!--              <span class="i-info">{{ getQuestionCount }}</span>-->
-      <!--            </div>-->
-      <!--            <div class="i-item">-->
-      <!--              <span class="i-label">{{ texts.timeText }}</span>-->
-      <!--              <span class="i-info">{{ getTotalTime }}</span>-->
-      <!--            </div>-->
-      <!--          </div>-->
-      <!--          <div-->
-      <!--            v-if="activeAdvanced && advancedText && advancedText != ''"-->
-      <!--            class="i-items"-->
-      <!--          >-->
-      <!--            <div class="i-item">-->
-      <!--              <span class="i-label">خيارات متقدمة</span>-->
-      <!--              <span class="i-info">-->
-      <!--                {{ advancedText }}-->
-      <!--              </span>-->
-      <!--            </div>-->
-      <!--          </div>-->
-      <!--        </template>-->
-      <!--        <span-->
-      <!--          v-else-->
-      <!--          class="i-no-selected-note"-->
-      <!--        >-->
-      <!--          {{ texts.noSelectedNote }}-->
-      <!--        </span>-->
-      <!--        <app-button-->
-      <!--          class="!mt-3"-->
-      <!--          data-disable-interaction="false"-->
-      <!--          :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"-->
-      <!--          :label="texts.btnText"-->
-      <!--          @click="checkAndStart"-->
-      <!--        />-->
-      <!--      </div>-->
     </div>
     <div
       class="pa-fo"
@@ -557,6 +396,7 @@
         <div class="pa-fo__en">
           <app-button
             :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"
+            :isLoading="examLoading"
             :label="texts.btnText"
             colorType="blue"
             iconEndClass="fa fa-chevron-left"
@@ -1672,10 +1512,17 @@ export default {
   },
 
   computed: {
+    remainMessage() {
+      if (!this.isExams) {
+        return `
+              لديك ${this.userCurrentSub.remainTrainingCountPerDay} محاولات تدريب
+              مجانية لهذا اليوم`;
+      }
+
+      return `لديك ${this.userCurrentSub.remainTrainingCountPerDay} محاولات مجانية لمحاكي الاختبار`;
+    },
     showRemainingCount() {
-      return (
-        !this.isExams && this.userCurrentSub.remainTrainingCountPerDay < 100
-      );
+      return this.userCurrentSub.remainTrainingCountPerDay < 100;
     },
     canStartTour() {
       return (
