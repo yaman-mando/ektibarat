@@ -164,7 +164,7 @@ class examForm {
   isOpen = false;
   tagsIds = [] as any[];
   takfeelTagsIds = [] as any[];
-  onlyWrongQuestions = false;
+  onlyWrongQuestions = true;
   onlyFlaggedQuestions = false;
   randomQuestionsSettings = [] as any[];
   questionsLevelsMin = 0;
@@ -416,12 +416,6 @@ const getImagePosition = (index) => {
   }
 };
 
-// Time formatting
-function formatTime(seconds: number) {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
 
 </script>
 
