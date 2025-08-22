@@ -3,6 +3,7 @@
     id="exam-layout"
     class="exam-layout"
   >
+    <main-menu />
     <slot></slot>
     <client-only>
       <lazy-surveys-modal ref="modal_surveys_ref" />

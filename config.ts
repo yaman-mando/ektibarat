@@ -112,7 +112,7 @@ export const getEnv = () => {
         slackWebhookUrl: '',
       },
       configData: {
-        byPassSubscribedUser: true,
+        byPassSubscribedUser: false,
       },
     },
   };

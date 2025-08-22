@@ -29,7 +29,7 @@
             class="qd-item"
             @click="smartClick"
           >
-            <template v-if="!isSubscribe">
+            <template v-if="!isPremiumUser">
               <service-block />
               <img
                 class="absolute w-[24px] top-[10px] left-[10px]"
@@ -100,7 +100,7 @@
             :to="userPanelExamPath"
             class="qd-item orange"
           >
-            <template v-if="!isSubscribe">
+            <template v-if="!isPremiumUser">
               <service-block />
               <img
                 class="absolute w-[24px] top-[10px] left-[10px]"
@@ -309,19 +309,17 @@ export default {
   setup() {
     definePageMeta({
       layout: 'empty-layout',
+      middleware: ['user-services-middleware'],
     });
     const windowSize = useWindowSize();
     const runtimeConfig = useRuntimeConfig();
     const subscriptionsStore = useSubscriptionsStore();
-    const isSubscribe = computed(() => {
-      return subscriptionsStore.state.userCurrentSubVal?.freeType === null;
-    });
     return {
       ...useSetupRoute(),
       ...useSetupAuth(),
       runtimeConfig,
       windowSize,
-      isSubscribe,
+      isPremiumUser: subscriptionsStore.isPremiumUser,
     };
   },
   data() {

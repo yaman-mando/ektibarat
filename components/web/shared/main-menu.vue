@@ -1,7 +1,7 @@
 <template>
   <div class="web-header-container">
     <header
-      v-if="isMobileSize"
+      v-if="windowSize.isMobileSize"
       class="web-header hide-from-tablet"
     >
       <span @click="toggleMenu">
@@ -538,7 +538,7 @@ const userPanelItems = UserPanelItems;
 //composable
 const { status, data, signOut } = useAuth();
 const authState = useAuthState();
-const { isMobileSize } = useWindowSize();
+const windowSize = useWindowSize();
 const router = useRouter();
 const route = useRoute();
 const { state, patchState: pathGlobalStore } = useGlobalStore();
@@ -568,15 +568,14 @@ const notificationCount = computed(() => {
   return 0;
 });
 
-
 const validSections: any = [
-  {id:1,link:'/user-dashboard/personal-setting'},
-  {id:3,link:'/user-dashboard/analytics'},
-  {id:5,link:'/user-dashboard/personal-setting?section=subscriptions'},
-  {id:7,link:'/user-dashboard/personal-setting?section=support'},
-  {id:9,link:'/user-dashboard/school'},
-  {id:10,link:'/user-dashboard/teacher'},
-  ];
+  { id: 1, link: '/user-dashboard/personal-setting' },
+  { id: 3, link: '/user-dashboard/analytics' },
+  { id: 5, link: '/user-dashboard/personal-setting?section=subscriptions' },
+  { id: 7, link: '/user-dashboard/personal-setting?section=support' },
+  { id: 9, link: '/user-dashboard/school' },
+  { id: 10, link: '/user-dashboard/teacher' },
+];
 
 const listItemModel = computed<MenuItemUi[]>(() => [
   { id: 1, label: 'معلوماتي', icon: 'info' },
@@ -727,11 +726,11 @@ const hideSubMenu = () => {
   }, 100);
 };
 
-const goToLink = (key) =>{
-  const link = validSections.filter(k=>k.id === key)[0].link
+const goToLink = (key) => {
+  const link = validSections.filter((k) => k.id === key)[0].link;
   router.push(link);
   hideList();
-}
+};
 
 const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
   router.push({

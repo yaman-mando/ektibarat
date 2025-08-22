@@ -1,32 +1,45 @@
 <template>
   <user-panel-wrapper content-class="max-w-[1050px] !mx-auto">
-
-
-
     <div class="flex flex-col xl1200:flex-row gap-[50px]">
-
-      <app-data-wrapper :loading="userPanelStore.fetching.studentStages" :data="userPanelStore.studentStages"
-        loading-type="spinner-overlay" empty-text="لا توجد بيانات متاحة">
-        <div class="flex-1 xl1200:mt-[-60px]" v-if="activePhase">
+      <app-data-wrapper
+        :loading="userPanelStore.fetching.studentStages"
+        :data="userPanelStore.studentStages"
+        loading-type="spinner-overlay"
+        empty-text="لا توجد بيانات متاحة"
+      >
+        <div
+          class="flex-1 xl1200:mt-[-60px]"
+          v-if="activePhase"
+        >
           <!-- Header displaying active phase info -->
           <div
             class="grid h-[110px] text-white sm:p-[11px_20px] p-[11px_10px] rounded-[8px] transition-[background] duration-700 ease-in-out"
             :style="{
               background: `linear-gradient(to right, ${activePhase.color_1}, ${activePhase.color_2})`,
-            }">
+            }"
+          >
             <div class="flex justify-between items-center">
               <h2 class="text-lg font-bold">{{ activePhase.phase_name }}</h2>
               <div class="time flex items-center gap-x-[10px] sm:ml-[40px]">
-                <img src="/images/svg/clock.svg" alt="" />
+                <img
+                  src="/images/svg/clock.svg"
+                  alt=""
+                />
                 <div class="grid gap-y-2">
-                  <span class="text-white sm:text-[16px] text-[13px] opacity-70">
+                  <span
+                    class="text-white sm:text-[16px] text-[13px] opacity-70"
+                  >
                     الوقت المتبقي
                   </span>
                   <span>
-                    <span class="text-white sm:text-[26px] text-[20px] font-bold">
+                    <span
+                      class="text-white sm:text-[26px] text-[20px] font-bold"
+                    >
                       {{ formatTime(activePhase.total_time_remaining) }}
                     </span>
-                    <span class="text-white-[12px] font-medium mr-[17px] opacity-70">
+                    <span
+                      class="text-white-[12px] font-medium mr-[17px] opacity-70"
+                    >
                       ساعة
                     </span>
                   </span>
@@ -35,10 +48,12 @@
             </div>
             <div class="flex items-center gap-x-[23px] justify-between">
               <div class="w-full h-[8px] bg-white/30 rounded-[8px]">
-                <div class="h-full bg-white rounded transition-all duration-1000 ease-[cubic-bezier(0.4, 0, 0.2, 1)]"
+                <div
+                  class="h-full bg-white rounded transition-all duration-1000 ease-[cubic-bezier(0.4, 0, 0.2, 1)]"
                   :style="{
                     width: `${(activePhase.completed_steps / activePhase.total_steps) * 100}%`,
-                  }"></div>
+                  }"
+                ></div>
               </div>
               <span>
                 {{ activePhase.completed_steps }}/{{ activePhase.total_steps }}
@@ -49,25 +64,34 @@
           <!-- steps -->
           <!-- scroll element -->
           <ClientOnly>
-            <div ref="scrollContainer" class="overflow-y-auto pr-2 hide-scrollbar"
-              style="max-height: calc(100vh - 171px)">
-              <div v-for="stage of props?.stages" :key="stage.phase_id" class="mb-8"
-                :ref="(el) => stageRefs.set(stage.phase_id, el)">
+            <div
+              ref="scrollContainer"
+              class="overflow-y-auto pr-2 hide-scrollbar"
+              style="max-height: calc(100vh - 171px)"
+            >
+              <div
+                v-for="stage of props?.stages"
+                :key="stage.phase_id"
+                class="mb-8"
+                :ref="(el) => stageRefs.set(stage.phase_id, el)"
+              >
                 <div class="flex items-center justify-center mb-[40px]">
                   <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
-                  <span class="px-4 mt-2 text-[20px] font-medium text-gray-8f whitespace-nowrap">
+                  <span
+                    class="px-4 mt-2 text-[20px] font-medium text-gray-8f whitespace-nowrap"
+                  >
                     {{ stage.phase_name }}
                   </span>
                   <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
                 </div>
 
-
-                <spiralButton :for-part="stage.phase_id === 0" :show-help-modal="props?.show_modal_need_help ?? false"
-                  :steps="stage.steps" />
-
+                <spiralButton
+                  :for-part="stage.phase_id === 0"
+                  :show-help-modal="props?.show_modal_need_help ?? false"
+                  :steps="stage.steps"
+                />
               </div>
             </div>
-
           </ClientOnly>
         </div>
       </app-data-wrapper>
@@ -132,8 +156,6 @@ const updateActivePhaseOnScroll = () => {
   }
 };
 
-
-
 onMounted(async () => {
   await nextTick();
 
@@ -150,6 +172,10 @@ onMounted(async () => {
       behavior: 'smooth',
     });
   }
+});
+
+definePageMeta({
+  middleware: ['user-services-middleware'],
 });
 </script>
 
