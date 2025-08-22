@@ -164,7 +164,7 @@ class examForm {
   isOpen = false;
   tagsIds = [] as any[];
   takfeelTagsIds = [] as any[];
-  onlyWrongQuestions = true;
+  onlyWrongQuestions = false;
   onlyFlaggedQuestions = false;
   randomQuestionsSettings = [] as any[];
   questionsLevelsMin = 0;
@@ -213,6 +213,9 @@ function toTrining(step: step) {
     questionsCount: (step.categoryInfo?.numberQuestion ?? 0) - (step.categoryInfo?.numberQuestionComplete ?? 0),
   })
   form.value.stepId = step.id
+  if(step.categoryInfo?.isWrong){
+    form.value.onlyWrongQuestions = true
+  }
   startTrainig()
 }
 
