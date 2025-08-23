@@ -110,7 +110,7 @@
           </li>
           <template v-if="showMyTrainPlanItem">
             <li class="relative">
-              <service-block v-if="appAuth.notSubscribedUser" />
+              <service-block v-if="!subscriptionsStore.isPremiumSub" />
               <nuxt-link
                 :to="webUserTrainingPlan()"
                 class="cursor-pointer hover:text-purple-600 text-[20px] font-medium color-dark-63"
@@ -146,7 +146,14 @@
     class="w-full fixed bottom-0 h-[78px] px-[15px] bg-white"
     style="box-shadow: 0px -2px 10px 0px #00000026"
   >
-    <div class="flex items-center h-full" :class="filteredMobileMenuModel.length>3?'justify-between':'justify-around'">
+    <div
+      class="flex items-center h-full"
+      :class="
+        filteredMobileMenuModel.length > 3
+          ? 'justify-between'
+          : 'justify-around'
+      "
+    >
       <template
         v-for="item in filteredMobileMenuModel"
         :key="item.name"
@@ -189,6 +196,7 @@ import {
 } from '~/main/utils/web-routes.utils';
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
 import { UserRoles } from '~/core/auth/constants/user-roles';
+import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 
 const props = withDefaults(
   defineProps<{
@@ -203,6 +211,7 @@ const props = withDefaults(
 const runtimeConfig = useRuntimeConfig();
 const { data, signOut } = useAuth();
 const { appAuth } = useSetupAuth();
+const subscriptionsStore = useSubscriptionsStore();
 const route = useRoute();
 const router = useRouter();
 const userPanelStore = useUserPanelStore();

@@ -1,6 +1,6 @@
 <template>
   <user-panel-wrapper
-    :hasLInfo="false"
+    :hasLInfo="true"
     :hasRInfo="windowSize.isDesktop"
     :showMobileHeader="true"
     pageTitle="محاكي الاختبار"

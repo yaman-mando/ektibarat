@@ -29,7 +29,7 @@
             class="qd-item"
             @click="smartClick"
           >
-            <template v-if="!isPremiumUser">
+            <template v-if="!isPremiumSub">
               <service-block />
               <img
                 class="absolute w-[24px] top-[10px] left-[10px]"
@@ -100,7 +100,7 @@
             :to="userPanelExamPath"
             class="qd-item orange"
           >
-            <template v-if="!isPremiumUser">
+            <template v-if="!isPremiumSub">
               <service-block />
               <img
                 class="absolute w-[24px] top-[10px] left-[10px]"
@@ -319,7 +319,7 @@ export default {
       ...useSetupAuth(),
       runtimeConfig,
       windowSize,
-      isPremiumUser: subscriptionsStore.isPremiumUser,
+      isPremiumSub: subscriptionsStore.isPremiumSub,
     };
   },
   data() {

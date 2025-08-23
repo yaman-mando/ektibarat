@@ -55,7 +55,7 @@ export const useSubscriptionsStore = defineStore('subscriptions-store', () => {
   return {
     patchState,
     state: toRefs(readonly(state)),
-    isPremiumUser: computed(() => state.userCurrentSubVal?.freeType === null),
+    isPremiumSub: computed(() => state.userCurrentSubVal?.freeType === null),
     //actions
     getCurrentSub,
     getAll,
