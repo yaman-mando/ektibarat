@@ -296,6 +296,8 @@ import {
   webErrorPathUtil,
   webStudentTrainingPathUtil,
   webUserPanelTraining,
+  webUserSteps,
+  webUserTrainWithUs,
 } from '~/main/utils/web-routes.utils';
 import { StudentExamStateEnum } from '~/main/modules/students-exam/data-access/constats/student-exam-state.enum';
 import { mapExamDetailModelToUi } from '~/main/modules/students-exam/data-access/parsers/students-exam.parser';
@@ -307,9 +309,12 @@ import { TRAIN_MODAL_WARN_CASE } from '~/main/constants/train-modal-warn-case.en
 import { useTypedLazyRequest } from '~/composables/useTypedLazyRequest';
 import { firstValueFrom, of } from 'rxjs';
 import { useStore } from 'vuex';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+import { UserPlanSubscribedEnum } from '~/core/auth/constants/user-plan-subscribed.enum';
 
 const $isDev = !IS_PRODUCTION_APP;
 //composable
+const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
 const toastMessage = useToastMessage();
@@ -1167,7 +1172,14 @@ const onContinueTrain = async () => {
 
 const exitPage = async () => {
   if (confirmNavigate.value) return;
-  await router.replace(webUserPanelTraining());
+  if (
+    authStore.state.userData?.planSubscribed ===
+    UserPlanSubscribedEnum.Subscribed
+  ) {
+    await router.replace(webUserSteps());
+  } else {
+    await router.replace(webUserTrainWithUs());
+  }
 };
 
 const exitWithoutConfirm = async () => {
