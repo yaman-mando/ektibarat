@@ -6,6 +6,7 @@ import type {
 import { useSubscriptionsRepo } from '~/main/modules/subscriptions/services/useSubscriptionsRepo';
 import type { GlobalTypes } from '~/main/constants/global-types';
 import { createPatchState } from '~/main/utils/patch-state.util';
+import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 
 type StateType = {
   lastUserSubUpdate: number;
@@ -54,6 +55,7 @@ export const useSubscriptionsStore = defineStore('subscriptions-store', () => {
   return {
     patchState,
     state: toRefs(readonly(state)),
+    isPremiumSub: computed(() => state.userCurrentSubVal?.freeType === null),
     //actions
     getCurrentSub,
     getAll,

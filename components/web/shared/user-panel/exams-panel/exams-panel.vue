@@ -7,7 +7,11 @@
     class="exams-part relative"
   >
     <app-overlay v-if="examLoading" />
-    <template v-if="showRemainingCount">
+    <template
+      v-if="
+        (showRemainExamCount && isExams) || (showRemainingCount && !isExams)
+      "
+    >
       <div
         class="ra-count flex flex-col lg:flex-row items-start justify-start lg:justify-between gap-[10px] mt-2 mb-[10px] lg:mb-[15px] px-[15px] py-[15px] rounded-[8px] border-[#EAB316] bg-[#FFFBEB] border"
       >
@@ -64,32 +68,6 @@
           :rightLabel="texts.switchRight"
           :leftLabel="texts.switchLeft"
         />
-        <template v-if="userCurrentSub">
-          <span
-            v-if="showRemainExamCount"
-            class="swq-qt__wa"
-          >
-            باقي لديك {{ userCurrentSub.remainExamsCount }} محاولة مجانية في
-            الباقة الأساسية
-          </span>
-          <template v-else-if="userCurrentSub.remainExamsCount < 1">
-            <div class="flex flex-col items-center">
-              <div class="swq-qt__qe relative">
-                <service-block />
-                <service-lock />
-                <span class="swq-qt__wa">
-                  استنفذت المحاولات المجانية المتاحة
-                </span>
-              </div>
-              <nuxt-link
-                class="swq-qt__ll"
-                :to="routerHelper.userPanelSubscriptions()"
-              >
-                ترقية الاشتراك
-              </nuxt-link>
-            </div>
-          </template>
-        </template>
       </div>
 
       <div
@@ -158,7 +136,7 @@
           >
             <prime-accordion-header class="c-head">
               <div class="flex items-center justify-start gap-[10px]">
-                <template v-if="appAuth.notSubscribedUser">
+                <template v-if="!subscriptionsStore.isPremiumSub">
                   <img
                     class="flex items-center justify-center"
                     src="/images/icons/lock-icon.png"
@@ -179,10 +157,7 @@
                 <div class="select-items-wrapper">
                   <div class="relative lg:col-start-1">
                     <service-block
-                      v-if="
-                        !userServicesState.BANKUSAGE.isActive ||
-                        appAuth.notSubscribedUser
-                      "
+                      v-if="!userServicesState.BANKUSAGE.isActive"
                     />
                     <app-select-card-item
                       title="أحدث 1000 سؤال"
@@ -190,20 +165,14 @@
                       label="تدرب على أحدث الأسئلة والتسريبات فقط"
                       color="blue"
                       :isActive="isRecentQuestionActive"
-                      :isDisabled="
-                        !userServicesState.BANKUSAGE.isActive ||
-                        appAuth.notSubscribedUser
-                      "
+                      :isDisabled="!userServicesState.BANKUSAGE.isActive"
                       :hasNewBadge="true"
                       @click="onRecentSelect"
                     />
                   </div>
                   <div class="relative lg:col-start-2">
                     <service-block
-                      v-if="
-                        !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
-                        appAuth.notSubscribedUser
-                      "
+                      v-if="!userServicesState.ROWNQUESTIONPRACTICE.isActive"
                     />
                     <app-select-card-item
                       title="الأسئلة التي أخطأت فيها"
@@ -212,8 +181,7 @@
                       color="red"
                       :isActive="advancedFilter.onlyWrongQuestions"
                       :isDisabled="
-                        !userServicesState.ROWNQUESTIONPRACTICE.isActive ||
-                        appAuth.notSubscribedUser
+                        !userServicesState.ROWNQUESTIONPRACTICE.isActive
                       "
                       @click="
                         () => (
@@ -226,10 +194,7 @@
                   </div>
                   <div class="relative lg:col-start-1">
                     <service-block
-                      v-if="
-                        !userServicesState.FAVORITEUSAGE.isActive ||
-                        appAuth.notSubscribedUser
-                      "
+                      v-if="!userServicesState.FAVORITEUSAGE.isActive"
                     />
                     <app-select-card-item
                       title="الأسئلة المميزة بنجمة فقط"
@@ -237,10 +202,7 @@
                       label="تدرب على الأسئلة التي ميزتها بنجمة فقط"
                       color="yellow"
                       :isActive="advancedFilter.onlyFlaggedQuestions"
-                      :isDisabled="
-                        !userServicesState.FAVORITEUSAGE.isActive ||
-                        appAuth.notSubscribedUser
-                      "
+                      :isDisabled="!userServicesState.FAVORITEUSAGE.isActive"
                       @click="
                         () => (
                           (advancedFilter.onlyFlaggedQuestions =
@@ -253,10 +215,7 @@
                   </div>
                   <div class="relative lg:col-start-2">
                     <service-block
-                      v-if="
-                        !userServicesState.TAKFELATUSAGE.isActive ||
-                        appAuth.notSubscribedUser
-                      "
+                      v-if="!userServicesState.TAKFELATUSAGE.isActive"
                     />
                     <app-select-card-item
                       title="أسئلة التقفيلات فقط"
@@ -264,10 +223,7 @@
                       label="تدرب على أسئلة التقفيلات فقط"
                       color="green"
                       :isActive="advancedFilter.onlyTakfelQuestions"
-                      :isDisabled="
-                        !userServicesState.TAKFELATUSAGE.isActive ||
-                        appAuth.notSubscribedUser
-                      "
+                      :isDisabled="!userServicesState.TAKFELATUSAGE.isActive"
                       @click="
                         () =>
                           (advancedFilter.onlyTakfelQuestions =
@@ -283,7 +239,7 @@
                       v-model:selectedValues="form.questionCount"
                       inputId="questionCount"
                       class="w-[130px] h-[45px]"
-                      :isDisabled="appAuth.notSubscribedUser"
+                      :isDisabled="!subscriptionsStore.isPremiumSub"
                       :list="questionCountOptions"
                       :placeholder="'سؤال'"
                       :isMulti="false"
@@ -295,10 +251,7 @@
                     class="relative lg:col-start-3 lg:row-start-1 lg:row-end-3"
                   >
                     <service-block
-                      v-if="
-                        !userServicesState.LEVELQUESTIONPRACTICE.isActive ||
-                        appAuth.notSubscribedUser
-                      "
+                      v-if="!userServicesState.LEVELQUESTIONPRACTICE.isActive"
                     />
                     <app-select-card-options
                       title="مستوى الأسئلة"
@@ -307,8 +260,7 @@
                         لهذا التدريب"
                       iconSvgPath="/images/svg/layer-group-solid.svg"
                       :isDisabled="
-                        !userServicesState.LEVELQUESTIONPRACTICE.isActive ||
-                        appAuth.notSubscribedUser
+                        !userServicesState.LEVELQUESTIONPRACTICE.isActive
                       "
                       :selectedValues="selectedDifficultValues"
                       :options="levelOptions"
@@ -332,7 +284,7 @@
           >
             <prime-accordion-header class="c-head">
               <div class="flex items-center justify-start gap-[10px]">
-                <template v-if="appAuth.notSubscribedUser">
+                <template v-if="!subscriptionsStore.isPremiumSub">
                   <img
                     class="flex items-center justify-center"
                     src="/images/icons/lock-icon.png"
@@ -352,10 +304,7 @@
                 <div class="grid gap-[16px] grid-cols-1 lg:grid-cols-3">
                   <div class="relative">
                     <service-block
-                      v-if="
-                        !userServicesState.BANKUSAGE.isActive ||
-                        appAuth.notSubscribedUser
-                      "
+                      v-if="!userServicesState.BANKUSAGE.isActive"
                     />
                     <app-select-card-item
                       title="أحدث 1000 سؤال"
@@ -363,10 +312,7 @@
                       label="تدرب على أحدث الأسئلة والتسريبات فقط"
                       color="blue"
                       :isActive="isRecentQuestionActive"
-                      :isDisabled="
-                        !userServicesState.BANKUSAGE.isActive ||
-                        appAuth.notSubscribedUser
-                      "
+                      :isDisabled="!userServicesState.BANKUSAGE.isActive"
                       :hasNewBadge="true"
                       @click="onRecentSelect"
                     />
@@ -549,7 +495,7 @@ const levelOptionsEnum = Object.freeze({
 
 //TODO-z add fcmClarityMixin
 export default {
-  components: { AppSelectCardItem, RangeSlider, EmCheckbox },
+  components: { AppSelectCardItem, EmCheckbox },
   setup() {
     const blockModalRef =
       useTemplateRef<InstanceType<typeof ServiceBlockModal>>('block_modal_ref');
@@ -635,9 +581,10 @@ export default {
       userServicesState: computed(
         () => subscriptionsStore.state.userServicesStateVal
       ),
-      userCurrentSub: computed(
-        () => subscriptionsStore.state.userCurrentSubVal!
-      ),
+      userCurrentSub: computed(() => ({
+        ...subscriptionsStore.state.userCurrentSubVal!,
+      })),
+      subscriptionsStore,
       blockModalRef,
       form,
       introService,
@@ -1261,15 +1208,7 @@ export default {
       }
     },
 
-    async handleButtonClick() {
-      if (this.tourModel.isActive) {
-        await this.exitTour();
-      }
-
-      this.checkAndStart();
-    },
-
-    checkAndStart(type: string | null = null) {
+    checkAndStart() {
       if (!this.userCurrentSub.endDate) {
         this.appRouter.push({
           path: '/user-panel',
@@ -1277,21 +1216,35 @@ export default {
             page: UserPanelItemsRecord[UserPanelItems.subscriptionList],
           },
         });
-      } else {
-        if (type == 'full') {
-          this.startFullExam();
-        } else {
-          if (!this.isExams) {
-            if (
-              this.userCurrentSub.remainTrainingCount <= 0 ||
-              this.userCurrentSub.remainTrainingCountPerDay <= 0
-            ) {
-              this.blockModalRef!.showModal();
-              return;
-            }
-          }
-          this.startExam();
+        return;
+      }
+
+      //block no tries remained
+      if (this.isExams) {
+        if (this.userCurrentSub.remainExamsCount <= 0) {
+          this.blockModalRef!.showModal();
+          return;
         }
+      } else {
+        if (
+          this.userCurrentSub.remainTrainingCount <= 0 ||
+          this.userCurrentSub.remainTrainingCountPerDay <= 0
+        ) {
+          this.blockModalRef!.showModal();
+          return;
+        }
+      }
+
+      //exam
+      if (this.isExams) {
+        if (this.activeSwitch) {
+          this.startExam();
+        } else {
+          this.startFullExam();
+        }
+      } else {
+        //train
+        this.startExam();
       }
     },
 
@@ -1519,7 +1472,7 @@ export default {
               مجانية لهذا اليوم`;
       }
 
-      return `لديك ${this.userCurrentSub.remainTrainingCountPerDay} محاولات مجانية لمحاكي الاختبار`;
+      return `لديك ${this.userCurrentSub.remainExamsCount} محاولات مجانية لمحاكي الاختبار`;
     },
     showRemainingCount() {
       return this.userCurrentSub.remainTrainingCountPerDay < 100;
@@ -1581,6 +1534,9 @@ export default {
     },
 
     getTotalTime() {
+      if (!this.isExams) {
+        return `${this.form.questionCount} دقيقة`;
+      }
       const realMinutes = calculateSumFromArray(
         this.selectedLists,
         'defaultDuration'

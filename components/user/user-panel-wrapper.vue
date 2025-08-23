@@ -68,6 +68,7 @@
             <div
               v-if="hasLInfo"
               class="flex items-center gap-x-[20px]"
+              :class="[{ '!mis-auto': !hasRInfo }]"
             >
               <div class="flex items-center gap-x-[8px]">
                 <img
@@ -75,7 +76,9 @@
                   alt="icon"
                   class="w-[24px] h-auto"
                 />
-                <span class="text-[20px] font-bold text-blue-f7">2,849</span>
+                <span class="text-[20px] font-bold text-blue-f7 num-font">
+                  2,849
+                </span>
               </div>
               <div class="flex items-center gap-x-[8px]">
                 <img
@@ -83,7 +86,9 @@
                   alt="icon"
                   class="w-[16px] h-auto"
                 />
-                <span class="text-[20px] font-bold text-orange-39">7</span>
+                <span class="text-[20px] font-bold text-orange-39 num-font">
+                  7
+                </span>
               </div>
               <!-- <app-dropdown
                 :modelValue="

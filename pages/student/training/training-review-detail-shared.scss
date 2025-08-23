@@ -1,0 +1,73 @@
+@use '@/assets/scss/mixin' as *;
+
+.train-review-detail-page {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  margin-top: var(--menu-mobile-height);
+  @include web-desktop-up() {
+    margin-top: var(--menu-height);
+  }
+  .tp-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-bottom: 10px;
+    @include web-desktop-up() {
+      padding-top: 30px;
+    }
+    .p-title {
+      display: block;
+      text-align: center;
+      font-size: 30px;
+      font-weight: bold;
+      color: var(--white);
+      background-color: var(--purple-8d);
+      padding: 15px 20px;
+      @include web-desktop-up {
+        font-size: 50px;
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+      }
+    }
+
+    ::v-deep {
+      .tp-ii {
+        margin-bottom: 10px;
+        @include web-desktop-up() {
+          margin-bottom: 30px;
+        }
+      }
+    }
+
+    .tg-wrapper {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      @include web-desktop-up {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+        column-gap: 36px;
+        row-gap: 30px;
+      }
+
+      ::v-deep {
+        .ex-cd {
+        }
+      }
+    }
+
+    .qwr-s {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      column-gap: 15px;
+      margin-inline-start: auto;
+      margin-inline-end: 15px;
+      .qw-i {
+        color: var(--white-ff);
+        font-size: 22px;
+      }
+    }
+  }
+}

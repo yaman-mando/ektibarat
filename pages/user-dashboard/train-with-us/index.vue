@@ -29,7 +29,7 @@
             class="qd-item"
             @click="smartClick"
           >
-            <template v-if="!isSubscribe">
+            <template v-if="!isPremiumSub">
               <service-block />
               <img
                 class="absolute w-[24px] top-[10px] left-[10px]"
@@ -100,7 +100,7 @@
             :to="userPanelExamPath"
             class="qd-item orange"
           >
-            <template v-if="!isSubscribe">
+            <template v-if="!isPremiumSub">
               <service-block />
               <img
                 class="absolute w-[24px] top-[10px] left-[10px]"
@@ -280,6 +280,7 @@
         v-model:show="isShownConfirm"
         @continue="submit4"
       />
+      <service-block-modal ref="service_block_modal_ref" />
     </div>
   </user-panel-wrapper>
 </template>
@@ -302,6 +303,7 @@ import {
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
 import { UserPlanSubscribedEnum } from '~/core/auth/constants/user-plan-subscribed.enum';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
+import type { ServiceBlockModal } from '#components';
 export default {
   components: {
     ConfirmPlan,
@@ -309,19 +311,22 @@ export default {
   setup() {
     definePageMeta({
       layout: 'empty-layout',
+      middleware: ['user-services-middleware'],
     });
+    const blockModalRef = useTemplateRef<
+      InstanceType<typeof ServiceBlockModal>
+    >('service_block_modal_ref');
     const windowSize = useWindowSize();
     const runtimeConfig = useRuntimeConfig();
     const subscriptionsStore = useSubscriptionsStore();
-    const isSubscribe = computed(() => {
-      return subscriptionsStore.state.userCurrentSubVal?.freeType === null;
-    });
     return {
       ...useSetupRoute(),
       ...useSetupAuth(),
+      blockModalRef,
       runtimeConfig,
       windowSize,
-      isSubscribe,
+      isPremiumSub: subscriptionsStore.isPremiumSub,
+      subscriptionsStore,
     };
   },
   data() {
@@ -458,23 +463,20 @@ export default {
       this.form.examDate = null;
     },
     smartClick() {
+      if (!this.isPremiumSub) {
+        this.blockModalRef!.showModal();
+        return;
+      }
+
       if (
-        this.appAuth.user.planSubscribed ===
-          UserPlanSubscribedEnum.NotSubscribed ||
-        this.runtimeConfig.public.configData.byPassSubscribedUser
+        this.isPremiumSub &&
+        !this.subscriptionsStore.state.userCurrentSubVal?.isStartedPlan
       ) {
         this.showStepsSection = true;
         return;
       }
 
-      if (
-        [
-          UserPlanSubscribedEnum.Finished,
-          UserPlanSubscribedEnum.Subscribed,
-        ].some((val) => val === this.appAuth.user.planSubscribed)
-      ) {
-        return this.appRouter.push(webUserSteps());
-      }
+      return this.appRouter.push(webUserSteps());
     },
   },
 };
