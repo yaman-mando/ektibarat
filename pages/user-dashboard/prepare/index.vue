@@ -4,7 +4,7 @@
     :hasRInfo="windowSize.isDesktop"
     :showMobileHeader="true"
     pageTitle="التدريب الشخصي"
-    contentClass="!pb-0"
+    contentClass="!pb-0 !max-w-[1100px] !mx-auto"
     contentWrapperClass="!mb-0"
   >
     <template #top-right>

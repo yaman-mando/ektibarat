@@ -68,6 +68,7 @@
             <div
               v-if="hasLInfo"
               class="flex items-center gap-x-[20px]"
+              :class="[{ '!mis-auto': !hasRInfo }]"
             >
               <div class="flex items-center gap-x-[8px]">
                 <img
