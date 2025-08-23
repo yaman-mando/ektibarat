@@ -36,9 +36,7 @@ export const getEnv = () => {
         slackWebhookUrl:
           'https://hooks.slack.com/services/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',
       },
-      configData: {
-        byPassSubscribedUser: false,
-      },
+      configData: {},
     },
     [APP_ENVS.local_prod]: {
       websiteUrl: 'https://ekhtibarat.com',
@@ -81,9 +79,7 @@ export const getEnv = () => {
         appId: '1:930044743699:web:e43ca0fb0a283b5796efe6',
         measurementId: 'G-ZZHKE5C3MW',
       },*/
-      configData: {
-        byPassSubscribedUser: false,
-      },
+      configData: {},
     },
     [APP_ENVS.dev]: {
       websiteUrl: 'http://37.27.63.239:8030',
@@ -111,9 +107,7 @@ export const getEnv = () => {
         measurementId: 'G-BJLKK55FNQ',
         slackWebhookUrl: '',
       },
-      configData: {
-        byPassSubscribedUser: false,
-      },
+      configData: {},
     },
   };
   buildEnvOptions[APP_ENVS.local_dev] = buildEnvOptions[APP_ENVS.dev];

@@ -236,22 +236,19 @@ const filteredMobileMenuModel = computed(() => {
 });
 
 function mapMenuModel(list: typeof userMenuItems) {
-  const user = userData.value as UserInfoDataModel;
   const targetIndex = list.findIndex(
     (item) => item.id === userMenuItemsIds.train
   )!;
   const item = list[targetIndex];
 
-  if (
-    [
-      UserPlanSubscribedEnum.NotSubscribed,
-      UserPlanSubscribedEnum.Finished,
-    ].some((val) => val === user.planSubscribed) ||
-    runtimeConfig.public.configData.byPassSubscribedUser
-  ) {
-    item.route = webUserTrainWithUs();
+  if (subscriptionsStore.isPremiumSub) {
+    if (subscriptionsStore.state.userCurrentSubVal?.isStartedPlan) {
+      item.route = webUserSteps();
+    } else {
+      item.route = webUserTrainWithUs();
+    }
   } else {
-    item.route = webUserSteps();
+    item.route = webUserTrainWithUs();
   }
 
   list.splice(targetIndex, 1, item);

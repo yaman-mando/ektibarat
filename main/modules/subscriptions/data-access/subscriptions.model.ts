@@ -5,13 +5,14 @@ export type CurrentSubscriptionDataModel = {
   color: string;
   title: string;
   freeType: number;
+  isStartedPlan: boolean;
   endDate: string;
   lastUpdateDate: string;
   remainExamsCount: number;
   remainTrainingCount: number;
   remainTrainingCountPerDay: number;
-  totalTrainingsCount:number;
-  totalExamsCount:number;
+  totalTrainingsCount: number;
+  totalExamsCount: number;
   subjectId: number;
   trainingLawWatchingCount: number;
   remainTrainingCountBeforePhoneNumber: number;
