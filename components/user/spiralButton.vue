@@ -55,8 +55,9 @@
       </div>
 
       <!-- Info popup -->
-      <div v-if="step.categoryInfo && step.status === 1 && activePopupIndex === index" :id="`popupRefs-${index}`"
-        tabindex="1" @focusout="handlePopupFocusOut" :class="['popup', popupDirection]" :style="{
+      <div @focusout="handlePopupFocusOut"
+        v-if="step.type !== stepTypesEnum.examSimulator && step.categoryInfo && step.status === 1 && activePopupIndex === index"
+        :id="`popupRefs-${index}`" tabindex="1" :class="['popup', popupDirection]" :style="{
           left: `${pattern[index % pattern.length] - 80}px`,
           top: popupDirection === 'up' ? `${index * stepSpacing - 255}px` : `${index * stepSpacing + 90}px`
         }">
@@ -70,7 +71,8 @@
               class="mt-[5px] !text-center text-[20px] font-bold text-orange-39">
               <text-slice :length="20" :text="step.categoryInfo.categoryName" />
             </h3>
-            <div class="flex items-center justify-between mt-[10px] !p-[0px_12px]">
+            <div v-if="step.type !== stepTypesEnum.examSimulator"
+              class="flex items-center justify-between mt-[10px] !p-[0px_12px]">
               <div class="grid justify-items-center gap-y-[6px]">
                 <span class="text-[16px] text-purple-78 font-bold">عدد الأسئلة</span>
                 <span class="text-[16px] text-gray-63 text-center">{{ step.categoryInfo.numberQuestion -
@@ -84,10 +86,33 @@
               </div>
             </div>
             <app-overlay v-if="examLoading" />
+
             <button @click="toTrining(step)"
               class="w-[200px] h-[44px] rounded-[6px] bg-purple-78 text-white font-bold text-[16px] mt-[14px] cursor-pointer flex items-center justify-center justify-self-center">
               ابدأ التدريب
             </button>
+          </div>
+          <div class="popup-arrow"></div>
+        </div>
+      </div>
+
+      <div @focusout="handlePopupFocusOut"
+        v-if="step.type === stepTypesEnum.examSimulator && step.categoryInfo && step.status === 1 && activePopupIndex === index"
+        :id="`popupRefs-${index}`" tabindex="1" :class="['popup', popupDirection]" :style="{
+          left: `${pattern[index % pattern.length] - 80}px`,
+          top: popupDirection === 'up' ? `${index * stepSpacing - 140}px` : `${index * stepSpacing + 90}px`
+        }">
+        <div class="popup-content p-[15px] !h-[120px]">
+          <div class="popup-inner !p-[0px_10px]">
+            <h2 class="text-[22px] font-bold text-purple-78 !text-center m-0">
+              محاكي اختبار
+            </h2>
+            <app-overlay v-if="examLoading" />
+            <button @click="startExam(step)"
+              class="w-[200px] h-[44px] rounded-[6px] bg-purple-78 text-white font-bold text-[16px] mt-[14px] cursor-pointer flex items-center justify-center justify-self-center">
+              ابدأ الاختبار
+            </button>
+
           </div>
           <div class="popup-arrow"></div>
         </div>
@@ -213,7 +238,7 @@ function toTrining(step: step) {
     questionsCount: (step.categoryInfo?.numberQuestion ?? 0) - (step.categoryInfo?.numberQuestionComplete ?? 0),
   })
   form.value.stepId = step.id
-  if(step.categoryInfo?.isWrong){
+  if (step.categoryInfo?.isWrong) {
     form.value.onlyWrongQuestions = true
   }
   startTrainig()
@@ -260,6 +285,35 @@ const startTrainig = async () => {
       router.push(`/student/training/${res.id}`)
     }
     await sleepUtil(1500);
+    examLoading.value = false;
+  } catch (e) {
+    toastMessage.showError({
+      life: 2500,
+      summary: 'عذراً حدث خطأ في إنشاء امتحانكم ... يرجى إعادة المحاولة',
+    });
+    await sleepUtil(1000);
+    examLoading.value = false;
+    console.log(e);
+  }
+}
+
+
+const startExam = async (step: step) => {
+  try {
+    examLoading.value = true;
+    const bodyData = {
+      examId: 1,
+      stepId: step.id,
+      willDo: true,
+      tagsIds: [],
+      customerId: null,
+      sessionId: null
+    }
+    const { data: res } = await $axios.post('/studentsExam', bodyData)
+    if (res) {
+      router.push(`/student/exams/${res.id}`);
+    }
+     await sleepUtil(1000);
     examLoading.value = false;
   } catch (e) {
     toastMessage.showError({
@@ -324,7 +378,6 @@ const togglePopup = async (index, event) => {
     await nextTick();
     const rect = event.target.getBoundingClientRect();
     const spaceAbove = rect.top;
-    const spaceBelow = window.innerHeight - rect.bottom;
     popupDirection.value = spaceAbove > 400 ? 'up' : 'down';
     activePopupIndex.value = index;
   }

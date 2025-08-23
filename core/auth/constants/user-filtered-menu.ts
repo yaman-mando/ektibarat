@@ -2,7 +2,6 @@ import {
   UserPanelItems,
   UserPanelItemsRecord,
 } from '~/main/constants/user-panel-items';
-import { RouteHelper } from '~/main/utils/route-helper';
 import { UserRoles } from './user-roles';
 import { webUserPanelExamSimulatorPathUtil } from '~/main/utils/web-routes.utils';
 

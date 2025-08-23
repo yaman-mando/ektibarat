@@ -115,16 +115,13 @@ await userPanelStore.getStudentStages();
 
 const props = userPanelStore.studentStages;
 
-const showHelpModal = ref(props?.show_modal_need_help);
+
 
 const activePhase = ref(
   props?.stages.find((p) => p.phase_id === props.active_phase_id)
 );
 const scrollContainer = <any>ref(null);
 const stageRefs = new Map();
-const currentStep = computed(() =>
-  activePhase.value?.steps.find((s) => s.id === props?.active_step_id)
-);
 
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
