@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid relative">
-        <no-sub-plane v-if="!isSubscribe" />
+        <no-sub-plane :type="noSubType" v-if="!isShowRate" />
         <template v-else>
             <app-overlay msg="جاري جلب بيانات الخطة ..." v-if="fetching" />
 
@@ -29,7 +29,8 @@
                         <span v-else>--</span>
                     </span>
                     <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">
-                        {{ dateFormat.formatStoMMHH(stdPlaneInfo?.timeDone) }} | {{ dateFormat.formatStoMMHH(stdPlaneInfo?.timeRequired) }}
+                        {{ dateFormat.formatStoMMHH(stdPlaneInfo?.timeDone) }} | {{
+                            dateFormat.formatStoMMHH(stdPlaneInfo?.timeRequired) }}
                     </span>
                 </div>
             </div>
@@ -127,39 +128,83 @@
 </template>
 
 <script setup lang="ts">
+import { UserRoles } from "~/core/auth/constants/user-roles";
+import type { UserInfoDataModel } from "~/core/auth/data-access/models/auth.model";
+import { planSubscribedEnum } from "~/main/constants/global.enums";
+import { useSubscriptionsStore } from "~/main/modules/subscriptions/services/useSubscriptionsStore";
 import type { trainingPlanSummaryResponse } from "~/main/modules/user-panel/data-access/user-panel.model";
 import * as dateFormat from "~/main/utils/date-utils";
+import { useUserPanelStore } from "~/store/user-panel";
 
 
 interface Props {
-  stdPlaneInfo?: trainingPlanSummaryResponse | null;
-  isSubscribe: boolean;
-  fetching: boolean;
+    stdPlaneInfo?: trainingPlanSummaryResponse | null;
+    fetching: boolean;
 }
+
+const subscriptionsStore = useSubscriptionsStore();
+const panelStore = useUserPanelStore();
 
 const props = defineProps<Props>();
 
+
+const { data } = useAuth()
+const userData = computed(() => data.value as UserInfoDataModel);
+
+
+const noSubType = computed(() => {
+    if (isSubscribe.value) {
+        if (isStudent.value) {
+            return 'studentHasNoPlane'
+        }
+        return 'studentHasNoPlaneForTeacher'
+    }
+    else {
+        if (isStudent.value) {
+            return 'studentNotSubscribe'
+        }
+        return 'studentNotSubscribeForTeacher'
+    }
+})
+
+const isStudent = computed(() => {
+    return userData.value.role === UserRoles.student || userData.value.role === UserRoles.admin
+})
+
+const isSubscribe = computed(() => {
+    return isStudent.value ? subscriptionsStore.state.userCurrentSubVal?.freeType === null : panelStore.studentSubscriptionDetails?.isSubscribed
+})
+
+const planSubscription = computed(() => {
+    return isStudent.value ? userData.value.planSubscribed : panelStore.studentSubscriptionDetails?.planSubscription
+})
+
+
+const isShowRate = computed(() => {
+    return isSubscribe.value && (planSubscription.value === planSubscribedEnum.finished || planSubscription.value === planSubscribedEnum.subscribed)
+})
+
+
+
+
+
 const level = computed<string>(() => {
-  const percentageDone = props.stdPlaneInfo?.percentageDone ?? 0;
+    const percentageDone = props.stdPlaneInfo?.percentageDone ?? 0;
 
-  if (percentageDone >= 95) return "ممتاز";
-  if (percentageDone >= 80) return "جيد";
-  if (percentageDone >= 50) return "متوسط";
-  return "ضعيف";
+    if (percentageDone >= 95) return "ممتاز";
+    if (percentageDone >= 80) return "جيد";
+    if (percentageDone >= 50) return "متوسط";
+    return "ضعيف";
 });
 
-const levelColor = computed<string>(() => {
-  switch (level.value) {
-    case "جيد":
-    case "ممتاز":
-      return "#58CC02";
-    case "متوسط":
-      return "#EAB316";
-    case "ضعيف":
-      return "#F04438";
-    default:
-      return "#999999";
-  }
-});
+
+const levelColors: Record<string, string> = {
+  "ممتاز": "#58CC02",
+  "جيد": "#58CC02",
+  "متوسط": "#EAB316",
+  "ضعيف": "#F04438"
+};
+
+const levelColor = computed(() => levelColors[level.value] ?? "#999999");
+
 </script>
-

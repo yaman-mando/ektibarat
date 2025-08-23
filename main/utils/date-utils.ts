@@ -188,6 +188,57 @@ export const dateDayUi = (date) => {
   );
 };
 
+export const formatStoSSMM_MMHH = (seconds?: number) => {
+  if (seconds == null || seconds <= 0) return '--';
+
+  const totalSeconds = Math.floor(seconds);
+
+  if (totalSeconds < 60) {
+    // MM:SS
+    const hrs = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor(totalSeconds / 60); 
+    const secs = totalSeconds % 60;
+    return `${String(secs).padStart(2, '0')} ثانية`;
+  } else {
+    // HH:MM
+    const hrs = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+  }
+};
+
+export const formatStoSSMM_MMHHWithText = (
+  seconds?: number,
+  showText = true,
+  alter = '--'
+) => {
+  if (seconds == null || seconds <= 0) {
+    return alter;
+  }
+
+  const totalSeconds = Math.floor(seconds);
+
+  
+  if (totalSeconds < 60) {
+    const secs = totalSeconds % 60;
+    return `${String(secs).padStart(2, '0')}${showText ? ' ثانية' : ''}`;
+  }
+
+  
+  if (totalSeconds < 3600) {
+    const mins = Math.floor(totalSeconds / 60);
+    return `${String(mins).padStart(2, '0')}${showText ? ' دقيقة' : ''}`;
+  }
+
+  
+  const hrs = Math.floor(totalSeconds / 3600);
+  const mins = Math.floor((totalSeconds % 3600) / 60);
+  return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}${
+    showText ? ' ساعة' : ''
+  }`;
+};
+
+
 
 export const formatStoMMHH = (seconds?: number) => {
   if (!seconds || seconds < 60) {

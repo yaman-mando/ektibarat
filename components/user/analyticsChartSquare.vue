@@ -1,10 +1,9 @@
 <template>
-    <div :class="!isSubscribe ? 'p-0' : 'p-4'"
-        class="bg-white shadow-md rounded-lg relative h-full">
-        <app-overlay msg="جاري جلب بيانات المخطط ..." v-if="fetching && isSubscribe" />
+    <div :class="!chartShow.showChart ? 'p-0' : 'p-4'" class="bg-white shadow-md rounded-lg relative h-full">
+        <app-overlay msg="جاري جلب بيانات المخطط ..." v-if="fetching" />
 
-        <img @click="$emit('go-prices')" v-if="!isSubscribe" class=" cursor-pointer w-full h-full"
-            src="/images/png/analysisChartNotSub.png" alt="" />
+        <img v-if="!chartShow.showChart" class="w-full h-full" :class="{ 'cursor-pointer': chartShow.withClick }"
+            :src="chartShow.imageUrl ?? '#'" alt="" @click="chartShow.toLink?.()" />
 
         <template v-else>
             <!-- Header -->
@@ -22,7 +21,7 @@
                         </div>
                     </button>
                 </div>
-                <select v-model="selectedPeriodLocal" @change="$emit('change-period', selectedPeriodLocal)"
+                <select v-model="selectedPeriodLocal"
                     class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm">
                     <option v-for="item in chartPeriodList" :key="item.id" :value="item.id"> الفترة: {{ item.label }}
                     </option>
@@ -68,127 +67,242 @@
 import { useApexChartService } from "~/main/services/useApexChartService";
 import * as dateFormat from "~/main/utils/date-utils";
 import type { mainCategoryRate, studentAnalyzeChartResponse } from "~/main/modules/user-panel/data-access/user-panel.model";
+import { useSubscriptionsStore } from "~/main/modules/subscriptions/services/useSubscriptionsStore";
+import type { UserInfoDataModel } from "~/core/auth/data-access/models/auth.model";
+import { UserRoles } from "~/core/auth/constants/user-roles";
+import { planSubscribedEnum } from "~/main/constants/global.enums";
+import { webPricesPathUtil, webUserSteps, webUserTrainWithUs } from "~/main/utils/web-routes.utils";
+import { useUserPanelStore } from "~/store/user-panel";
 
 
 interface Props {
-  isSubscribe: boolean;
-  fetching: boolean;
-  categories: mainCategoryRate[] | any;
-  selectedCategoryId: string | number;
-  selectedPeriod: number;
-  chartSeries: any[];
-  stdChartData: studentAnalyzeChartResponse | null;
+    fetching: boolean;
+    categories: mainCategoryRate[] | any;
+    selectedCategoryId: string | number;
+    selectedPeriod: number;
+    chartSeries: any[];
+    stdChartData: studentAnalyzeChartResponse | null;
+}
+
+interface ChartShow {
+    showChart: boolean
+    imageUrl: string | null
+    withClick: boolean
+    toLink?: () => void
 }
 
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  (e: "go-prices"): void;
-  (e: "select-category", categoryId: string | number): void;
-  (e: "change-period", periodId?: number): void;
+    (e: "select-category", categoryId: string | number): void;
+    (e: "change-period", periodId?: number): void;
 }>();
 
 const apexChartService = useApexChartService();
 const windowsSize = useWindowSize()
+const router = useRouter()
+const panelStore = useUserPanelStore();
 
 const chartKey = Symbol();
-const selectedPeriodLocal =ref(0)
+const selectedPeriodLocal = ref(0)
 const chartPeriodList = [
-  { id: 0, label: 'يومي' },
-  { id: 1, label: 'اسبوعيا' },
-  { id: 2, label: 'شهريا' },
+    { id: 0, label: 'يومي' },
+    { id: 1, label: 'اسبوعيا' },
+    { id: 2, label: 'شهريا' },
 ]
+const EMPTY_CHART: ChartShow = {
+    showChart: true,
+    imageUrl: null,
+    withClick: false,
+}
 
 const apexChartComponent = computed(() => {
-  return apexChartService.apexComponent.value;
+    return apexChartService.apexComponent.value;
 });
 
+const { data } = useAuth()
+const subscriptionsStore = useSubscriptionsStore();
+
+const userData = computed(() => data.value as UserInfoDataModel);
+
+const isSubscribe = computed(() => {
+    return subscriptionsStore.state.userCurrentSubVal?.freeType === null
+})
+
+const planSubscription = computed(() => {
+    return userData.value.planSubscribed
+})
+
+const isSubscribedForTeacher = computed(() => {
+    return panelStore.studentSubscriptionDetails?.isSubscribed
+})
+
+const planSubscriptionForTeacher = computed(() => {
+    return panelStore.studentSubscriptionDetails?.planSubscription
+})
+
+const isStudent = computed(() => {
+    return userData.value.role === UserRoles.student || userData.value.role === UserRoles.admin
+})
+
+const hasData = computed(() => {
+    return props.chartSeries && props.chartSeries?.[0]?.data.length > 0
+})
+
+const hasActivePlan = computed(() =>
+    planSubscription.value === planSubscribedEnum.subscribed ||
+    planSubscription.value === planSubscribedEnum.finished
+)
+
+
+const hasActivePlanTeacher = computed(() =>
+    planSubscriptionForTeacher.value === planSubscribedEnum.subscribed ||
+    planSubscriptionForTeacher.value === planSubscribedEnum.finished
+)
+
+const chartShow = computed<ChartShow>(() => {
+    if(userData.value.role === UserRoles.admin) return EMPTY_CHART
+    if (isStudent.value) {
+        if (isSubscribe.value) {
+            if (hasData.value) return EMPTY_CHART
+
+            return hasActivePlan.value
+                ? {
+                    showChart: false,
+                    imageUrl: '/images/png/studentPendingLevel.png',
+                    withClick: true,
+                    toLink: () => router.push(webUserSteps()),
+                }
+                : {
+                    showChart: false,
+                    imageUrl: '/images/png/studentQuesCount.png',
+                    withClick: true,
+                    toLink: () => router.push(webUserTrainWithUs()),
+                }
+        }
+
+        return {
+            showChart: false,
+            imageUrl: '/images/png/analysisChartNotSub.png',
+            withClick: true,
+            toLink: () => router.push(webPricesPathUtil()),
+        }
+    }
+
+    // Teacher
+    if (isSubscribedForTeacher.value) {
+        if (hasData.value) return EMPTY_CHART
+
+        return hasActivePlanTeacher.value
+            ? {
+                showChart: false,
+                imageUrl: '/images/png/teacherPendingLevel.png',
+                withClick: false,
+            }
+            : {
+                showChart: false,
+                imageUrl: '/images/png/teacherQuesCount.png',
+                withClick: false,
+            }
+    }
+
+    return {
+        showChart: false,
+        imageUrl: '/images/png/teacherAnalysisChartNotSub.png',
+        withClick: false,
+    }
+})
+
 const chartOptions = computed(() => ({
-  chart: {
-    id: "main-chart",
-    type: "area",
-    toolbar: { show: false },
-    zoom: { enabled: false },
-    fontFamily: "Tajawal, sans-serif",
-  },
-  noData: {
-    text: "لا توجد قيم كافية لعرض الرسم البياني",
-    align: "center",
-    verticalAlign: "middle",
-    style: {
-      color: "#6b7280",
-      fontSize: "14px",
-      fontFamily: "Tajawal, sans-serif",
+    chart: {
+        id: "main-chart",
+        type: "area",
+        toolbar: { show: false },
+        zoom: { enabled: false },
+        fontFamily: "Tajawal, sans-serif",
     },
-  },
-  xaxis: {
-    type: "datetime",
-    labels: {
-      show: props.chartSeries.length > 0,
-      rotate: -45,
-      style: { fontSize: "12px" },
-      formatter: (val: string | number) => formatDate(val),
+    noData: {
+        text: "لا توجد قيم كافية لعرض الرسم البياني",
+        align: "center",
+        verticalAlign: "middle",
+        style: {
+            color: "#6b7280",
+            fontSize: "14px",
+            fontFamily: "Tajawal, sans-serif",
+        },
     },
-    tickAmount: windowsSize.isDesktop ? 6 : 2,
-    tooltip: { enabled: false },
-  },
-  yaxis: {
-    labels: {
-      formatter: (val: number) => `${Math.round(val)}`,
+    xaxis: {
+        type: "datetime",
+        labels: {
+            show: props.chartSeries[0].data.length > 0,
+            rotate: -45,
+            style: { fontSize: "12px" },
+            formatter: (val: string | number) => formatDate(val),
+        },
+        tickAmount: windowsSize.isDesktop ? 6 : 2,
+        tooltip: { enabled: false },
     },
-    forceNiceScale: true,
-    decimalsInFloat: 0,
-  },
-  dataLabels: { enabled: false },
-  stroke: {
-    curve: "smooth",
-    width: 3,
+    yaxis: {
+        labels: {
+            formatter: (val: number) => `${Math.round(val)}`,
+        },
+        forceNiceScale: true,
+        decimalsInFloat: 0,
+    },
+    dataLabels: { enabled: false },
+    stroke: {
+        curve: "smooth",
+        width: 3,
+        colors: ["#0266D6"],
+    },
+    fill: {
+        type: "gradient",
+        gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.6,
+            opacityTo: 0.1,
+            stops: [0, 100],
+            gradientToColors: ["#0266D6"],
+            colorStops: [],
+        },
+    },
+    markers: {
+        size: 0,
+        hover: { size: 8, sizeOffset: 0 },
+        colors: ["#0266D6"],
+        strokeColors: "#fff",
+        strokeWidth: 2,
+    },
+    tooltip: {
+        x: {
+            formatter: (val: string) => {
+                const date = new Date(val);
+                const weekday = date.toLocaleDateString("ar-EG", { weekday: "long" });
+                const fullDate = formatDate(val);
+                return `${weekday} - ${fullDate}`;
+            },
+        },
+        y: {
+            formatter: (val: number) => `${Math.round(val)}`,
+        },
+    },
+    grid: { strokeDashArray: 4 },
     colors: ["#0266D6"],
-  },
-  fill: {
-    type: "gradient",
-    gradient: {
-      shadeIntensity: 1,
-      opacityFrom: 0.6,
-      opacityTo: 0.1,
-      stops: [0, 100],
-      gradientToColors: ["#0266D6"],
-      colorStops: [],
-    },
-  },
-  markers: {
-    size: 0,
-    hover: { size: 8, sizeOffset: 0 },
-    colors: ["#0266D6"],
-    strokeColors: "#fff",
-    strokeWidth: 2,
-  },
-  tooltip: {
-    x: {
-      formatter: (val: string) => {
-        const date = new Date(val);
-        const weekday = date.toLocaleDateString("ar-EG", { weekday: "long" });
-        const fullDate = formatDate(val);
-        return `${weekday} - ${fullDate}`;
-      },
-    },
-    y: {
-      formatter: (val: number) => `${Math.round(val)}`,
-    },
-  },
-  grid: { strokeDashArray: 4 },
-  colors: ["#0266D6"],
 }));
 
 
+
 function formatDate(dateStr: string | number): string {
-  const date = new Date(dateStr);
-  return date.toISOString().split("T")[0];
+    const date = new Date(dateStr);
+    return date.toISOString().split("T")[0];
 }
+
+watch(selectedPeriodLocal, (newVal) => {
+  emit('change-period', newVal)
+});
 
 onMounted(async () => {
     selectedPeriodLocal.value = props.selectedPeriod
-  apexChartService.initApexChart();
+    apexChartService.initApexChart();
 });
 </script>
-

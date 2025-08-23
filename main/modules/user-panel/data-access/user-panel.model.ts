@@ -282,8 +282,6 @@ export type studentAnalyzeForTeacherResponse = {
   pictureUrl: string;
   fullName: string;
   phoneNumber: string;
-  isSubscribed:boolean;
-  planSubscription:number;
   analyzes: {
     studentRate: number;
     levelRate: number;
@@ -388,4 +386,9 @@ export type teachersFinancialResponse = {
   subscriptionsCount: number;
   code: string | null;
   details: financialDetail[];
+}
+
+export type studentSubscriptionResponse={
+  planSubscription: number
+  isSubscribed: boolean
 }

@@ -56,7 +56,7 @@
                                     |
                                     <span class="text-green-8c text-[14px] font-medium">{{
                                         dateFormat.formatNoData(cat.correctAnswersCount)
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                             <div class="flex flex-col items-center">
@@ -81,7 +81,7 @@
             <!-- مربع التقدم بالخطة -->
             <div class="flex-1/3 min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid relative">
                 <!-- not subscribe -->
-                <no-sub-plane v-if="!isSubscribe" />
+                <no-sub-plane type="studentHasNoPlane" v-if="!isSubscribe" />
                 <template v-else>
                     <app-overlay msg="جاري جلب بيانات الخطة ..." v-if="panelStore.fetching.planInfoSimple" />
                     <!-- First line -->

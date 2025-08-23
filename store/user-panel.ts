@@ -5,6 +5,7 @@ import type {
   lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, recommendationsResponse, schoolDashboardData, similarVidModel,
   slidersResponse,
   stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeForTeacherResponse, studentAnalyzeResponse, studentStages,
+  studentSubscriptionResponse,
   teachersFinancialResponse,
   TPstudentDataResponse,
   trainingAnalyzeSimpleResponse, trainingPlanInfoSimpleResponse, trainingPlanSummaryResponse
@@ -37,7 +38,8 @@ interface UserPanelState {
     homeSliders: boolean,
     trainingAnalyzeSimple: boolean,
     planInfoSimple: boolean,
-    teachersFinancial:boolean
+    teachersFinancial:boolean,
+    studentSubscriptionDetails:boolean
   }
   globalType: number,
   lessonsCategories: lessonsCategoriesDataModel[] | null,
@@ -63,7 +65,8 @@ interface UserPanelState {
   homeSliders: slidersResponse | null,
   trainingAnalyzeSimple: trainingAnalyzeSimpleResponse | null,
   planInfoSimple: trainingPlanInfoSimpleResponse | null,
-  teachersFinancial:teachersFinancialResponse | null
+  teachersFinancial:teachersFinancialResponse | null,
+  studentSubscriptionDetails:studentSubscriptionResponse | null
 }
 
 
@@ -94,6 +97,7 @@ export const useUserPanelStore = defineStore('userPanel', {
       trainingAnalyzeSimple: false,
       planInfoSimple: false,
       teachersFinancial:false,
+      studentSubscriptionDetails:false
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
@@ -119,7 +123,8 @@ export const useUserPanelStore = defineStore('userPanel', {
     homeSliders: null,
     trainingAnalyzeSimple: null,
     planInfoSimple: null,
-    teachersFinancial:null
+    teachersFinancial:null,
+    studentSubscriptionDetails:null
   }),
 
   actions: {
@@ -602,6 +607,21 @@ export const useUserPanelStore = defineStore('userPanel', {
       }
     },
 
+    async getStudentSubscriptionsDetails(stdId): Promise<studentSubscriptionResponse | null> {
+      try {
+        this.fetching.studentSubscriptionDetails = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/dashboard/studentSubscriptionsDetails?id=${stdId}`)
+        this.studentSubscriptionDetails = data
+        return data
+      } catch (e) {
+        this.studentSubscriptionDetails = null
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.studentSubscriptionDetails = false
+      }
+    },
 
 
   },

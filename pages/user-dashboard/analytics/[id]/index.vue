@@ -88,7 +88,7 @@
                 <div class="text-purple-78 text-[15px] xl:text-[16px] font-bold">
                   مدة التدريب
                 </div>
-                <div>{{ dateFormat.formatStoMMHHWithText(mainCategory?.totalTime) }}</div>
+                <div>{{ dateFormat.formatStoSSMM_MMHHWithText(mainCategory?.totalTime) }}</div>
               </div>
             </div>
 
@@ -220,7 +220,7 @@
                         </span>
                       </div>
                       <div class="w-[15%] text-center">
-                        {{ dateFormat.formatStoMMHHWithText(child.totalTime) }}
+                        {{ dateFormat.formatStoSSMM_MMHHWithText(child.totalTime) }}
                       </div>
                       <div class="w-[15%] text-center">
                         <div class="w-full bg-gray-200 h-[18px] rounded-[4px] dark:bg-dark-600">

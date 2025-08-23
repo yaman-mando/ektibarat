@@ -3,7 +3,7 @@
     <div class="flex flex-col md:flex-row md:items-center md:justify-baseline mt-[25px] gap-x-[30px] gap-y-[15px]">
         <h2 class="text-[24px] font-bold text-blue-d6 text-right">تفاصيل التدريب</h2>
 
-        <select v-model="selectedPeriodTable" @change="$emit('fetchStudentAnalyze', selectedPeriodTable)"
+        <select v-model="selectedPeriodTable"
             class="w-full md:w-[220px] h-[40px] bg-white border border-[#BCCCDB] rounded-[6px] text-dark-2b outline-0">
             <option v-for="item in tablePeriodList" :key="item.id" :value="item.id">
                 الفترة: {{ item.label }}
@@ -41,9 +41,10 @@
                         <div class="text-[14px] text-gray-8f font-medium space-x-[5px] lg:space-x-[20px]">
                             <span class="font-bold text-purple-78">مدة التدريب</span>
                             <span class="text-dark-2b">
-                                {{ dateFormat.formatStoMMHH(item.totalTime) }}
-                                <span class="text-gray-8f">
-                                    <template v-if="item.totalTime < 3600">دقيقة</template>
+                                {{ dateFormat.formatStoSSMM_MMHH(item.totalTime) }}
+                                <span class="text-gray-8f" v-if="item.totalTime>0">
+                                    <template v-if="item.totalTime < 60">ثانية</template>
+                                    <template v-else-if="item.totalTime < 3600">دقيقة</template>
                                     <template v-else>ساعة</template>
                                 </span>
                             </span>
@@ -95,7 +96,7 @@
                             </div>
                             <div class="w-[20%] text-center">
                                 <span class="text-green-8c font-bold text-[14px]">
-                                    {{ child.correctAnswersCount }}
+                                    {{ child.correctAnswersCount  }}
                                 </span>
                                 |
                                 <span class="text-red-5e font-bold text-[14px]">
@@ -104,15 +105,15 @@
                             </div>
                             <div class="w-[20%] text-center">
                                 <span class="text-green-8c font-bold text-[14px]">
-                                    {{ dateFormat.secondsToMMSS(child.studentTimeTakenRate) }}
+                                    {{ dateFormat.formatStoSSMM_MMHH(child.studentTimeTakenRate) }}
                                 </span>
                                 |
                                 <span class="text-red-5e font-bold text-[14px]">
-                                    {{ dateFormat.secondsToMMSS(child.allStudentsTimeTakenRate) }}
+                                    {{ dateFormat.formatStoSSMM_MMHH(child.allStudentsTimeTakenRate) }}
                                 </span>
                             </div>
                             <div class="w-[20%] text-gray-63 font-medium text-center">
-                                {{ dateFormat.formatStoMMHHWithText(child.totalTime) }}
+                                {{ dateFormat.formatStoSSMM_MMHHWithText(child.totalTime) }}
                             </div>
                         </div>
 
@@ -225,4 +226,9 @@ function toAnalyticsDetails(categoryId) {
 function openSubscribeModal() {
     showSubscribeModal.value = true
 }
+
+watch(selectedPeriodTable, (newVal) => {
+  emit('fetchStudentAnalyze', newVal);
+});
+
 </script>

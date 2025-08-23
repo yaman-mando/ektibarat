@@ -15,7 +15,7 @@
             جميع المدربين
           </option>
           <option v-for="item in teachersList" :key="item.id ?? 0" :value="item.id">
-            المدرب: {{ item.label }}
+            {{ item.label }}
           </option>
         </select>
       </div>
@@ -197,21 +197,9 @@
                     :title="teachersList?.find(t => t.id === std.teacherId)?.label || ''"
                     @change="(e) => handleSelectChange(std, e)">
                     <option v-for="item in teachersList" :key="item.id" :value="item.id">
-                      المدرب: {{ item.label }}
+                      {{ item.label }}
                     </option>
                   </select>
-                  <ConfirmDialog v-if="isOpenConfirmModal && tempStudent" v-model:visible="isOpenConfirmModal"
-                    title="تأكيد" confirmText="نعم، احفظ" cancelText="لا، تجاهل" :onConfirm="confirmChange"
-                    :onCancel="cancelChange">
-                    <template #message>
-                      هل تريد فعلا تغيير الطالب
-                      <strong style="color:#0266D6">{{ tempStudent.studentName }}</strong>
-                      من المدرس
-                      <strong style="color:red">({{ tempStudent.oldTeacherLabel }})</strong>
-                      إلى المدرس
-                      <strong style="color:green">({{ tempStudent.newTeacherLabel }})</strong>؟
-                    </template>
-                  </ConfirmDialog>
 
                 </div>
               </div>
@@ -232,6 +220,19 @@
         </div>
       </div>
 
+      <template v-if="userData.role === UserRoles.schoolManager">
+        <ConfirmDialog v-if="isOpenConfirmModal && tempStudent" v-model:visible="isOpenConfirmModal" title="تأكيد"
+          confirmText="نعم، احفظ" cancelText="لا، تجاهل" :onConfirm="confirmChange" :onCancel="cancelChange">
+          <template #message>
+            هل تريد فعلا تغيير الطالب
+            <strong style="color:#0266D6">{{ tempStudent.studentName }}</strong>
+            من المدرس
+            <strong style="color:red">({{ tempStudent.oldTeacherLabel }})</strong>
+            إلى المدرس
+            <strong style="color:green">({{ tempStudent.newTeacherLabel }})</strong>؟
+          </template>
+        </ConfirmDialog>
+      </template>
     </app-data-wrapper>
     <!-- <div v-else class="h-[75vh] flex items-center justify-center text-[50px] font-bold text-red-5e">لا يوجد بيانات</div> -->
   </user-panel-wrapper>
