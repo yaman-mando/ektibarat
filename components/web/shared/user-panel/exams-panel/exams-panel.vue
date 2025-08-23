@@ -1304,7 +1304,6 @@ export default {
         console.log(e);
       }
     },
-44
     async startFullExam() {
       try {
         this.examLoading = true;
