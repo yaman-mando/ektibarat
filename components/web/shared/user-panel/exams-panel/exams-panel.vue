@@ -1534,6 +1534,9 @@ export default {
     },
 
     getTotalTime() {
+      if (!this.isExams) {
+        return `${this.form.questionCount} دقيقة`;
+      }
       const realMinutes = calculateSumFromArray(
         this.selectedLists,
         'defaultDuration'
