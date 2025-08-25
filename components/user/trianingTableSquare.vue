@@ -152,7 +152,7 @@
                                     </button>
                                 </template>
                                 <template v-else>
-                                    <button v-if="child.isEnabled"
+                                    <button v-if="child.rate>0"
                                         class="border border-purple-78 w-[110px] h-[32px] rounded-[4px] text-purple-78 text-[14px] font-bold cursor-pointer"
                                         @click="toAnalyticsDetails(child.categoryId)">
                                         تحليل النتيجة
