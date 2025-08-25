@@ -254,8 +254,11 @@ export class RouteHelper {
     return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}`
   }
 
-  static userAnalyticsDetails(id){
-    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}/${id}`
+  static userAnalyticsDetails(catId,stdId:any=null){
+    if(stdId){
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}/${catId}?stdId=${stdId}`  
+    }
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}/${catId}`
   }
 
   static schoolPanel(){

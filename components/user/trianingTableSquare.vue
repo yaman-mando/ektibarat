@@ -185,6 +185,7 @@ import type { analyzeStudentCategoryForTable } from "~/main/modules/user-panel/d
 import { planSubscribedEnum } from '~/main/constants/global.enums';
 import * as dateFormat from '~/main/utils/date-utils'
 import { RouteHelper } from "~/main/utils/route-helper";
+import { UserRoles } from "~/core/auth/constants/user-roles";
 
 
 const props = defineProps<{
@@ -197,11 +198,16 @@ const emit = defineEmits<{
 }>()
 
 const router = useRouter();
+const route = useRoute()
 const { data } = useAuth()
 
 const showSubscribeModal = ref(false)
 const userData = computed(() => data.value as UserInfoDataModel);
+const isStudent = computed(()=>{
+    return userData.value.role === UserRoles.student
+})
 
+const stdId = route.params.id;
 const tablePeriodList = [
     { id: 0, label: 'كامل المدة' },
     { id: 1, label: 'اليوم' },
@@ -219,8 +225,9 @@ function toTraining(parentId, catId) {
     );
 }
 
+
 function toAnalyticsDetails(categoryId) {
-    router.push(RouteHelper.userAnalyticsDetails(categoryId))
+    router.push(RouteHelper.userAnalyticsDetails(categoryId, isStudent.value?null:stdId))
 }
 
 function openSubscribeModal() {

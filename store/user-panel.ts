@@ -285,11 +285,41 @@ export const useUserPanelStore = defineStore('userPanel', {
       }
     },
 
+    async getAnalyticsDetailsForTeacher(catId,stdId): Promise<categoryAnalysisList | null> {
+      try {
+        this.fetching.analyticsDetails = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/dashboard/studentSecondaryAnalyzeForTeacher/${stdId}?categoryId=${catId}`)
+        this.analyticsDetails = data
+        return data
+      } catch (e) {
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.analyticsDetails = false
+      }
+    },
+
     async getAnalyzeDetailsChartForStudent(payload): Promise<chartDataList | null> {
       try {
         this.fetching.analyzeDetailsChartForStudent = true
         const { $axios } = useNuxtApp()
         const { data } = await $axios.post(`/dashboard/analyzeCategoryDetailsForStudent`, payload)
+        this.analyzeDetailsChartForStudent = data
+        return data
+      } catch (e) {
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.analyzeDetailsChartForStudent = false
+      }
+    },
+
+    async getAnalyzeDetailsChartForTeacher(payload,stdId): Promise<chartDataList | null> {
+      try {
+        this.fetching.analyzeDetailsChartForStudent = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.post(`/dashboard/analyzeCategoryDetailsForStudentForTeacher/${stdId}`, payload)
         this.analyzeDetailsChartForStudent = data
         return data
       } catch (e) {

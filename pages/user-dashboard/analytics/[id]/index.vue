@@ -114,6 +114,7 @@
                 نصائح اختبارات
               </button>
               <button
+                v-if="isStudent"
                 class="bg-purple-78 text-white rounded-[8px] w-[180px] xl:w-[200px] h-[40px] xl:h-[44px] cursor-pointer flex items-center justify-center gap-[12px] text-[14px] xl:text-[16px]"
                 @click="
                   toTraining(mainCategory?.parentId, mainCategory?.categoryId)
@@ -223,16 +224,9 @@
                         {{ dateFormat.formatStoSSMM_MMHHWithText(child.totalTime) }}
                       </div>
                       <div class="w-[15%] text-center">
-                        <div class="w-full bg-gray-200 h-[18px] rounded-[4px] dark:bg-dark-600">
-                          <div :class="`bg-${getRateColor(child.rate)}`"
-                            class="h-[18px] rounded-[4px] flex items-center justify-center"
-                            :style="{ width: child.rate + '%' }">
-                            <span v-if="child.rate > 0" class="text-sm" :class="child.rate > 12 ? 'text-white' : 'text-black'
-                              ">
-                              {{ child.rate }}%
-                            </span>
-                          </div>
-                        </div>
+                        <app-g-progress-bar v-if="child.rate>0" radius="4px" :bg-class="`bg-${getRateColor(child.rate)}`"
+                    :has-shadow="true" height="18px" :showText="true" :value="child.rate" />
+                    <span class="text-[12px]" v-else>عدد الاسئلة غير كافي</span>
                       </div>
                     </div>
                     <div class="flex flex-[30%] h-[100%] items-center rounded-l-[8px] border border-[#BCCCDB]"
@@ -257,7 +251,7 @@
                               للحفظ
                             </button>
                           </template>
-                          <template v-if="userData.planSubscribed !== planSubscribedEnum.subscribed">
+                          <template v-if="isStudent && userData.planSubscribed !== planSubscribedEnum.subscribed">
                             <button
                               class="bg-purple-78 text-white text-[14px] font-medium h-[32px] w-[60px] rounded-[4px] cursor-pointer">
                               تدرب
@@ -290,6 +284,7 @@ import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.mode
 import { planSubscribedEnum } from '~/main/constants/global.enums';
 import { UserRoles } from '~/core/auth/constants/user-roles';
 import * as dateFormat from '~/main/utils/date-utils'
+import { number } from 'yup';
 
 const userPanelStore = useUserPanelStore();
 const route = useRoute();
@@ -299,7 +294,8 @@ const apexChartService = useApexChartService();
 const { $axios } = useNuxtApp();
 const windowSize = useWindowSize()
 
-const id = route.params.id;
+const catId = Number(route.params.id);
+const stdId = Number(route.query['stdId'])
 const selectedPeriod = ref(0);
 const chartKey = Symbol();
 const chartSeries = ref<any>([]);
@@ -367,10 +363,19 @@ const chartOptions = ref({
 });
 
 async function fetchChartData() {
+  
+  if(isStudent.value){
   await userPanelStore.getAnalyzeDetailsChartForStudent({
-    categoryId: id,
-    period: selectedPeriod.value,
+    categoryId: catId,
+    period: selectedPeriod.value
   });
+}
+else{
+  await userPanelStore.getAnalyzeDetailsChartForTeacher({
+    categoryId: catId,
+    period: selectedPeriod.value,
+  },stdId);
+}
 
     const data = chartData.value?.chartData
     .filter(item => item.count > 0)
@@ -466,13 +471,13 @@ function getAdvices(catId) {
 
 const mainCategory = computed(() => {
   return userPanelStore.analyticsDetails?.find(
-    (k) => k.categoryId === Number(id)
+    (k) => k.categoryId === Number(catId)
   );
 });
 
 const tableCategories = computed(() => {
   return userPanelStore.analyticsDetails?.filter(
-    (k) => k.categoryId !== Number(id)
+    (k) => k.categoryId !== Number(catId)
   );
 });
 
@@ -482,6 +487,10 @@ const chartData = computed(() => {
 
 const userData = computed(() => data.value as UserInfoDataModel);
 
+const isStudent = computed(()=>{
+  return userData.value.role === UserRoles.student
+})
+
 const isMobile = ref(false);
 const rotateWarning = ref(false);
 const scaleValue = ref(1);
@@ -489,8 +498,8 @@ const scaleValue = ref(1);
 onMounted(async () => {
   apexChartService.initApexChart();
 
-  if (id) {
-    await userPanelStore.getAnalyticsDetails(id);
+  if (catId) {
+    isStudent.value?await userPanelStore.getAnalyticsDetails(catId):await userPanelStore.getAnalyticsDetailsForTeacher(catId,stdId)
     await fetchChartData();
   }
 
