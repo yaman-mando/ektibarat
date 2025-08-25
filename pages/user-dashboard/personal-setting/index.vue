@@ -81,7 +81,7 @@ const accountItems = [
   { key: 'preferences', label: 'التفضيلات', isShow: true },
   { key: 'partner', label: 'شريك اختبارات', isShow: true },
   { key: 'teacher-panel', label: 'لوحة المدرب', isShow: false },
-  { key: 'teachers', label: 'المدربون', isShow: [UserRoles.teacher].includes(userData.role) }
+  { key: 'teachers', label: 'المدربون', isShow: [UserRoles.student].includes(userData.role) }
 ];
 
 const helpItems = [
