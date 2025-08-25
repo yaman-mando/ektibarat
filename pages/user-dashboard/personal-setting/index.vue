@@ -10,17 +10,19 @@
       </main>
 
       <aside v-if="windowSize.isDesktop" class="2xl:max-w-[330px] flex-1/3 min-w-[250px] flex flex-col gap-[15px]">
-        <div class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-[311px]">
+        <div class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-full">
           <h2 class="text-purple-e0 font-bold text-[24px] mb-[10px]">حسابك</h2>
           <ul class="space-y-[10px]">
-            <li v-for="item in accountItems" :key="item.key" @click="selectedSection = item.key" :class="[
-              'cursor-pointer px-3 py-2 rounded-[4px] transition h-[50px] content-center',
-              selectedSection === item.key
-                ? 'bg-gray-fa font-bold'
-                : 'hover:bg-gray-50 text-dark-63 font-medium',
-            ]">
-              {{ item.label }}
-            </li>
+            <template v-for="item in accountItems" :key="item.key">
+              <li v-if="item.isShow" @click="selectedSection = item.key" :class="[
+                'cursor-pointer px-3 py-2 rounded-[4px] transition h-[50px] content-center',
+                selectedSection === item.key
+                  ? 'bg-gray-fa font-bold'
+                  : 'hover:bg-gray-50 text-dark-63 font-medium',
+              ]">
+                {{ item.label }}
+              </li>
+            </template>
           </ul>
         </div>
 
@@ -59,19 +61,27 @@ import preferences from '~/components/user/personal-setting/preferences.vue';
 import support from '~/components/user/personal-setting/support.vue';
 import contactUs from '~/components/user/personal-setting/contactUs.vue';
 import partner from '~/components/user/personal-setting/partner.vue';
+import teacherPanel from '~/components/user/personal-setting/teacher-panel.vue';
+import teachers from '~/components/user/personal-setting/teachers.vue';
+import { UserRoles } from '~/core/auth/constants/user-roles';
+import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 
 //use
 const { signOut } = useAuth();
 const router = useRouter();
 const route = useRoute();
 const windowSize = useWindowSize()
+const { data } = useAuth();
+const userData = data.value as UserInfoDataModel;
 
 //enums
 const accountItems = [
-  { key: 'info', label: 'المعلومات الشخصية' },
-  { key: 'subscriptions', label: 'الاشتراكات' },
-  { key: 'preferences', label: 'التفضيلات' },
-  { key: 'partner', label: 'شريك اختبارات' },
+  { key: 'info', label: 'المعلومات الشخصية', isShow: true },
+  { key: 'subscriptions', label: 'الاشتراكات', isShow: true },
+  { key: 'preferences', label: 'التفضيلات', isShow: true },
+  { key: 'partner', label: 'شريك اختبارات', isShow: true },
+  { key: 'teacher-panel', label: 'لوحة المدرب', isShow: false },
+  { key: 'teachers', label: 'المدربون', isShow: [UserRoles.teacher].includes(userData.role) }
 ];
 
 const helpItems = [
@@ -88,6 +98,8 @@ const validSections: any = [
   'faq',
   'support',
   'contact',
+  'teacher-panel',
+  'teachers'
 ];
 
 const grades = [
@@ -116,6 +128,10 @@ const currentComponent = computed(() => {
       return support;
     case 'contact':
       return contactUs;
+    case 'teacher-panel':
+      return teacherPanel
+    case 'teachers':
+      return teachers
     default:
       return 'div';
   }

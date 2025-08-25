@@ -1707,6 +1707,7 @@ import { appEvents } from '~/main/shared/events/app.events';
 import { take } from 'rxjs';
 import { useApexChartService } from '~/main/services/useApexChartService';
 import type { PrimeAccordion } from '#components';
+import { useUserPanelStore } from '~/store/user-panel';
 
 class examForm {
   subjectId: number | string;
@@ -1764,9 +1765,11 @@ export default {
     forTeacher: Boolean,
     forTrainingStudent: Boolean,
     studentId: Number as PropType<number | null>,
+    inSidePanel:Boolean
   },
   setup() {
     const globalStore = useGlobalStore();
+    const panelStore = useUserPanelStore();
     const introService = useIntroService();
     const windowSize = useWindowSize();
     const runtimeConfig = useRuntimeConfig();
@@ -1778,13 +1781,14 @@ export default {
         'accordion_ref'
       );
     return {
+      globalStore,
+      panelStore,
       accordionRef,
       apexChartService: useApexChartService(),
       runtimeConfig,
       ...useSetupAuth(),
       ...useSetupRoute(),
       ...useToastMessage(),
-      globalTypeUser: computed(() => globalStore.state.globalTypeUserValue),
       userServicesState: computed(
         () => subscriptionsStore.state.userServicesStateVal
       ),
@@ -2017,6 +2021,7 @@ export default {
     isStudent() {
       return this.appAuth?.user?.role === UserRoles.student;
     },
+    globalTypeUser(){return this.inSidePanel?this.panelStore.globalType:this.globalStore.state.globalTypeUserValue},
     isTahsele() {
       return this.globalTypeUser == GlobalTypes.tahsele;
     },
@@ -2216,7 +2221,7 @@ export default {
     },
 
     getChartFilterData(fullData) {
-      return fullData.filter((k) => {
+      return fullData?.filter((k) => {
         return k.count > 0;
       });
     },

@@ -592,7 +592,6 @@ export default {
               document.getElementById('coachCode')!.select();
               return;
             }
-            this.showError();
           });
       } catch (e) {
         console.log('sendTeacherCode: ' + e);
