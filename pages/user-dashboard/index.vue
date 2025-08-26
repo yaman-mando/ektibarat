@@ -12,7 +12,7 @@
         </app-data-wrapper>
 
         <!-- التحليلات -->
-        <div v-if="userData.role === UserRoles.student" class="flex 2xl:flex-nowrap flex-wrap mt-[20px] gap-[20px]">
+        <div v-if="userData.role === UserRoles.admin" class="flex 2xl:flex-nowrap flex-wrap mt-[20px] gap-[20px]">
             <!-- مربع اختبار القدرات -->
             <div class=" flex-2/3 p-[18px_15px] rounded-lg bg-white dark:bg-gray-800 shadow-custom grid gap-[10px]">
                 <div class="flex items-center justify-between">
@@ -56,7 +56,7 @@
                                     |
                                     <span class="text-green-8c text-[14px] font-medium">{{
                                         dateFormat.formatNoData(cat.correctAnswersCount)
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <div class="flex flex-col items-center">
@@ -77,6 +77,8 @@
 
                 </div>
             </div>
+
+
 
             <!-- مربع التقدم بالخطة -->
             <div class="flex-1/3 min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid relative">
@@ -103,11 +105,12 @@
                         <div class="flex flex-col items-center">
                             <span class="text-[40px] 2xl:text-[48px] leading-[42px] font-bold text-dark-63">
                                 <span>{{ dateFormat.formatNoData(planInfo?.totalPercentage) }}</span>
-                                <span class="text-[26px] 2xl:text-[30px]">%</span>
+                                <span class="text-[26px] 2xl:text-[30px]"
+                                    v-if="planInfo?.totalPercentage && planInfo?.totalPercentage > 0">%</span>
                             </span>
                             <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">
-                                {{ dateFormat.formatStoMMHH(planInfo?.timeDone) }} | {{
-                                    dateFormat.formatStoMMHH(planInfo?.timeRequired) }}
+                                {{ dateFormat.minutesToHHMM(planInfo?.timeDone, false) }} | {{
+                                    dateFormat.minutesToHHMM(planInfo?.timeRequired, false) }}
                             </span>
                         </div>
                     </div>
@@ -137,7 +140,7 @@
 
                         <!-- "You are here" indicator -->
                         <div v-if="planInfo?.percentageDone > 0"
-                            :style="{ right: `calc(${planInfo?.percentageDone ?? 0}% - 30px)` }"
+                            :style="{ right: `calc(${planInfo?.percentageDone ?? 0}% - 18px)` }"
                             class="absolute -top-[10px] h-[27px] grid gap-y-[5px] justify-items-center w-[40px]">
                             <div class="text-[10px] 2xl:text-[12px] text-black font-medium">أنت هنا</div>
                             <svg width="16" height="14" viewBox="0 0 16 14" fill="none"
@@ -148,7 +151,7 @@
 
                         <!-- Target indicator -->
                         <div v-if="planInfo?.percentageRequired > 0"
-                            :style="{ right: `calc(${planInfo?.percentageRequired ?? 0}% - 45px)` }"
+                            :style="{ right: `calc(${planInfo?.percentageRequired ?? 0}% - 40px)` }"
                             class="absolute bottom-0 h-[27px] grid gap-y-[5px] justify-items-center w-[80px]">
                             <svg width="16" height="14" viewBox="0 0 16 14" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -161,9 +164,9 @@
                     </div>
 
                     <div class="flex items-center justify-center gap-x-[20px]">
-                        <app-g-button width="150px" height="44px" bg-class="bg-transparent" :border="true"
-                            border-color="border-purple-8c" radius="8px" text-color="text-purple-8c" text-size="16px"
-                            font-weight="font-medium">
+                        <app-g-button @click="toPlane" width="150px" height="44px" bg-class="bg-transparent"
+                            :border="true" border-color="border-purple-8c" radius="8px" text-color="text-purple-8c"
+                            text-size="16px" font-weight="font-medium">
                             خطتي
                         </app-g-button>
                         <app-g-button @click="toTraining" width="150px" height="44px" bg-class="bg-purple-78"
@@ -193,7 +196,7 @@ import { computed } from 'vue';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { planSubscribedEnum } from '~/main/constants/global.enums';
 import { RouteHelper } from '~/main/utils/route-helper';
-import { webUserTrainWithUs } from '~/main/utils/web-routes.utils';
+import { webUserSteps, webUserTrainingPlan, webUserTrainWithUs } from '~/main/utils/web-routes.utils';
 import { UserRoles } from '~/core/auth/constants/user-roles';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import * as dateFormat from '~/main/utils/date-utils'
@@ -215,14 +218,6 @@ const isSubscribe = computed(() => {
 const userData = computed(() => data.value as UserInfoDataModel);
 const blogs = computed(() => panelStore.blogs);
 const sliders = computed(() => panelStore.homeSliders);
-const slidersTest = computed(() => {
-    const base = sliders.value?.[0];
-    if (!base) return [];
-
-    return Array.from({ length: 4 }).map((_, index) => ({
-        ...base, order: index,
-    }));
-});
 const planInfo = computed(() => panelStore.planInfoSimple);
 const analyzeInfo = computed(() => panelStore.trainingAnalyzeSimple);
 
@@ -255,11 +250,6 @@ const levelColor = computed(() => {
     }
 });
 
-const formatTime = (minutes) => {
-    const hrs = Math.floor(minutes / 60);
-    const mins = Math.round(minutes % 60);
-    return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
-};
 
 
 const toAnalytics = () => {
@@ -267,6 +257,18 @@ const toAnalytics = () => {
 }
 
 const toTraining = () => {
+    if (userData.value.planSubscribed === planSubscribedEnum.finished || userData.value.planSubscribed === planSubscribedEnum.subscribed) {
+        router.push(webUserSteps())
+        return
+    }
+    router.push(webUserTrainWithUs())
+}
+
+const toPlane = () => {
+    if (userData.value.planSubscribed === planSubscribedEnum.finished || userData.value.planSubscribed === planSubscribedEnum.subscribed) {
+        router.push(webUserTrainingPlan())
+        return
+    }
     router.push(webUserTrainWithUs())
 }
 
