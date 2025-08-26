@@ -2,7 +2,7 @@
   <section  id="recommendations" class="text-right bg-white dark:bg-gray-800 rounded-[8px] shadow-custom overflow-hidden mt-[20px]">
     
     <!-- Header -->
-    <div class="flex items-center justify-between px-4 h-[74px] py-[15px]">
+     <!-- <div class="flex items-center justify-between px-4 h-[74px] py-[15px]">
       <div class="flex items-center gap-[5px]">
         
         <div class="w-[36px] h-[36px] rounded-full flex items-center justify-center" style="background-color: #E3F0FF;">
@@ -14,7 +14,7 @@
         </span>
       </div>
 
-      <!-- Toggle Button -->
+      
       <button
         @click="toggleAccordion"
         class="w-[164px] h-[44px] flex items-center justify-center gap-[5px] text-white text-[16px] font-medium rounded-[8px] cursor-pointer"
@@ -39,6 +39,23 @@
         </svg>
       </div>
       </button>
+    </div> -->
+
+    <div @click="toggleAccordion" class=" cursor-pointer flex items-center justify-between px-4 h-[74px] py-[15px]">
+      <div class="flex items-center gap-[5px]">
+        
+        <div class="w-[36px] h-[36px] rounded-full flex items-center justify-center" style="background-color: #E3F0FF;">
+        <img src="/images/svg/lightbulb.svg" alt="icon" class="w-[14px] h-auto" />
+        </div>
+        
+        <span class="ml-2 text-orange-39 font-bold text-base md:text-[18px]">
+          توصيات اختبارات
+        </span>
+      </div>
+
+      <!-- Toggle Button -->
+       <i class="fa text-orange-35 text-[12px]" :class="isOpen?'fa-chevron-up':'fa-chevron-down'"></i>
+       
     </div>
 
     <!-- Divider -->
@@ -67,7 +84,7 @@
   </section>
 
   <!-- Action Buttons -->
-  <div class="flex justify-end gap-[10px] px-4 mt-5 flex-wrap">
+  <div class="flex justify-end gap-[10px] px-4 mt-5 flex-wrap" v-if="false">
     <button
       class="w-[161px] h-[44px] bg-[#7840E0] text-white rounded-[8px] flex items-center justify-center gap-2 text-[16px] font-medium cursor-pointer"
     >
