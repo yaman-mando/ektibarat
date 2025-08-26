@@ -440,7 +440,7 @@ const chartOptions = computed(() => ({
   xaxis: {
     type: "datetime",
     labels: {
-      show: chartSeries[0].data.length > 0,
+      show: chartSeries.value[0].data.length > 0,
       rotate: -45,
       style: { fontSize: "12px" },
       formatter: (val: string | number) => formatDate(val),
