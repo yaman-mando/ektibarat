@@ -12,7 +12,7 @@
         </app-data-wrapper>
 
         <!-- التحليلات -->
-        <div v-if="userData.role === UserRoles.admin" class="flex 2xl:flex-nowrap flex-wrap mt-[20px] gap-[20px]">
+        <div v-if="userData.role === UserRoles.student" class="flex 2xl:flex-nowrap flex-wrap mt-[20px] gap-[20px]">
             <!-- مربع اختبار القدرات -->
             <div class=" flex-2/3 p-[18px_15px] rounded-lg bg-white dark:bg-gray-800 shadow-custom grid gap-[10px]">
                 <div class="flex items-center justify-between">

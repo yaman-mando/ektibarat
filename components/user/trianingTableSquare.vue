@@ -141,7 +141,7 @@
 
                             <div class="w-[45%] h-[100%] flex justify-center items-center border-r-1 border-[#BCCCDB]">
                                 <template v-if="!child.hasLawAnalyze">
-                                    <button v-if="userData.planSubscribed !== planSubscribedEnum.subscribed"
+                                    <button v-if="isStudent && userData.planSubscribed !== planSubscribedEnum.subscribed"
                                         class="border border-purple-78 w-[110px] h-[32px] rounded-[4px] text-purple-78 text-[14px] font-bold cursor-pointer"
                                         @click="toTraining(child.parentId, child.categoryId)">
                                         تدرب
