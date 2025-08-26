@@ -153,6 +153,14 @@ export type categoryAnalysisList = {
   wrongAnswersCount: number;
 }[]
 
+export type categoryAnalysisForTeacherResponse = {
+  studentId: string | number;
+  userName: string;
+  pictureUrl: string;
+  fullName: string;
+  analyzes: categoryAnalysisList
+}
+
 export type chartDataList = {
   count: number;
   date: string | null
@@ -388,7 +396,7 @@ export type teachersFinancialResponse = {
   details: financialDetail[];
 }
 
-export type studentSubscriptionResponse={
+export type studentSubscriptionResponse = {
   planSubscription: number
   isSubscribed: boolean
 }

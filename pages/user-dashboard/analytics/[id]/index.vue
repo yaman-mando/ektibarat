@@ -113,8 +113,7 @@
                 <img src="/images/svg/user-panel/lamp-white.svg" class="w-[18px] xl:w-[20px]" />
                 نصائح اختبارات
               </button>
-              <button
-                v-if="isStudent"
+              <button v-if="isStudent"
                 class="bg-purple-78 text-white rounded-[8px] w-[180px] xl:w-[200px] h-[40px] xl:h-[44px] cursor-pointer flex items-center justify-center gap-[12px] text-[14px] xl:text-[16px]"
                 @click="
                   toTraining(mainCategory?.parentId, mainCategory?.categoryId)
@@ -224,9 +223,10 @@
                         {{ dateFormat.formatStoSSMM_MMHHWithText(child.totalTime) }}
                       </div>
                       <div class="w-[15%] text-center">
-                        <app-g-progress-bar v-if="child.rate>0" radius="4px" :bg-class="`bg-${getRateColor(child.rate)}`"
-                    :has-shadow="true" height="18px" :showText="true" :value="child.rate" />
-                    <span class="text-[12px]" v-else>عدد الاسئلة غير كافي</span>
+                        <app-g-progress-bar v-if="child.rate > 0" radius="4px"
+                          :bg-class="`bg-${getRateColor(child.rate)}`" :has-shadow="true" height="18px" :showText="true"
+                          :value="child.rate" />
+                        <span class="text-[12px]" v-else>عدد الاسئلة غير كافي</span>
                       </div>
                     </div>
                     <div class="flex flex-[30%] h-[100%] items-center rounded-l-[8px] border border-[#BCCCDB]"
@@ -284,7 +284,6 @@ import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.mode
 import { planSubscribedEnum } from '~/main/constants/global.enums';
 import { UserRoles } from '~/core/auth/constants/user-roles';
 import * as dateFormat from '~/main/utils/date-utils'
-import { number } from 'yup';
 
 const userPanelStore = useUserPanelStore();
 const route = useRoute();
@@ -296,7 +295,7 @@ const windowSize = useWindowSize()
 
 const catId = Number(route.params.id);
 const stdId = Number(route.query['stdId'])
-const selectedPeriod = ref(0);
+const selectedPeriod = ref(3);
 const chartKey = Symbol();
 const chartSeries = ref<any>([]);
 const isLoadingAdvices = ref(false);
@@ -312,77 +311,28 @@ const chartPeriodList = [
   { id: 3, label: '6 أشهر' },
 ];
 
-const chartOptions = ref({
-  chart: {
-    id: 'main-chart',
-    toolbar: { show: false },
-    zoom: { enabled: false },
-  },
-  xaxis: {
-    type: 'category',
-    labels: {
-      show: chartSeries.value.length>0,
-      rotate: -45,
-
-      formatter: (val) => new Date(val).toLocaleDateString('en-US'),
-    },
-  },
-  yaxis: {
-    labels: {
-      formatter: (val) => `${val}%`,
-    },
-  },
-  dataLabels: { enabled: false },
-  stroke: {
-    curve: 'smooth',
-    width: 3,
-    colors: ['#0266D6'],
-  },
-  fill: {
-    type: 'gradient',
-    gradient: {
-      shadeIntensity: 1,
-      opacityFrom: 0.6,
-      opacityTo: 0.1,
-      colorStops: [],
-      stops: [0, 100],
-      gradientToColors: ['#0266D6'],
-    },
-  },
-  markers: {
-    size: 8,
-    colors: ['#0266D6'],
-    strokeColors: '#fff',
-    strokeWidth: 2,
-  },
-  tooltip: {
-    x: {
-      formatter: (val) => val,
-    },
-  },
-});
 
 async function fetchChartData() {
-  
-  if(isStudent.value){
-  await userPanelStore.getAnalyzeDetailsChartForStudent({
-    categoryId: catId,
-    period: selectedPeriod.value
-  });
-}
-else{
-  await userPanelStore.getAnalyzeDetailsChartForTeacher({
-    categoryId: catId,
-    period: selectedPeriod.value,
-  },stdId);
-}
 
-    const data = chartData.value?.chartData
+  if (isStudent.value) {
+    await userPanelStore.getAnalyzeDetailsChartForStudent({
+      categoryId: catId,
+      period: selectedPeriod.value
+    });
+  }
+  else {
+    await userPanelStore.getAnalyzeDetailsChartForTeacher({
+      categoryId: catId,
+      period: selectedPeriod.value,
+    }, stdId);
+  }
+
+  const data = chartData.value
     .filter(item => item.count > 0)
     .map(item => item.date ? { x: formatDate(item.date), y: item.count } : null)
     .filter(Boolean);
 
-     chartSeries.value = [
+  chartSeries.value = [
     {
       name: 'النقاط',
       data: (data && data.length >= 2) ? data : []
@@ -391,9 +341,9 @@ else{
 
 }
 
-function formatDate(dateStr: string) {
-  const date = new Date(dateStr)
-  return date.toISOString().split('T')[0]
+function formatDate(dateStr: string | number): string {
+  const date = new Date(dateStr);
+  return date.toISOString().split("T")[0];
 }
 
 function toAnalytics() {
@@ -469,14 +419,95 @@ function getAdvices(catId) {
     });
 }
 
+const chartOptions = computed(() => ({
+  chart: {
+    id: "main-chart",
+    type: "area",
+    toolbar: { show: false },
+    zoom: { enabled: false },
+    fontFamily: "Tajawal, sans-serif",
+  },
+  noData: {
+    text: "لا توجد قيم كافية لعرض الرسم البياني",
+    align: "center",
+    verticalAlign: "middle",
+    style: {
+      color: "#6b7280",
+      fontSize: "14px",
+      fontFamily: "Tajawal, sans-serif",
+    },
+  },
+  xaxis: {
+    type: "datetime",
+    labels: {
+      show: chartSeries[0].data.length > 0,
+      rotate: -45,
+      style: { fontSize: "12px" },
+      formatter: (val: string | number) => formatDate(val),
+    },
+    tickAmount: windowSize.isDesktop ? 6 : 2,
+    tooltip: { enabled: false },
+  },
+  yaxis: {
+    labels: {
+      formatter: (val: number) => `${Math.round(val)}`,
+    },
+    forceNiceScale: true,
+    decimalsInFloat: 0,
+  },
+  dataLabels: { enabled: false },
+  stroke: {
+    curve: "smooth",
+    width: 3,
+    colors: ["#0266D6"],
+  },
+  fill: {
+    type: "gradient",
+    gradient: {
+      shadeIntensity: 1,
+      opacityFrom: 0.6,
+      opacityTo: 0.1,
+      stops: [0, 100],
+      gradientToColors: ["#0266D6"],
+      colorStops: [],
+    },
+  },
+  markers: {
+    size: 0,
+    hover: { size: 8, sizeOffset: 0 },
+    colors: ["#0266D6"],
+    strokeColors: "#fff",
+    strokeWidth: 2,
+  },
+  tooltip: {
+    x: {
+      formatter: (val: string) => {
+        const date = new Date(val);
+        const weekday = date.toLocaleDateString("ar-EG", { weekday: "long" });
+        const fullDate = formatDate(val);
+        return `${weekday} - ${fullDate}`;
+      },
+    },
+    y: {
+      formatter: (val: number) => `${Math.round(val)}`,
+    },
+  },
+  grid: { strokeDashArray: 4 },
+  colors: ["#0266D6"],
+}));
+
+const mainData = computed(() => {
+  return isStudent.value ? userPanelStore.analyticsDetails : userPanelStore.analyticsDetailsForTeacher?.analyzes
+})
+
 const mainCategory = computed(() => {
-  return userPanelStore.analyticsDetails?.find(
+  return mainData.value?.find(
     (k) => k.categoryId === Number(catId)
   );
 });
 
 const tableCategories = computed(() => {
-  return userPanelStore.analyticsDetails?.filter(
+  return mainData.value?.filter(
     (k) => k.categoryId !== Number(catId)
   );
 });
@@ -487,7 +518,7 @@ const chartData = computed(() => {
 
 const userData = computed(() => data.value as UserInfoDataModel);
 
-const isStudent = computed(()=>{
+const isStudent = computed(() => {
   return userData.value.role === UserRoles.student
 })
 
@@ -499,7 +530,7 @@ onMounted(async () => {
   apexChartService.initApexChart();
 
   if (catId) {
-    isStudent.value?await userPanelStore.getAnalyticsDetails(catId):await userPanelStore.getAnalyticsDetailsForTeacher(catId,stdId)
+    isStudent.value ? await userPanelStore.getAnalyticsDetails(catId) : await userPanelStore.getAnalyticsDetailsForTeacher(catId, stdId)
     await fetchChartData();
   }
 

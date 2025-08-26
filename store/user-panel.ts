@@ -1,7 +1,7 @@
 import { da } from "date-fns/locale"
 import { GlobalSub } from "~/main/modules/user-panel/data-access/user-panel.enum"
 import type {
-  blogsListResponse, categoriesListForModal, categoryAnalysisList, categoryInfoForStep, chartDataList, idLabelList,
+  blogsListResponse, categoriesListForModal, categoryAnalysisForTeacherResponse, categoryAnalysisList, categoryInfoForStep, chartDataList, idLabelList,
   lessonDetailsModel, lessonsCategoriesDataModel, lessonsModel, recommendationsResponse, schoolDashboardData, similarVidModel,
   slidersResponse,
   stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeForTeacherResponse, studentAnalyzeResponse, studentStages,
@@ -50,6 +50,7 @@ interface UserPanelState {
   categoriesListForModal: categoriesListForModal | null,
   categoryInfo: stepCategoryInfo | null,
   analyticsDetails: categoryAnalysisList | null,
+  analyticsDetailsForTeacher: categoryAnalysisForTeacherResponse | null,
   analyzeDetailsChartForStudent: chartDataList | null | any
   schoolDashboardData: schoolDashboardData | null,
   teacherDashboardData: TPstudentDataResponse | null,
@@ -108,6 +109,7 @@ export const useUserPanelStore = defineStore('userPanel', {
     categoriesListForModal: null,
     categoryInfo: null,
     analyticsDetails: null,
+    analyticsDetailsForTeacher:null,
     analyzeDetailsChartForStudent: null,
     schoolDashboardData: null,
     teacherDashboardData: null,
@@ -285,12 +287,12 @@ export const useUserPanelStore = defineStore('userPanel', {
       }
     },
 
-    async getAnalyticsDetailsForTeacher(catId,stdId): Promise<categoryAnalysisList | null> {
+    async getAnalyticsDetailsForTeacher(catId,stdId): Promise<categoryAnalysisForTeacherResponse | null> {
       try {
         this.fetching.analyticsDetails = true
         const { $axios } = useNuxtApp()
         const { data } = await $axios.get(`/dashboard/studentSecondaryAnalyzeForTeacher/${stdId}?categoryId=${catId}`)
-        this.analyticsDetails = data
+        this.analyticsDetailsForTeacher = data
         return data
       } catch (e) {
         console.error(e)
