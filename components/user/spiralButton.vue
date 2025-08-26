@@ -56,7 +56,7 @@
 
       <!-- Info popup -->
       <div @focusout="handlePopupFocusOut"
-        v-if="step.type !== stepTypesEnum.examSimulator && step.categoryInfo && step.status === 1 && activePopupIndex === index"
+        v-if="(step.type !== stepTypesEnum.examSimulator || step.categoryInfo?.isWrong) && step.categoryInfo && step.status === 1 && activePopupIndex === index"
         :id="`popupRefs-${index}`" tabindex="1" :class="['popup', popupDirection]" :style="{
           left: `${pattern[index % pattern.length] - 80}px`,
           top: popupDirection === 'up' ? `${index * stepSpacing - 255}px` : `${index * stepSpacing + 90}px`
@@ -67,12 +67,10 @@
               <template v-if="step.categoryInfo.isWrong">تدرب على الاسئلة اللتي أخطأت بها</template>
               <template v-else>القسم الذي ستتدرب عليه</template>
             </h2>
-            <h3 v-if="step.categoryInfo.categoryName"
-              class="mt-[5px] !text-center text-[20px] font-bold text-orange-39">
-              <text-slice :length="20" :text="step.categoryInfo.categoryName" />
+            <h3 class="mt-[5px] !text-center text-[20px] font-bold text-orange-39">
+              <text-slice :length="20" :text="step.categoryInfo.categoryName ?? '--'" />
             </h3>
-            <div v-if="step.type !== stepTypesEnum.examSimulator"
-              class="flex items-center justify-between mt-[10px] !p-[0px_12px]">
+            <div class="flex items-center justify-between mt-[10px] !p-[0px_12px]">
               <div class="grid justify-items-center gap-y-[6px]">
                 <span class="text-[16px] text-purple-78 font-bold">عدد الأسئلة</span>
                 <span class="text-[16px] text-gray-63 text-center">{{ step.categoryInfo.numberQuestion -
@@ -97,7 +95,7 @@
       </div>
 
       <div @focusout="handlePopupFocusOut"
-        v-if="step.type === stepTypesEnum.examSimulator && step.categoryInfo && step.status === 1 && activePopupIndex === index"
+        v-if="(step.type === stepTypesEnum.examSimulator && !step.categoryInfo?.isWrong) && step.categoryInfo && step.status === 1 && activePopupIndex === index"
         :id="`popupRefs-${index}`" tabindex="1" :class="['popup', popupDirection]" :style="{
           left: `${pattern[index % pattern.length] - 80}px`,
           top: popupDirection === 'up' ? `${index * stepSpacing - 140}px` : `${index * stepSpacing + 90}px`
@@ -183,6 +181,7 @@ class examForm {
   constructor(subjectId: number | string) {
     this.subjectId = subjectId;
   }
+  totalQuestionsCount: number = 0;
   willDo = false;
   withoutStudentEvaluate = false;
   randomLevel = false;
@@ -232,11 +231,18 @@ function handlePopupFocusOut(event: FocusEvent) {
 }
 
 function toTrining(step: step) {
-  form.value.randomQuestionsSettings.push({
-    categoryId: step.categoryInfo?.categoryId,
-    questionLevel: 0,
-    questionsCount: (step.categoryInfo?.numberQuestion ?? 0) - (step.categoryInfo?.numberQuestionComplete ?? 0),
-  })
+  form.value.totalQuestionsCount = Math.max(
+    0,
+    (step.categoryInfo?.numberQuestion ?? 0) -
+    (step.categoryInfo?.numberQuestionComplete ?? 0)
+  );
+  if (!step.categoryInfo?.isWrong) {
+    form.value.randomQuestionsSettings.push({
+      categoryId: step.categoryInfo?.categoryId,
+      questionLevel: 0,
+      questionsCount: (step.categoryInfo?.numberQuestion ?? 0) - (step.categoryInfo?.numberQuestionComplete ?? 0),
+    })
+  }
   form.value.stepId = step.id
   if (step.categoryInfo?.isWrong) {
     form.value.onlyWrongQuestions = true
@@ -313,7 +319,7 @@ const startExam = async (step: step) => {
     if (res) {
       router.push(`/student/exams/${res.id}`);
     }
-     await sleepUtil(1000);
+    await sleepUtil(1000);
     examLoading.value = false;
   } catch (e) {
     toastMessage.showError({
