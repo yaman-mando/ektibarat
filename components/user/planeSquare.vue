@@ -29,8 +29,8 @@
                         <span v-else>--</span>
                     </span>
                     <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">
-                        {{ dateFormat.formatStoMMHH(stdPlaneInfo?.timeDone) }} | {{
-                            dateFormat.formatStoMMHH(stdPlaneInfo?.timeRequired) }}
+                        {{ dateFormat.minutesToHHMM(stdPlaneInfo?.timeDone, false) }} | {{
+                            dateFormat.minutesToHHMM(stdPlaneInfo?.timeRequired, false) }}
                     </span>
                 </div>
             </div>
@@ -59,7 +59,7 @@
 
                 <!-- "You are here" indicator -->
                 <div v-if="stdPlaneInfo?.percentageDone > 0"
-                    :style="{ right: `calc(${stdPlaneInfo?.percentageDone ?? 0}% - 30px)` }"
+                    :style="{ right: `calc(${stdPlaneInfo?.percentageDone ?? 0}% - 18px)` }"
                     class="absolute -top-[10px] h-[27px] grid gap-y-[5px] justify-items-center w-[40px]">
                     <div class="text-[10px] 2xl:text-[12px] text-black font-medium">أنت هنا</div>
                     <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +69,7 @@
 
                 <!-- Target indicator -->
                 <div v-if="stdPlaneInfo?.percentageRequired > 0"
-                    :style="{ right: `calc(${stdPlaneInfo?.percentageRequired ?? 0}% - 45px)` }"
+                    :style="{ right: `calc(${stdPlaneInfo?.percentageRequired ?? 0}% - 40px)` }"
                     class="absolute bottom-0 h-[27px] grid gap-y-[5px] justify-items-center w-[80px]">
                     <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 0L16 14H0L8 0Z" fill="#EAB316" />
@@ -91,8 +91,8 @@
                     </div>
                     <div class="flex flex-col items-center text-[12px] 2xl:text-[14px] font-medium text-gray-8f">
                         <span>آخر الشهر</span>
-                        <span>{{ dateFormat.formatStoMMHH(stdPlaneInfo?.lastMonth.timeDone) }} | {{
-                            dateFormat.formatStoMMHH(stdPlaneInfo?.lastMonth.timeRequired) }}</span>
+                        <span>{{ dateFormat.minutesToHHMM(stdPlaneInfo?.lastMonth.timeDone, false) }} | {{
+                            dateFormat.minutesToHHMM(stdPlaneInfo?.lastMonth.timeRequired, false) }}</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-x-[8px] text-right pr-[5px] border-r-[3px] border-r-purple-e0">
@@ -104,8 +104,8 @@
                     </div>
                     <div class="flex flex-col items-center text-[12px] 2xl:text-[14px] font-medium text-gray-8f">
                         <span>آخر أسبوع</span>
-                        <span>{{ dateFormat.formatStoMMHH(stdPlaneInfo?.lastWeek.timeDone) }} | {{
-                            dateFormat.formatStoMMHH(stdPlaneInfo?.lastWeek.timeRequired) }}</span>
+                        <span>{{ dateFormat.minutesToHHMM(stdPlaneInfo?.lastWeek.timeDone, false) }} | {{
+                            dateFormat.minutesToHHMM(stdPlaneInfo?.lastWeek.timeRequired, false) }}</span>
                     </div>
                 </div>
             </div>
@@ -199,10 +199,10 @@ const level = computed<string>(() => {
 
 
 const levelColors: Record<string, string> = {
-  "ممتاز": "#58CC02",
-  "جيد": "#58CC02",
-  "متوسط": "#EAB316",
-  "ضعيف": "#F04438"
+    "ممتاز": "#58CC02",
+    "جيد": "#58CC02",
+    "متوسط": "#EAB316",
+    "ضعيف": "#F04438"
 };
 
 const levelColor = computed(() => levelColors[level.value] ?? "#999999");

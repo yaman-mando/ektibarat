@@ -2,6 +2,7 @@ import {
   addSeconds,
   format,
   intervalToDuration,
+  min,
   parseISO,
   startOfDay,
 } from 'date-fns';
@@ -115,13 +116,14 @@ export const DateHelper = () => {
   };
 };
 
-export const minutesToHHMM = (totalMin) => {
+export const minutesToHHMM = (totalMin,withText=true) => {
+  if(totalMin <=0) return '--'
   const hours = Math.floor(totalMin / 60);
   const minutes = Math.floor(totalMin - hours * 60);
 
   // Padding the values to ensure they are two digits
-  let parsedHours = '';
-  let parsedMinutes = '';
+  let parsedHours:any = hours;
+  let parsedMinutes:any = minutes;
   if (hours < 10) {
     parsedHours = '0' + hours;
   }
@@ -130,7 +132,9 @@ export const minutesToHHMM = (totalMin) => {
     parsedMinutes = '0' + minutes;
   }
 
-  return parsedHours + ':' + parsedMinutes + ' ساعة';
+  const text = hours>0?'ساعة':'دقيقة'
+
+  return parsedHours + ':' + parsedMinutes + (withText?text:'');
 };
 
 export const secondsToMMSS = (totalSeconds) => {
