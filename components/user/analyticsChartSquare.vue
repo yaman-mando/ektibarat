@@ -2,7 +2,7 @@
     <div :class="!chartShow.showChart ? 'p-0' : 'p-4'" class="bg-white shadow-md rounded-lg relative h-full">
         <app-overlay msg="جاري جلب بيانات المخطط ..." v-if="fetching" />
 
-        <img v-if="!chartShow.showChart" class="w-full h-full" :class="{ 'cursor-pointer': chartShow.withClick }"
+        <img v-if="!chartShow.showChart" class="w-full h-full rounded-[10px]" :class="{ 'cursor-pointer': chartShow.withClick }"
             :src="chartShow.imageUrl ?? '#'" alt="" @click="chartShow.toLink?.()" />
 
         <template v-else>
