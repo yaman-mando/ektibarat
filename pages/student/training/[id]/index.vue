@@ -74,31 +74,6 @@
             </div>
             <div class="sed-p2">
               <div class="w-container">
-                <!--            <client-only>-->
-                <!--              <div-->
-                <!--                v-if="$isDev"-->
-                <!--                class="bg-red-100"-->
-                <!--              >-->
-                <!--                <lazy-prime-button-->
-                <!--                  size="small"-->
-                <!--                  @click="confirmContinueOrExitTrain"-->
-                <!--                >-->
-                <!--                  end-->
-                <!--                </lazy-prime-button>-->
-                <!--                <lazy-prime-button-->
-                <!--                  size="small"-->
-                <!--                  @click="prevQuestion"-->
-                <!--                >-->
-                <!--                  prev-->
-                <!--                </lazy-prime-button>-->
-                <!--                <lazy-prime-button-->
-                <!--                  size="small"-->
-                <!--                  @click="nextQuestion"-->
-                <!--                >-->
-                <!--                  next-->
-                <!--                </lazy-prime-button>-->
-                <!--              </div>-->
-                <!--            </client-only>-->
                 <app-overlay v-if="loadingPage" />
                 <app-exam-part-article
                   v-if="
@@ -200,6 +175,7 @@
                   currentQuestionDetailModel.isBelongToLaw &&
                   userCurrentSub.trainingLawWatchingCount > 0
                 "
+                :showEndAction="isFinished"
                 @confirmAction="onSelectAnswer(currentQuestionAnswerId)"
                 @nextAction="nextQuestion"
                 @complainAction="onComplaint"
@@ -633,8 +609,11 @@ const hasNextPart = computed(
     examDetail.value.examParts.length > activePartIndex.value + 1
 );
 
-const isEndQuestion = computed(
+const isLastExamQuestion = computed(
   () => isLastQuestion.value && !hasNextPart.value
+);
+const isFinished = computed(
+  () => isLastExamQuestion.value && isActiveQuestionAnswered.value
 );
 
 const canSelectNextQuestion = computed(
@@ -1127,21 +1106,21 @@ const onSelectAnswer = async (answerId: any) => {
         : QuestionStateEnum.wrong,
     });
 
-    if (isEndQuestion.value) {
+    if (isLastExamQuestion.value) {
       if (route.query?.isFilteredTraining) {
         exitWithoutConfirm();
       } else {
-        await subscriptionsStore.getCurrentSub(
-          globalStore.state.globalTypeUserValue!
-        );
-        if (
-          userCurrentSub.value!.remainTrainingCount - 1 > 0 &&
-          userCurrentSub.value!.remainTrainingCountPerDay - 1 > 0
-        ) {
-          await confirmContinueOrExitTrain();
-          return;
-        }
-        await exitWithoutConfirm();
+        // await subscriptionsStore.getCurrentSub(
+        //   globalStore.state.globalTypeUserValue!
+        // );
+        // if (
+        //   userCurrentSub.value!.remainTrainingCount - 1 > 0 &&
+        //   userCurrentSub.value!.remainTrainingCountPerDay - 1 > 0
+        // ) {
+        //   await confirmContinueOrExitTrain();
+        //   return;
+        // }
+        // await exitWithoutConfirm();
       }
     }
     isApplyAnswerLoading.value = false;
@@ -1481,6 +1460,18 @@ onMounted(async () => {
   if (nextQuestionModel.value) {
     getQuestionApiAndUpdateRecord(nextQuestionModel.value.id);
   }
+
+  //TODO-remove
+  // setTimeout(() => {
+  //   if (activeQuestionListModel.value) {
+  //     const index = activeQuestionListModel.value.length - 1;
+  //     activeExamQuestionInterval.value?.pauseTime();
+  //     activeQuestionIndex.value = index;
+  //     activeExamQuestionInterval.value?.startTime();
+  //     getQuestionApiAndUpdateRecord(activeQuestionListModel.value[index].id);
+  //   }
+  // }, 6000);
+  //TODO-remove
 });
 
 const pageTitle = computed(() => {

@@ -6,23 +6,40 @@
     <div class="tpa-wrapper">
       <div></div>
       <div class="tpa-buttons">
-        <app-button
-          v-if="isActiveConfirm"
-          :isDisabled="!isActiveConfirm || isLoadingConfirm"
-          :isLoading="isLoadingConfirm"
-          :label="staticLocales.trainPage.confirmAnswerLabel"
-          labelClass="text-lg text-white font-bold"
-          colorType="blue"
-          @click="onConfirm"
-        />
-        <app-button
-          v-else
-          :isDisabled="!isActiveNext"
-          label="السؤال التالي"
-          labelClass="text-lg text-white font-bold"
-          :colorType="colorTypeModel"
-          @click="onNext"
-        />
+        <template v-if="showEndAction">
+          <app-button
+            class="e-bu !justify-self-start"
+            :label="windowSize.isMobileSize ? 'خروج' : 'إنهاء التدريب'"
+            variant="outline"
+            @click="emit('endAction')"
+          >
+            <template #iconStart>
+              <img
+                alt="icon"
+                src="/images/icons/arrow-right-from-bracket.svg"
+              />
+            </template>
+          </app-button>
+        </template>
+        <template v-else>
+          <app-button
+            v-if="isActiveConfirm"
+            :isDisabled="!isActiveConfirm || isLoadingConfirm"
+            :isLoading="isLoadingConfirm"
+            :label="staticLocales.trainPage.confirmAnswerLabel"
+            labelClass="text-lg text-white font-bold"
+            colorType="blue"
+            @click="onConfirm"
+          />
+          <app-button
+            v-else
+            :isDisabled="!isActiveNext"
+            label="السؤال التالي"
+            labelClass="text-lg text-white font-bold"
+            :colorType="colorTypeModel"
+            @click="onNext"
+          />
+        </template>
       </div>
       <div class="c-e-wrapper">
         <template v-if="isActiveQuestionAnswered">
@@ -118,6 +135,7 @@ const props = withDefaults(
     isLoadingConfirm?: boolean;
     questionId?: string | number;
     canShowLaw?: boolean;
+    showEndAction?: boolean;
     questionState?: number;
   }>(),
   {}
