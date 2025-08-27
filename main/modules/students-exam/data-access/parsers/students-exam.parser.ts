@@ -1,23 +1,28 @@
-import type { StudentsExamDataModel } from '~/main/modules/students-exam/data-access/models/students-exam.model';
+import type {
+  StudentsExamDataModel,
+  StudentsExamPartDataModel,
+  StudentsExamPartQuestionDataModel,
+} from '~/main/modules/students-exam/data-access/models/students-exam.model';
 
 export const mapExamDetailModelToUi = (model: StudentsExamDataModel) => {
   model.examParts.forEach((part) => {
-    //in case article is parent part
-    if (part.isCategoryText) {
-      const firstArticlePart = part.children[0];
-      firstArticlePart.studentsQuestion.forEach((ques) => {
-        ques.articleUi = firstArticlePart.categoryDescription;
-        part.studentsQuestion.push(ques);
+    if (part.isCategoryText && part.children?.length) {
+      // collect all questions from children into the parent
+      part.children.forEach((child) => {
+        child.studentsQuestion.forEach((question) => {
+          question.articleUi = child.categoryDescription;
+          part.studentsQuestion.push(question);
+        });
       });
     }
 
-    //in case article is nested in another part
-    part.children.forEach((innerPart) => {
-      if (innerPart.isCategoryText) {
+    // still handle nested category parts inside children
+    part.children?.forEach((innerPart) => {
+      if (innerPart.isCategoryText && innerPart.children?.length) {
         innerPart.children.forEach((articlePart) => {
           articlePart.studentsQuestion.forEach((question) => {
             question.articleUi = articlePart.categoryDescription;
-            part.studentsQuestion.push(question);
+            innerPart.studentsQuestion.push(question);
           });
         });
       }
@@ -25,4 +30,27 @@ export const mapExamDetailModelToUi = (model: StudentsExamDataModel) => {
   });
 
   return model;
+};
+
+export const getAllQuestionsInExam = (
+  exam: StudentsExamDataModel
+): StudentsExamPartQuestionDataModel[] => {
+  const allQuestions: StudentsExamPartQuestionDataModel[] = [];
+
+  function collectQuestionsInPart(part: StudentsExamPartDataModel): void {
+    if (part.studentsQuestion.length) {
+      allQuestions.push(...part.studentsQuestion);
+    }
+
+    // only traverse children if NOT a categoryText part
+    if (!part.isCategoryText && part.children.length) {
+      part.children.forEach((child) => collectQuestionsInPart(child));
+    }
+  }
+
+  if (exam.examParts.length) {
+    exam.examParts.forEach((part) => collectQuestionsInPart(part));
+  }
+
+  return allQuestions;
 };

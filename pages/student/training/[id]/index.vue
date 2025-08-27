@@ -251,7 +251,6 @@ import type {
   StudentsExamAnalyzeDataModel,
   StudentsExamCustomFromTagsDTODataModel,
   StudentsExamDataModel,
-  StudentsExamPartDataModel,
   StudentsExamPartQuestionDataModel,
   StudentsExamRemoveAnswerDTODataModel,
 } from '~/main/modules/students-exam/data-access/models/students-exam.model';
@@ -276,7 +275,10 @@ import {
   webUserTrainWithUs,
 } from '~/main/utils/web-routes.utils';
 import { StudentExamStateEnum } from '~/main/modules/students-exam/data-access/constats/student-exam-state.enum';
-import { mapExamDetailModelToUi } from '~/main/modules/students-exam/data-access/parsers/students-exam.parser';
+import {
+  getAllQuestionsInExam,
+  mapExamDetailModelToUi,
+} from '~/main/modules/students-exam/data-access/parsers/students-exam.parser';
 import { QuestionStateEnum } from '~/main/modules/students-exam/data-access/constats/question-state.enum';
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
@@ -676,28 +678,6 @@ function closeArticleModal() {
   isOpenArticleModal.value = false;
 }
 
-function getAllQuestionsInExam(
-  exam: StudentsExamDataModel
-): StudentsExamPartQuestionDataModel[] {
-  const allQuestions: StudentsExamPartQuestionDataModel[] = [];
-
-  function collectQuestionsInPart(part: StudentsExamPartDataModel): void {
-    if (part.studentsQuestion.length) {
-      allQuestions.push(...part.studentsQuestion);
-    }
-
-    if (part.children.length) {
-      part.children.forEach((child) => collectQuestionsInPart(child));
-    }
-  }
-
-  if (exam.examParts.length) {
-    exam.examParts.forEach((part) => collectQuestionsInPart(part));
-  }
-
-  return allQuestions;
-}
-
 const getCurrentQuestionStorageState = () => {
   return trainingStorageState.value.questionsState[
     currentQuestionDetailModel.value!.id
@@ -710,10 +690,7 @@ const initPage = async () => {
     await globalStore.getLocalesJsonStatic();
     let currentExam = store.state.student.currentExamTrainPageData;
     if (!currentExam) {
-      const examDetailRes = await studentsExamStore.getById(
-        route.params.id as string
-      );
-      currentExam = examDetailRes;
+      currentExam = await studentsExamStore.getById(route.params.id as string);
     }
 
     const detail = mapExamDetailModelToUi(deepCloneUtil(currentExam));
@@ -758,42 +735,26 @@ const initPage = async () => {
     }
 
     if (activePartIndexVal >= 0) {
-      if (detail.examParts[activePartIndexVal].isCategoryText) {
-        activeQuestionIndexVal = detail.currentQuestionId
-          ? detail.examParts[
-              activePartIndexVal
-            ].children[0].studentsQuestion.findIndex(
-              (item) => item.id === detail.currentQuestionId
-            )
-          : 0;
-      } else {
-        activeQuestionIndexVal = detail.examParts[
-          activePartIndexVal
-        ].studentsQuestion.findIndex(
-          (question) => question.id === detail.currentQuestionId
-        );
-      }
+      activeQuestionIndexVal = detail.currentQuestionId
+        ? detail.examParts[activePartIndexVal].studentsQuestion.findIndex(
+            (question) => question.id === detail.currentQuestionId
+          )
+        : 0;
     } else {
       activePartIndexVal = 0;
     }
 
     let questionId: string | null = null;
 
-    //in case backend issue question exist in currentQuestionId but not in list
+    // in case backend issue: question exists in currentQuestionId but not in list
     if (activeQuestionIndexVal === -1) {
       activeQuestionIndexVal = 0;
     }
-    if (detail.examParts[activePartIndexVal].isCategoryText) {
-      questionId =
-        detail.examParts[activePartIndexVal].children[0].studentsQuestion[
-          activeQuestionIndexVal
-        ].id;
-    } else {
-      questionId =
-        detail.examParts[activePartIndexVal].studentsQuestion[
-          activeQuestionIndexVal
-        ].id;
-    }
+
+    questionId =
+      detail.examParts[activePartIndexVal].studentsQuestion[
+        activeQuestionIndexVal
+      ]?.id ?? null;
 
     //get current question detail by part id and question id
     const currentQuestionDetailRes = await getExamQuestionApi({
