@@ -119,7 +119,7 @@
         </template>
       </div>
 
-      <div class="rw-bank w-full">
+      <div class="rw-bank w-full mb-[80px]">
         <prime-accordion
           v-if="selectedType == examTypes.trainings"
           id="bank-training-collapse"
@@ -236,7 +236,7 @@
                   >
                     <span class="la">عدد الأسئلة</span>
                     <form-select
-                      v-model:selectedValues="form.questionCount"
+                      v-model:selectedValues="form.totalQuestionsCount"
                       inputId="questionCount"
                       class="w-[130px] h-[45px]"
                       :isDisabled="!subscriptionsStore.isPremiumSub"
@@ -463,7 +463,7 @@ export class examForm {
   onlyFlaggedQuestions = false;
   randomQuestionsSettings = [] as any[];
   questionsLevelsMin = 0;
-  questionCount: null | number = 24;
+  totalQuestionsCount=24;
   questionsLevelsMax = 10;
   customerId: any | null = null;
   sessionId: any | null = null;
@@ -1150,7 +1150,7 @@ export default {
         list.push({
           categoryId: k.id,
           questionLevel: 0,
-          questionsCount: this.form.questionCount,
+          questionsCount: this.form.totalQuestionsCount,
         });
       });
       return list;
@@ -1534,7 +1534,7 @@ export default {
 
     getTotalTime() {
       if (!this.isExams) {
-        return `${this.form.questionCount} دقيقة`;
+        return `${this.form.totalQuestionsCount} دقيقة`;
       }
       const realMinutes = calculateSumFromArray(
         this.selectedLists,
