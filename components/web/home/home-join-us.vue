@@ -5,8 +5,8 @@
   >
     <span class="p-text">{{ staticData.homeCaption1 }}</span>
     <button
-      class="normal-btn"
-      @click="navTo(null)"
+      class="normal-btn cursor-pointer"
+      @click="router.push(webUserDashboard())"
     >
       وش تنتظر؟ انضم لاختبارات الآن
     </button>
@@ -16,10 +16,11 @@
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { useRedirectService } from '~/main/useRedirectService';
 import type { GlobalTypes } from '~/main/constants/global-types';
-
+import {webUserDashboard } from '~/main/utils/web-routes.utils';
 //composable
 const globalStore = useGlobalStore();
 const redirectService = useRedirectService();
+const router = useRouter()
 
 //data
 const staticData = globalStore.staticState.homeJson;

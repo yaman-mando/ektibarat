@@ -26,6 +26,4 @@ definePageMeta({
 <style lang="scss" scoped>
 @use '@/assets/scss/mixin' as *;
 
-.home-page {
-}
 </style>

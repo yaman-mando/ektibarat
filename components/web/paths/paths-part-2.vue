@@ -40,8 +40,8 @@
       </div>
     </div>
     <div class="cl-btn">
-      <nuxt-link :to="navLink">
-        <button class="red-white-btn">انضم إلى اختبارات الآن</button>
+      <nuxt-link :to="webUserDashboard()">
+        <button class="red-white-btn cursor-pointer">انضم إلى اختبارات الآن</button>
       </nuxt-link>
     </div>
   </div>
@@ -49,6 +49,7 @@
 <script lang="ts" setup>
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { useRedirectService } from '~/main/useRedirectService';
+import { webUserDashboard } from '~/main/utils/web-routes.utils';
 
 //props
 const props = withDefaults(

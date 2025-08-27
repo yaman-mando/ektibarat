@@ -10,7 +10,7 @@
       </main>
 
       <aside v-if="windowSize.isDesktop" class="2xl:max-w-[330px] flex-1/3 min-w-[250px] flex flex-col gap-[15px]">
-        <div class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-full">
+        <div class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-auto">
           <h2 class="text-purple-e0 font-bold text-[24px] mb-[10px]">حسابك</h2>
           <ul class="space-y-[10px]">
             <template v-for="item in accountItems" :key="item.key">

@@ -1,13 +1,13 @@
 <template>
   <section class="web-subs-page">
-    <div class="select-global">
+    <!-- <div class="select-global">
       <span class="_title">نوع الباقة</span>
       <lazy-custom-switch
         v-model:active="selectedGlobalType"
         :rightLabel="'قدرات'"
         :leftLabel="'تحصيلي'"
       />
-    </div>
+    </div> -->
     <lazy-app-old-prices-list />
   </section>
 </template>

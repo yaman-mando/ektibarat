@@ -95,7 +95,7 @@
                 class="ml-4 mt-2 bg-gray-50 absolute left-[-90px] top-0 rounded-lg border border-gray-200 shadow-sm p-1"
               >
                 <div
-                  v-for="(option, index) in globalOptions"
+                  v-for="(option, index) in globalOptions.filter(k=>k.value !== 15)"
                   :key="index"
                   class="cursor-pointer py-2 px-2 hover:bg-purple-100 rounded text-sm"
                   :class="{
@@ -122,12 +122,13 @@
 
           <li
             class="cursor-pointer hover:text-purple-600 text-[20px] font-medium color-dark-63"
-            @click="toPage('personal-setting')"
+            @click="toPage('personal-setting?section=info')"
           >
             الإعدادات
           </li>
           <li
             class="cursor-pointer hover:text-purple-600 text-[20px] font-medium color-dark-63"
+            @click="toPage('personal-setting?section=support')"
           >
             المساعدة
           </li>

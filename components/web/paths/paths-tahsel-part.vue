@@ -11,9 +11,7 @@
         class="sub-card"
         :class="sub.jsonName"
         :to="
-          redirectService.getTrainingRedirectWithGlobalTypeUrl(
-            GlobalTypes.tahsele
-          )
+          webUserDashboard()
         "
       >
         <img
@@ -53,6 +51,7 @@
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { useRedirectService } from '~/main/useRedirectService';
 import { GlobalTypes } from '~/main/constants/global-types';
+import { webUserDashboard } from '~/main/utils/web-routes.utils';
 
 //constant
 const labelName = 'التحصيلي';

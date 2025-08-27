@@ -228,8 +228,8 @@
       >
         <div class="user-part">
           <button
-            class="normal-btn"
-            @click="goPanelPart(userPanelItems.learningPanel)"
+            class="normal-btn cursor-pointer"
+            @click="goToDashboard"
           >
             لوحتي التعليمية
           </button>
@@ -434,14 +434,14 @@
               </div>
             </div>
           </div>
-          <div class="pt-3 flex justify-center">
+          <!-- <div class="pt-3 flex justify-center">
             <custom-switch
               v-model:active="selectedGlobalType"
               :rightLabel="'قدرات'"
               :leftLabel="'تحصيلي'"
               :isSm="true"
             />
-          </div>
+          </div> -->
         </div>
       </div>
       <web-login-register-modal ref="loginRegisterModalRef" />
@@ -731,6 +731,11 @@ const goToLink = (key) => {
   router.push(link);
   hideList();
 };
+
+
+const goToDashboard=()=>{
+    router.push('/user-dashboard')
+}
 
 const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
   router.push({

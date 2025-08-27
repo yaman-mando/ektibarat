@@ -24,14 +24,14 @@
             label="تدرّب على اختبار القدرات"
             :rounded="true"
             class=""
-            @click="navTo(GlobalTypes.kudrat)"
+            @click="router.push(webUserDashboard())"
           />
           <app-button
             colorType="warn"
             :isLoading="loadingBtn === GlobalTypes.tahsele"
             :rounded="true"
             label="تدرّب على اختبار التحصيلي"
-            @click="navTo(GlobalTypes.tahsele)"
+            @click="router.push(webUserDashboard())"
           />
         </div>
       </div>
@@ -45,10 +45,12 @@
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { GlobalTypes } from '~/main/constants/global-types';
 import { useRedirectService } from '~/main/useRedirectService';
+import { webUserDashboard, webUserSteps } from '~/main/utils/web-routes.utils';
 
 //composable
 const globalStore = useGlobalStore();
 const redirectService = useRedirectService();
+const router = useRouter()
 
 //data
 const staticData = globalStore.staticState.homeJson;
@@ -63,6 +65,8 @@ const navTo = (type: GlobalTypes | null = null) => {
     redirectService.studentRedirect();
   }
 };
+
+
 </script>
 <style lang="scss" scoped>
 @use '@/assets/scss/mixin' as *;

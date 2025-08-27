@@ -26,7 +26,7 @@
                 class="_sub_list"
               >
                 <div
-                  v-for="sub of subscriptions"
+                  v-for="sub of subscriptions.filter(k=>k.subjectId !== 3)"
                   :key="sub.id"
                   class="_sub"
                 >
