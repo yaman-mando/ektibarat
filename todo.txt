@@ -28,3 +28,7 @@ global-img > custom-image
 mx-g-img > custom-image
 mx-img > app-image
 $vRoute.base > public.websiteUrl
+
+
+//note
+question count in trainint if train on wrong > just calculate from api
