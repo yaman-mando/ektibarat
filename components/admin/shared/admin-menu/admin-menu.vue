@@ -99,6 +99,7 @@ import { all_routers } from '~/main/constants/routes';
 import { mediaQuery } from '~/main/constants/media-query.enum';
 import { toggleAdminMenu } from '~/main/utils/shared-utils';
 import { webAuthSignup } from '~/main/utils/web-routes.utils';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 
 const MENU_ITEMS = [
   {
@@ -408,9 +409,11 @@ export default {
   setup() {
     const windowSize = useWindowSize();
     const authService = useAuth();
+    const authStore = useAuthStore();
     return {
       ...useSetupAuth(),
       ...useSetupRoute(),
+      authStore,
       windowSize,
       authService,
     };
@@ -443,7 +446,7 @@ export default {
   methods: {
     async logout() {
       if (this.appAuth.loggedIn) {
-        await this.authService.signOut({ redirect: false });
+        await this.authStore.logout();
       }
       await this.appRouter.push(webAuthSignup());
     },

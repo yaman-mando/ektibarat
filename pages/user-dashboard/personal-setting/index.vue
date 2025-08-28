@@ -1,51 +1,83 @@
 <template>
-  <user-panel-wrapper content-class="max-w-[1060px] !mx-auto" :has-l-info="false" :has-r-info="false"
-    :no-spaces="!windowSize.isDesktop" :has-prev="!windowSize.isDesktop" :page-name="selectedName">
-    <div class="flex flex-wrap 2xl:flex-nowrap gap-[20px]" :class="{ '!p-0': !windowSize.isDesktop }">
-      <main class="bg-white rounded-[8px] flex-2/3 sm:min-w-[400px] shadow-custom py-[30px] h-fit"
-        :class="{ '!py-0 !rounded-none !shadow-none': !windowSize.isDesktop }">
+  <user-panel-wrapper
+    content-class="max-w-[1060px] !mx-auto"
+    :has-l-info="false"
+    :has-r-info="false"
+    :no-spaces="!windowSize.isDesktop"
+    :has-prev="!windowSize.isDesktop"
+    :page-name="selectedName"
+  >
+    <div
+      class="flex flex-wrap 2xl:flex-nowrap gap-[20px]"
+      :class="{ '!p-0': !windowSize.isDesktop }"
+    >
+      <main
+        class="bg-white rounded-[8px] flex-2/3 sm:min-w-[400px] shadow-custom py-[30px] h-fit"
+        :class="{ '!py-0 !rounded-none !shadow-none': !windowSize.isDesktop }"
+      >
         <client-only>
           <component :is="currentComponent" />
         </client-only>
       </main>
 
-      <aside v-if="windowSize.isDesktop" class="2xl:max-w-[330px] flex-1/3 min-w-[250px] flex flex-col gap-[15px]">
-        <div class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-auto">
+      <aside
+        v-if="windowSize.isDesktop"
+        class="2xl:max-w-[330px] flex-1/3 min-w-[250px] flex flex-col gap-[15px]"
+      >
+        <div
+          class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-auto"
+        >
           <h2 class="text-purple-e0 font-bold text-[24px] mb-[10px]">حسابك</h2>
           <ul class="space-y-[10px]">
-            <template v-for="item in accountItems" :key="item.key">
-              <li v-if="item.isShow" @click="selectedSection = item.key" :class="[
-                'cursor-pointer px-3 py-2 rounded-[4px] transition h-[50px] content-center',
-                selectedSection === item.key
-                  ? 'bg-gray-fa font-bold'
-                  : 'hover:bg-gray-50 text-dark-63 font-medium',
-              ]">
+            <template
+              v-for="item in accountItems"
+              :key="item.key"
+            >
+              <li
+                v-if="item.isShow"
+                @click="selectedSection = item.key"
+                :class="[
+                  'cursor-pointer px-3 py-2 rounded-[4px] transition h-[50px] content-center',
+                  selectedSection === item.key
+                    ? 'bg-gray-fa font-bold'
+                    : 'hover:bg-gray-50 text-dark-63 font-medium',
+                ]"
+              >
                 {{ item.label }}
               </li>
             </template>
           </ul>
         </div>
 
-        <div class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-[250px]">
+        <div
+          class="bg-white rounded-[8px] shadow-custom py-[20px] px-[15px] h-[250px]"
+        >
           <h2 class="text-purple-e0 font-bold text-[24px] mb-[10px]">
             المساعدة
           </h2>
           <ul class="space-y-[10px]">
-            <li v-for="item in helpItems" :key="item.key" @click="
-              item.link ? toPage(item.link) : (selectedSection = item.key)
-              " :class="[
+            <li
+              v-for="item in helpItems"
+              :key="item.key"
+              @click="
+                item.link ? toPage(item.link) : (selectedSection = item.key)
+              "
+              :class="[
                 'cursor-pointer px-3 py-2 rounded transition h-[50px] content-center',
                 selectedSection === item.key
                   ? 'bg-gray-fa font-bold'
                   : 'hover:bg-gray-50 text-dark-63 font-medium',
-              ]">
+              ]"
+            >
               {{ item.label }}
             </li>
           </ul>
         </div>
 
-        <button @click="logout"
-          class="bg-white text-red-500 hover:bg-red-50 transition shadow px-4 py-3 rounded-lg font-semibold cursor-pointer">
+        <button
+          @click="logout"
+          class="bg-white text-red-500 hover:bg-red-50 transition shadow px-4 py-3 rounded-lg font-semibold cursor-pointer"
+        >
           تسجيل الخروج
         </button>
       </aside>
@@ -65,12 +97,15 @@ import teacherPanel from '~/components/user/personal-setting/teacher-panel.vue';
 import teachers from '~/components/user/personal-setting/teachers.vue';
 import { UserRoles } from '~/core/auth/constants/user-roles';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+import { webHomePathUtil } from '~/main/utils/web-routes.utils';
 
 //use
 const { signOut } = useAuth();
+const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
-const windowSize = useWindowSize()
+const windowSize = useWindowSize();
 const { data } = useAuth();
 const userData = data.value as UserInfoDataModel;
 
@@ -81,7 +116,11 @@ const accountItems = [
   { key: 'preferences', label: 'التفضيلات', isShow: true },
   { key: 'partner', label: 'شريك اختبارات', isShow: true },
   { key: 'teacher-panel', label: 'لوحة المدرب', isShow: false },
-  { key: 'teachers', label: 'المدربون', isShow: [UserRoles.student].includes(userData.role) }
+  {
+    key: 'teachers',
+    label: 'المدربون',
+    isShow: [UserRoles.student].includes(userData.role),
+  },
 ];
 
 const helpItems = [
@@ -99,7 +138,7 @@ const validSections: any = [
   'support',
   'contact',
   'teacher-panel',
-  'teachers'
+  'teachers',
 ];
 
 const grades = [
@@ -129,9 +168,9 @@ const currentComponent = computed(() => {
     case 'contact':
       return contactUs;
     case 'teacher-panel':
-      return teacherPanel
+      return teacherPanel;
     case 'teachers':
-      return teachers
+      return teachers;
     default:
       return 'div';
   }
@@ -149,7 +188,8 @@ const selectedName = computed(() => {
 });
 
 const logout = async () => {
-  await signOut({ callbackUrl: '/' });
+  await authStore.logout();
+  await router.replace(webHomePathUtil());
   document.getElementById('web-footer')?.classList.remove('is-user-panel');
 };
 

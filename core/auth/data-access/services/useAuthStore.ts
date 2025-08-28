@@ -9,6 +9,7 @@ import { defineStore } from 'pinia';
 import { reactive, toRefs } from 'vue';
 import { AuthTokenCookieNameEnum } from '~/core/auth/constants/auth-token-cookie-name.enum';
 import { IS_PRODUCTION_APP } from '~/main/utils/shared-utils';
+import { addSeconds } from 'date-fns';
 
 //store
 export const useAuthStore = defineStore('auth-store', () => {
@@ -71,15 +72,30 @@ export const useAuthStore = defineStore('auth-store', () => {
     authState.rawRefreshToken.value = model.refreshToken;
   };
 
+  const clearAuthCookie = () => {
+    ekToken.value = null;
+    ekRefreshToken.value = null;
+    ekTokenExpire.value = null;
+    //update state
+    authState.rawToken.value = null;
+    authState.rawRefreshToken.value = null;
+  };
+
+  const logout = async () => {
+    await auth.signOut({ redirect: false });
+    clearAuthCookie();
+  };
+
   return {
     state: toRefs(readonly(state)),
     //actions
     setAuthCookie,
+    clearAuthCookie,
     loginGoogle,
     loginApple,
     loginOTP,
     loginLocal: auth.signIn,
     fetchUser: auth.getSession,
-    logout: auth.signOut,
+    logout,
   };
 });

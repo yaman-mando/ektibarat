@@ -95,7 +95,9 @@
                 class="ml-4 mt-2 bg-gray-50 absolute left-[-90px] top-0 rounded-lg border border-gray-200 shadow-sm p-1"
               >
                 <div
-                  v-for="(option, index) in globalOptions.filter(k=>k.value !== 15)"
+                  v-for="(option, index) in globalOptions.filter(
+                    (k) => k.value !== 15
+                  )"
                   :key="index"
                   class="cursor-pointer py-2 px-2 hover:bg-purple-100 rounded text-sm"
                   :class="{
@@ -198,6 +200,7 @@ import {
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
 import { UserRoles } from '~/core/auth/constants/user-roles';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 
 const props = withDefaults(
   defineProps<{
@@ -209,8 +212,9 @@ const props = withDefaults(
 );
 
 //composable
+const authStore = useAuthStore();
 const runtimeConfig = useRuntimeConfig();
-const { data, signOut } = useAuth();
+const { data } = useAuth();
 const { appAuth } = useSetupAuth();
 const subscriptionsStore = useSubscriptionsStore();
 const route = useRoute();
@@ -285,7 +289,8 @@ const selectExam = (exam) => {
 const sidebarRef = ref(null);
 
 const logout = async () => {
-  await signOut({ callbackUrl: '/' });
+  await authStore.logout();
+  await router.replace(webHomePathUtil());
   document.getElementById('web-footer')?.classList.remove('is-user-panel');
 };
 

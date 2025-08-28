@@ -3,7 +3,6 @@ import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import { webHomePathUtil } from '~/main/utils/web-routes.utils';
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const saved = false;
   const ekTokenExpire = useCookie(AuthTokenCookieNameEnum.tokenExpireDate);
   const ekRefreshToken = useCookie(AuthTokenCookieNameEnum.refreshToken);
   const authStore = useAuthStore();
@@ -25,6 +24,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         tokenExpireDate: res.data.tokenExpireDate,
       });
     } catch (err) {
+      authStore.clearAuthCookie();
       return navigateTo(webHomePathUtil(), { replace: true });
     }
   }

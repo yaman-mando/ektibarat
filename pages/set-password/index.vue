@@ -206,7 +206,7 @@ export default {
 
     async goForgetPassword() {
       if (this.appAuth.loggedIn) {
-        await this.authStore.logout({ redirect: false });
+        await this.authStore.logout();
       }
       await this.appRouter.push(webAuthForgetPassword());
     },

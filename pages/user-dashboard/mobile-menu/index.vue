@@ -109,9 +109,12 @@ import { ImageSize } from '~/main/constants/image-size';
 import { ImagesFolderName } from '~/main/constants/images-folder-name';
 import { globalSubList } from '~/main/modules/user-panel/data-access/user-panel.enum';
 import { useUserPanelStore } from '~/store/user-panel';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+import { webHomePathUtil } from '~/main/utils/web-routes.utils';
 
+const authStore = useAuthStore();
 const router = useRouter();
-const { data, signOut } = useAuth();
+const { data } = useAuth();
 const userPanelStore = useUserPanelStore();
 
 const userData = computed(() => data.value as UserInfoDataModel);
@@ -165,7 +168,8 @@ const selectExam = (exam) => {
 };
 
 const logout = async () => {
-  await signOut({ callbackUrl: '/' });
+  await authStore.logout();
+  await router.replace(webHomePathUtil());
   document.getElementById('web-footer')?.classList.remove('is-user-panel');
 };
 </script>
