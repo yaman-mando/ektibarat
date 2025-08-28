@@ -4,23 +4,28 @@ import type {
   AuthLoginProviderDTODataModel,
   UserInfoDataModel,
 } from '~/core/auth/data-access/models/auth.model';
-import {
-  webGeneralSelectionPathUtil,
-  webUserPanelTraining,
-  webUserPanelTrainingWithQuery,
-  webUserSteps,
-  webUserTrainWithUs,
-} from '~/main/utils/web-routes.utils';
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { defineStore } from 'pinia';
 import { reactive, toRefs } from 'vue';
-import { UserRoles } from '~/core/auth/constants/user-roles';
-import { adminRootPathUtil } from '~/main/utils/admin-routes.utils';
-import SubscribesPanel from '~/components/web/shared/user-panel/subscribes-panel/subscribes-panel.vue';
-import { UserPlanSubscribedEnum } from '../../constants/user-plan-subscribed.enum';
+import { AuthTokenCookieNameEnum } from '~/core/auth/constants/auth-token-cookie-name.enum';
+import { IS_PRODUCTION_APP } from '~/main/utils/shared-utils';
 
 //store
 export const useAuthStore = defineStore('auth-store', () => {
+  const ekToken = useCookie(AuthTokenCookieNameEnum.token);
+  const ekRefreshToken = useCookie(AuthTokenCookieNameEnum.refreshToken, {
+    maxAge: 60 * 60 * 24 * 30 * 6, // 6 months
+    httpOnly: false,
+    sameSite: 'lax',
+    secure: IS_PRODUCTION_APP,
+  });
+  const ekTokenExpire = useCookie(AuthTokenCookieNameEnum.tokenExpireDate, {
+    maxAge: 60 * 60 * 24 * 30 * 6, // 6 months, same as refresh token
+    httpOnly: false,
+    secure: IS_PRODUCTION_APP,
+    sameSite: 'lax',
+  });
+
   const globalStore = useGlobalStore();
   const repo = useAuthRepo();
   const auth = useAuth();
@@ -37,7 +42,7 @@ export const useAuthStore = defineStore('auth-store', () => {
     isLoggedIn,
     userData,
     isLoadingProfile,
-    token
+    token,
   });
 
   const loginGoogle = (model: AuthLoginProviderDTODataModel) => {
@@ -52,40 +57,25 @@ export const useAuthStore = defineStore('auth-store', () => {
     return repo.loginOTP(model);
   };
 
-  const setAuthCookie = (model: { token: string; refreshToken: string }) => {
+  const setAuthCookie = (model: {
+    token: string;
+    refreshToken: string;
+    tokenExpireDate: string;
+  }) => {
+    //update cookie
+    ekToken.value = model.token;
+    ekRefreshToken.value = model.refreshToken;
+    ekTokenExpire.value = model.tokenExpireDate;
+    //update state
     authState.rawToken.value = model.token;
     authState.rawRefreshToken.value = model.refreshToken;
   };
-
-  const redirectUrlAfterLogin = () => {
-    const url = redirectUrlCookie.value;
-    if (url) {
-      redirectUrlCookie.value = null;
-      return url;
-    }
-
-    if (state.userData?.role == UserRoles.admin) {
-      return adminRootPathUtil();
-    }
-
-    if(state.userData?.planSubscribed === UserPlanSubscribedEnum.Subscribed){
-      return webUserSteps()
-    }
-
-    return webUserTrainWithUs()
-
-    // return globalStore.state.globalTypeUserValue
-    //   ? webUserPanelTraining()
-    //   : webGeneralSelectionPathUtil();
-  };
-
 
   return {
     state: toRefs(readonly(state)),
     //actions
     setAuthCookie,
     loginGoogle,
-    redirectUrlAfterLogin,
     loginApple,
     loginOTP,
     loginLocal: auth.signIn,

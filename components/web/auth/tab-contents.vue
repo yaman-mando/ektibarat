@@ -178,6 +178,7 @@ const loginByApple = async () => {
           id: res.id,
           token: res.token,
           refreshToken: res.refreshToken,
+          tokenExpireDate: res.tokenExpireDate,
           email: res.email,
           showWelcomeModal: res.showWelcomeModal,
         });

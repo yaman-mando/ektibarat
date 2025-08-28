@@ -23,10 +23,13 @@ import {
 import { delay, filter, mergeMap, of, Subject } from 'rxjs';
 import { useGlobalStore } from '~/main/useGlobalStore';
 import { RouteHelper } from './main/utils/route-helper';
+import { useRedirectService } from '~/main/useRedirectService';
+import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 
 declare const google: any;
 
 //composable
+const redirectService = useRedirectService();
 const auth = useAuth();
 const router = useRouter();
 const route = useRoute();
@@ -153,6 +156,7 @@ const handleCredentialResponse = async (response: { credential: string }) => {
       id: res.id,
       token: res.token,
       refreshToken: res.refreshToken,
+      tokenExpireDate: res.tokenExpireDate,
       email: res.email,
       showWelcomeModal: res.showWelcomeModal,
     });
@@ -169,10 +173,11 @@ const signInAction = async (data: SignInActionDataUiModel) => {
     authStore.setAuthCookie({
       token: data.token,
       refreshToken: data.refreshToken!,
+      tokenExpireDate: data.tokenExpireDate,
     });
-    
+
     if (!userData.value) {
-     await auth.getSession();
+      await auth.getSession();
     }
     if (userData.value?.id) {
       localStorageStore.setRegisterInfo(userData.value?.id, true);
@@ -181,13 +186,18 @@ const signInAction = async (data: SignInActionDataUiModel) => {
       handleClarityUser({ email: data.email, id: data.id });
       handleFcm(data.id);
     }
-    
-    if (data.showWelcomeModal || (!userData.value?.firstName && !userData.value?.lastName)) {
+
+    if (
+      data.showWelcomeModal ||
+      (!userData.value?.firstName && !userData.value?.lastName)
+    ) {
       localStorageStore.setFirstRegister(data.id);
-      router.push(RouteHelper.userInformationSteps())
-      return
-      }
-    await router.push(authStore.redirectUrlAfterLogin());
+      router.push(RouteHelper.userInformationSteps());
+      return;
+    }
+    await router.push(
+      redirectService.redirectUrlAfterLogin(userData.value as UserInfoDataModel)
+    );
   } catch (e) {
     console.log(e);
   }

@@ -1,5 +1,4 @@
 import axios, { type AxiosError } from 'axios';
-import { useAuth } from '#imports';
 import {
   webAuthPathUtil,
   webErrorPathUtil,
@@ -21,6 +20,8 @@ export default defineNuxtPlugin(() => {
     (config) => {
       const token = authState.token.value;
       if (token) {
+        // console.log(authState.rawToken.value);
+        // console.log(authState.rawRefreshToken.value);
         config.headers.Authorization = token;
       }
       return config;
