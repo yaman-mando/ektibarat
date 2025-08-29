@@ -236,7 +236,7 @@ function toTrining(step: step) {
     (step.categoryInfo?.numberQuestion ?? 0) -
     (step.categoryInfo?.numberQuestionComplete ?? 0)
   );
-  if (!step.categoryInfo?.isWrong) {
+  if (!step.categoryInfo?.isWrong || step.type === 2) {
     form.value.randomQuestionsSettings.push({
       categoryId: step.categoryInfo?.categoryId,
       questionLevel: 0,
