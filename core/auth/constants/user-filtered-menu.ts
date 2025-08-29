@@ -94,7 +94,7 @@ export const userMenuItems = [
   {
     name: 'الاشتراكات',
     icon: '/images/svg/user-panel/king.svg',
-    route: '/user-dashboard/personal-setting?section=subscriptions',
+    route: '/user-dashboard/subscriptions',
     isMobile: false,
     isDesktop: true,
     allowRoles: [],

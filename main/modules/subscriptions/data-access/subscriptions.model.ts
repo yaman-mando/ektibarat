@@ -66,3 +66,11 @@ export type SubscriptionsItemDataModel = {
   features: SubscriptionsItemFeatureDataModel[];
   subscriptionsServices: SubscriptionsItemServiceDataModel[];
 };
+
+export type SubscriptionsResponse={
+  features:[],
+  id:number,
+  subscriptions:SubscriptionsItemDataModel[],
+  title:string
+
+}

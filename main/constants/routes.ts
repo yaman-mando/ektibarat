@@ -125,6 +125,9 @@ export const APP_ROUTES = {
       root:'student-analytics'  
     }
     },
+    subscriptions:{
+      root:'subscriptions'
+    }
     
   },
   userInformation:{
@@ -1508,6 +1511,18 @@ export const all_routers = [
     allowTeacher: true,
     allowEmployee: false,
     allowSchollManager: false,
+    allowUser: false,
+    isPublic: false,
+    isAuth: true,
+  },
+  {
+    path: `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.subscriptions.root}`,
+    name: 'subscriptions',  
+    allowAdmin: true,
+    allowStudent: true,
+    allowTeacher: true,
+    allowEmployee: true,
+    allowSchollManager: true,
     allowUser: false,
     isPublic: false,
     isAuth: true,
