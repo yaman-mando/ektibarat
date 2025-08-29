@@ -21,7 +21,7 @@ export default defineNuxtPlugin(() => {
     (config) => {
       const token = authStore.token;
       const refreshToken = authStore.refreshToken;
-      if (token && !config.url?.includes('/refreshToken')) {
+      if (token) {
         // console.log(token);
         // console.log(refreshToken);
         config.headers.Authorization = `Bearer ${token}`;

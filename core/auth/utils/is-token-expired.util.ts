@@ -1,8 +1,8 @@
 import { differenceInSeconds } from 'date-fns';
 
+export const tokenThresholdSeconds = 20;
 export const isTokenExpiredUtil = (
-  expireDate: string | null | undefined,
-  thresholdSeconds = 20
+  expireDate: string | null | undefined
 ): boolean => {
   if (!expireDate) return false;
 
@@ -10,6 +10,6 @@ export const isTokenExpiredUtil = (
   if (isNaN(expire.getTime())) return true;
 
   const diff = differenceInSeconds(expire, new Date());
-  console.log(diff);
-  return diff <= thresholdSeconds;
+  console.log(diff - tokenThresholdSeconds, 'remain');
+  return diff <= tokenThresholdSeconds;
 };

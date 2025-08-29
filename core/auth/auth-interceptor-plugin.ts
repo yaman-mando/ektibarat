@@ -8,7 +8,7 @@ export default defineNuxtPlugin(() => {
       const req = request as string | null;
       const token = authStore.token;
       const refreshToken = authStore.refreshToken;
-      if (token && !req?.includes('/refreshToken')) {
+      if (token) {
         // console.log(token);
         // console.log(refreshToken);
         options.headers.set('Authorization', `Bearer ${token}`);
