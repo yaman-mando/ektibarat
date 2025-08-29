@@ -421,11 +421,15 @@ export default {
           neededDegree: this.form.neededDegree,
         });
         this.isShownConfirm = false;
-        const id = res.data.id;
-        this.appRouter.push(webUserTrainingPlan());
+        await this.onSuccessLastStep();
       } finally {
         this.loadingForm = false;
       }
+    },
+    async onSuccessLastStep() {
+      //request profile here and go to steps
+      await this.appAuth.fetchUser();
+      await this.appRouter.push(webUserSteps());
     },
     async getRequiredHours() {
       try {

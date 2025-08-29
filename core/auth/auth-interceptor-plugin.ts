@@ -5,6 +5,8 @@ export default defineNuxtPlugin(() => {
     onRequest({ options }) {
       const token = authState.token.value;
       if (token) {
+        // console.log(authState.rawToken.value);
+        // console.log(authState.rawRefreshToken.value);
         options.headers.set('Authorization', token);
       }
     },

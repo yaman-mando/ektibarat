@@ -468,6 +468,7 @@ import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/use
 import type WebLoginRegisterModal from '~/components/web/shared/web-login-register-modal.vue';
 import {
   webFaqsPathUtil,
+  webHomePathUtil,
   webPathKudratPathUtil,
   webPathTahselPathUtil,
   webPricesPathUtil,
@@ -536,7 +537,7 @@ const imageExt = ImageExt;
 const userPanelItems = UserPanelItems;
 
 //composable
-const { status, data, signOut } = useAuth();
+const { status, data } = useAuth();
 const authState = useAuthState();
 const windowSize = useWindowSize();
 const router = useRouter();
@@ -664,7 +665,8 @@ const toUserDashboard = () => {
 };
 
 const logout = async () => {
-  await signOut({ callbackUrl: '/' });
+  await authStore.logout();
+  await router.replace(webHomePathUtil());
   document.getElementById('web-footer')?.classList.remove('is-user-panel');
 };
 const openCollapse = (index: number) => {
@@ -732,10 +734,9 @@ const goToLink = (key) => {
   hideList();
 };
 
-
-const goToDashboard=()=>{
-    router.push('/user-dashboard')
-}
+const goToDashboard = () => {
+  router.push('/user-dashboard');
+};
 
 const goPanelPart = (key: keyof typeof UserPanelItemsRecord) => {
   router.push({

@@ -5,6 +5,7 @@ export type SignInActionDataUiModel = {
   email: string | null;
   token: string;
   refreshToken: string | null;
+  tokenExpireDate: string;
   showWelcomeModal: boolean;
 };
 

@@ -60,6 +60,7 @@ import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 import { authEvents } from '~/core/auth/data-access/services/useAuthEvents';
 import { useAuthState } from '#imports';
 import { webAuthForgetPassword } from '~/main/utils/web-routes.utils';
+import type { LoginDataModel } from '~/core/auth/data-access/models/auth.model';
 
 export default {
   components: {
@@ -104,22 +105,20 @@ export default {
         const { valid } = await this.formRef!.validate();
         if (valid) {
           this.isSaving = true;
-          await this.authStore.loginLocal(
-            {
-              username: this.form.userName!,
-              password: this.form.password!,
-            },
-            { redirect: false }
-          );
+          const res = await this.$axios.post(`/identity/login`, {
+            username: this.form.userName!,
+            password: this.form.password!,
+          });
+          const data = res.data as LoginDataModel;
           this.showSuccess({ summary: 'تمت عملية التسجيل بنجاح' });
           this.isSaving = false;
-
           authEvents.emitSignIn({
-            id: this.authStore.state.userData!.id,
-            email: this.authStore.state.userData!.email,
-            refreshToken: this.authState.refreshToken.value,
+            id: data.id,
+            email: data.email,
+            refreshToken: data.refreshToken,
+            tokenExpireDate: data.tokenExpireDate,
             showWelcomeModal: false,
-            token: this.authState.rawToken.value!,
+            token: data.token,
           });
         } else {
           this.passEntered = true;

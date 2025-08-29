@@ -608,38 +608,21 @@ export default {
         }
 
         if (activePartIndex >= 0) {
-          if (examDetail.examParts[activePartIndex]?.isCategoryText) {
-            activeQuestionIndex = examDetail.currentQuestionId
-              ? examDetail.examParts[
-                  activePartIndex
-                ].children[0].studentsQuestion.findIndex(
-                  (item) => item.id === examDetail.currentQuestionId
-                )
-              : 0;
-          } else {
-            activeQuestionIndex = examDetail.examParts[
-              activePartIndex
-            ].studentsQuestion.findIndex(
-              (question) => question.id === examDetail.currentQuestionId
-            );
-          }
+          activeQuestionIndex = examDetail.currentQuestionId
+            ? examDetail.examParts[activePartIndex].studentsQuestion.findIndex(
+                (question) => question.id === examDetail.currentQuestionId
+              )
+            : 0;
         } else {
           activePartIndex = 0;
         }
 
         let questionId: string | null = null;
 
-        if (examDetail.examParts[activePartIndex]?.isCategoryText) {
-          questionId =
-            examDetail.examParts[activePartIndex].children[0].studentsQuestion[
-              activeQuestionIndex
-            ].id;
-        } else {
-          questionId =
-            examDetail.examParts[activePartIndex]?.studentsQuestion[
-              activeQuestionIndex
-            ].id;
-        }
+        questionId =
+          examDetail.examParts[activePartIndex]?.studentsQuestion[
+            activeQuestionIndex
+          ]?.id ?? null;
 
         const currentQuestionDetailRes = await this.$store.dispatch(
           'student/getQuestionDetailByExamIdAndQuestionId',
