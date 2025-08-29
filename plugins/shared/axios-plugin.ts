@@ -5,9 +5,10 @@ import {
 } from '~/main/utils/web-routes.utils';
 import { ErrorsRecord } from '~/main/constants/errors.enum';
 import { useGlobalStore } from '~/main/useGlobalStore';
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 
 export default defineNuxtPlugin(() => {
-  const authState = useAuthState();
+  const authStore = useAuthStore();
   const config = useRuntimeConfig();
   const globalStore = useGlobalStore();
   const toastMessage = useToastMessage();
@@ -18,11 +19,12 @@ export default defineNuxtPlugin(() => {
 
   $axios.interceptors.request.use(
     (config) => {
-      const token = authState.token.value;
-      if (token) {
-        // console.log(authState.rawToken.value);
-        // console.log(authState.rawRefreshToken.value);
-        config.headers.Authorization = token;
+      const token = authStore.token;
+      const refreshToken = authStore.refreshToken;
+      if (token && !config.url?.includes('/refreshToken')) {
+        // console.log(token);
+        // console.log(refreshToken);
+        config.headers.Authorization = `Bearer ${token}`;
       }
       return config;
     },

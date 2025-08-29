@@ -9,7 +9,6 @@ import { defineStore } from 'pinia';
 import { reactive, toRefs } from 'vue';
 import { AuthTokenCookieNameEnum } from '~/core/auth/constants/auth-token-cookie-name.enum';
 import { IS_PRODUCTION_APP } from '~/main/utils/shared-utils';
-import { addSeconds } from 'date-fns';
 
 //store
 export const useAuthStore = defineStore('auth-store', () => {
@@ -27,23 +26,19 @@ export const useAuthStore = defineStore('auth-store', () => {
     sameSite: 'lax',
   });
 
-  const globalStore = useGlobalStore();
   const repo = useAuthRepo();
   const auth = useAuth();
   const authState = useAuthState();
-  const redirectUrlCookie = useCookie('redirectUrl');
   const isLoggedIn = computed(() => authState.status.value === 'authenticated');
   const isLoadingProfile = computed(() => authState.loading.value);
   const userData = computed(
     () => authState.data.value as UserInfoDataModel | null
   );
-  const token = computed(() => authState.rawToken.value);
 
   const state = reactive({
     isLoggedIn,
     userData,
     isLoadingProfile,
-    token,
   });
 
   const loginGoogle = (model: AuthLoginProviderDTODataModel) => {
@@ -88,6 +83,9 @@ export const useAuthStore = defineStore('auth-store', () => {
 
   return {
     state: toRefs(readonly(state)),
+    token: ekToken,
+    refreshToken: ekRefreshToken,
+    tokenExpire: ekTokenExpire,
     //actions
     setAuthCookie,
     clearAuthCookie,
