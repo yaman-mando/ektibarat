@@ -10,10 +10,16 @@ import { defineStore } from 'pinia';
 import { reactive, toRefs } from 'vue';
 import { AuthTokenCookieNameEnum } from '~/core/auth/constants/auth-token-cookie-name.enum';
 import { IS_PRODUCTION_APP } from '~/main/utils/shared-utils';
-import { isTokenExpiredUtil } from '~/core/auth/utils/is-token-expired.util';
+import {
+  isTokenExpiredUtil,
+  tokenThresholdSeconds,
+} from '~/core/auth/utils/is-token-expired.util';
+import { addSeconds } from 'date-fns';
 
 //store
 export const useAuthStore = defineStore('auth-store', () => {
+  const runtimeConfig = useRuntimeConfig();
+
   const ekToken = useCookie(AuthTokenCookieNameEnum.token); //this age for this will be set in nuxt config
   const ekRefreshToken = useCookie(AuthTokenCookieNameEnum.refreshToken, {
     maxAge: 60 * 60 * 24 * 30 * 6, // 6 months
@@ -64,6 +70,12 @@ export const useAuthStore = defineStore('auth-store', () => {
     ekToken.value = model.token;
     ekRefreshToken.value = model.refreshToken;
     ekTokenExpire.value = model.tokenExpireDate;
+    //test
+    // ekTokenExpire.value = addSeconds(
+    //   new Date(),
+    //   tokenThresholdSeconds + 15
+    // ).toISOString();
+    //end test
     //update state
     authState.rawToken.value = model.token;
     authState.rawRefreshToken.value = model.refreshToken;
@@ -83,10 +95,16 @@ export const useAuthStore = defineStore('auth-store', () => {
     clearAuthCookie();
   };
 
+  let isLoadingRefresh = false;
   const tokenRefreshInterceptorHandler = async () => {
-    if (import.meta.client && isTokenExpiredUtil(ekTokenExpire.value)) {
-      const req = useFetch<AuthRefreshTokenDataModel>(
-        '/identity/refreshToken',
+    if (!ekToken.value || !ekRefreshToken.value) return;
+
+    if (!isTokenExpiredUtil(ekTokenExpire.value) || isLoadingRefresh) return;
+
+    try {
+      isLoadingRefresh = true;
+      const data = await $fetch<AuthRefreshTokenDataModel>(
+        `${runtimeConfig.public.apiUrl}/identity/refreshToken`,
         {
           method: 'POST',
           body: {
@@ -94,8 +112,6 @@ export const useAuthStore = defineStore('auth-store', () => {
           },
         }
       );
-      await req.execute();
-      const data = req.data.value;
       if (data) {
         setAuthCookie({
           token: data.token,
@@ -103,14 +119,18 @@ export const useAuthStore = defineStore('auth-store', () => {
           tokenExpireDate: data.tokenExpireDate,
         });
       }
+    } catch (e) {
+      console.error(JSON.stringify(e));
+      clearAuthCookie();
+      throw e;
+    } finally {
+      isLoadingRefresh = false;
     }
   };
 
   return {
     state: toRefs(readonly(state)),
-    token: ekToken,
-    refreshToken: ekRefreshToken,
-    tokenExpire: ekTokenExpire,
+    getToken: () => ekToken.value,
     //actions
     tokenRefreshInterceptorHandler,
     setAuthCookie,

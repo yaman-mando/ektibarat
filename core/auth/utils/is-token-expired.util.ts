@@ -10,6 +10,6 @@ export const isTokenExpiredUtil = (
   if (isNaN(expire.getTime())) return true;
 
   const diff = differenceInSeconds(expire, new Date());
-  console.log(diff - tokenThresholdSeconds, 'remain');
+  // console.log(diff - tokenThresholdSeconds, 'remain');
   return diff <= tokenThresholdSeconds;
 };

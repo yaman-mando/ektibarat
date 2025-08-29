@@ -263,7 +263,7 @@ function onPlayerPause() {
 
 async function onPlayerReady(event: { target: { player: any } }) {
   player = event.target.player;
-  const token = authStore.token; // حسب اسم الحقل عندك
+  const token = authStore.getToken(); // حسب اسم الحقل عندك
 
   if (player.tech().vhs?.xhr) {
     player.tech().vhs.xhr.beforeRequest = function (options: any) {

@@ -8,7 +8,7 @@ export const useSetupAuth = () => {
   const authStore = useAuthStore();
 
   const getToken = () => {
-    const token = authStore.token;
+    const token = authStore.getToken();
     return token ? `Bearer ${token}` : '';
   };
 
