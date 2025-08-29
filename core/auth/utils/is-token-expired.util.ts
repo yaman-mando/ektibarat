@@ -1,6 +1,6 @@
 import { differenceInSeconds } from 'date-fns';
 
-export const tokenThresholdSeconds = 20;
+export const tokenThresholdSeconds = 30;
 export const isTokenExpiredUtil = (
   expireDate: string | null | undefined
 ): boolean => {

@@ -18,12 +18,15 @@ export default defineNuxtPlugin(() => {
   });
 
   $axios.interceptors.request.use(
-    (config) => {
+    async (config) => {
       const token = authStore.token;
       const refreshToken = authStore.refreshToken;
+
+      //handle refresh
+      await authStore.tokenRefreshInterceptorHandler();
+
+      //set token in the headers
       if (token) {
-        // console.log(token);
-        // console.log(refreshToken);
         config.headers.Authorization = `Bearer ${token}`;
       }
       return config;

@@ -2,6 +2,7 @@ import { useAuthRepo } from '~/core/auth/data-access/services/useAuthRepo';
 import type {
   AuthLoginOtpDTODataModel,
   AuthLoginProviderDTODataModel,
+  AuthRefreshTokenDataModel,
   UserInfoDataModel,
 } from '~/core/auth/data-access/models/auth.model';
 import { useGlobalStore } from '~/main/useGlobalStore';
@@ -9,10 +10,11 @@ import { defineStore } from 'pinia';
 import { reactive, toRefs } from 'vue';
 import { AuthTokenCookieNameEnum } from '~/core/auth/constants/auth-token-cookie-name.enum';
 import { IS_PRODUCTION_APP } from '~/main/utils/shared-utils';
+import { isTokenExpiredUtil } from '~/core/auth/utils/is-token-expired.util';
 
 //store
 export const useAuthStore = defineStore('auth-store', () => {
-  const ekToken = useCookie(AuthTokenCookieNameEnum.token);
+  const ekToken = useCookie(AuthTokenCookieNameEnum.token); //this age for this will be set in nuxt config
   const ekRefreshToken = useCookie(AuthTokenCookieNameEnum.refreshToken, {
     maxAge: 60 * 60 * 24 * 30 * 6, // 6 months
     httpOnly: false,
@@ -81,12 +83,36 @@ export const useAuthStore = defineStore('auth-store', () => {
     clearAuthCookie();
   };
 
+  const tokenRefreshInterceptorHandler = async () => {
+    if (import.meta.client && isTokenExpiredUtil(ekTokenExpire.value)) {
+      const req = useFetch<AuthRefreshTokenDataModel>(
+        '/identity/refreshToken',
+        {
+          method: 'POST',
+          body: {
+            refreshToken: ekRefreshToken.value,
+          },
+        }
+      );
+      await req.execute();
+      const data = req.data.value;
+      if (data) {
+        setAuthCookie({
+          token: data.token,
+          refreshToken: data.refreshToken,
+          tokenExpireDate: data.tokenExpireDate,
+        });
+      }
+    }
+  };
+
   return {
     state: toRefs(readonly(state)),
     token: ekToken,
     refreshToken: ekRefreshToken,
     tokenExpire: ekTokenExpire,
     //actions
+    tokenRefreshInterceptorHandler,
     setAuthCookie,
     clearAuthCookie,
     loginGoogle,

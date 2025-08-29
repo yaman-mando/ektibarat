@@ -19,7 +19,7 @@ export type RefreshTokenDTODataModel = {
   refreshToken: string;
 };
 
-export type RefreshTokenDataModel = {
+export type AuthRefreshTokenDataModel = {
   id: number;
   email: string | null;
   token: string;

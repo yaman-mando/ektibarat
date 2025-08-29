@@ -1,4 +1,3 @@
-import { AuthTokenCookieNameEnum } from '~/core/auth/constants/auth-token-cookie-name.enum';
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import { webHomePathUtil } from '~/main/utils/web-routes.utils';
 import {
@@ -10,8 +9,6 @@ import { addSeconds } from 'date-fns';
 const testModeApplied = false; // test
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const ekTokenExpire = useCookie(AuthTokenCookieNameEnum.tokenExpireDate);
-  const ekRefreshToken = useCookie(AuthTokenCookieNameEnum.refreshToken);
   const authStore = useAuthStore();
 
   // test for force expire in the 10s (only first time)
@@ -23,11 +20,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   //   testModeApplied = true;
   // }
 
-  if (isTokenExpiredUtil(ekTokenExpire.value)) {
+  if (isTokenExpiredUtil(authStore.tokenExpire) && import.meta.server) {
     try {
       const $axios = useNuxtApp().$axios;
       const res = await $axios.post('/identity/refreshToken', {
-        refreshToken: ekRefreshToken.value,
+        refreshToken: authStore.refreshToken,
       });
 
       authStore.setAuthCookie({
