@@ -6,6 +6,7 @@ import type {
   slidersResponse,
   stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeForTeacherResponse, studentAnalyzeResponse, studentStages,
   studentSubscriptionResponse,
+  subscriptionsParentsResponse,
   teachersFinancialResponse,
   TPstudentDataResponse,
   trainingAnalyzeSimpleResponse, trainingPlanInfoSimpleResponse, trainingPlanSummaryResponse
@@ -39,7 +40,8 @@ interface UserPanelState {
     trainingAnalyzeSimple: boolean,
     planInfoSimple: boolean,
     teachersFinancial:boolean,
-    studentSubscriptionDetails:boolean
+    studentSubscriptionDetails:boolean,
+    subscriptionsParents:boolean
   }
   globalType: number,
   lessonsCategories: lessonsCategoriesDataModel[] | null,
@@ -68,6 +70,7 @@ interface UserPanelState {
   planInfoSimple: trainingPlanInfoSimpleResponse | null,
   teachersFinancial:teachersFinancialResponse | null,
   studentSubscriptionDetails:studentSubscriptionResponse | null
+  subscriptionsParents:subscriptionsParentsResponse | null
 }
 
 
@@ -98,7 +101,8 @@ export const useUserPanelStore = defineStore('userPanel', {
       trainingAnalyzeSimple: false,
       planInfoSimple: false,
       teachersFinancial:false,
-      studentSubscriptionDetails:false
+      studentSubscriptionDetails:false,
+      subscriptionsParents:false
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
@@ -126,7 +130,8 @@ export const useUserPanelStore = defineStore('userPanel', {
     trainingAnalyzeSimple: null,
     planInfoSimple: null,
     teachersFinancial:null,
-    studentSubscriptionDetails:null
+    studentSubscriptionDetails:null,
+    subscriptionsParents:null
   }),
 
   actions: {
@@ -652,6 +657,23 @@ export const useUserPanelStore = defineStore('userPanel', {
         return null
       } finally {
         this.fetching.studentSubscriptionDetails = false
+      }
+    },
+
+
+    async getStudentSubscriptionsParent(): Promise<subscriptionsParentsResponse | null> {
+      try {
+        this.fetching.subscriptionsParents = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/subscriptionsParents/all`)
+        this.subscriptionsParents = data
+        return data
+      } catch (e) {
+        this.subscriptionsParents = null
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.subscriptionsParents = false
       }
     },
 

@@ -400,3 +400,15 @@ export type studentSubscriptionResponse = {
   planSubscription: number
   isSubscribed: boolean
 }
+
+export type subscriptionsParents = {
+  id: number;
+  isBestPrice: boolean;  
+  title: string;         
+  currentPrice: number;  
+  oldPrice?: number;     
+  features: string[];    
+  subscriptions: any[];
+}
+
+export type subscriptionsParentsResponse = subscriptionsParents[]
