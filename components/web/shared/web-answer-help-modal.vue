@@ -50,6 +50,7 @@ import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
 import { useSetupStaticLocales } from '~/main/services/setup/useSetupStaticLocales';
 import { RouteHelper } from '~/main/utils/route-helper';
+import { webAuthPathUtil } from '~/main/utils/web-routes.utils';
 
 export default {
   props: {
@@ -126,7 +127,7 @@ export default {
           //this.closeAnswerHelpModal()
           return;
         }
-        this.appRouter.push(RouteHelper.userSignUp());
+        this.appRouter.push(webAuthPathUtil());
         this.closeAnswerHelpModal();
       } catch (e) {
         this.loading = false;

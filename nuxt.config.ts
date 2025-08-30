@@ -343,6 +343,10 @@ export default defineNuxtConfig({
         },
       },
     },
+    sessionRefresh: {
+      enablePeriodically: false,
+      enableOnWindowFocus: false,
+    },
   },
   image: {
     domains: [getEnv().baseImageUrl, getEnv().websiteUrl, 'localhost'],
