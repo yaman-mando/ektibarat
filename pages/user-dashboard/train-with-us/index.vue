@@ -285,25 +285,27 @@
   </user-panel-wrapper>
 </template>
 <script lang="ts">
-import { addDays, addMinutes, format, isToday, startOfDay } from 'date-fns';
+import {
+  addDays,
+  addMinutes,
+  format,
+  isToday,
+  startOfDay,
+  isAfter,
+} from 'date-fns';
 import { dateUi } from '~/main/utils/date-utils';
 import ConfirmPlan from '~/components/user/confirm-plan.vue';
 import { useSetupRoute } from '~/main/services/setup/useSetupRoute';
 import {
   webUserPanelExamSimulatorPathUtil,
   webUserPanelTraining,
-  webUserPanelTrainingWithQuery,
   webUserSteps,
-  webUserTrainingPlan,
 } from '~/main/utils/web-routes.utils';
-import {
-  UserPanelItems,
-  UserPanelItemsRecord,
-} from '~/main/constants/user-panel-items';
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
-import { UserPlanSubscribedEnum } from '~/core/auth/constants/user-plan-subscribed.enum';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import type { ServiceBlockModal } from '#components';
+import { UserPlanSubscribedEnum } from '~/core/auth/constants/user-plan-subscribed.enum';
+
 export default {
   components: {
     ConfirmPlan,
@@ -347,6 +349,10 @@ export default {
     };
   },
   computed: {
+    isPlanStartAfterToday() {
+      if (!this.form.date) return false;
+      return isAfter(startOfDay(this.form.date), startOfDay(new Date()));
+    },
     unitLabel() {
       if (!this.requiredHours) return '';
 
@@ -429,7 +435,19 @@ export default {
     async onSuccessLastStep() {
       //request profile here and go to steps
       await this.appAuth.fetchUser();
-      await this.appRouter.push(webUserSteps());
+      if (this.isPlanStartAfterToday) {
+        if (
+          this.appAuth.user.planSubscribed ===
+          UserPlanSubscribedEnum.NotSubscribed
+        ) {
+          await this.appRouter.push(webUserSteps());
+        } else {
+          this.showStepsSection = false;
+          this.form.currentStep = 1;
+        }
+      } else {
+        await this.appRouter.push(webUserSteps());
+      }
     },
     async getRequiredHours() {
       try {

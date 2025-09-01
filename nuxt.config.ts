@@ -316,7 +316,7 @@ export default defineNuxtConfig({
         type: 'Bearer',
         cookieName: AuthCookiesEnum.token,
         headerName: 'Authorization',
-        maxAgeInSeconds: 60 * 60 * 5, //5 hour,
+        maxAgeInSeconds: 60 * 60 * 24 * 30 * 6, //6 month
         // sameSiteAttribute: 'lax',
         cookieDomain: IS_PRODUCTION_APP
           ? new URL(getEnv().websiteUrl).hostname
