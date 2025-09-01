@@ -233,19 +233,34 @@
                   </div>
                   <div
                     class="qu-count order-10 lg:order-none font-bold text-[#4B5363] !justify-between"
+                    :class="[{ '!justify-start': isWrongQuestionCase }]"
                   >
                     <span class="la">عدد الأسئلة</span>
-                    <form-select
-                      v-model:selectedValues="form.totalQuestionsCount"
-                      inputId="questionCount"
-                      class="w-[130px] h-[45px]"
-                      :isDisabled="!subscriptionsStore.isPremiumSub"
-                      :list="questionCountOptions"
-                      :placeholder="'سؤال'"
-                      :isMulti="false"
-                      :clearable="false"
-                      :searchable="false"
-                    />
+                    <template v-if="isWrongQuestionCase">
+                      <app-spinner
+                        v-if="isLoadingCount"
+                        class="!m-0"
+                      />
+                      <span
+                        v-else
+                        class="font-bold text-[18px]"
+                      >
+                        {{ totalWrongQuestionsCaseCount }}
+                      </span>
+                    </template>
+                    <template v-else>
+                      <form-select
+                        v-model:selectedValues="form.totalQuestionsCount"
+                        inputId="questionCount"
+                        class="w-[130px] h-[45px]"
+                        :isDisabled="!subscriptionsStore.isPremiumSub"
+                        :list="questionCountOptions"
+                        :placeholder="'سؤال'"
+                        :isMulti="false"
+                        :clearable="false"
+                        :searchable="false"
+                      />
+                    </template>
                   </div>
                   <div
                     class="relative lg:col-start-3 lg:row-start-1 lg:row-end-3"
@@ -463,7 +478,7 @@ export class examForm {
   onlyFlaggedQuestions = false;
   randomQuestionsSettings = [] as any[];
   questionsLevelsMin = 0;
-  totalQuestionsCount=24;
+  totalQuestionsCount = 24;
   questionsLevelsMax = 10;
   customerId: any | null = null;
   sessionId: any | null = null;
@@ -615,6 +630,7 @@ export default {
       advancedFilter: new advancedFilterForm(),
       activeAdvanced: false,
       customQuestionsCount: null as any | null,
+      isLoadingCount: false,
       isCreated: false,
       tourModel: {
         isShownOnce: false,
@@ -1361,6 +1377,7 @@ export default {
 
     async getCustomCount() {
       try {
+        this.isLoadingCount = true;
         const _formData = new customExamCountsForm();
         _formData.onlyFlaggedQuestions = this.form.onlyFlaggedQuestions;
         _formData.onlyWrongQuestions = this.form.onlyWrongQuestions;
@@ -1372,8 +1389,11 @@ export default {
           _formData
         );
         this.customQuestionsCount = this.calcQuestionsCount(res);
+        this.isLoadingCount = false;
       } catch (e) {
         console.log(e);
+      } finally {
+        this.isLoadingCount = false;
       }
     },
 
@@ -1464,6 +1484,18 @@ export default {
   },
 
   computed: {
+    totalWrongQuestionsCaseCount() {
+      if (!this.isWrongQuestionCase || this.isLoadingCount) return null;
+      return this.customQuestionsCount;
+    },
+    isWrongQuestionCase() {
+      return (
+        this.advancedFilter.onlyWrongQuestions &&
+        !this.advancedFilter.onlyFlaggedQuestions &&
+        !this.advancedFilter.onlyTakfelQuestions &&
+        this.advancedFilter.oBankMinValue === 1
+      );
+    },
     remainMessage() {
       if (!this.isExams) {
         return `
