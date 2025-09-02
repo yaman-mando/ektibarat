@@ -317,7 +317,7 @@ const warnState = ref({
   showHelpRemoveAnswerWarn: true,
   showHelpCorrectAnswerWarn: true,
   showMaxTimeWarn: true,
-  showMinTimeWarn: false, //todo
+  showMinTimeWarn: true,
 });
 const isLoadingContinue = ref(false);
 const isOpenComplaintForm = ref(false);
@@ -689,8 +689,8 @@ function closeArticleModal() {
 //when user answers the final question of current batch
 async function handleFinalQuestionAnswered() {
   if (nextBatchDetail.value) {
-    examDetail.value = deepCloneUtil(nextBatchDetail.value);
-    setActivePartIndexAndQuestionIndex(0, 0);
+    store.commit('SET_CURRENT_EXAM_TRAIN_PAGE_DATA', nextBatchDetail.value);
+    initPage();
   }
 }
 
@@ -752,6 +752,8 @@ const getCurrentQuestionStorageState = () => {
 const initPage = async () => {
   try {
     isLoadingPage.value = true;
+    nextBatchDetail.value = null;
+
     await globalStore.getLocalesJsonStatic();
     let currentExam = store.state.student.currentExamTrainPageData;
     if (!currentExam) {
