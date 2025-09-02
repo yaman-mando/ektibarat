@@ -357,7 +357,7 @@
         <div class="pa-fo__en">
           <app-button
             :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"
-            :isLoading="examLoading"
+            :isLoading="examLoading || isLoadingCount"
             :label="texts.btnText"
             colorType="blue"
             iconEndClass="fa fa-chevron-left"
@@ -393,7 +393,7 @@ import {
   UserPanelItemsRecord,
 } from '~/main/constants/user-panel-items';
 import type { ServiceBlockModal } from '#components';
-import { debounceUtil } from '~/main/utils/lodash.utils';
+import { debounceUtil, deepCloneUtil } from '~/main/utils/lodash.utils';
 import { RouteHelper } from '~/main/utils/route-helper';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import { appEvents } from '~/main/shared/events/app.events';
@@ -402,6 +402,7 @@ import {
   webPricesPathUtil,
   webUserDashboardPlan,
 } from '~/main/utils/web-routes.utils';
+import { Max_Question_Batch_Size } from '~/main/constants/max-question-batch-size';
 
 const SIMULATE_START_DELAY = 600;
 const TOGGLE_DELAY_GAP = 500;
@@ -1207,15 +1208,20 @@ export default {
       if (this.selectedType === examTypes.exams) {
         this.appRouter.push(`/student/exams/${id}`);
       } else {
-        let query = null as any | null;
-        if (
-          this.advancedFilter.onlyTakfelQuestions ||
-          this.advancedFilter.onlyFlaggedQuestions ||
-          this.advancedFilter.onlyWrongQuestions
-        ) {
-          query = {
-            isFilteredTraining: true,
-          };
+        //clear previous values in storage for other cases
+        AppLocalStorage.removeTrainingFilters();
+        AppLocalStorage.removeTrainingTotalQuestionCount();
+        AppLocalStorage.removeTrainingCompletedQuestionCount();
+
+        //if passed max allowed batch for wrong update storage
+        if (this.isWrongQuestionPassedMaxBatch) {
+          AppLocalStorage.setTrainingFilters(this.getPayload());
+          AppLocalStorage.setTrainingTotalQuestionCount(
+            this.totalWrongQuestionsCaseCount
+          );
+          AppLocalStorage.setTrainingCompletedQuestionCount(
+            Max_Question_Batch_Size
+          );
         }
         this.appRouter.push({
           path: `/student/training/${id}`,
@@ -1288,7 +1294,26 @@ export default {
         return null;
       }
     },
+    getPayload() {
+      const form = deepCloneUtil(this.form);
 
+      //exam
+      if (this.isExams) return form;
+
+      //general training
+      if (!this.isWrongQuestionCase) return form;
+
+      //training wrong question
+      if (this.isWrongQuestionCase) {
+        form.totalQuestionsCount = this.isWrongQuestionPassedMaxBatch
+          ? Max_Question_Batch_Size
+          : this.totalWrongQuestionsCaseCount;
+
+        return form;
+      }
+
+      return form;
+    },
     async startExam() {
       try {
         this.examLoading = true;
@@ -1300,8 +1325,10 @@ export default {
         this.form.subjectId = this.isTahsele
           ? this.runtimeConfig.public.defaultSubjectIdTahsele
           : this.runtimeConfig.public.defaultSubjectId;
+
+        const payload = this.getPayload();
         const { data: res } = await this.$axios
-          .post(url, this.form)
+          .post(url, payload)
           .finally(() => {
             this.examLoading = false;
           });
@@ -1484,6 +1511,12 @@ export default {
   },
 
   computed: {
+    isWrongQuestionPassedMaxBatch() {
+      return (
+        this.isWrongQuestionCase &&
+        this.totalWrongQuestionsCaseCount > Max_Question_Batch_Size
+      );
+    },
     totalWrongQuestionsCaseCount() {
       if (!this.isWrongQuestionCase || this.isLoadingCount) return null;
       return this.customQuestionsCount;

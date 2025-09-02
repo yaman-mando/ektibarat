@@ -289,6 +289,9 @@ import { firstValueFrom, of } from 'rxjs';
 import { useStore } from 'vuex';
 import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
 import { UserPlanSubscribedEnum } from '~/core/auth/constants/user-plan-subscribed.enum';
+import { watch } from 'vue';
+import { AppLocalStorage } from '~/main/utils/app-storage';
+import { Max_Question_Batch_Size } from '~/main/constants/max-question-batch-size';
 
 const $isDev = !IS_PRODUCTION_APP;
 //composable
@@ -303,16 +306,18 @@ const windowSize = useWindowSize();
 const studentsExamStore = useStudentsExamStore();
 const examInterval = useTimeSpanService();
 const studentsExamStorageService = useStudentsExamStorageService();
+const { $axios } = useNuxtApp();
 
 //data
 const examDetail = ref<StudentsExamDataModel | null>(null);
+const nextBatchDetail = ref<StudentsExamDataModel | null>(null);
 const isLoadingPage = ref(false);
 const questionTrackInterval = ref<ReturnType<typeof setInterval> | null>(null);
 const warnState = ref({
   showHelpRemoveAnswerWarn: true,
   showHelpCorrectAnswerWarn: true,
   showMaxTimeWarn: true,
-  showMinTimeWarn: true,
+  showMinTimeWarn: false, //todo
 });
 const isLoadingContinue = ref(false);
 const isOpenComplaintForm = ref(false);
@@ -615,7 +620,10 @@ const isLastExamQuestion = computed(
   () => isLastQuestion.value && !hasNextPart.value
 );
 const isFinished = computed(
-  () => isLastExamQuestion.value && isActiveQuestionAnswered.value
+  () =>
+    isLastExamQuestion.value &&
+    isActiveQuestionAnswered.value &&
+    !nextBatchDetail.value
 );
 
 const canSelectNextQuestion = computed(
@@ -676,6 +684,63 @@ function onClickReadArticleButton() {
 }
 function closeArticleModal() {
   isOpenArticleModal.value = false;
+}
+
+//when user answers the final question of current batch
+async function handleFinalQuestionAnswered() {
+  if (nextBatchDetail.value) {
+    examDetail.value = deepCloneUtil(nextBatchDetail.value);
+    setActivePartIndexAndQuestionIndex(0, 0);
+  }
+}
+
+const isLastExamQuestionAnswered = computed(
+  () => isLastExamQuestion.value && isActiveQuestionAnswered.value
+);
+watch(
+  () => isLastExamQuestionAnswered.value,
+  (val) => {
+    if (val) {
+      handleFinalQuestionAnswered();
+    }
+  }
+);
+
+async function checkNextBatch() {
+  //check for mor attempts
+  if (
+    userCurrentSub.value.remainTrainingCount <= 0 ||
+    userCurrentSub.value.remainTrainingCountPerDay <= 0
+  )
+    return;
+
+  //check if count in storage
+  const totalQuestion = AppLocalStorage.getTrainingTotalQuestionCount();
+  let totalQuestionCompleted =
+    AppLocalStorage.getTrainingCompletedQuestionCount();
+
+  if (!totalQuestion || !totalQuestionCompleted) return;
+
+  //if all done do nothing
+  if (totalQuestion === totalQuestionCompleted) return;
+
+  //get next batch
+  const remaining = totalQuestion - totalQuestionCompleted;
+  const newQuestion =
+    remaining > Max_Question_Batch_Size ? Max_Question_Batch_Size : remaining;
+
+  //get new batch api
+  const filters = AppLocalStorage.getTrainingFilters();
+  const { data } = await $axios.post('/studentsExam/customFromTags', {
+    ...filters,
+    totalQuestionsCount: newQuestion,
+    studentExamId: examDetail.value!.id,
+  });
+
+  nextBatchDetail.value = data;
+
+  totalQuestionCompleted += newQuestion;
+  AppLocalStorage.setTrainingCompletedQuestionCount(totalQuestionCompleted);
 }
 
 const getCurrentQuestionStorageState = () => {
@@ -1066,24 +1131,20 @@ const onSelectAnswer = async (answerId: any) => {
         ? QuestionStateEnum.correct
         : QuestionStateEnum.wrong,
     });
-
-    if (isLastExamQuestion.value) {
-      if (route.query?.isFilteredTraining) {
-        exitWithoutConfirm();
-      } else {
-        // await subscriptionsStore.getCurrentSub(
-        //   globalStore.state.globalTypeUserValue!
-        // );
-        // if (
-        //   userCurrentSub.value!.remainTrainingCount - 1 > 0 &&
-        //   userCurrentSub.value!.remainTrainingCountPerDay - 1 > 0
-        // ) {
-        //   await confirmContinueOrExitTrain();
-        //   return;
-        // }
-        // await exitWithoutConfirm();
-      }
-    }
+    //
+    // if (isLastExamQuestion.value) {
+    //     // await subscriptionsStore.getCurrentSub(
+    //     //   globalStore.state.globalTypeUserValue!
+    //     // );
+    //     // if (
+    //     //   userCurrentSub.value!.remainTrainingCount - 1 > 0 &&
+    //     //   userCurrentSub.value!.remainTrainingCountPerDay - 1 > 0
+    //     // ) {
+    //     //   await confirmContinueOrExitTrain();
+    //     //   return;
+    //     // }
+    //     // await exitWithoutConfirm();
+    // }
     isApplyAnswerLoading.value = false;
   } catch (e) {
     console.error(e);
@@ -1322,6 +1383,14 @@ const getCurrentQuestionTimer = () => {
 };
 
 //watch
+watch(
+  () => allAnsweredQuestionCounts.value,
+  (val) => {
+    if (val >= 10 && !nextBatchDetail.value) {
+      checkNextBatch();
+    }
+  }
+);
 watch(
   () => activeQuestionIndex.value,
   () => {
