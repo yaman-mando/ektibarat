@@ -689,8 +689,11 @@ function closeArticleModal() {
 //when user answers the final question of current batch
 async function handleFinalQuestionAnswered() {
   if (nextBatchDetail.value) {
-    store.commit('SET_CURRENT_EXAM_TRAIN_PAGE_DATA', nextBatchDetail.value);
-    initPage();
+    store.commit(
+      'student/SET_CURRENT_EXAM_TRAIN_PAGE_DATA',
+      nextBatchDetail.value
+    );
+    await mountedHook();
   }
 }
 
@@ -706,6 +709,7 @@ watch(
   }
 );
 
+const loadingNextBatch = ref(false);
 async function checkNextBatch() {
   //check for mor attempts
   if (
@@ -730,17 +734,23 @@ async function checkNextBatch() {
     remaining > Max_Question_Batch_Size ? Max_Question_Batch_Size : remaining;
 
   //get new batch api
-  const filters = AppLocalStorage.getTrainingFilters();
-  const { data } = await $axios.post('/studentsExam/customFromTags', {
-    ...filters,
-    totalQuestionsCount: newQuestion,
-    studentExamId: examDetail.value!.id,
-  });
-
-  nextBatchDetail.value = data;
-
-  totalQuestionCompleted += newQuestion;
-  AppLocalStorage.setTrainingCompletedQuestionCount(totalQuestionCompleted);
+  try {
+    loadingNextBatch.value = true;
+    const filters = AppLocalStorage.getTrainingFilters();
+    const { data } = await $axios.post('/studentsExam/customFromTags', {
+      // ...filters,
+      totalQuestionsCount: newQuestion,
+      studentExamId: examDetail.value!.id,
+    });
+    nextBatchDetail.value = data;
+    totalQuestionCompleted += newQuestion;
+    AppLocalStorage.setTrainingCompletedQuestionCount(totalQuestionCompleted);
+    loadingNextBatch.value = false;
+  } catch (e) {
+    console.error(e);
+  } finally {
+    loadingNextBatch.value = false;
+  }
 }
 
 const getCurrentQuestionStorageState = () => {
@@ -1388,7 +1398,12 @@ const getCurrentQuestionTimer = () => {
 watch(
   () => allAnsweredQuestionCounts.value,
   (val) => {
-    if (val >= 10 && !nextBatchDetail.value) {
+    const total = allQuestions.value.length;
+    if (
+      val >= Math.ceil(total / 2) &&
+      !nextBatchDetail.value &&
+      !loadingNextBatch.value
+    ) {
       checkNextBatch();
     }
   }
@@ -1487,7 +1502,7 @@ onBeforeRouteLeave(async (to, from, next) => {
   }
 });
 
-onMounted(async () => {
+async function mountedHook() {
   await initPage();
   if (nextQuestionModel.value) {
     getQuestionApiAndUpdateRecord(nextQuestionModel.value.id);
@@ -1504,6 +1519,10 @@ onMounted(async () => {
   //   }
   // }, 6000);
   //TODO-remove
+}
+
+onMounted(async () => {
+  await mountedHook();
 });
 
 const pageTitle = computed(() => {
