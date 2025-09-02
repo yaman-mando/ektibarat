@@ -1,7 +1,8 @@
 <template>
   <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5 justify-center w-fit justify-self-center">
     
-      <app-subscription-parent-card v-for="p in arrangedPackets" :key="p.id" :packet="p" class="h-full"
+      <app-subscription-parent-card
+v-for="p in arrangedPackets" :key="p.id" :packet="p" class="h-full"
         @select="id => emit('select', id)" />
     
   </div>

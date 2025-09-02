@@ -3,9 +3,8 @@
     :disabled="disabled"
     :class="buttonClass"
     :style="buttonStyle"
-    @click="onClick"
   >
-    <slot />
+    <slot></slot>
   </button>
 </template>
 
@@ -17,12 +16,12 @@ interface Props {
   height?: string;
   radius?: string;
 
-  background?: string | null; 
+  background?: string | null;
   bgClass?: string;
-  hoverBackground?: string; 
+  hoverBackground?: string;
   textColor?: string;
   textSize?: string;
-  fontWeight?:string
+  fontWeight?: string;
 
   border?: boolean;
   borderColor?: string;
@@ -30,10 +29,9 @@ interface Props {
   darkMode?: boolean;
   lightMode?: boolean;
 
-  disabled?:boolean
+  disabled?: boolean;
 
   //onClick?: () => void;
-  onClick?: (payload?: any) => void;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,23 +43,26 @@ const props = withDefaults(defineProps<Props>(), {
   hoverBackground: '',
   textColor: 'text-white',
   textSize: 'text-base',
-  fontWeight:'normal',
+  fontWeight: 'normal',
   border: false,
   borderColor: 'border-gray-300',
   darkMode: false,
   lightMode: false,
-  disabled:false
-
+  disabled: false,
 });
 
 const emit = defineEmits(['click']);
 
-function onClick() {
+function onClickAction() {
   //if (props.onClick) props.onClick();
   emit('click');
 }
 
-const isGradient = computed(() => props.background?.includes('gradient') || props.background?.includes('linear-gradient'));
+const isGradient = computed(
+  () =>
+    props.background?.includes('gradient') ||
+    props.background?.includes('linear-gradient')
+);
 
 const buttonClass = computed(() => {
   return [
@@ -74,7 +75,7 @@ const buttonClass = computed(() => {
     props.textColor,
     props.textSize,
     props.fontWeight,
-    !props.background && props.bgClass, 
+    !props.background && props.bgClass,
     props.border ? `border ${props.borderColor}` : '',
     props.hoverBackground ? `hover:${props.hoverBackground}` : '',
     props.darkMode ? 'dark:bg-gray-800 dark:text-white' : '',
@@ -83,7 +84,6 @@ const buttonClass = computed(() => {
     .filter(Boolean)
     .join(' ');
 });
-
 
 const buttonStyle = computed(() => {
   return {

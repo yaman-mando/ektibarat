@@ -14,7 +14,8 @@
 
                 <div class="w-full max-w-md mb-6">
                     <div class="w-full bg-gray-700 rounded-full overflow-hidden h-6">
-                        <div class="bg-yellow-400 h-full text-sm font-bold text-center leading-[1.5rem] transition-all duration-200"
+                        <div
+class="bg-yellow-400 h-full text-sm font-bold text-center leading-[1.5rem] transition-all duration-200"
                             :style="{ width: `${progress * 100 / 30}%` }">
                             {{ Math.ceil(progress) }} ثانية
                         </div>

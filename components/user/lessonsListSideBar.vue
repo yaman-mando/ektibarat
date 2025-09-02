@@ -9,12 +9,14 @@
                 <div class="top-1/2 w-full border-t border-gray-8f left-0 z-0 flex-1"></div>
             </div>
 
-            <div @click="toLesson(nextLesson.id)"
-                class="bg-white h-[70px] rounded-[8px] p-[10px_12px] shadow-custom cursor-pointer">
+            <div
+class="bg-white h-[70px] rounded-[8px] p-[10px_12px] shadow-custom cursor-pointer"
+                @click="toLesson(nextLesson.id)">
 
                 <div class="flex items-center gap-x-[8px]">
-                    <img class="rounded-[8px]"
-                        :src="`https://media.ekhtibarat.com/dev/LessonsVideos/${nextLesson.videoLink}/vtt/cover-min.jpg`">
+                    <img
+class="rounded-[8px]"
+                        :src="`https://media.ekhtibarat.com/dev/LessonsVideos/${nextLesson.videoLink}/vtt/cover-min.jpg`"/>
 
                     <div class="grid gap-y-[5px]">
                         <span :class="textClass" class="leading-[1.2]">
@@ -41,9 +43,10 @@
                 <div class="top-1/2 w-full border-t border-gray-8f left-0 z-0 flex-1"></div>
             </div>
 
-            <div class="space-y-[20px]" v-if="sectionLessons">
+            <div v-if="sectionLessons" class="space-y-[20px]">
                 <template v-for="lesson in sectionLessons">
-                    <div v-if="lesson" :key="lesson.id" class="h-[70px] rounded-[8px] p-[10px_12px] shadow-custom"
+                    <div
+v-if="lesson" :key="lesson.id" class="h-[70px] rounded-[8px] p-[10px_12px] shadow-custom"
                         :class="{
                             'bg-green-fa text-green-8c': lesson.status === 'watched',
                             'bg-blue-0ff text-blue-d6': lesson.status === 'active',
@@ -52,8 +55,9 @@
                         }">
 
                         <div class="flex items-center gap-x-[8px]">
-                            <img class="rounded-[8px]"
-                                :src="`https://media.ekhtibarat.com/dev/LessonsVideos/${lesson.videoLink}/vtt/cover-min.jpg`">
+                            <img
+class="rounded-[8px]"
+                                :src="`https://media.ekhtibarat.com/dev/LessonsVideos/${lesson.videoLink}/vtt/cover-min.jpg`"/>
 
                             <!-- <span v-if="lesson.status === 'locked'"
                             class="flex items-center justify-center w-9 h-9 rounded-full bg-[#BCCCDB33] text-[22px] text-gray-8f">
@@ -77,7 +81,8 @@
                             <div class="grid gap-y-[5px]">
                                 <span class="text-[20px] font-medium dark:text-purple-8c leading-[1.2]">
                                     <text-slice :length="20" :text="lesson.title" />
-                                    <i v-if="lesson.status === 'watched'"
+                                    <i
+v-if="lesson.status === 'watched'"
                                         class="fa fa-check rounded-full p-[2px] border text-[12px] mr-[5px]"></i>
                                 </span>
                                 <span class="text-[16px] font-medium text-gray-8f leading-[1.2]"> {{ lesson.periodTime }}</span>

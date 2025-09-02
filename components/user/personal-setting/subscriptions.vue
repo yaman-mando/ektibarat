@@ -48,7 +48,8 @@
                     </div>
                   </div>
                   <div class="_lp">
-                    <app-button size="md" :label="sub.freeType == null ? 'تجديد' : 'اشترك'" @click="
+                    <app-button
+size="md" :label="sub.freeType == null ? 'تجديد' : 'اشترك'" @click="
                       sub.freeType == null
                         ? reNewSubscription(sub.id, sub.subjectId)
                         : goToPrice(sub.subjectId)
@@ -57,12 +58,13 @@
                 </div>
               </div>
             </div>
-            <lazy-complete-info-modal :key="completeInfoModalKey" v-model:isOpenModal="isOpenCompleteInfoModal"
+            <lazy-complete-info-modal
+:key="completeInfoModalKey" v-model:isOpenModal="isOpenCompleteInfoModal"
               @onCompleteInfo="onCompleteInfo" />
           </template>
           <template v-if="activeStep == steps.offers">
             <div class="">
-              <div @click="activeStep = steps.subscriptions" class="flex items-center gap-x-[10px] cursor-pointer">
+              <div class="flex items-center gap-x-[10px] cursor-pointer" @click="activeStep = steps.subscriptions">
                 <i class="fa fa-chevron-right"></i>
                 <span>رجوع للخلف</span>
               </div>
@@ -87,7 +89,8 @@
               <hr class="hide-to-tablet" />
               <div class="s1-info relative">
                 <app-overlay v-if="!appleIsLoaded" />
-                <div :style="{ opacity: !appleIsLoaded ? 0 : 1 }" class="s1-p1-info relative"
+                <div
+:style="{ opacity: !appleIsLoaded ? 0 : 1 }" class="s1-p1-info relative"
                   :class="{ free: total <= 0 }">
                   <template v-if="!selectedPacket.freeType">
                     <div class="s1-p1-rw-1">
@@ -99,11 +102,13 @@
                       </div>
                       <div class="l-part">
                         <vee-form v-slot="{ meta }" tag="div" class="a-discount-form w-full">
-                          <form-input v-model:inputValue="discountCodeInput" :rules="{ required: true }"
+                          <form-input
+v-model:inputValue="discountCodeInput" :rules="{ required: true }"
                             inputId="codeInputSm" :isDisabled="coupon.hasCoupon" inputPlaceholder="كود الخصم"
                             :hideLabel="true" :hideErrorLabel="true" />
                           <app-button v-if="coupon.hasCoupon" size="md" label="إزالة" @click="removeCoupon()" />
-                          <app-button v-else size="md" colorType="success" :isLoading="couponLoad"
+                          <app-button
+v-else size="md" colorType="success" :isLoading="couponLoad"
                             :isDisabled="!meta.valid" label="تطبيق" @click="requestCoupon" />
                         </vee-form>
                       </div>
@@ -114,7 +119,8 @@
                     <div class="s1-p1-rw-3">
                       <span class="title">وسيلة الدفع</span>
                       <div class="s1-p1-rw-3-rw-2 relative">
-                        <div :class="{
+                        <div
+:class="{
                           active: activePaymentType === paymentTypes.cards,
                         }" class="s1-p1-rw-3-rw-2-cl-1" @click="changePaymentMethod(paymentTypes.cards)">
                           <span class="c-check"></span>
@@ -126,7 +132,8 @@
                         </div>
                         <app-overlay v-if="!appleIsLoaded" />
 
-                        <div class="s1-p1-rw-3-rw-2-cl-2" :class="{
+                        <div
+class="s1-p1-rw-3-rw-2-cl-2" :class="{
                           active: activePaymentType === paymentTypes.apple,
                           disabled: disableApple,
                         }" @click="changePaymentMethod(paymentTypes.apple)">
@@ -140,7 +147,8 @@
                     </div>
 
                     <div class="card-info relative">
-                      <form v-show="activePaymentType == paymentTypes.cards" id="form-container" class="relative"
+                      <form
+v-show="activePaymentType == paymentTypes.cards" id="form-container" class="relative"
                         method="post" action="/charge">
                         <div id="element-container" class="relative" style="min-height: 176px">
                           <app-overlay v-if="loadPaymentForm" />
@@ -160,9 +168,11 @@
                         </span>
                       </div>
                       <app-overlay v-if="paymentLoad" />
-                      <app-button v-if="activePaymentType == paymentTypes.cards" class="!mx-auto" label="إتمام الدفع"
+                      <app-button
+v-if="activePaymentType == paymentTypes.cards" class="!mx-auto" label="إتمام الدفع"
                         @click="payByCard4()" />
-                      <div id="apple-pay-button" :style="{
+                      <div
+id="apple-pay-button" :style="{
                         display:
                           activePaymentType == paymentTypes.apple
                             ? 'flex'
@@ -206,7 +216,8 @@
                       </div>
                       <div class="info-item">
                         <span class="title">تخفيض الباقة</span>
-                        <span class="caption red" style="
+                        <span
+class="caption red" style="
                             display: flex;
                             align-items: center;
                             column-gap: 3px;
@@ -269,7 +280,8 @@
     </template>
 
     <prime-dialog id="my-modal" :modal="true" :showHeader="false" :closable="true">
-      <iframe :src="frameLink" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"
+      <iframe
+:src="frameLink" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"
         name="iframe_a" height="700px" width="700px" allowfullscreen frameborder="0" scrolling="no"
         title="Iframe Example"></iframe>
     </prime-dialog>

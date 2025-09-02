@@ -4,7 +4,7 @@
             عبر الكود الخاص بي
             <span class="font-bold text-red-5e mr-1">{{ baseData?.code }}</span>
         </span>
-        <AppLoadingSpinner :showSpinner="true" v-if="panelStore.fetching.teachersFinancial"></AppLoadingSpinner>
+        <app-loading-spinner v-if="panelStore.fetching.teachersFinancial" :showSpinner="true"/>
         <template v-else>
             <div v-if="windowSize.isDesktop" class="flex items-center gap-x-[20px] sm:gap-x-[54px] ms-[25px] mt-[10px]">
                 <div class="flex items-center gap-x-[20px]">
@@ -22,7 +22,8 @@
                 <div class="space-y-2 mx-[15px] mt-[20px] min-w-[600px]">
                     <!-- Header -->
                     <div class="h-[70px] w-full flex items-center">
-                        <div class="bg-[#F5F7FA] h-[100%] flex-1 grid items-center border border-[#BCCCDB] 
+                        <div
+class="bg-[#F5F7FA] h-[100%] flex-1 grid items-center border border-[#BCCCDB] 
                 rounded-[8px] px-[15px] text-purple-78 text-[16px] font-bold grid-cols-[15%_40%_15%_15%_15%]">
                             <div class="">التاريخ</div>
                             <div class="text-start">اسم المستخدم</div>
@@ -35,14 +36,16 @@
 
                     <!-- Rows -->
                     <div v-for="(item, i) in baseData?.details" :key="i" :class="['h-[60px] flex items-center']">
-                        <div class="grid h-[100%] flex-1 items-center rounded-[8px] border border-[#BCCCDB] px-[15px] text-gray-63 font-medium text-[14px]"
+                        <div
+class="grid h-[100%] flex-1 items-center rounded-[8px] border border-[#BCCCDB] px-[15px] text-gray-63 font-medium text-[14px]"
                             :class="[i % 2 === 0 ? 'bg-white' : 'bg-[#FAFAFA]', item.subscriptionName ? 'grid-cols-[15%_40%_15%_15%_15%]' : 'grid-cols-[15%_70%_15%]']">
                             <div>{{ item.createdDate }}</div>
                             <div>{{ item.studentName }}</div>
                             <div v-if="item.subscriptionName" class="text-center">{{ item.subscriptionName }}</div>
-                            <div style="direction: ltr" v-if="item.subscriptionName" class="text-center">{{
+                            <div v-if="item.subscriptionName" style="direction: ltr" class="text-center">{{
                                 item.studentPaidAmount }}</div>
-                            <div style="direction: ltr" class="text-center"
+                            <div
+style="direction: ltr" class="text-center"
                                 :class="{ 'text-red-5e': item.teacherAmount < 0 }">{{
                                     item.teacherAmount }}</div>
                         </div>
@@ -78,13 +81,15 @@
                     <div
                         class="flex-3/4 flex items-center gap-x-[10px] h-full justify-center border-l border-[#BCCCDB]">
                         <span class="text-[16px] text-dark-63 font-bold">الرصيد المتبقي</span>
-                        <app-g-button :disabled="Number(total) <= 0" @click="toRequestTransfer" width="85px"
-                            height="32px" bg-class="bg-purple-78" text-color="text-white" text-size="14px" radius="4px">
+                        <app-g-button
+:disabled="Number(total) <= 0" width="85px" height="32px"
+                            bgClass="bg-purple-78" textColor="text-white" textSize="14px" radius="4px" @click="toRequestTransfer">
                             طلب تحويل
                         </app-g-button>
                     </div>
 
-                    <span class="flex-1/4 text-[20px] flex justify-center text-dark-63 font-bold" style="direction: ltr"
+                    <span
+class="flex-1/4 text-[20px] flex justify-center text-dark-63 font-bold" style="direction: ltr"
                         :class="{ 'text-red-5e': Number(total) < 0 }">
                         {{ total }}
                     </span>
@@ -92,7 +97,8 @@
 
             </div>
 
-            <span v-if="!windowSize.isDesktop"
+            <span
+v-if="!windowSize.isDesktop"
                 class="text-[18px] sm:text-[24px] font-bold text-dark-63 ms-[25px]">المشتركون
                 عبر الكود الخاص بي
                 <span class="font-bold text-red-5e mr-1">{{ baseData?.code }}</span>

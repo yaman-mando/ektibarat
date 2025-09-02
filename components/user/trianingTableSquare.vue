@@ -3,7 +3,8 @@
     <div class="flex flex-col md:flex-row md:items-center md:justify-baseline mt-[25px] gap-x-[30px] gap-y-[15px]">
         <h2 class="text-[24px] font-bold text-blue-d6 text-right">تفاصيل التدريب</h2>
 
-        <select v-model="selectedPeriodTable"
+        <select
+v-model="selectedPeriodTable"
             class="w-full md:w-[220px] h-[40px] bg-white border border-[#BCCCDB] rounded-[6px] text-dark-2b outline-0">
             <option v-for="item in tablePeriodList" :key="item.id" :value="item.id">
                 الفترة: {{ item.label }}
@@ -13,11 +14,12 @@
 
     <!-- tables - Accordion -->
     <div class="mt-5 flex flex-col gap-5 relative">
-        <app-overlay msg="جاري جلب البيانات ..." v-if="fetching" />
+        <app-overlay v-if="fetching" msg="جاري جلب البيانات ..." />
         <app-no-data v-else-if="!stdAnlyzeDataTable || stdAnlyzeDataTable.length === 0" />
 
-        <accordionGroup v-else>
-            <disclosureGroup v-for="(item, index) in stdAnlyzeDataTable" :key="index" :defaultOpen="true"
+        <accordion-group v-else>
+            <disclosure-group
+v-for="(item, index) in stdAnlyzeDataTable" :key="index" :defaultOpen="true"
                 :isResponsive="true" :onlyOneOpen="false" :index="index">
                 <!-- head -->
                 <template #right>
@@ -42,7 +44,7 @@
                             <span class="font-bold text-purple-78">مدة التدريب</span>
                             <span class="text-dark-2b">
                                 {{ dateFormat.formatStoSSMM_MMHH(item.totalTime) }}
-                                <span class="text-gray-8f" v-if="item.totalTime>0">
+                                <span v-if="item.totalTime>0" class="text-gray-8f">
                                     <template v-if="item.totalTime < 60">ثانية</template>
                                     <template v-else-if="item.totalTime < 3600">دقيقة</template>
                                     <template v-else>ساعة</template>
@@ -86,7 +88,8 @@
                     <!-- data -->
                     <div v-for="(child, i) in item.children" :key="i" :class="['h-[60px] flex items-center']">
                         <!-- first part -->
-                        <div class="flex flex-[70%] h-[100%] items-center rounded-[8px] border border-[#BCCCDB] px-[15px]"
+                        <div
+class="flex flex-[70%] h-[100%] items-center rounded-[8px] border border-[#BCCCDB] px-[15px]"
                             :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
                             <div class="w-[40%] text-gray-63 font-medium">
                                 {{ child.categoryName }}
@@ -120,7 +123,8 @@
                         <div class="w-[15px]"></div>
 
                         <!-- second part -->
-                        <div class="flex flex-[30%] h-[100%] items-center rounded-[8px] border border-[#BCCCDB]"
+                        <div
+class="flex flex-[30%] h-[100%] items-center rounded-[8px] border border-[#BCCCDB]"
                             :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
                             <div class="w-[55%] h-[100%] flex justify-center items-center">
                                 <template v-if="child.isEnabled">
@@ -141,23 +145,27 @@
 
                             <div class="w-[45%] h-[100%] flex justify-center items-center border-r-1 border-[#BCCCDB]">
                                 <template v-if="!child.hasLawAnalyze">
-                                    <button v-if="isStudent && userData.planSubscribed !== planSubscribedEnum.subscribed"
+                                    <button
+v-if="isStudent && userData.planSubscribed !== planSubscribedEnum.subscribed"
                                         class="border border-purple-78 w-[110px] h-[32px] rounded-[4px] text-purple-78 text-[14px] font-bold cursor-pointer"
                                         @click="toTraining(child.parentId, child.categoryId)">
                                         تدرب
                                     </button>
-                                    <button v-else disabled
+                                    <button
+v-else disabled
                                         class="border border-purple-78 w-[110px] h-[32px] rounded-[4px] text-purple-78 text-[14px] font-bold opacity-50">
                                         تدرب
                                     </button>
                                 </template>
                                 <template v-else>
-                                    <button v-if="child.rate>0"
+                                    <button
+v-if="child.rate>0"
                                         class="border border-purple-78 w-[110px] h-[32px] rounded-[4px] text-purple-78 text-[14px] font-bold cursor-pointer"
                                         @click="toAnalyticsDetails(child.categoryId)">
                                         تحليل النتيجة
                                     </button>
-                                    <button v-else disabled
+                                    <button
+v-else disabled
                                         class="border border-purple-78 w-[110px] h-[32px] rounded-[4px] text-purple-78 text-[14px] font-bold opacity-50">
                                         تحليل النتيجة
                                     </button>
@@ -166,12 +174,13 @@
                         </div>
                     </div>
                 </div>
-            </disclosureGroup>
-        </accordionGroup>
+            </disclosure-group>
+        </accordion-group>
     </div>
 
     <!-- subscribe modal -->
-    <subscribe-modal v-if="showSubscribeModal" :show="showSubscribeModal" @update:show="
+    <subscribe-modal
+v-if="showSubscribeModal" :show="showSubscribeModal" @update:show="
         ($event) => {
             showSubscribeModal = $event;
         }

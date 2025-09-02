@@ -1,5 +1,6 @@
 <template>
-  <section id="recommendations"
+  <section
+id="recommendations"
     class="text-right bg-white dark:bg-gray-800 rounded-[8px] shadow-custom overflow-hidden mt-[20px]">
 
     <!-- Header -->
@@ -42,7 +43,7 @@
       </button>
     </div> -->
 
-    <div @click="toggleAccordion" class=" cursor-pointer flex items-center justify-between px-4 h-[74px] py-[15px]">
+    <div class=" cursor-pointer flex items-center justify-between px-4 h-[74px] py-[15px]" @click="toggleAccordion">
       <div class="flex items-center gap-[5px]">
 
         <div class="w-[36px] h-[36px] rounded-full flex items-center justify-center" style="background-color: #E3F0FF;">
@@ -71,7 +72,8 @@
             <h3 class="text-blue-d6 dark:text-blue-400 font-bold text-[20px] mb-[15px]">
               {{ section.title }}
             </h3>
-            <ul class="list-disc pr-5 text-[16px] font-medium text-dark-63 dark:text-gray-100 space-y-1"
+            <ul
+class="list-disc pr-5 text-[16px] font-medium text-dark-63 dark:text-gray-100 space-y-1"
               style="line-height: 28px">
               <li v-for="(advice, i) in section.advices" :key="'advice-' + i">
                 {{ advice }}
@@ -84,7 +86,7 @@
   </section>
 
   <!-- Action Buttons -->
-  <div class="flex justify-end gap-[10px] px-4 mt-5 flex-wrap" v-if="false">
+  <div v-if="false" class="flex justify-end gap-[10px] px-4 mt-5 flex-wrap">
     <button
       class="w-[161px] h-[44px] bg-[#7840E0] text-white rounded-[8px] flex items-center justify-center gap-2 text-[16px] font-medium cursor-pointer">
       <i class="fa fa-bell"></i>

@@ -1,6 +1,6 @@
 <template>
   <div class="tooltip-wrapper" @mouseenter="visible = true" @mouseleave="visible = false">
-    <slot />
+    <slot ></slot>
 
     <div
       v-if="visible"
@@ -8,7 +8,7 @@
       :class="positionClass"
       :style="bubbleStyle"
     >
-      <slot name="content" />
+      <slot name="content" ></slot>
       <div class="tooltip-arrow" :class="arrowClass" :style="arrowStyle"></div>
     </div>
   </div>

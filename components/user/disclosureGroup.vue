@@ -1,5 +1,6 @@
 <template>
-  <div class="rounded-[8px] shadow-custom overflow-hidden"
+  <div
+class="rounded-[8px] shadow-custom overflow-hidden"
   :class="[
       isResponsive ? 'overflow-x-auto custom-scroll' : ''
     ]"

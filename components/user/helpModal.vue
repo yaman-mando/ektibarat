@@ -3,7 +3,8 @@
     <div v-show="show" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
         <transition name="grow-fade">
 
-            <div v-if="show" class="
+            <div
+v-if="show" class="
     bg-white flex flex-col-reverse md:flex-row
     justify-center md:justify-between
     items-center
@@ -22,7 +23,8 @@
                         أنت كثير الأخطاء
                     </h2>
 
-                    <p class="
+                    <p
+class="
         text-dark-2b
         mt-1 md:mt-[5px]
         h-auto md:h-[85px]
@@ -37,25 +39,27 @@
                     </p>
 
                     <div class="flex mt-3 md:mt-[15px] gap-3 md:gap-4 justify-center">
-                        <button @click="continueTraining" class="
+                        <button
+class="
           text-gray-8f border border-gray-8f
           text-[14px] md:text-[16px]
           font-bold bg-transparent
           w-[150px] md:w-[200px]
           h-[40px] md:h-[44px]
           rounded-[6px] cursor-pointer
-        ">
+        " @click="continueTraining">
                             إكمال التدريب
                         </button>
 
-                        <button @click="goToFoundation" class="
+                        <button
+class="
           text-white border border-gray-8f
           text-[14px] md:text-[16px]
           font-bold bg-blue-d6
           w-[150px] md:w-[200px]
           h-[40px] md:h-[44px]
           rounded-[6px] cursor-pointer
-        ">
+        " @click="goToFoundation">
                             إعادة التأسيس
                         </button>
                     </div>

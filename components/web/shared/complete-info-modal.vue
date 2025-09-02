@@ -1,5 +1,6 @@
 <template>
-  <lazy-prime-dialog :visible="isOpenModal" :modal="true" :showHeader="false" :closable="true" :dismissableMask="false"
+  <lazy-prime-dialog
+:visible="isOpenModal" :modal="true" :showHeader="false" :closable="true" :dismissableMask="false"
     class="complete-info-modal" @afterHide="closeModal()">
     <lazy-vee-validate-provider>
       <i class="fa fa-times" @click="closeModal"></i>
@@ -8,13 +9,16 @@
           <template v-if="activeStep === 1">
             <span class="__text1">يرجى استكمال المعلومات الخاصة بكم</span>
             <span class="__text2">قبل الانتقال لعملية الدفع</span>
-            <form-input v-if="!hasFirstName" v-model:inputValue="form.firstName" inputTabIndex="1" label="الاسم الأول"
+            <form-input
+v-if="!hasFirstName" v-model:inputValue="form.firstName" inputTabIndex="1" label="الاسم الأول"
               :inputId="'firstName'" :rules="{ required: true }" />
 
-            <form-input v-if="!hasLastName" v-model:inputValue="form.lastName" inputTabIndex="2" label="الاسم الأخير"
+            <form-input
+v-if="!hasLastName" v-model:inputValue="form.lastName" inputTabIndex="2" label="الاسم الأخير"
               :inputId="'lastName'" :rules="{ required: true }" />
 
-            <form-input v-if="!hasEmail" v-model:inputValue="email" :inputId="'email'"
+            <form-input
+v-if="!hasEmail" v-model:inputValue="email" :inputId="'email'"
               :rules="{ required: true, email: true }" :label="'البريد الالكتروني'" />
 
             <span v-if="!hasEmail && countRegisterTriesEmail > 3" class="__triesNote __red">
@@ -36,7 +40,8 @@
               </div>
               <div class="code-part relative" :class="{ 'wrong-code': wrongCode }">
                 <app-overlay v-if="processCode" />
-                <code-input ref="codeInputRef" className="w-full" :fields="4" :fieldWidth="45" :fieldHeight="45"
+                <code-input
+ref="codeInputRef" className="w-full" :fields="4" :fieldWidth="45" :fieldHeight="45"
                   :radius="8" :required="true" style="direction: ltr" @complete="sendCode" />
 
                 <p v-if="wrongCode" class="wrong-code">
@@ -51,7 +56,8 @@
                 لقد استنفذت عدد المحاولات المسموح بها لإرسال الكود يرجى إعادة
                 المحاولة بعد مرور 8 ساعات
               </span>
-              <span :class="{ disabled: countRegisterTriesEmail > 3 || isWaiting }" class="resend" @click="
+              <span
+:class="{ disabled: countRegisterTriesEmail > 3 || isWaiting }" class="resend" @click="
                 countRegisterTriesEmail <= 3 && !isWaiting
                   ? requestChangeMail
                   : {}
@@ -61,7 +67,8 @@
             </div>
           </template>
 
-          <app-button v-if="activeStep == 1" :disabled="!hasEmail && countRegisterTriesEmail > 3" class="next-btn"
+          <app-button
+v-if="activeStep == 1" :disabled="!hasEmail && countRegisterTriesEmail > 3" class="next-btn"
             :label="btnText" @click="sendInfo" />
         </vee-form>
       </div>

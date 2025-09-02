@@ -6,7 +6,7 @@
 
         
         <div class="grid gap-5 grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 justify-center w-fit justify-self-center mt-[20px] mx-auto">
-            <app-subscription-card @select="id=>emit('select',id)" v-for="s in parent.subscriptions" :key="s.id" :subscription="s" />
+            <app-subscription-card v-for="s in parent.subscriptions" :key="s.id" :subscription="s" @select="id=>emit('select',id)" />
         </div>
 
         
@@ -18,7 +18,8 @@
                 <li v-for="(txt, i) in parent.features.slice(0, 3)" :key="i" class="flex items-center gap-2">
                     
                     <div class="w-6 h-6 rounded-full flex items-center justify-center bg-[#E3F0FF]">
-                        <svg viewBox="0 0 24 24" class="w-4 h-4 text-[#0266D6]" fill="none" stroke="currentColor"
+                        <svg
+viewBox="0 0 24 24" class="w-4 h-4 text-[#0266D6]" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                         </svg>

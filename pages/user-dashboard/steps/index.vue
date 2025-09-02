@@ -1,15 +1,15 @@
 <template>
-  <user-panel-wrapper content-class="max-w-[1050px] !mx-auto">
+  <user-panel-wrapper contentClass="max-w-[1050px] !mx-auto">
     <div class="flex flex-col xl1200:flex-row gap-[50px]">
       <app-data-wrapper
         :loading="userPanelStore.fetching.studentStages"
         :data="userPanelStore.studentStages"
-        loading-type="spinner-overlay"
-        empty-text="لا توجد بيانات متاحة"
+        loadingType="spinner-overlay"
+        emptyText="لا توجد بيانات متاحة"
       >
         <div
-          class="flex-1 xl1200:mt-[-60px]"
           v-if="activePhase"
+          class="flex-1 xl1200:mt-[-60px]"
         >
           <!-- Header displaying active phase info -->
           <div
@@ -63,7 +63,7 @@
 
           <!-- steps -->
           <!-- scroll element -->
-          <ClientOnly>
+          <client-only>
             <div
               ref="scrollContainer"
               class="overflow-y-auto pr-2 hide-scrollbar"
@@ -72,8 +72,8 @@
               <div
                 v-for="stage of props?.stages"
                 :key="stage.phase_id"
-                class="mb-8"
                 :ref="(el) => stageRefs.set(stage.phase_id, el)"
+                class="mb-8"
               >
                 <div class="flex items-center justify-center mb-[40px]">
                   <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
@@ -85,20 +85,20 @@
                   <div class="flex-grow border-t-[2px] border-[#C4C4C5]"></div>
                 </div>
 
-                <spiralButton
-                  :for-part="stage.phase_id === 0"
-                  :show-help-modal="props?.show_modal_need_help ?? false"
+                <spiral-button
+                  :forPart="stage.phase_id === 0"
+                  :showHelpModal="props?.show_modal_need_help ?? false"
                   :steps="stage.steps"
                 />
               </div>
             </div>
-          </ClientOnly>
+          </client-only>
         </div>
       </app-data-wrapper>
 
       <!-- Daily Challenges -->
       <div class="w-full xl1200:w-[310px]">
-        <dailyChallenges />
+        <daily-challenges />
       </div>
     </div>
   </user-panel-wrapper>
@@ -115,12 +115,10 @@ await userPanelStore.getStudentStages();
 
 const props = userPanelStore.studentStages;
 
-
-
 const activePhase = ref(
   props?.stages.find((p) => p.phase_id === props.active_phase_id)
 );
-const scrollContainer = <any>ref(null);
+const scrollContainer = ref<any | null>(null);
 const stageRefs = new Map();
 
 function formatTime(seconds: number) {

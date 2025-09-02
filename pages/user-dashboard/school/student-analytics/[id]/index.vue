@@ -1,21 +1,32 @@
 <template>
-  <user-panel-wrapper content-class="max-w-[1060px] !mx-auto lg:px-0 px-[5px]" :has-l-info="windowsSize.isDesktop"
-    :has-r-info="windowsSize.isDesktop" :page-name="`تحليل الطالب: ${stdAnlyzeFullData?.fullName}`" :withBackPage="true"
-    :has-prev="!windowsSize.isDesktop">
+  <user-panel-wrapper
+    contentClass="max-w-[1060px] !mx-auto lg:px-0 px-[5px]"
+    :hasLInfo="windowsSize.isDesktop"
+    :hasRInfo="windowsSize.isDesktop"
+    :pageName="`تحليل الطالب: ${stdAnlyzeFullData?.fullName}`"
+    :withBackPage="true"
+    :hasPrev="!windowsSize.isDesktop"
+  >
     <div class="mx-auto">
-      <div v-if="windowsSize.isDesktop"
+      <div
+        v-if="windowsSize.isDesktop"
         class="flex items-center text-dark-2b font-medium gap-[5px] cursor-pointer mb-[20px] mt-[-60px]"
-        @click="toSchool">
+        @click="toSchool"
+      >
         <i class="fa fa-chevron-right"></i>
         <span>رجوع للخلف</span>
       </div>
 
-
       <!-- student info for teacher -->
-      <div class="flex flex-wrap justify-center gap-[15px] lg:justify-between my-[20px]">
+      <div
+        class="flex flex-wrap justify-center gap-[15px] lg:justify-between my-[20px]"
+      >
         <!-- info part -->
         <div class="flex gap-[20px] items-center">
-          <img src="/images/png/person.png" class="rounded-full w-[80px] h-[80px] bg-white" />
+          <img
+            src="/images/png/person.png"
+            class="rounded-full w-[80px] h-[80px] bg-white"
+          />
           <div class="grid">
             <span class="text-blue-d6 text-[18px] 2xl:text-[24px] font-bold">
               {{ stdAnlyzeFullData?.fullName }}
@@ -29,18 +40,25 @@
         <!-- actions part -->
         <div class="flex gap-[3px] sm:gap-[12px] items-center">
           <!-- advices -->
-          <button style="
+          <button
+            style="
               background: linear-gradient(95.1deg, #24a7f1 0.47%, #0266d6 100%);
             "
             class="flex items-center justify-center gap-[15px] w-[147px] h-[44px] text-white font-medium text-[16px] rounded-[8px] cursor-pointer"
-            @click="scrollToRecommendations()">
+            @click="scrollToRecommendations()"
+          >
             <i class="fa-solid fa-lightbulb"></i>
             <span>التوصيات</span>
           </button>
           <!-- watsapp -->
-          <a :href="`https://wa.me/${stdAnlyzeFullData?.phoneNumber}`" target="_blank" rel="noopener noreferrer">
+          <a
+            :href="`https://wa.me/${stdAnlyzeFullData?.phoneNumber}`"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <button
-              class="flex items-center justify-center w-[96px] h-[44px] bg-green-66 gap-[5px] text-white font-medium text-[16px] rounded-[8px] cursor-pointer">
+              class="flex items-center justify-center w-[96px] h-[44px] bg-green-66 gap-[5px] text-white font-medium text-[16px] rounded-[8px] cursor-pointer"
+            >
               <i class="fa-brands fa-whatsapp"></i>
               <span>رسالة</span>
             </button>
@@ -48,7 +66,8 @@
           <!-- phone -->
           <a :href="`tel:+${stdAnlyzeFullData?.phoneNumber}`">
             <button
-              class="flex items-center justify-center w-[98px] h-[44px] gap-[5px] text-red-5e border border-red-5e bg-transparent font-medium text-[16px] rounded-[8px] cursor-pointer">
+              class="flex items-center justify-center w-[98px] h-[44px] gap-[5px] text-red-5e border border-red-5e bg-transparent font-medium text-[16px] rounded-[8px] cursor-pointer"
+            >
               <i class="fa-solid fa-phone"></i>
               <span>اتصال</span>
             </button>
@@ -59,32 +78,46 @@
       <!-- analytics info  -->
       <div class="flex flex-col 2xl:flex-row gap-[20px]">
         <!-- analytics info right part -->
-        <div class="flex flex-1/3 flex-col gap-y-[20px] w-full 2xl:min-w-[330px]">
+        <div
+          class="flex flex-1/3 flex-col gap-y-[20px] w-full 2xl:min-w-[330px]"
+        >
           <!-- rate square -->
-          <rateSquare :stdAnlyzeData="stdAnlyzeData" :fetching="panelStore.fetching.studentAnalyzeForTeacher" />
+          <rate-square
+            :stdAnlyzeData="stdAnlyzeData"
+            :fetching="panelStore.fetching.studentAnalyzeForTeacher"
+          />
 
           <!-- plane square -->
-          <planeSquare :stdPlaneInfo="stdPlaneInfo" :fetching="panelStore.fetching.studentPlanInfoForTeacher" />
+          <plane-square
+            :stdPlaneInfo="stdPlaneInfo"
+            :fetching="panelStore.fetching.studentPlanInfoForTeacher"
+          />
         </div>
 
         <!-- analytics info left part - chart filter -->
         <div class="w-full flex-2/3 2xl:min-w-[710px] h-auto">
-          <analyticsChartSquare :fetching="panelStore.fetching.studentAnalyzeChartForTeacher"
-            :categories="stdChartData?.mainCategoriesRates" :selectedCategoryId="selectedCategoryId"
-            v-model:selectedPeriod="selectedPeriodTable" :chartSeries="chartSeries" :stdChartData="stdChartData"
-            @select-category="selectCategory" @change-period="selectPeriodChart" />
+          <analytics-chart-square
+            v-model:selectedPeriod="selectedPeriodTable"
+            :fetching="panelStore.fetching.studentAnalyzeChartForTeacher"
+            :categories="stdChartData?.mainCategoriesRates"
+            :selectedCategoryId="selectedCategoryId"
+            :chartSeries="chartSeries"
+            :stdChartData="stdChartData"
+            @selectCategory="selectCategory"
+            @changePeriod="selectPeriodChart"
+          />
         </div>
       </div>
 
-
       <!-- tables filter -->
-      <LazyTrianingTableSquare :stdAnlyzeDataTable="stdAnlyzeDataTable" :fetching="panelStore.fetching.studentAnalyzeForTeacher"
-        @fetchStudentAnalyze="fetchStudentAnalyze" />
-
+      <lazy-trianing-table-square
+        :stdAnlyzeDataTable="stdAnlyzeDataTable"
+        :fetching="panelStore.fetching.studentAnalyzeForTeacher"
+        @fetchStudentAnalyze="fetchStudentAnalyze"
+      />
 
       <!-- advices part -->
-      <advicesSquare :data="stdRecommendations" />
-
+      <advices-square :data="stdRecommendations" />
     </div>
   </user-panel-wrapper>
 </template>
@@ -95,169 +128,169 @@ import advicesSquare from '~/components/user/advicesSquare.vue';
 import { useApexChartService } from '~/main/services/useApexChartService';
 import { RouteHelper } from '~/main/utils/route-helper';
 import { useUserPanelStore } from '~/store/user-panel';
-import type { analyzeStudentCategory, analyzeStudentCategoryForTable } from '~/main/modules/user-panel/data-access/user-panel.model';
+import type {
+  analyzeStudentCategory,
+  analyzeStudentCategoryForTable,
+} from '~/main/modules/user-panel/data-access/user-panel.model';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { UserRoles } from '~/core/auth/constants/user-roles';
 
-
 //use fun
 const apexChartService = useApexChartService();
-const route = useRoute()
+const route = useRoute();
 const router = useRouter();
 const panelStore = useUserPanelStore();
-const windowsSize = useWindowSize()
-const { data } = useAuth()
-
-
+const windowsSize = useWindowSize();
+const { data } = useAuth();
 
 //data
-const studentId = Number(route.params.id)
-const selectedCategoryId = ref<any>(null)
-const selectedPeriodTable = ref(0)
-const selectedPeriodChart = ref(0)
+const studentId = Number(route.params.id);
+const selectedCategoryId = ref<any>(null);
+const selectedPeriodTable = ref(0);
+const selectedPeriodChart = ref(0);
 const chartSeries = ref<any>([]);
-
-
-
 
 //computed
 const userData = computed(() => data.value as UserInfoDataModel);
 
-
 const stdAnlyzeFullData = computed(() => {
-  return panelStore.studentAnalyzeForTeacher
-})
+  return panelStore.studentAnalyzeForTeacher;
+});
 
 const stdAnlyzeData = computed(() => {
-  return stdAnlyzeFullData.value?.analyzes[0] || null
-})
+  return stdAnlyzeFullData.value?.analyzes[0] || null;
+});
 
 const stdRecommendations = computed(() => {
-  return panelStore.recommendations
-})
+  return panelStore.recommendations;
+});
 
 const stdAnlyzeDataTable = computed(() => {
-  const flat = stdAnlyzeData.value?.analayzeStudentCategories ?? []
+  const flat = stdAnlyzeData.value?.analayzeStudentCategories ?? [];
 
-  const map = new Map<number, any>()
+  const map = new Map<number, any>();
 
-  const result: analyzeStudentCategoryForTable = []
+  const result: analyzeStudentCategoryForTable = [];
 
-  flat.forEach(item => {
-    map.set(item.categoryId, { ...item, children: <analyzeStudentCategory[]>[] })
-  })
+  flat.forEach((item) => {
+    map.set(item.categoryId, { ...item, children: [] });
+  });
 
-  flat.forEach(item => {
+  flat.forEach((item) => {
     if (item.parentId === null) {
-      result.push(map.get(item.categoryId))
+      result.push(map.get(item.categoryId));
     } else {
-      const parent = map.get(item.parentId)
+      const parent = map.get(item.parentId);
       if (parent) {
-        parent.children.push(map.get(item.categoryId))
+        parent.children.push(map.get(item.categoryId));
       }
     }
-  })
+  });
 
-  return result
-})
+  return result;
+});
 
 const stdChartData = computed(() => {
-  return panelStore.studentAnalyzeChartForTeacher
-})
+  return panelStore.studentAnalyzeChartForTeacher;
+});
 
 const stdPlaneInfo = computed(() => {
-  return panelStore.studentPlanInfoForTeacher
-})
-
+  return panelStore.studentPlanInfoForTeacher;
+});
 
 //methods
 function selectCategory(id) {
-  selectedCategoryId.value = id
-  fetchStudentAnalyzeChart()
+  selectedCategoryId.value = id;
+  fetchStudentAnalyzeChart();
 }
 
 function selectPeriodChart(period) {
-  selectedPeriodChart.value = period
-  fetchStudentAnalyzeChart()
+  selectedPeriodChart.value = period;
+  fetchStudentAnalyzeChart();
 }
 
-
 function scrollToRecommendations() {
-  const target = document.getElementById("recommendations");
+  const target = document.getElementById('recommendations');
   if (target) {
-    target.scrollIntoView({ behavior: "smooth" });
+    target.scrollIntoView({ behavior: 'smooth' });
   }
 }
 
 function toSchool() {
-  router.push(RouteHelper.schoolPanel())
+  router.push(RouteHelper.schoolPanel());
 }
 
 async function fetchStudentAnalyze(selectedPeriod) {
-  selectedPeriodTable.value = selectedPeriod
-  await panelStore.getStudentAnalyzeForTeacher(selectedPeriodTable.value, studentId)
+  selectedPeriodTable.value = selectedPeriod;
+  await panelStore.getStudentAnalyzeForTeacher(
+    selectedPeriodTable.value,
+    studentId
+  );
 }
 
 async function fetchStudentAnalyzeChart() {
-  await panelStore.getStudentAnalyzeChartForTeacher(selectedPeriodChart.value, selectedCategoryId.value, studentId)
+  await panelStore.getStudentAnalyzeChartForTeacher(
+    selectedPeriodChart.value,
+    selectedCategoryId.value,
+    studentId
+  );
   const data = stdChartData.value?.chartData
-    .filter(item => item.count > 0)
-    .map(item => item.date ? { x: formatDate(item.date), y: item.count } : null)
+    .filter((item) => item.count > 0)
+    .map((item) =>
+      item.date ? { x: formatDate(item.date), y: item.count } : null
+    )
     .filter(Boolean);
 
   chartSeries.value = [
     {
       name: 'النقاط',
-      data: (data && data.length >= 2) ? data : []
-    }
+      data: data && data.length >= 2 ? data : [],
+    },
   ];
 }
 
 async function fetchStudentTrainingPlane() {
-  await panelStore.getTrainingPlansInfoForTeacher(studentId)
+  await panelStore.getTrainingPlansInfoForTeacher(studentId);
 }
 
 async function fetchStudentSubscriptionsDetails() {
-  await panelStore.getStudentSubscriptionsDetails(studentId)
+  await panelStore.getStudentSubscriptionsDetails(studentId);
 }
 
 function fetchRecommendations() {
   const bodyData = {
     totalPercentage: stdPlaneInfo.value?.totalPercentage,
     lastWeekPercentage: stdPlaneInfo.value?.lastWeek.percentage,
-    Categories: stdAnlyzeData.value?.analayzeStudentCategories
-  }
-  panelStore.getanalyzeRecommendations(bodyData)
+    Categories: stdAnlyzeData.value?.analayzeStudentCategories,
+  };
+  panelStore.getanalyzeRecommendations(bodyData);
 }
-
 
 function formatDate(dateStr: string) {
-  const date = new Date(dateStr)
-  return date.toISOString().split('T')[0]
+  const date = new Date(dateStr);
+  return date.toISOString().split('T')[0];
 }
-
 
 onMounted(async () => {
   apexChartService.initApexChart();
-  await fetchStudentSubscriptionsDetails()
-  fetchStudentAnalyzeChart()
-  await fetchStudentAnalyze(selectedPeriodTable.value)
-  await fetchStudentTrainingPlane()
-  fetchRecommendations()
-})
+  await fetchStudentSubscriptionsDetails();
+  fetchStudentAnalyzeChart();
+  await fetchStudentAnalyze(selectedPeriodTable.value);
+  await fetchStudentTrainingPlane();
+  fetchRecommendations();
+});
 
 //watch
 watch(
   () => panelStore.globalType,
   async (newVal, oldVal) => {
     if (oldVal && oldVal !== newVal) {
-      fetchStudentAnalyzeChart()
-      fetchStudentAnalyze(selectedPeriodTable.value)
+      fetchStudentAnalyzeChart();
+      fetchStudentAnalyze(selectedPeriodTable.value);
     }
   },
   { immediate: true }
 );
-
 </script>
 
 <style lang="scss" scoped></style>

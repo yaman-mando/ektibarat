@@ -1,16 +1,17 @@
 <template>
     <div class="fixed inset-0 z-50 bg-black/60 flex justify-center overflow-auto" @click.self="closeModal">
         <transition name="grow-fade">
-            <div v-if="visible" class="bg-white dark:bg-dark-800 rounded-lg shadow-lg p-6 relative w-[700px] max-w-[95vw] h-fit m-auto"
+            <div
+v-if="visible" class="bg-white dark:bg-dark-800 rounded-lg shadow-lg p-6 relative w-[700px] max-w-[95vw] h-fit m-auto"
                 style="box-shadow: 0px 0px 10px 0px #00000026">
                 <div class="flex justify-between items-center border-b pb-3 mb-4">
                     <h2 class="text-xl font-bold text-gray-800 dark:text-white">نصائح اختبارات</h2>
-                    <button @click="closeModal" class="text-gray-500 hover:text-red-500 cursor-pointer">
+                    <button class="text-gray-500 hover:text-red-500 cursor-pointer" @click="closeModal">
                         <i class="fa fa-close text-xl"></i>
                     </button>
                 </div>
 
-                <div v-if="content" v-html="content" class="text-gray-700 dark:text-gray-200"></div>
+                <div v-if="content" class="text-gray-700 dark:text-gray-200" v-html="content"></div>
                 <div v-else class="text-center text-gray-500 dark:text-gray-400">لايوجد نصائح لعرضها</div>
             </div>
         </transition>

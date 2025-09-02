@@ -1,27 +1,30 @@
 <template>
     <div :class="!chartShow.showChart ? 'p-0' : 'p-4'" class="bg-white shadow-md rounded-lg relative h-full">
-        <app-overlay msg="جاري جلب بيانات المخطط ..." v-if="fetching" />
+        <app-overlay v-if="fetching" msg="جاري جلب بيانات المخطط ..." />
 
-        <img v-if="!chartShow.showChart" class="w-full h-full rounded-[10px]" :class="{ 'cursor-pointer': chartShow.withClick }"
+        <img
+v-if="!chartShow.showChart" class="w-full h-full rounded-[10px]" :class="{ 'cursor-pointer': chartShow.withClick }"
             :src="chartShow.imageUrl ?? '#'" alt="" @click="chartShow.toLink?.()" />
 
         <template v-else>
             <!-- Header -->
             <div class="flex flex-col sm:flex-row justify-between items-baseline mb-4 gap-4">
                 <div class="flex gap-[12px] flex-wrap overflow-x-auto sm:overflow-visible p-[10px] sm:p-0">
-                    <button v-for="(category, index) in categories" :key="category.categoryId ?? index"
-                        @click="$emit('select-category', category.categoryId)" :class="['rounded-[8px] min-w-[90px] h-[50px] text-[12px] sm:min-w-[100px] sm:h-[60px] sm:text-[13px] xl:min-w-[140px] xl:h-[80px] xl:text-[16px]',
+                    <button
+v-for="(category, index) in categories" :key="category.categoryId ?? index"
+                        :class="['rounded-[8px] min-w-[90px] h-[50px] text-[12px] sm:min-w-[100px] sm:h-[60px] sm:text-[13px] xl:min-w-[140px] xl:h-[80px] xl:text-[16px]',
                             'shadow-custom font-medium cursor-pointer',
                             selectedCategoryId === category.categoryId ? 'bg-blue-d6 text-white shadow-none' : 'bg-white text-dark-2b'
-                        ]" class="category-button">
+                        ]" class="category-button" @click="$emit('select-category', category.categoryId)">
                         <div class="grid items-center justify-items-center">
-                            <TextSlice :text="category.categoryName" :length="12" />
+                            <text-slice :text="category.categoryName" :length="12" />
                             <span class="font-bold text-[18px] sm:text-[22px] xl:text-[30px]"> {{
                                 dateFormat.formatNoData(category.rate) }} </span>
                         </div>
                     </button>
                 </div>
-                <select v-model="selectedPeriodLocal"
+                <select
+v-model="selectedPeriodLocal"
                     class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm">
                     <option v-for="item in chartPeriodList" :key="item.id" :value="item.id"> الفترة: {{ item.label }}
                     </option>
@@ -30,7 +33,8 @@
 
             <!-- Chart -->
             <div class="relative max-w-full overflow-x-auto">
-                <component :is="apexChartComponent" v-if="apexChartComponent" :key="chartKey" type="area"
+                <component
+:is="apexChartComponent" v-if="apexChartComponent" :key="chartKey" type="area"
                     :height="'280px'" :options="chartOptions" :series="chartSeries" />
             </div>
 

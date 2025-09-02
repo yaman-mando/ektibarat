@@ -1,20 +1,24 @@
 <template>
   <!-- Modal overlay -->
-  <div v-show="show" class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+  <div
+    v-show="show"
+    class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center"
+  >
     <transition name="grow-fade">
       <!-- Modal box -->
-      <div v-if="show" class="bg-white shadow-xl rounded-[15px]
-               w-full max-w-[95vw] md:w-[830px]
-               min-h-[429px]
-               flex flex-col gap-5
-               p-5 md:p-[20px] text-center relative">
+      <div
+        v-if="show"
+        class="bg-white shadow-xl rounded-[15px] w-full max-w-[95vw] md:w-[830px] min-h-[429px] flex flex-col gap-5 p-5 md:p-[20px] text-center relative"
+      >
         <!-- Modal header with close button -->
         <div class="w-full flex justify-between items-center">
           <span class="text-[18px] md:text-[20px] font-medium text-purple-8c">
             اختيار القسم التالي
           </span>
-          <i class="fa fa-times text-[22px] md:text-[24px] text-purple-8c cursor-pointer"
-            @click="$emit('update:show', false)"></i>
+          <i
+            class="fa fa-times text-[22px] md:text-[24px] text-purple-8c cursor-pointer"
+            @click="$emit('update:show', false)"
+          ></i>
         </div>
 
         <!-- Instructional text -->
@@ -22,52 +26,66 @@
           <span class="text-blue-d6 text-[18px] md:text-[20px] font-bold">
             قم بتحديد القسم الذي تريد أن تتدرب عليه
           </span>
-          <span class="text-dark-2b text-[14px] md:text-[16px] font-medium leading-snug text-center">
+          <span
+            class="text-dark-2b text-[14px] md:text-[16px] font-medium leading-snug text-center"
+          >
             بعد اختيارك، لن تتمكن من تغيير القسم إلى أن تُنهيه بالكامل
           </span>
         </div>
 
         <!-- Categories list -->
-        <div class="flex flex-col md:flex-row md:flex-wrap gap-[10px] justify-center items-center">
-          <template v-if="categoriesList" v-for="(card, index) in categoriesList" :key="`card_${index}`">
-            <div v-if="card.children.length > 0" class="card w-full md:max-w-[390px]">
-              <!-- Category title -->
-              <div class="ca-head">
-                <label>{{ card.name }}</label>
-              </div>
+        <div
+          class="flex flex-col md:flex-row md:flex-wrap gap-[10px] justify-center items-center"
+        >
+          <template v-if="categoriesList">
+            <template
+              v-for="(card, index) in categoriesList"
+              :key="`card_${index}`"
+            >
+              <div
+                v-if="card.children.length > 0"
+                class="card w-full md:max-w-[390px]"
+              >
+                <!-- Category title -->
+                <div class="ca-head">
+                  <label>{{ card.name }}</label>
+                </div>
 
-              <!-- Items under category -->
-              <div class="ca-contents relative">
-                <div v-for="item in card.children" :key="item.id" class="item"
-                  :class="{ active: selectedCat === item.id, disabled: item.disabled }"
-                  @click="!item.disabled && (selectedCat = item.id)">
-                  <text-slice :length="20" :text="item.label" />
+                <!-- Items under category -->
+                <div class="ca-contents relative">
+                  <div
+                    v-for="item in card.children"
+                    :key="item.id"
+                    class="item"
+                    :class="{
+                      active: selectedCat === item.id,
+                      disabled: item.disabled,
+                    }"
+                    @click="!item.disabled && (selectedCat = item.id)"
+                  >
+                    <text-slice
+                      :length="20"
+                      :text="item.label"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            </template>
           </template>
         </div>
 
         <!-- Save button -->
         <app-overlay v-if="examLoading" />
-        <button @click="selectedCat !== null && saveSelection(selectedCat)" class="mt-4 w-[150px] md:w-[200px]
-                 h-[40px] md:h-[44px]
-                 text-[14px] md:text-[16px]
-                 font-bold text-white
-                 bg-purple-8c rounded-[6px] 
-                mx-auto
-                 flex items-center justify-center
-                 cursor-pointer">
+        <button
+          class="mt-4 w-[150px] md:w-[200px] h-[40px] md:h-[44px] text-[14px] md:text-[16px] font-bold text-white bg-purple-8c rounded-[6px] mx-auto flex items-center justify-center cursor-pointer"
+          @click="selectedCat !== null && saveSelection(selectedCat)"
+        >
           حفظ
         </button>
       </div>
     </transition>
   </div>
 </template>
-
-
-
-
 
 <script setup lang="ts">
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
@@ -79,40 +97,37 @@ import { getUuid, sleepUtil } from '~/main/utils/shared-utils';
 import { useUserPanelStore } from '~/store/user-panel';
 import { useStore } from 'vuex';
 
-
 const props = defineProps({
   stepId: {
     type: Number,
-    required: true
+    required: true,
   },
   show: {
     type: Boolean,
     default: false,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
 //emits
 const emit = defineEmits<{
-  (e: 'continue'): void
-  (e: 'update:show', value: boolean): void
-}>()
+  (e: 'continue'): void;
+  (e: 'update:show', value: boolean): void;
+}>();
 
 //store
-const userPanelStore = useUserPanelStore()
-const globalStore = useGlobalStore()
+const userPanelStore = useUserPanelStore();
+const globalStore = useGlobalStore();
 const runtimeConfig = useRuntimeConfig();
 const store = useStore();
 const auth = useAuth();
 const authStore = useAuthStore();
 const { $axios } = useNuxtApp();
 const router = useRouter();
-const toastMessage = useToastMessage()
+const toastMessage = useToastMessage();
 
 //getting
-await userPanelStore.getCategoriesListForUser()
-
-
+await userPanelStore.getCategoriesListForUser();
 
 //enums
 class examForm {
@@ -136,28 +151,27 @@ class examForm {
   customerId: any | null = null;
   sessionId: any | null = null;
   stepId: null | number = null;
-
 }
 
 //data
-const categoriesList: categoriesListForModal | null = userPanelStore.categoriesListForModal
-const selectedCat = ref<number | null>(null)
-const examLoading = ref<boolean>(false)
+const categoriesList: categoriesListForModal | null =
+  userPanelStore.categoriesListForModal;
+const selectedCat = ref<number | null>(null);
+const examLoading = ref<boolean>(false);
 const form = ref(new examForm(runtimeConfig.public.defaultSubjectId));
 
-
 //computed
-const user = computed(
-  () => { return authStore.state.userData as unknown as UserInfoDataModel }
-)
+const user = computed(() => {
+  return authStore.state.userData as unknown as UserInfoDataModel;
+});
 
 const globalUser = computed(() => {
-  return globalStore.state.globalTypeUserValue
-})
+  return globalStore.state.globalTypeUserValue;
+});
 
 const isTahsele = computed(() => {
   return globalUser.value === GlobalTypes.tahsele;
-})
+});
 
 //method
 const handleClarityData = async () => {
@@ -183,7 +197,7 @@ const handleClarityData = async () => {
     console.log(e);
     return null;
   }
-}
+};
 
 const toTrainig = async () => {
   try {
@@ -195,10 +209,10 @@ const toTrainig = async () => {
     form.value.subjectId = isTahsele.value
       ? runtimeConfig.public.defaultSubjectIdTahsele
       : runtimeConfig.public.defaultSubjectId;
-    const { data: res } = await $axios.post(url, form.value)
+    const { data: res } = await $axios.post(url, form.value);
     if (res) {
       store.commit('student/SET_CURRENT_EXAM_TRAIN_PAGE_DATA', res);
-      router.push(`/student/training/${res.id}`)
+      router.push(`/student/training/${res.id}`);
     }
     await sleepUtil(1500);
     examLoading.value = false;
@@ -211,23 +225,22 @@ const toTrainig = async () => {
     examLoading.value = false;
     console.log(e);
   }
-}
+};
 
-const saveSelection = async (catId: Number) => {
+const saveSelection = async (catId: number) => {
   try {
-    const catInfo = await userPanelStore.getCategoryInfo(catId, props.stepId)
+    const catInfo = await userPanelStore.getCategoryInfo(catId, props.stepId);
     form.value.randomQuestionsSettings.push({
       categoryId: catInfo?.categoryId,
       questionLevel: 0,
       questionsCount: catInfo?.questionsCount,
-    })
-    form.value.stepId = catInfo?.stepId ?? null
-    toTrainig()
+    });
+    form.value.stepId = catInfo?.stepId ?? null;
+    toTrainig();
   } catch (e) {
-    console.log('حدث خطأ')
+    console.log('حدث خطأ');
   }
-}
-
+};
 </script>
 
 <style lang="scss" scoped>
@@ -247,7 +260,7 @@ const saveSelection = async (catId: Number) => {
     justify-content: center;
     align-items: center;
     height: 50px;
-    background-color: #ECEFF2;
+    background-color: #eceff2;
 
     label {
       font-size: 20px;
@@ -306,11 +319,11 @@ const saveSelection = async (catId: Number) => {
 
       &.disabled {
         box-shadow: none;
-        background: #F0F0F0;
+        background: #f0f0f0;
         pointer-events: none;
 
         span {
-          color: #8F8F8F;
+          color: #8f8f8f;
         }
       }
     }

@@ -1,14 +1,15 @@
 <template>
-    <user-panel-wrapper content-class="max-w-[1050px] !mx-auto px-[5px]">
+    <user-panel-wrapper contentClass="max-w-[1050px] !mx-auto px-[5px]">
         <div class="mt-0 sm:mt-[-60px] text-[20px] font-bold text-blue-d6 dark:text-white">
             <span>أهلاً </span>
             <span>{{ userData.userName || userData.firstName }}!</span>
         </div>
 
         <!-- السلايدر -->
-        <app-data-wrapper :loading="panelStore.fetching.homeSliders" :data="sliders" loading-type="text"
-            loadingText="جاري تحميل السلايدر ..." empty-text="لا توجد صور سلايدر">
-            <app-slider class="mt-[20px]" v-if="sliders" :slides="sliders" :delay-action="6000" :tagFilter="0" />
+        <app-data-wrapper
+:loading="panelStore.fetching.homeSliders" :data="sliders" loadingType="text"
+            loadingText="جاري تحميل السلايدر ..." emptyText="لا توجد صور سلايدر">
+            <app-slider v-if="sliders" class="mt-[20px]" :slides="sliders" :delayAction="6000" :tagFilter="0" />
         </app-data-wrapper>
 
         <!-- التحليلات -->
@@ -28,7 +29,8 @@
                     </div>
 
                     <!-- نسبة الأداء -->
-                    <app-circule-progress-bar :isLock="!isSubscribe" :percentage="analyzeInfo?.studentRate ?? 0"
+                    <app-circule-progress-bar
+:isLock="!isSubscribe" :percentage="analyzeInfo?.studentRate ?? 0"
                         :gradientColors="['#58CC02', '#4E9818']" :strokeWidth="9" :textSize="16"
                         textClass="text-blue-d6" />
 
@@ -36,7 +38,8 @@
 
                 <!-- أقسام التدريب -->
                 <div class="flex-1 min-h-[100px] mt-4 sm:mt-0 grid grid-cols-1 sm:grid-cols-2 gap-[10px]">
-                    <div v-for="cat in analyzeInfo?.trainingAnalyzeCategories" :key="cat.categoryId"
+                    <div
+v-for="cat in analyzeInfo?.trainingAnalyzeCategories" :key="cat.categoryId"
                         class="bg-gray-fa dark:bg-gray-700 rounded-[8px] p-[12px] flex flex-col gap-[8px]">
                         <div class="flex items-center justify-center gap-[10px]">
                             <img src="/images/svg/calculator.svg" class="w-[28px] h-auto" alt="icon" />
@@ -70,8 +73,9 @@
 
                 <!-- زر التحليلات -->
                 <div class="w-full flex justify-center">
-                    <app-g-button @click="toAnalytics" width="150px" height="44px" bg-class="bg-blue-d6" radius="8px"
-                        text-color="text-white" text-size="16px" font-weight="font-medium">
+                    <app-g-button
+width="150px" height="44px" bgClass="bg-blue-d6" radius="8px" textColor="text-white"
+                        textSize="16px" font-weight="font-medium" @click="toAnalytics">
                         التحليلات
                     </app-g-button>
 
@@ -83,9 +87,9 @@
             <!-- مربع التقدم بالخطة -->
             <div class="flex-1/3 min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid relative">
                 <!-- not subscribe -->
-                <no-sub-plane type="studentHasNoPlane" v-if="!isSubscribe" />
+                <no-sub-plane v-if="!isSubscribe" type="studentHasNoPlane" />
                 <template v-else>
-                    <app-overlay msg="جاري جلب بيانات الخطة ..." v-if="panelStore.fetching.planInfoSimple" />
+                    <app-overlay v-if="panelStore.fetching.planInfoSimple" msg="جاري جلب بيانات الخطة ..." />
                     <!-- First line -->
                     <div class="flex items-center justify-between h-[50px]">
                         <div class="flex flex-col items-start">
@@ -93,7 +97,8 @@
                                 الالتزام بالخطة
                             </span>
                             <span class="flex gap-x-[5px] items-center">
-                                <svg width="8" height="8" viewBox="0 0 8 8" fill="none"
+                                <svg
+width="8" height="8" viewBox="0 0 8 8" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="4" cy="4" r="4" :fill="levelColor" />
                                 </svg>
@@ -105,8 +110,9 @@
                         <div class="flex flex-col items-center">
                             <span class="text-[40px] 2xl:text-[48px] leading-[42px] font-bold text-dark-63">
                                 <span>{{ dateFormat.formatNoData(planInfo?.totalPercentage) }}</span>
-                                <span class="text-[26px] 2xl:text-[30px]"
-                                    v-if="planInfo?.totalPercentage && planInfo?.totalPercentage > 0">%</span>
+                                <span
+v-if="planInfo?.totalPercentage && planInfo?.totalPercentage > 0"
+                                    class="text-[26px] 2xl:text-[30px]">%</span>
                             </span>
                             <span class="text-gray-8f text-[10px] 2xl:text-[12px] font-medium">
                                 {{ dateFormat.minutesToHHMM(planInfo?.timeDone, false) }} | {{
@@ -119,13 +125,15 @@
                     <div class="mt-[15px] h-[84px] grid items-center relative">
                         <div style="box-shadow: 2px 2px 4px 0px #00000026 inset" class="relative h-[20px] bg-[#F0F0F0]">
                             <!-- Green bar -->
-                            <div style="background: linear-gradient(90deg, #58CC02 0%, #4E9818 100%)"
+                            <div
+style="background: linear-gradient(90deg, #58CC02 0%, #4E9818 100%)"
                                 class="absolute top-0 bottom-0 right-0"
                                 :style="{ width: `${planInfo?.percentageDone}%` }">
                             </div>
 
                             <!-- Orange bar -->
-                            <div style="
+                            <div
+style="
                     background: linear-gradient(
                       90deg,
                       #fdc830 0%,
@@ -139,21 +147,25 @@
                         </div>
 
                         <!-- "You are here" indicator -->
-                        <div v-if="planInfo?.percentageDone > 0"
+                        <div
+v-if="planInfo?.percentageDone > 0"
                             :style="{ right: `calc(${planInfo?.percentageDone ?? 0}% - 18px)` }"
                             class="absolute -top-[10px] h-[27px] grid gap-y-[5px] justify-items-center w-[40px]">
                             <div class="text-[10px] 2xl:text-[12px] text-black font-medium">أنت هنا</div>
-                            <svg width="16" height="14" viewBox="0 0 16 14" fill="none"
+                            <svg
+width="16" height="14" viewBox="0 0 16 14" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path d="M8 14L0 0L16 0L8 14Z" fill="#00C48C" />
                             </svg>
                         </div>
 
                         <!-- Target indicator -->
-                        <div v-if="planInfo?.percentageRequired > 0"
+                        <div
+v-if="planInfo?.percentageRequired > 0"
                             :style="{ right: `calc(${planInfo?.percentageRequired ?? 0}% - 40px)` }"
                             class="absolute bottom-0 h-[27px] grid gap-y-[5px] justify-items-center w-[80px]">
-                            <svg width="16" height="14" viewBox="0 0 16 14" fill="none"
+                            <svg
+width="16" height="14" viewBox="0 0 16 14" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path d="M8 0L16 14H0L8 0Z" fill="#EAB316" />
                             </svg>
@@ -164,13 +176,15 @@
                     </div>
 
                     <div class="flex items-center justify-center gap-x-[20px]">
-                        <app-g-button @click="toPlane" width="150px" height="44px" bg-class="bg-transparent"
-                            :border="true" border-color="border-purple-8c" radius="8px" text-color="text-purple-8c"
-                            text-size="16px" font-weight="font-medium">
+                        <app-g-button
+width="150px" height="44px" bgClass="bg-transparent" :border="true"
+                            borderColor="border-purple-8c" radius="8px" textColor="text-purple-8c" textSize="16px"
+                            font-weight="font-medium" @click="toPlane">
                             خطتي
                         </app-g-button>
-                        <app-g-button @click="toTraining" width="150px" height="44px" bg-class="bg-purple-78"
-                            radius="8px" text-color="text-white" text-size="16px" font-weight="font-medium">
+                        <app-g-button
+width="150px" height="44px" bgClass="bg-purple-78" radius="8px"
+                            textColor="text-white" textSize="16px" font-weight="font-medium" @click="toTraining">
                             تدرب
                         </app-g-button>
                     </div>
@@ -181,8 +195,9 @@
         <!-- أحدث المقالات -->
         <div class="grid gap-y-[25px] mt-[40px] mb-[30px]">
             <span class=" text-blue-d6 text-[24px] font-bold">أحدث المقالات</span>
-            <app-data-wrapper :loading="panelStore.fetching.blogs" :data="blogs" loading-type="text"
-                loadingText="جاري تحميل المقالات ..." empty-text="لا توجد بيانات متاحة">
+            <app-data-wrapper
+:loading="panelStore.fetching.blogs" :data="blogs" loadingType="text"
+                loadingText="جاري تحميل المقالات ..." emptyText="لا توجد بيانات متاحة">
                 <app-blogs v-if="blogs" :blogs="blogs" />
             </app-data-wrapper>
         </div>

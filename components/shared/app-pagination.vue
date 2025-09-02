@@ -1,11 +1,11 @@
 <template>
   <div class="pagination">
-    <span class="pagination-item" v-if="!hideFirstLast">
+    <span v-if="!hideFirstLast" class="pagination-item">
       <a
         href="#"
-        @click.prevent="onClickFirstPage"
         :class="isInFirstPage ? 'disabled' : ''"
         :disabled="isInFirstPage"
+        @click.prevent="onClickFirstPage"
       >
         الأول
       </a>
@@ -14,9 +14,9 @@
     <span class="pagination-item back">
       <a
         href="#"
-        @click.prevent="onClickPreviousPage"
         :class="isInFirstPage ? 'disabled' : ''"
         :disabled="isInFirstPage"
+        @click.prevent="onClickPreviousPage"
       >
         <i class="fa fa-chevron-right"></i>
       </a>
@@ -33,9 +33,9 @@
       <span v-for="page in pages" :key="page.name" class="pagination-item">
         <a
           href="#"
-          @click.prevent="onClickPage(page.name)"
           :disabled="page.isDisabled"
           :class="{ active: isPageActive(page.name) }"
+          @click.prevent="onClickPage(page.name)"
         >
           {{ page.name }}
         </a>
@@ -52,20 +52,20 @@
     <span class="pagination-item next">
       <a
         href="#"
-        @click.prevent="onClickNextPage"
         :class="isInLastPage ? 'disabled' : ''"
         :disabled="isInLastPage"
+        @click.prevent="onClickNextPage"
       >
         <i class="fa fa-chevron-left"></i>
       </a>
     </span>
 
-    <span class="pagination-item" v-if="!hideFirstLast">
+    <span v-if="!hideFirstLast" class="pagination-item">
       <a
         href="#"
-        @click.prevent="onClickLastPage"
         :class="isInLastPage ? 'disabled' : ''"
         :disabled="isInLastPage"
+        @click.prevent="onClickLastPage"
       >
         الأخير
       </a>

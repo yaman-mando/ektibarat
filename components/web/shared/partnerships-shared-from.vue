@@ -4,7 +4,8 @@
       <client-only>
         <div class="register-form">
           <div class="c-back-mobile">
-            <app-button variant="clear" size="md" label="رجوع" iconStartClass="fa fa-solid fa-arrow-right-from-bracket"
+            <app-button
+variant="clear" size="md" label="رجوع" iconStartClass="fa fa-solid fa-arrow-right-from-bracket"
               @click="toMain" />
           </div>
           <client-only>
@@ -13,42 +14,51 @@
               <vee-form ref="form_ref" class="w-full">
                 <div class="rt-c__form">
                   <div class="w-full grid grid-cols-2 gap-5">
-                    <form-input v-model:inputValue="form.firstName" inputId="firstName" label="الاسم الأول" :rules="{
+                    <form-input
+v-model:inputValue="form.firstName" inputId="firstName" label="الاسم الأول" :rules="{
                       required: true,
                     }" />
-                    <form-input v-model:inputValue="form.lastname" inputId="lastname" label="اسم العائلة" :rules="{
+                    <form-input
+v-model:inputValue="form.lastname" inputId="lastname" label="اسم العائلة" :rules="{
                       required: true,
                     }" />
                   </div>
 
                   <!--   email  -->
-                  <form-input v-model:inputValue="form.email" class="w-full" inputId="email" label="البريد الإلكتروني"
+                  <form-input
+v-model:inputValue="form.email" class="w-full" inputId="email" label="البريد الإلكتروني"
                     :rules="{
                       required: true,
                       email: true,
                     }" inputType="email" />
 
-                  <phone-input ref="phone_input_ref" :key="phoneInputKey" class="w-full" :isEdit="true"
+                  <phone-input
+ref="phone_input_ref" :key="phoneInputKey" class="w-full" :isEdit="true"
                     :showLabel="true" :phoneNumber="form.phoneNumber"
                     @onInputPhone="(val) => (form.phoneNumber = val)" />
 
-                  <lazy-form-select v-if="selectedType === PartnerShipFormTypesEnum.teacher"
+                  <lazy-form-select
+v-if="selectedType === PartnerShipFormTypesEnum.teacher"
                     v-model:selectedValues="form.teacherQodoratType" :list="teacherQodoratType" :label="'التخصصات'"
                     :placeholder="'اختر تخصصك'" :rules="{ required: true }" inputId="teacherQodoratType" />
 
-                  <lazy-form-select v-if="selectedType === PartnerShipFormTypesEnum.student"
+                  <lazy-form-select
+v-if="selectedType === PartnerShipFormTypesEnum.student"
                     v-model:selectedValues="form.grade" :list="gradesList" :label="'الصف الدراسي'"
                     :placeholder="'اختر صفك الدراسي'" :rules="{ required: true }" inputId="grade" :isMulti="false" />
 
                   <template v-if="selectedType === PartnerShipFormTypesEnum.school">
-                    <lazy-form-select v-model:selectedValues="form.city" :list="applicantCityType" :label="'المدينة'"
+                    <lazy-form-select
+v-model:selectedValues="form.city" :list="applicantCityType" :label="'المدينة'"
                       :rules="{ required: true }" inputId="city" :isMulti="false" />
 
-                    <form-input v-model:inputValue="form.schoolName" inputId="schoolName" label="اسم المدرسة" :rules="{
+                    <form-input
+v-model:inputValue="form.schoolName" inputId="schoolName" label="اسم المدرسة" :rules="{
                       required: true,
                     }" />
 
-                    <lazy-form-select v-model:selectedValues="form.applicantType" :list="applicantType"
+                    <lazy-form-select
+v-model:selectedValues="form.applicantType" :list="applicantType"
                       :label="'صفة مقدم الطلب'" :rules="{ required: true }" inputId="applicantType" />
                   </template>
 
@@ -62,7 +72,8 @@
         </div>
       </client-only>
 
-      <lazy-prime-dialog id="modal-edit-mail" v-model:visible="openMailModal" header="تعديل البريد الالكتروني"
+      <lazy-prime-dialog
+id="modal-edit-mail" v-model:visible="openMailModal" header="تعديل البريد الالكتروني"
         :showHeader="false" :modal="true" :dismissableMask="true" :closeOnEscape="true" :closable="true"
         @afterHide="closeMailModal()">
         <i class="fa fa-close" @click="closeMailModal()"></i>
@@ -73,7 +84,8 @@
           <span class="t-3">{{ form.email }}</span>
           <div class="relative w-full">
             <app-overlay v-if="processing" />
-            <code-input ref="codeInputRef" class="t-code-input" :fields="4" :fieldWidth="45" :fieldHeight="45"
+            <code-input
+ref="codeInputRef" class="t-code-input" :fields="4" :fieldWidth="45" :fieldHeight="45"
               :radius="8" :required="true" style="direction: ltr" @complete="sendCode" />
           </div>
           <p v-if="wrongCode" class="wrong-code">
@@ -84,7 +96,8 @@
             تحقق من البريد العشوائي في حال لم تجد الرسالة
           </span>
 
-          <timer-active v-if="
+          <timer-active
+v-if="
             requestData && requestData.countRegisterTries <= 3 && isWaiting
           " v-model:isActive="isWaiting" />
 
@@ -93,7 +106,8 @@
               بإمكانك إعادة إرسال الرسالة بعد 8 ساعات
             </span>
 
-            <app-button label="إعادة إرسال" size="sm" variant="outline" :isDisabled="(requestData && requestData.countRegisterTries > 3) || isWaiting
+            <app-button
+label="إعادة إرسال" size="sm" variant="outline" :isDisabled="(requestData && requestData.countRegisterTries > 3) || isWaiting
               " @click="
                 requestData.countRegisterTries <= 3 && !isWaiting
                   ? callApiChangeEmail()
@@ -103,7 +117,8 @@
         </div>
       </lazy-prime-dialog>
 
-      <lazy-prime-dialog id="modal-edit-phone" v-model:visible="openPhoneModal" header="تعديل رقم الهاتف"
+      <lazy-prime-dialog
+id="modal-edit-phone" v-model:visible="openPhoneModal" header="تعديل رقم الهاتف"
         :showHeader="false" :modal="true" :dismissableMask="true" :closeOnEscape="true" :closable="true"
         @afterHide="closePhoneModal()">
         <i class="fa fa-close" @click="closePhoneModal()"></i>
@@ -114,7 +129,8 @@
           <span class="t-3">{{ form.phoneNumber }}+</span>
           <div class="relative w-full">
             <app-overlay v-if="processing" />
-            <code-input ref="codeInputRef" class="t-code-input" :fields="4" :fieldWidth="45" :fieldHeight="45"
+            <code-input
+ref="codeInputRef" class="t-code-input" :fields="4" :fieldWidth="45" :fieldHeight="45"
               :radius="8" :required="true" style="direction: ltr" @complete="sendCode" />
           </div>
           <p v-if="wrongCode" class="wrong-code">
@@ -126,7 +142,8 @@
             </span>
             <timer-active v-if="requestDataPhone.countRegisterTries <= 3 && isWaiting" v-model:isActive="isWaiting" />
 
-            <span :class="{
+            <span
+:class="{
               disable: requestDataPhone.countRegisterTries > 3 || isWaiting,
             }" class="re-send" @click="
                 requestDataPhone.countRegisterTries <= 3 && !isWaiting

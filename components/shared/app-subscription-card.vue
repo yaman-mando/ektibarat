@@ -29,10 +29,12 @@
         
         <p class="font-bold text-dark-63 mb-[10px]">تشمل الباقة</p>
         <ul class="flex flex-col gap-3 flex-1">
-            <li v-for="(feature, i) in subscription.features" :key="i"
+            <li
+v-for="(feature, i) in subscription.features" :key="i"
                 class="flex items-start gap-2 text-[#4B5363] text-sm leading-6">
                 <span class="w-6 h-6 rounded-full bg-[#E3F0FF] flex items-center justify-center shrink-0 mt-[2px]">
-                    <svg v-if="feature.isExist" viewBox="0 0 24 24" class="w-4 h-4 text-[#0266D6]" fill="none"
+                    <svg
+v-if="feature.isExist" viewBox="0 0 24 24" class="w-4 h-4 text-[#0266D6]" fill="none"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
@@ -44,7 +46,8 @@
 
         
         <div class="flex justify-center absolute bottom-[25px] left-[70px]">
-            <button class="w-[200px] h-[46px] rounded-[8px] font-medium text-[18px] cursor-pointer" :class="subscription.isRecommended
+            <button
+class="w-[200px] h-[46px] rounded-[8px] font-medium text-[18px] cursor-pointer" :class="subscription.isRecommended
                 ? 'bg-[#7840E0] text-white'
                 : 'bg-transparent border border-[#AFAFAF] text-[#4B5363]'" @click="emit('select', subscription.id)">
                 اختر

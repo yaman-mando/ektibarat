@@ -1,15 +1,16 @@
 <template>
-  <div class="relative w-full overflow-hidden" :dir="isRTL ? 'rtl' : 'ltr'" ref="containerRef">
+  <div ref="containerRef" class="relative w-full overflow-hidden" :dir="isRTL ? 'rtl' : 'ltr'">
     <!-- Slides Container -->
     <div 
+    ref="slideTrack"
     class="flex transition-transform duration-500"
-    :style="{ transform: `translateX(${currentIndex * containerWidth}px)` }"
-      ref="slideTrack" 
+      :style="{ transform: `translateX(${currentIndex * containerWidth}px)` }" 
       @touchstart="handleTouchStart" 
       @touchmove="handleTouchMove" 
       @touchend="handleTouchEnd"
       >
-      <div v-for="(slide, index) in sortedSlides" :key="slide.id" 
+      <div
+v-for="(slide, index) in sortedSlides" :key="slide.id" 
       class="flex-shrink-0 cursor-pointer"
       :style="{ width: `${containerWidth}px` }"
         @click="navigate(slide)">
@@ -20,23 +21,26 @@
     </div>
 
     <!-- Arrows (hide on mobile & single slide) -->
-    <button v-if="sortedSlides.length > 1 && currentIndex > 0 && !isMobile" 
-      @click="isRTL ? prevSlide():nextSlide()"
+    <button
+v-if="sortedSlides.length > 1 && currentIndex > 0 && !isMobile" 
       style="background: linear-gradient(227.05deg, #24A7F1 16.25%, #0266D6 86.34%)"
-      class="absolute rtl:right-[20px] ltr:left-[20px] top-1/2 -translate-y-1/2 w-[40px] h-[40px] p-2 rounded-full shadow cursor-pointer">
+      class="absolute rtl:right-[20px] ltr:left-[20px] top-1/2 -translate-y-1/2 w-[40px] h-[40px] p-2 rounded-full shadow cursor-pointer"
+      @click="isRTL ? prevSlide():nextSlide()">
       <i class="fa fa-chevron-right text-white"></i>
     </button>
-    <button v-if="sortedSlides.length > 1 && currentIndex < sortedSlides.length - 1 && !isMobile"
-      @click="isRTL ? nextSlide():prevSlide()"
+    <button
+v-if="sortedSlides.length > 1 && currentIndex < sortedSlides.length - 1 && !isMobile"
       style="background: linear-gradient(227.05deg, #24A7F1 16.25%, #0266D6 86.34%)"
-      class="absolute rtl:left-[20px] ltr:right-[20px] top-1/2 -translate-y-1/2 w-[40px] h-[40px] rounded-full shadow cursor-pointer">
+      class="absolute rtl:left-[20px] ltr:right-[20px] top-1/2 -translate-y-1/2 w-[40px] h-[40px] rounded-full shadow cursor-pointer"
+      @click="isRTL ? nextSlide():prevSlide()">
       
       <i class="fa fa-chevron-left text-white"></i>
     </button>
 
     <!-- Dots (only on mobile if multiple slides) -->
     <div v-if="isMobile && sortedSlides.length > 1" class="flex justify-center gap-2 mt-2">
-      <span v-for="(_, index) in sortedSlides" :key="index" class="w-2 h-2 rounded-full"
+      <span
+v-for="(_, index) in sortedSlides" :key="index" class="w-2 h-2 rounded-full"
         :class="currentIndex === index ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'"></span>
     </div>
   </div>

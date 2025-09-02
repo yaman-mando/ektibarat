@@ -295,7 +295,7 @@ const logout = async () => {
 };
 
 const handleClickOutside = (event) => {
-  //@ts-ignore
+  //@ts-expect-error access ref value
   if (!sidebarRef.value?.contains(event.target)) {
     showExamMenu.value = false;
     showAccountMenu.value = false;

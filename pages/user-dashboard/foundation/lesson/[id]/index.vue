@@ -1,21 +1,34 @@
 <template>
-  <user-panel-wrapper :has-l-info="windowSize.isDesktop" :has-r-info="windowSize.isDesktop"
-    :contentClass="`max-w-[1065px] !mx-auto ${!windowSize.isDesktop ? '!py-[5px] !px-[10px]' : ''} `">
+  <user-panel-wrapper
+    :hasLInfo="windowSize.isDesktop"
+    :hasRInfo="windowSize.isDesktop"
+    :contentClass="`max-w-[1065px] !mx-auto ${!windowSize.isDesktop ? '!py-[5px] !px-[10px]' : ''} `"
+  >
     <template #top-right></template>
 
     <div class="flex flex-col xl1200:flex-row gap-[35px]">
-      <app-data-wrapper :loading="userPanelStore.fetching.lessonsList" :data="userPanelStore.lessonsList"
-        loading-type="spinner-overlay" empty-text="لا توجد دروس متاحة">
-
-
+      <app-data-wrapper
+        :loading="userPanelStore.fetching.lessonsList"
+        :data="userPanelStore.lessonsList"
+        loadingType="spinner-overlay"
+        emptyText="لا توجد دروس متاحة"
+      >
         <div class="flex-1 xl1200:mt-[-60px]">
-          <div style="background: linear-gradient(270deg, #24A7F1 0%, #0266D6 100%);"
+          <div
+            style="
+              background: linear-gradient(270deg, #24a7f1 0%, #0266d6 100%);
+            "
             :class="windowSize.isDesktop ? 'mb-[30px]' : 'mb-[20px]'"
-            class="grid items-center h-[107px] text-white p-[10px_20px] rounded-[8px]">
-            <div class="flex items-center justify-baseline gap-x-[8px] cursor-pointer opacity-50 w-fit"
-              @click="toFoundation()">
+            class="grid items-center h-[107px] text-white p-[10px_20px] rounded-[8px]"
+          >
+            <div
+              class="flex items-center justify-baseline gap-x-[8px] cursor-pointer opacity-50 w-fit"
+              @click="toFoundation()"
+            >
               <i class="fa fa-chevron-right text-white text-[16px]"></i>
-              <span class="text-white font-medium text-[16px] leading-[1.2]">رجوع للخلف</span>
+              <span class="text-white font-medium text-[16px] leading-[1.2]">
+                رجوع للخلف
+              </span>
             </div>
             <div class="flex justify-between mt-[5px]">
               <h2 class="text-[26px] font-bold leading-[1.2]">
@@ -23,20 +36,45 @@
               </h2>
             </div>
             <div class="flex items-center gap-x-[10px] justify-between">
-              <app-g-progress-bar class="flex-1" height="8px" :value="(doneCount / totalCount) * 100" :showText="false"
-                bgClass="bg-white" bgEmptyClass="bg-white/30" />
-              <span class="text-[16px] font-bold text-white">{{ doneCount }}/{{ totalCount }}</span>
+              <app-g-progress-bar
+                class="flex-1"
+                height="8px"
+                :value="(doneCount / totalCount) * 100"
+                :showText="false"
+                bgClass="bg-white"
+                bgEmptyClass="bg-white/30"
+              />
+              <span class="text-[16px] font-bold text-white">
+                {{ doneCount }}/{{ totalCount }}
+              </span>
             </div>
           </div>
 
-          <div :class="windowSize.isDesktop ? 'space-y-[15px]' : 'space-y-[20px]'">
-            <template v-for="(group, index) in lessonGroups" :key="index">
+          <div
+            :class="windowSize.isDesktop ? 'space-y-[15px]' : 'space-y-[20px]'"
+          >
+            <template
+              v-for="(group, index) in lessonGroups"
+              :key="index"
+            >
               <div v-if="group.length === 1">
-                <lesson-card :key="index" :lesson="group[0]" :status="getStatus(group[0])" />
+                <lesson-card
+                  :key="index"
+                  :lesson="group[0]"
+                  :status="getStatus(group[0])"
+                />
               </div>
-              <div v-else class="flex flex-wrap gap-[15px]">
-                <lesson-card v-for="lesson in group" :key="lesson.id" :lesson="lesson" :status="getStatus(lesson)"
-                  class="flex-1" />
+              <div
+                v-else
+                class="flex flex-wrap gap-[15px]"
+              >
+                <lesson-card
+                  v-for="lesson in group"
+                  :key="lesson.id"
+                  :lesson="lesson"
+                  :status="getStatus(lesson)"
+                  class="flex-1"
+                />
               </div>
             </template>
           </div>
@@ -46,7 +84,6 @@
         <daily-challenges />
       </div>
     </div>
-
   </user-panel-wrapper>
 </template>
 
@@ -59,12 +96,13 @@ import type { lessonObj } from '~/main/modules/user-panel/data-access/user-panel
 import { definePageMeta } from '#imports';
 import type { UserInfoDataModel } from '~/core/auth/data-access/models/auth.model';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
+import { deepCloneUtil } from '~/main/utils/lodash.utils';
 
 const windowSize = useWindowSize();
 const subscriptionsStore = useSubscriptionsStore();
-const isSubscribe = computed(()=> {
-   return subscriptionsStore.state.userCurrentSubVal?.freeType === null
-})
+const isSubscribe = computed(() => {
+  return subscriptionsStore.state.userCurrentSubVal?.freeType === null;
+});
 
 // const data = {
 //   id: 3,
@@ -167,7 +205,9 @@ const userData = computed(() => data.value as UserInfoDataModel);
 await userPanelStore.getLessonsList(id);
 
 const sortedLessons = computed(() => {
-  return userPanelStore.lessonsList?.lessons.sort((a, b) => a.order - b.order);
+  if (!userPanelStore.lessonsList?.lessons) return [];
+  const list = deepCloneUtil(userPanelStore.lessonsList.lessons);
+  return list.sort((a, b) => a.order - b.order);
 });
 
 const doneCount = computed(
@@ -184,8 +224,8 @@ function getStatus(lesson: lessonObj) {
   );
   if (lesson.isWatched) return 'completed';
   if (index === firstLocked) return 'next';
-  if (lesson.isFree) return 'open'
-  return isSubscribe ? 'open' : 'locked';
+  if (lesson.isFree) return 'open';
+  return isSubscribe.value ? 'open' : 'locked';
 }
 
 const toFoundation = () => {

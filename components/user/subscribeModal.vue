@@ -1,13 +1,15 @@
 <template>
     <div v-show="show" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center" @click.self="closeModal">
         <transition name="grow-fade">
-            <div v-if="visible" style="box-shadow: 0px 0px 10px 0px #00000026"
+            <div
+v-if="visible" style="box-shadow: 0px 0px 10px 0px #00000026"
                 class="w-[330px] h-[440px] bg-white rounded-[8px] text-center px-[15px] py-[30px] flex flex-col transition-transform items-center">
                 <!-- Icon -->
                 <div class="flex flex-col items-center w-full">
                     <div class="w-[120px] h-[120px] rounded-full bg-[#f3f4f6] flex items-center justify-center mb-[10px]">
                         <div class="w-[67px] h-[78px]">
-                            <svg width="67" height="78" viewBox="0 0 67 78" fill="none"
+                            <svg
+width="67" height="78" viewBox="0 0 67 78" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M57.4219 75.8242H9.57865C4.99174 75.8242 1.26001 72.0925 1.26001 67.5056V38.7996C1.26001 34.2127 4.99174 30.4809 9.57865 30.4809H11.9708H13.2208V29.2309V22.0545C13.2208 19.3174 13.757 16.6624 14.8145 14.1631C15.8362 11.7486 17.299 9.57955 19.1622 7.71634C21.0254 5.85313 23.1944 4.39036 25.609 3.36868C28.1082 2.31119 30.7632 1.77499 33.5003 1.77499C36.2374 1.77499 38.8924 2.31119 41.3916 3.36868C43.8062 4.39036 45.9752 5.85313 47.8384 7.71634C49.7016 9.57955 51.1644 11.7486 52.1861 14.1631C53.2436 16.6624 53.7798 19.3174 53.7798 22.0545V29.2309V30.4809H55.0298H57.4219C62.0088 30.4809 65.7406 34.2127 65.7406 38.7996V67.5056C65.7406 72.0925 62.0088 75.8242 57.4219 75.8242ZM33.5003 8.84365C26.2158 8.84365 20.2895 14.77 20.2895 22.0545V29.2309V30.4809H21.5395H45.4611H46.7111V29.2309V22.0545C46.7111 14.77 40.7848 8.84365 33.5003 8.84365Z"
@@ -37,9 +39,10 @@
                 </div>
 
                 <!-- CTA -->
-                <button @click="router.push('/prices')"
-                    style="background: linear-gradient(270deg, #24A7F1 0%, #0266D6 100%)"
-                    class="text-white w-[164px] h-[43px] font-bold text-[18px] mt-[30px] rounded-[8px] cursor-pointer">
+                <button
+style="background: linear-gradient(270deg, #24A7F1 0%, #0266D6 100%)"
+                    class="text-white w-[164px] h-[43px] font-bold text-[18px] mt-[30px] rounded-[8px] cursor-pointer"
+                    @click="router.push('/prices')">
                     اشترك الآن
                 </button>
             </div>

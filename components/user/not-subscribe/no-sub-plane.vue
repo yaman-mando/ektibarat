@@ -20,7 +20,8 @@
           </div>
         </template>
         <template v-else>
-          <span class="text-black text-[20px] font-bold"
+          <span
+class="text-black text-[20px] font-bold"
           :class="{'h-[150px] flex items-center justify-center':type==='studentHasNoPlaneForTeacher'}"
           >{{ config.title }}</span>
         </template>
@@ -36,9 +37,9 @@
         <!-- button -->
         <button
           v-if="config.action"
-          @click="config.action.handler"
           style="background: linear-gradient(270deg, #24A7F1 0%, #0266D6 100%)"
           class="flex justify-center items-center gap-x-[12px] h-[36px] w-[164px] rounded-[8px] text-white text-[14px] font-bold cursor-pointer"
+          @click="config.action.handler"
         >
           <span>{{ config.action.label }}</span>
           <i class="fa fa-chevron-left"></i>

@@ -3,24 +3,28 @@
         <svg class="w-full h-full transform -rotate-90">
             <defs v-if="isGradient">
                 <linearGradient :id="gradientId" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop v-for="(color, index) in gradientColors" :key="index" :offset="getGradientOffset(index)"
+                    <stop
+v-for="(color, index) in gradientColors" :key="index" :offset="getGradientOffset(index)"
                         :stop-color="color" />
                 </linearGradient>
             </defs>
 
 
-            <circle :class="bgClass" :stroke="!bgClass ? bgColor : undefined" :stroke-width="strokeWidth"
+            <circle
+:class="bgClass" :stroke="!bgClass ? bgColor : undefined" :stroke-width="strokeWidth"
                 fill="transparent" :r="radius" :cx="center" :cy="center" />
 
 
-            <circle v-if="!isLock" :class="['animated-circle', strokeClass]" :stroke="strokeComputed" :stroke-width="strokeWidth" fill="transparent"
-                :r="radius" :cx="center" :cy="center" :stroke-dasharray="circumference"
-                :stroke-dashoffset="dashOffset" :key="percentage"
+            <circle
+v-if="!isLock" :key="percentage" :class="['animated-circle', strokeClass]" :stroke="strokeComputed" :stroke-width="strokeWidth"
+                fill="transparent" :r="radius" :cx="center" :cy="center"
+                :stroke-dasharray="circumference" :stroke-dashoffset="dashOffset"
                  />
         </svg>
 
 
-        <div v-if="showText" class="absolute inset-0 flex items-center justify-center" :class="textClass"
+        <div
+v-if="showText" class="absolute inset-0 flex items-center justify-center" :class="textClass"
             :style="!textClass ? { color: textColor, fontSize: textSize + 'px' } : { fontSize: textSize + 'px' }">
             <span v-if="isLock" class="text-gray-8f"><i class="fa fa-lock"></i></span>
             <span v-else>{{ percentage }}%</span>

@@ -1,14 +1,16 @@
 <template>
-  <user-panel-wrapper content-class="max-w-[1060px] !mx-auto lg:px-0 px-[5px]">
+  <user-panel-wrapper contentClass="max-w-[1060px] !mx-auto lg:px-0 px-[5px]">
 
-    <app-data-wrapper :loading="panelStore.fetching.schoolDashboard" :data="baseData" loading-type="spinner-overlay"
-      empty-text="لا توجد بيانات متاحة">
+    <app-data-wrapper
+:loading="panelStore.fetching.schoolDashboard" :data="baseData" loadingType="spinner-overlay"
+      emptyText="لا توجد بيانات متاحة">
       <!-- Header -->
       <div class="flex items-center justify-between mb-4">
         <span class="text-[24px] font-bold text-blue-d6 dark:text-white">
           لوحة المدرسة
         </span>
-        <select v-if="userData.role === UserRoles.schoolManager" v-model="filterForm.teacherId"
+        <select
+v-if="userData.role === UserRoles.schoolManager" v-model="filterForm.teacherId"
           class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm dark:bg-dark-700 dark:text-white"
           @change="fetchData">
           <option :key="0" :value="null">
@@ -39,7 +41,8 @@
           <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
             <span class="text-[56px]">{{ formatNumber(baseData?.main.levelRateAvg) }}</span>
           </div>
-          <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
+          <app-g-progress-bar
+height="6px" radius="100px" :showText="false" :animated="true"
             background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)" :value="baseData?.main.levelRateAvg || 0" />
           <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
             للطلاب الذين أنهوا تحديد المستوى
@@ -54,7 +57,8 @@
           <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
             <span class="text-[56px]">{{ baseData?.main.predictedMarksAvg.toFixed(0) }}</span>
           </div>
-          <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
+          <app-g-progress-bar
+height="6px" radius="100px" :showText="false" :animated="true"
             background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)"
             :value="baseData?.main.predictedMarksAvg || 0" />
           <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
@@ -70,7 +74,8 @@
           <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
             <span class="text-[56px]">{{ formatNumber(baseData?.main.planAdherenceAvg) }}%</span>
           </div>
-          <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
+          <app-g-progress-bar
+height="6px" radius="100px" :showText="false" :animated="true"
             background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)"
             :value="baseData?.main.planAdherenceAvg || 0" />
           <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
@@ -83,10 +88,12 @@
       <div class="max-w-[100vw] overflow-x-auto">
         <div class="rounded-[8px] shadow-custom px-[15px] py-[20px] grid gap-y-[20px] bg-white min-w-[1030px]">
           <!-- Filters -->
-          <div :class="{ 'justify-self-start': windowSize.isMobileSize }"
+          <div
+:class="{ 'justify-self-start': windowSize.isMobileSize }"
             class="flex flex-col md:flex-row items-center justify-between gap-[20px]">
             <div class="flex items-center gap-2" :class="{ 'w-[500px]': windowSize.isMobileSize }">
-              <button v-for="(status, i) in statusFilters" :key="i" :class="[
+              <button
+v-for="(status, i) in statusFilters" :key="i" :class="[
                 'rounded-[20px] border font-medium text-sm w-[110px] h-[40px] flex items-center justify-center cursor-pointer',
                 selectedStatuses.includes(status.value)
                   ? `bg-${status.color} text-white border-${status.color}`
@@ -100,17 +107,20 @@
             </div>
 
             <div class="flex items-center gap-2 w-[500px] md:w-auto">
-              <input v-model="search" type="text" placeholder="البحث باسم الطالب"
+              <input
+v-model="search" type="text" placeholder="البحث باسم الطالب"
                 class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm w-full dark:bg-dark-700 dark:text-white" />
 
-              <select v-model.number="filterForm.sortBy"
+              <select
+v-model.number="filterForm.sortBy"
                 class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm dark:bg-dark-700 dark:text-white"
                 @change="fetchData">
                 <option :value="0">ترتيب حسب: التقييم</option>
                 <option :value="1">ترتيب حسب: عدد الأسئلة</option>
               </select>
 
-              <select v-model.number="filterForm.sortDirection"
+              <select
+v-model.number="filterForm.sortDirection"
                 class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm dark:bg-dark-700 dark:text-white"
                 @change="fetchData">
                 <option :value="1">من الأعلى إلى الأقل</option>
@@ -188,12 +198,15 @@
                   {{ std.requiredGrade }}
                 </div>
                 <div class="text-center">
-                  <app-g-progress-bar :animated="true" :bgClass="`bg-${getRateColor(std.planAdherence)}`"
+                  <app-g-progress-bar
+:animated="true" :bgClass="`bg-${getRateColor(std.planAdherence)}`"
                     :value="std.planAdherence" :showText="true" />
                 </div>
-                <div v-if="userData.role === UserRoles.schoolManager"
+                <div
+v-if="userData.role === UserRoles.schoolManager"
                   class="text-center flex items-center justify-end w-full">
-                  <select :value="std.teacherId" class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm w-[120px]"
+                  <select
+:value="std.teacherId" class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm w-[120px]"
                     :title="teachersList?.find(t => t.id === std.teacherId)?.label || ''"
                     @change="(e) => handleSelectChange(std, e)">
                     <option v-for="item in teachersList" :key="item.id" :value="item.id">
@@ -203,25 +216,29 @@
 
                 </div>
               </div>
-              <div class="flex flex-[10%] h-[100%] items-center justify-center rounded-l-[8px] border border-[#BCCCDB]"
+              <div
+class="flex flex-[10%] h-[100%] items-center justify-center rounded-l-[8px] border border-[#BCCCDB]"
                 :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
-                <button @click="toAnalytics(std.studentId)"
-                  class="border border-purple-78 rounded-[4px] w-[88px] h-[32px] flex items-center justify-center gap-x-[8px] text-purple-78 text-[14px] font-medium cursor-pointer">
+                <button
+class="border border-purple-78 rounded-[4px] w-[88px] h-[32px] flex items-center justify-center gap-x-[8px] text-purple-78 text-[14px] font-medium cursor-pointer"
+                  @click="toAnalytics(std.studentId)">
                   التفاصيل
                   <i class="fa fa-chevron-left"></i>
                 </button>
               </div>
             </div>
 
-            <app-pagination v-if="baseData?.data.totalPages && baseData?.data.totalPages > 1"
-              :current-page="baseData?.data.currentPage ?? 1" :total-pages="baseData?.data.totalPages ?? 1"
-              :max-visible-buttons="10" :hide-first-last="true" @pagechanged="changePage" />
+            <app-pagination
+v-if="baseData?.data.totalPages && baseData?.data.totalPages > 1"
+              :currentPage="baseData?.data.currentPage ?? 1" :totalPages="baseData?.data.totalPages ?? 1"
+              :maxVisibleButtons="10" :hideFirstLast="true" @pagechanged="changePage" />
           </div>
         </div>
       </div>
 
       <template v-if="userData.role === UserRoles.schoolManager">
-        <ConfirmDialog v-if="isOpenConfirmModal && tempStudent" v-model:visible="isOpenConfirmModal" title="تأكيد"
+        <confirm-dialog
+v-if="isOpenConfirmModal && tempStudent" v-model:visible="isOpenConfirmModal" title="تأكيد"
           confirmText="نعم، احفظ" cancelText="لا، تجاهل" :onConfirm="confirmChange" :onCancel="cancelChange">
           <template #message>
             هل تريد فعلا تغيير الطالب
@@ -231,7 +248,7 @@
             إلى المدرس
             <strong style="color:green">({{ tempStudent.newTeacherLabel }})</strong>؟
           </template>
-        </ConfirmDialog>
+        </confirm-dialog>
       </template>
     </app-data-wrapper>
     <!-- <div v-else class="h-[75vh] flex items-center justify-center text-[50px] font-bold text-red-5e">لا يوجد بيانات</div> -->

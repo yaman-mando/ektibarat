@@ -9,7 +9,7 @@
     <div v-if="fileUrl && !isUploaderOnly" class="p-4 border border-dashed rounded bg-gray-50">
       <div class="flex items-center justify-center gap-2">
         <img :src="fileUrl" width="75" height="75" alt="" class="rounded" />
-        <i @click="removePicture" class="fa fa-close text-red-500 cursor-pointer text-lg"></i>
+        <i class="fa fa-close text-red-500 cursor-pointer text-lg" @click="removePicture"></i>
       </div>
     </div>
 

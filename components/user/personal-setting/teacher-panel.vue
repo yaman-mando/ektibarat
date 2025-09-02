@@ -26,7 +26,8 @@
             <!--  co-processing-student info  -->
 
             <prime-accordion v-model:value="expandState">
-                <prime-accordion-panel v-if="prStudentData.length > 0" class="co-processing-student st-tab"
+                <prime-accordion-panel
+v-if="prStudentData.length > 0" class="co-processing-student st-tab"
                     :value="expandStateValues.prStudentCollapse">
                     <prime-accordion-header>
                         <div class="tab-header">
@@ -40,9 +41,11 @@
                     <prime-accordion-content class="pr-student-collapse">
                         <div class="tab-contents">
                             <template v-if="!windowSize.isMobileSize">
-                                <prime-data-table style="margin-top: 23px" :value="prStudentData"
+                                <prime-data-table
+style="margin-top: 23px" :value="prStudentData"
                                     responsiveLayout="scroll" stripedRows class="students-table">
-                                    <prime-column v-for="field in fields" :key="field.key" :field="field.key"
+                                    <prime-column
+v-for="field in fields" :key="field.key" :field="field.key"
                                         :header="field.label" :bodyClass="field.key">
                                         <!-- Answers Column -->
                                         <template v-if="field.key === 'answers'" #body="{ data }">
@@ -60,7 +63,8 @@
                                         <!-- Rate Column -->
                                         <template v-else-if="field.key === 'rate'" #body="{ data }">
                                             <template v-if="data.statistics.showRate">
-                                                <app-progress-bar v-if="data.statistics.rate > 0"
+                                                <app-progress-bar
+v-if="data.statistics.rate > 0"
                                                     :value="data.statistics.rate" />
                                                 <span v-else>عدد الاسئلة غير كافي</span>
                                             </template>
@@ -73,13 +77,16 @@
                                         <!-- Control Column -->
                                         <template v-else-if="field.key === 'control'" #body="{ data }">
 
-                                            <app-button v-if="data.id" size="md" variant="outline"
+                                            <app-button
+v-if="data.id" size="md" variant="outline"
                                                 class="outline-btn action" label="تحليل"
                                                 @click="toAnalytics(data.studentId)" />
-                                            <app-button size="sm" variant="clear" colorType="warn" :noLabel="true"
+                                            <app-button
+size="sm" variant="clear" colorType="warn" :noLabel="true"
                                                 label="" class="outline-btn trash" iconStartClass="fa fa-trash"
                                                 @click="toDelete(data.id)" />
-                                            <app-button v-if="data.phoneNumber" label="" variant="clear" :noLabel="true"
+                                            <app-button
+v-if="data.phoneNumber" label="" variant="clear" :noLabel="true"
                                                 class="outline-btn whatsapp" iconStartClass="fa fab fa-whatsapp"
                                                 size="sm" colorType="success" @click="toWhatsApp(data.phoneNumber)" />
 
@@ -94,7 +101,8 @@
                                             <span class="cl-r">{{ item.fullName }}</span>
                                             <div class="cl-l">
                                                 <template v-if="item.statistics.showRate">
-                                                    <app-progress-bar v-if="item.statistics.rate > 0"
+                                                    <app-progress-bar
+v-if="item.statistics.rate > 0"
                                                         :value="item.statistics.rate" />
                                                     <span v-else>عدد الاسئلة غير كافي</span>
                                                 </template>
@@ -130,11 +138,14 @@
                                                 </span>
                                             </div>
                                             <div class="flex items-center justify-center gap-1">
-                                                <app-button v-if="item.id" size="md" variant="outline" label="تحليل"
+                                                <app-button
+v-if="item.id" size="md" variant="outline" label="تحليل"
                                                     @click="toAnalytics(item.studentId)" />
-                                                <app-button size="sm" variant="clear" colorType="warn"
+                                                <app-button
+size="sm" variant="clear" colorType="warn"
                                                     iconStartClass="fa fa-trash" label="" @click="toDelete(item.id)" />
-                                                <app-button v-if="item.phoneNumber" size="sm" variant="clear"
+                                                <app-button
+v-if="item.phoneNumber" size="sm" variant="clear"
                                                     class="whatsapp" label="" iconStartClass="fa fab fa-whatsapp"
                                                     colorType="success" @click="toWhatsApp(item.phoneNumber)" />
                                             </div>
@@ -145,7 +156,8 @@
                         </div>
                     </prime-accordion-content>
                 </prime-accordion-panel>
-                <prime-accordion-panel v-if="waitStudentData.length > 0" class="co-waiting-student st-tab"
+                <prime-accordion-panel
+v-if="waitStudentData.length > 0" class="co-waiting-student st-tab"
                     :value="expandStateValues.waitStudentCollapse">
                     <prime-accordion-header>
                         <div class="tab-header">
@@ -159,9 +171,11 @@
                     <prime-accordion-content class="wait-student-collapse">
                         <div class="tab-contents">
                             <template v-if="!windowSize.isMobileSize">
-                                <prime-data-table style="margin-top: 23px" :value="waitStudentData"
+                                <prime-data-table
+style="margin-top: 23px" :value="waitStudentData"
                                     responsiveLayout="scroll" stripedRows class="students-table">
-                                    <prime-column v-for="field in fields" :key="field.key" :field="field.key"
+                                    <prime-column
+v-for="field in fields" :key="field.key" :field="field.key"
                                         :header="field.label" :bodyClass="field.key">
                                         <!-- Answers Column -->
                                         <template v-if="field.key === 'answers'" #body="{ data }">
@@ -179,7 +193,8 @@
                                         <!-- Rate Column -->
                                         <template v-else-if="field.key === 'rate'" #body="{ data }">
                                             <template v-if="data.statistics.showRate">
-                                                <app-progress-bar v-if="data.statistics.rate > 0"
+                                                <app-progress-bar
+v-if="data.statistics.rate > 0"
                                                     :value="data.statistics.rate" />
                                                 <span v-else>عدد الاسئلة غير كافي</span>
                                             </template>
@@ -192,11 +207,14 @@
                                         <!-- Control Column -->
                                         <template v-else-if="field.key === 'control'" #body="{ data }">
                                             <div class="flex items-center justify-center gap-1">
-                                                <app-button v-if="data.id" label="قبول" size="md" variant="outline"
+                                                <app-button
+v-if="data.id" label="قبول" size="md" variant="outline"
                                                     colorType="success" @click="requestAgree(data.id, 1)" />
-                                                <app-button size="sm" variant="clear" colorType="warn"
+                                                <app-button
+size="sm" variant="clear" colorType="warn"
                                                     iconStartClass="fa fa-trash" label="" @click="toReject(data.id)" />
-                                                <app-button v-if="data.phoneNumber" label="" class="whatsapp"
+                                                <app-button
+v-if="data.phoneNumber" label="" class="whatsapp"
                                                     iconStartClass="fa fab fa-whatsapp" size="sm" variant="clear"
                                                     colorType="success" @click="toWhatsApp(data.phoneNumber)" />
                                             </div>
@@ -211,7 +229,8 @@
                                             <span class="cl-r">{{ item.fullName }}</span>
                                             <div class="cl-l">
                                                 <template v-if="item.statistics.showRate">
-                                                    <app-progress-bar v-if="item.statistics.rate > 0"
+                                                    <app-progress-bar
+v-if="item.statistics.rate > 0"
                                                         :value="item.statistics.rate" />
                                                     <span v-else>عدد الاسئلة غير كافي</span>
                                                 </template>
@@ -247,12 +266,15 @@
                                                 </span>
                                             </div>
                                             <div class="flex items-center justify-center gap-1">
-                                                <app-button v-if="item.id" class="outline-btn action" variant="outline"
+                                                <app-button
+v-if="item.id" class="outline-btn action" variant="outline"
                                                     colorType="success" size="md" label="قبول"
                                                     @click="requestAgree(item.id, 1)" />
-                                                <app-button size="sm" colorType="warn" variant="clear" class="trash"
+                                                <app-button
+size="sm" colorType="warn" variant="clear" class="trash"
                                                     iconStartClass="fa fa-trash" label="" @click="toDelete(item.id)" />
-                                                <app-button v-if="item.phoneNumber" class="whatsapp" size="sm"
+                                                <app-button
+v-if="item.phoneNumber" class="whatsapp" size="sm"
                                                     variant="clear" iconStartClass="fa fab fa-whatsapp" label=""
                                                     colorType="success" @click="toWhatsApp(item.phoneNumber)" />
                                             </div>
@@ -263,7 +285,8 @@
                         </div>
                     </prime-accordion-content>
                 </prime-accordion-panel>
-                <prime-accordion-panel v-if="teachersFinancials && teachersFinancials.details"
+                <prime-accordion-panel
+v-if="teachersFinancials && teachersFinancials.details"
                     class="co-financial st-tab" :value="expandStateValues.financialCollapse">
                     <prime-accordion-header>
                         <div class="tab-header" @click="financialCollapse = !financialCollapse">
@@ -285,9 +308,11 @@
                     <prime-accordion-content class="financial-collapse">
                         <div class="tab-contents">
                             <div class="table-scroll">
-                                <prime-data-table style="margin-top: 23px" :value="teachersFinancials.details"
+                                <prime-data-table
+style="margin-top: 23px" :value="teachersFinancials.details"
                                     responsiveLayout="scroll" stripedRows class="financial-table">
-                                    <prime-column v-for="field in financialFields" :key="field.key" :field="field.key"
+                                    <prime-column
+v-for="field in financialFields" :key="field.key" :field="field.key"
                                         :header="field.label" :bodyClass="field.key">
                                         <!-- Student Name Column -->
                                         <template v-if="field.key === 'studentName'" #body="{ data }">
@@ -298,7 +323,8 @@
 
                                         <!-- Teacher Amount Column -->
                                         <template v-else-if="field.key === 'teacherAmount'" #body="{ data }">
-                                            <div style="direction: ltr" class="__amount"
+                                            <div
+style="direction: ltr" class="__amount"
                                                 :class="{ __red: data.teacherAmount < 0 }">
                                                 {{ data.teacherAmount }}
                                             </div>
@@ -328,7 +354,8 @@
                                 <div class="fi-cl rw-3">
                                     <span class="acc-label">
                                         الرصيد المتبقي
-                                        <app-button size="md" :disabled="total <= 0" label="طلب تحويل"
+                                        <app-button
+size="md" :disabled="total <= 0" label="طلب تحويل"
                                             @click="toRequestTransfer" />
                                     </span>
                                     <span class="acc-numbers" style="direction: ltr" :class="{ __red: total < 0 }">
@@ -341,19 +368,22 @@
                 </prime-accordion-panel>
             </prime-accordion>
 
-            <delete-modal ref="delete-modal" v-model:isOpen="isOpenDeleteModal" :isReject="deleteMsg.isReject"
+            <delete-modal
+ref="delete-modal" v-model:isOpen="isOpenDeleteModal" :isReject="deleteMsg.isReject"
                 :msg="deleteMsg.msg" :label="deleteMsg.label" :exLabel="deleteMsg.exLabel" @onConfirm="
                     deleteMsg.isReject ? requestAgree(toDeleteId, 2) : deleteConfirm()
                     " />
         </div>
 
         <div v-if="activePart === panelParts.analytics" class="analytics-student-part setting">
-            <analytics-panel key="analytics" :studentId="toAnalyticsId" :forTeacher="true" @backToMain="backToMain"
-                :in-side-panel="true" @toTraining="toTraining" />
+            <analytics-panel
+key="analytics" :studentId="toAnalyticsId" :forTeacher="true" :inSidePanel="true"
+                @backToMain="backToMain" @toTraining="toTraining" />
         </div>
 
         <div v-if="activePart === panelParts.trainings" class="analytics-student-part setting">
-            <analytics-panel key="trainings" :studentId="toAnalyticsId" :forTrainingStudent="true" :in-side-panel="true"
+            <analytics-panel
+key="trainings" :studentId="toAnalyticsId" :forTrainingStudent="true" :inSidePanel="true"
                 @backToMain="toAnalytics(toAnalyticsId)" />
         </div>
     </div>

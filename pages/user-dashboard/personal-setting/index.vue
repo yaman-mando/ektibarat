@@ -1,11 +1,11 @@
 <template>
   <user-panel-wrapper
-    content-class="max-w-[1060px] !mx-auto"
-    :has-l-info="false"
-    :has-r-info="false"
-    :no-spaces="!windowSize.isDesktop"
-    :has-prev="!windowSize.isDesktop"
-    :page-name="selectedName"
+    contentClass="max-w-[1060px] !mx-auto"
+    :hasLInfo="false"
+    :hasRInfo="false"
+    :noSpaces="!windowSize.isDesktop"
+    :hasPrev="!windowSize.isDesktop"
+    :pageName="selectedName"
   >
     <div
       class="flex flex-wrap 2xl:flex-nowrap gap-[20px]"
@@ -35,13 +35,13 @@
             >
               <li
                 v-if="item.isShow"
-                @click="selectedSection = item.key"
                 :class="[
                   'cursor-pointer px-3 py-2 rounded-[4px] transition h-[50px] content-center',
                   selectedSection === item.key
                     ? 'bg-gray-fa font-bold'
                     : 'hover:bg-gray-50 text-dark-63 font-medium',
                 ]"
+                @click="selectedSection = item.key"
               >
                 {{ item.label }}
               </li>
@@ -59,15 +59,15 @@
             <li
               v-for="item in helpItems"
               :key="item.key"
-              @click="
-                item.link ? toPage(item.link) : (selectedSection = item.key)
-              "
               :class="[
                 'cursor-pointer px-3 py-2 rounded transition h-[50px] content-center',
                 selectedSection === item.key
                   ? 'bg-gray-fa font-bold'
                   : 'hover:bg-gray-50 text-dark-63 font-medium',
               ]"
+              @click="
+                item.link ? toPage(item.link) : (selectedSection = item.key)
+              "
             >
               {{ item.label }}
             </li>
@@ -75,8 +75,8 @@
         </div>
 
         <button
-          @click="logout"
           class="bg-white text-red-500 hover:bg-red-50 transition shadow px-4 py-3 rounded-lg font-semibold cursor-pointer"
+          @click="logout"
         >
           تسجيل الخروج
         </button>
@@ -148,7 +148,7 @@ const grades = [
 ];
 
 //data
-const selectedSection = <any>ref('info');
+const selectedSection = ref<string | any>('info');
 
 //computed
 const currentComponent = computed(() => {

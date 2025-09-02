@@ -1,8 +1,8 @@
 <template>
     <div class="min-h-[300px] bg-white shadow-custom rounded-[8px] p-[20px_15px] grid relative">
-        <no-sub-plane :type="noSubType" v-if="!isShowRate" />
+        <no-sub-plane v-if="!isShowRate" :type="noSubType" />
         <template v-else>
-            <app-overlay msg="جاري جلب بيانات الخطة ..." v-if="fetching" />
+            <app-overlay v-if="fetching" msg="جاري جلب بيانات الخطة ..." />
 
 
             <!-- First line -->
@@ -39,12 +39,14 @@
             <div class="mt-[15px] h-[84px] grid items-center relative">
                 <div style="box-shadow: 2px 2px 4px 0px #00000026 inset" class="relative h-[20px] bg-[#F0F0F0]">
                     <!-- Green bar -->
-                    <div style="background: linear-gradient(90deg, #58CC02 0%, #4E9818 100%)"
+                    <div
+style="background: linear-gradient(90deg, #58CC02 0%, #4E9818 100%)"
                         class="absolute top-0 bottom-0 right-0" :style="{ width: `${stdPlaneInfo?.percentageDone}%` }">
                     </div>
 
                     <!-- Orange bar -->
-                    <div style="
+                    <div
+style="
                     background: linear-gradient(
                       90deg,
                       #fdc830 0%,
@@ -58,7 +60,8 @@
                 </div>
 
                 <!-- "You are here" indicator -->
-                <div v-if="stdPlaneInfo?.percentageDone > 0"
+                <div
+v-if="stdPlaneInfo?.percentageDone > 0"
                     :style="{ right: `calc(${stdPlaneInfo?.percentageDone ?? 0}% - 18px)` }"
                     class="absolute -top-[10px] h-[27px] grid gap-y-[5px] justify-items-center w-[40px]">
                     <div class="text-[10px] 2xl:text-[12px] text-black font-medium">أنت هنا</div>
@@ -68,7 +71,8 @@
                 </div>
 
                 <!-- Target indicator -->
-                <div v-if="stdPlaneInfo?.percentageRequired > 0"
+                <div
+v-if="stdPlaneInfo?.percentageRequired > 0"
                     :style="{ right: `calc(${stdPlaneInfo?.percentageRequired ?? 0}% - 40px)` }"
                     class="absolute bottom-0 h-[27px] grid gap-y-[5px] justify-items-center w-[80px]">
                     <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">

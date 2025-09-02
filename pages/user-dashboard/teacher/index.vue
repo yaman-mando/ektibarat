@@ -1,7 +1,8 @@
 <template>
-  <user-panel-wrapper content-class="max-w-[1060px] !mx-auto lg:px-0 px-[5px]">
-    <app-data-wrapper :loading="panelStore.fetching.teacherDashboar" :data="baseData" loading-type="spinner-overlay"
-      empty-text="لا توجد بيانات متاحة">
+  <user-panel-wrapper contentClass="max-w-[1060px] !mx-auto lg:px-0 px-[5px]">
+    <app-data-wrapper
+:loading="panelStore.fetching.teacherDashboar" :data="baseData" loadingType="spinner-overlay"
+      emptyText="لا توجد بيانات متاحة">
 
       
         <!-- Header -->
@@ -20,9 +21,9 @@
           </div>
           <div class="text-[16px] font-medium text-gray-63 text-right m-auto">
             يستطيع الطالب الانضمام إلى مجموعتك من خلال إدخال هذا الكود في طلبه
-            <br>
+            <br/>
             عند اشتراك أي طالب في أحد باقات اختبارات باستخدام الكود الخاص بك
-            <br>
+            <br/>
             سيحصل الطالب على خصم 10% وستحصل أنت على مكافأة 10% من قيمة الاشتراك
           </div>
         </div>
@@ -46,7 +47,8 @@
             <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
               <span class="text-[56px]">{{ formatNumber(baseData?.levelRateAvg) }}</span>
             </div>
-            <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
+            <app-g-progress-bar
+height="6px" radius="100px" :showText="false" :animated="true"
               background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)" :value="baseData?.levelRateAvg || 0" />
             <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
               للطلاب الذين أنهوا تحديد المستوى
@@ -61,7 +63,8 @@
             <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
               <span class="text-[56px]">{{ baseData?.predictedMarksAvg.toFixed(0) }}</span>
             </div>
-            <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
+            <app-g-progress-bar
+height="6px" radius="100px" :showText="false" :animated="true"
               background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)" :value="baseData?.predictedMarksAvg || 0" />
             <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
               للطلاب الذين أنهوا تحديد المستوى
@@ -76,7 +79,8 @@
             <div class="text-[32px] leading-none font-bold text-blue-d6 dark:text-white mb-[10px]">
               <span class="text-[56px]">{{ formatNumber(baseData?.planAdherenceAvg) }}%</span>
             </div>
-            <app-g-progress-bar height="6px" radius="100px" :showText="false" :animated="true"
+            <app-g-progress-bar
+height="6px" radius="100px" :showText="false" :animated="true"
               background="linear-gradient(90deg, #58CC02 0%, #4E9818 100%)" :value="baseData?.planAdherenceAvg || 0" />
             <span class="text-gray-8f text-[12px] font-medium mt-[5px]">
               لجميع الطلاب
@@ -85,13 +89,15 @@
         </div>
 
         <!-- Filters & accepted Table -->
-        <div class="max-w-[100vw] overflow-x-auto" v-if="filteredStudents && filteredStudents.length > 0">
+        <div v-if="filteredStudents && filteredStudents.length > 0" class="max-w-[100vw] overflow-x-auto">
           <div class="rounded-[8px] shadow-custom px-[15px] py-[20px] grid gap-y-[20px] bg-white min-w-[1030px]">
             <!-- Filters -->
-            <div :class="{ 'justify-self-start': windowSize.isMobileSize }"
+            <div
+:class="{ 'justify-self-start': windowSize.isMobileSize }"
               class="flex flex-col md:flex-row items-center justify-between gap-[20px]">
               <div class="flex items-center gap-2" :class="{ 'w-[500px]': windowSize.isMobileSize }">
-                <button v-for="(status, i) in statusFilters" :key="i" :class="[
+                <button
+v-for="(status, i) in statusFilters" :key="i" :class="[
                   'rounded-[20px] border font-medium text-sm w-[110px] h-[40px] flex items-center justify-center cursor-pointer',
                   selectedStatuses.includes(status.value)
                     ? `bg-${status.color} text-white border-${status.color}`
@@ -105,10 +111,12 @@
               </div>
 
               <div class="flex items-center gap-2 w-[500px] md:w-auto">
-                <input v-model="search" type="text" placeholder="البحث باسم الطالب"
+                <input
+v-model="search" type="text" placeholder="البحث باسم الطالب"
                   class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm w-full dark:bg-dark-700 dark:text-white" />
 
-                <select v-model="filterForm.sortBy"
+                <select
+v-model="filterForm.sortBy"
                   class="border border-[#BCCCDB] p-2 rounded-[6px] text-sm dark:bg-dark-700 dark:text-white"
                   @change="fetchData">
                   <option value="0">
@@ -124,7 +132,8 @@
             <div class="space-y-2">
               <!-- Header -->
               <div class="h-[70px] w-full flex items-center">
-                <div class="bg-[#F5F7FA] h-[100%] flex-[80%] grid items-center border border-[#BCCCDB] !border-l-0 
+                <div
+class="bg-[#F5F7FA] h-[100%] flex-[80%] grid items-center border border-[#BCCCDB] !border-l-0 
                 rounded-r-[8px] px-[15px] text-purple-78 text-[16px] font-bold grid-cols-[20%_16%_16%_16%_16%_16%]">
                   <div class="">اسم الطالب</div>
                   <div class="text-center">عدد الأسئلة</div>
@@ -167,7 +176,8 @@
                   <div class="text-center">{{ std.statistics.subscriptionName }}</div>
                   <div class="text-center">
 
-                    <app-g-progress-bar v-if="std.statistics.showRate" :animated="true"
+                    <app-g-progress-bar
+v-if="std.statistics.showRate" :animated="true"
                       :bgClass="`bg-${getRateColor(std.statistics.rate)}`" :value="std.statistics.rate"
                       :showText="true" />
                     <subs-only-block v-else />
@@ -176,18 +186,21 @@
                 <div
                   class="flex flex-[20%] h-[100%] items-center justify-center px-[15px] gap-x-[12px] rounded-l-[8px] border border-[#BCCCDB]"
                   :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
-                  <button @click="toAnalytics(std.studentId)"
-                    class="border border-purple-78 rounded-[4px] w-[88px] h-[32px] flex items-center justify-center gap-x-[8px] text-purple-78 text-[14px] font-medium cursor-pointer">
+                  <button
+class="border border-purple-78 rounded-[4px] w-[88px] h-[32px] flex items-center justify-center gap-x-[8px] text-purple-78 text-[14px] font-medium cursor-pointer"
+                    @click="toAnalytics(std.studentId)">
                     التفاصيل
                     <i class="fa fa-chevron-left"></i>
                   </button>
-                  <app-g-button @click="toWhatsApp(std.phoneNumber)" :disabled="!std.phoneNumber" width="32px"
-                    font-weight="normal" height="32px" text-size="14px" radius="4px" bg-class="bg-transparent"
-                    text-color="text-green-66" border-color="border-green-66" :border="true">
+                  <app-g-button
+:disabled="!std.phoneNumber" width="32px" font-weight="normal"
+                    height="32px" textSize="14px" radius="4px" bgClass="bg-transparent" textColor="text-green-66"
+                    borderColor="border-green-66" :border="true" @click="toWhatsApp(std.phoneNumber)">
                     <i class="fab fa-whatsapp" aria-hidden="true"></i>
                   </app-g-button>
-                  <app-g-button @click="toDeleteStd(std)" width="32px" height="32px" radius="4px" text-size="14px"
-                    bg-class="bg-transparent" text-color="text-red-5e" border-color="border-red-5e" :border="true">
+                  <app-g-button
+width="32px" height="32px" radius="4px" textSize="14px" bgClass="bg-transparent"
+                    textColor="text-red-5e" borderColor="border-red-5e" :border="true" @click="toDeleteStd(std)">
                     <i class="fa fa-times"></i>
                   </app-g-button>
                 </div>
@@ -197,7 +210,7 @@
         </div>
 
         <!-- refuses students table -->
-        <div class="mt-5 flex flex-col gap-5" v-if="pendingStudents && pendingStudents.length > 0">
+        <div v-if="pendingStudents && pendingStudents.length > 0" class="mt-5 flex flex-col gap-5">
           <accordion-group>
             <disclosure-group :defaultOpen="true" :onlyOneOpen="false">
               <template #right>
@@ -211,7 +224,8 @@
                 <div class="space-y-2 min-w-[1020px]">
                   <!-- Header -->
                   <div class="h-[70px] w-full flex items-center">
-                    <div class="bg-[#F5F7FA] h-[100%] flex-[80%] grid items-center border border-[#BCCCDB] !border-l-0 
+                    <div
+class="bg-[#F5F7FA] h-[100%] flex-[80%] grid items-center border border-[#BCCCDB] !border-l-0 
                 rounded-r-[8px] px-[15px] text-purple-78 text-[16px] font-bold grid-cols-[20%_16%_16%_16%_16%_16%]">
                       <div class="">اسم الطالب</div>
                       <div class="text-center">عدد الأسئلة</div>
@@ -254,7 +268,8 @@
                       <div class="text-center">{{ std.statistics.subscriptionName }}</div>
                       <div class="text-center">
 
-                        <app-g-progress-bar v-if="std.statistics.showRate" :animated="true"
+                        <app-g-progress-bar
+v-if="std.statistics.showRate" :animated="true"
                           :bgClass="`bg-${getRateColor(std.statistics.rate)}`" :value="std.statistics.rate"
                           :showText="true" />
                         <subs-only-block v-else />
@@ -263,17 +278,20 @@
                     <div
                       class="flex flex-[20%] h-[100%] items-center justify-center px-[15px] gap-x-[12px] rounded-l-[8px] border border-[#BCCCDB]"
                       :class="i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'">
-                      <button @click="acceptStd(std.id)"
-                        class="border border-purple-78 rounded-[4px] w-[88px] h-[32px] flex items-center justify-center gap-x-[8px] text-purple-78 text-[14px] font-medium cursor-pointer">
+                      <button
+class="border border-purple-78 rounded-[4px] w-[88px] h-[32px] flex items-center justify-center gap-x-[8px] text-purple-78 text-[14px] font-medium cursor-pointer"
+                        @click="acceptStd(std.id)">
                         قبول
                       </button>
-                      <app-g-button @click="toWhatsApp(std.phoneNumber)" :disabled="!std.phoneNumber" width="32px"
-                        font-weight="normal" height="32px" text-size="14px" radius="4px" bg-class="bg-transparent"
-                        text-color="text-green-66" border-color="border-green-66" :border="true">
+                      <app-g-button
+:disabled="!std.phoneNumber" width="32px" font-weight="normal"
+                        height="32px" textSize="14px" radius="4px" bgClass="bg-transparent" textColor="text-green-66"
+                        borderColor="border-green-66" :border="true" @click="toWhatsApp(std.phoneNumber)">
                         <i class="fab fa-whatsapp" aria-hidden="true"></i>
                       </app-g-button>
-                      <app-g-button @click="toDeleteStd(std)" width="32px" height="32px" radius="4px" text-size="14px"
-                        bg-class="bg-transparent" text-color="text-red-5e" border-color="border-red-5e" :border="true">
+                      <app-g-button
+width="32px" height="32px" radius="4px" textSize="14px" bgClass="bg-transparent"
+                        textColor="text-red-5e" borderColor="border-red-5e" :border="true" @click="toDeleteStd(std)">
                         <i class="fa fa-times"></i>
                       </app-g-button>
                     </div>
@@ -284,7 +302,8 @@
           </accordion-group>
         </div>
 
-        <delete-modal v-model:isOpen="isOpenDeleteModal" :isReject="false" :msg="deleteMsg"
+        <delete-modal
+v-model:isOpen="isOpenDeleteModal" :isReject="false" :msg="deleteMsg"
           @onConfirm="confirmDeleteStd" />
 
 

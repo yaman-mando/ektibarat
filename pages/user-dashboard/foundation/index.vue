@@ -5,8 +5,9 @@
 
     <div class="space-y-10 mb-[100px] lg:mb-0">
 
-      <app-data-wrapper :loading="userPanelStore.fetching.lessonsCategories" :data="userPanelStore.lessonsCategories"
-        loading-type="skeleton" :skeleton-count="16" empty-text="لا توجد بيانات">
+      <app-data-wrapper
+:loading="userPanelStore.fetching.lessonsCategories" :data="userPanelStore.lessonsCategories"
+        loadingType="skeleton" :skeletonCount="16" emptyText="لا توجد بيانات">
         <div v-for="section in userPanelStore.lessonsCategories" :key="section.id" class="fade-in mx-auto max-w-fit">
           <div class="flex items-center gap-x-[10px] mb-[20px]">
             <img :src="section.iconUrl" alt="icon" class="w-[36px]" />
@@ -16,7 +17,8 @@
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-[15px] justify-self-start">
-            <div v-for="child in section.children" :key="child.id"
+            <div
+v-for="child in section.children" :key="child.id"
               class="grid rounded-[8px] w-[300px] h-[95px] p-[15px] bg-white dark:bg-dark-37 transition hover:scale-[1.02] cursor-pointer group shadow-custom dark:shadow-custom-dark"
               @click="toLesson(child.id)">
               <h3 class="text-[20px] font-bold text-dark-63 dark:text-white leading-[1.2]">
@@ -28,8 +30,9 @@
                   <span class="text-[14px] font-bold text-purple-c2 leading-[1.2]">
                     {{ getProgress(child) + '%' }}
                   </span>
-                  <app-g-progress-bar radius="100px" background="linear-gradient(90deg, #7840E0 0%, #300378 100%)"
-                    :has-shadow="true" height="6px" :showText="false" :value="getProgress(child)" />
+                  <app-g-progress-bar
+radius="100px" background="linear-gradient(90deg, #7840E0 0%, #300378 100%)"
+                    :hasShadow="true" height="6px" :showText="false" :value="getProgress(child)" />
                 </div>
                 <div class="flex items-center gap-x-[8px] mb-[-5px]">
                   <span class="text-[14px] font-medium text-dark-63 dark:text-gray-400 leading-[1.2]">

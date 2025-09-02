@@ -18,7 +18,7 @@
 
     <!-- حالة عرض البيانات -->
     
-      <slot v-else-if="!(loading && loadingType !== 'spinner-overlay')" />
+      <slot v-else-if="!(loading && loadingType !== 'spinner-overlay')" ></slot>
     
   
 </template>

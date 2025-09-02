@@ -1,31 +1,37 @@
 <template>
   <div v-if="forPart" class="flex justify-center">
-    <app-g-button @click="onClickPart(steps?.[0])" style="opacity: 1 !important" :disabled="steps?.[0]?.status === 0"
-      width="190px" height="40px" radius="8px" text-color="text-white"
-      :background="steps?.[0]?.status === 0 ? '#BCCCDB' : '#00C48C'">
+    <app-g-button
+style="opacity: 1 !important" :disabled="steps?.[0]?.status === 0" width="190px"
+      height="40px" radius="8px" textColor="text-white" :background="steps?.[0]?.status === 0 ? '#BCCCDB' : '#00C48C'"
+      @click="onClickPart(steps?.[0])">
       <div class="flex items-center justify-center gap-x-[10px] text-[16px] font-bold">
         <i class="fa-solid fa-table-list"></i>
         اختيار القسم التالي
       </div>
     </app-g-button>
   </div>
-  <div v-else-if="steps" class="relative w-full max-w-[650px] mx-auto flex justify-center"
+  <div
+v-else-if="steps" class="relative w-full max-w-[650px] mx-auto flex justify-center"
     :style="{ height: `${steps.length * stepSpacing}px` }">
 
     <!-- Step rendering loop -->
-    <div class="relative" v-for="(step, index) in steps" :key="step.id">
+    <div v-for="(step, index) in steps" :key="step.id" class="relative">
 
       <!-- Step button -->
-      <button @click="(e) => onStepClick(index, step, e)" :style="getPositionStyle(index)"
-        class="group absolute left-1/2 transform -translate-x-1/2 cursor-pointer hover-effect">
-        <div class="relative flex items-center justify-center transition-transform active:scale-95 animate-bounce-in"
+      <button
+:style="getPositionStyle(index)" class="group absolute left-1/2 transform -translate-x-1/2 cursor-pointer hover-effect"
+        @click="(e) => onStepClick(index, step, e)">
+        <div
+class="relative flex items-center justify-center transition-transform active:scale-95 animate-bounce-in"
           :style="getButtonStyle(step.status, index)">
 
           <!-- Progress ring -->
           <svg v-if="step.status === 1" class="absolute mt-[5px]" :width="svgSize" :height="svgSize" style="z-index:0;">
-            <circle stroke="#eee" :stroke-width="progressWidth" fill="transparent" :r="progressRadius" :cx="svgCenter"
+            <circle
+stroke="#eee" :stroke-width="progressWidth" fill="transparent" :r="progressRadius" :cx="svgCenter"
               :cy="svgCenter" />
-            <circle stroke="#00C48C" :stroke-width="progressWidth" fill="transparent" :r="progressRadius"
+            <circle
+stroke="#00C48C" :stroke-width="progressWidth" fill="transparent" :r="progressRadius"
               :cx="svgCenter" :cy="svgCenter" :stroke-dasharray="circumference"
               :stroke-dashoffset="progressOffset(step)" stroke-linecap="round" transform="rotate(-90, 50, 50)" />
           </svg>
@@ -36,16 +42,18 @@
       </button>
 
       <!-- Step image -->
-      <img v-if="step.image_path" :src="step.image_path" alt=""
+      <img
+v-if="step.image_path" :src="step.image_path" alt=""
         class="absolute object-contain w-[75px] sm:w-[12vw] max-w-[136px]" :style="getImagePosition(index)" />
 
 
       <!-- Start popup -->
-      <div v-if="step.status === 1 && activePopupIndex === null" :id="`popupReStart-${index}`" tabindex="1"
-        @focusout="handlePopupFocusOut" :class="['popup', popupDirection]" :style="{
+      <div
+v-if="step.status === 1 && activePopupIndex === null" :id="`popupReStart-${index}`" tabindex="1"
+        :class="['popup', popupDirection]" :style="{
           left: `${pattern[index % pattern.length] - 45}px`,
           top: popupDirection === 'up' ? `${index * stepSpacing - 70}px` : `${index * stepSpacing + 90}px`
-        }">
+        }" @focusout="handlePopupFocusOut">
         <div class="popup-start-content flex items-center justify-center">
           <div class="popup-start-inner flex items-center justify-center">
             <span class="text-[18px] font-bold text-green-8c">ابدأ</span>
@@ -55,12 +63,13 @@
       </div>
 
       <!-- Info popup -->
-      <div @focusout="handlePopupFocusOut"
-        v-if="(step.type !== stepTypesEnum.examSimulator || step.categoryInfo?.isWrong) && step.categoryInfo && step.status === 1 && activePopupIndex === index"
-        :id="`popupRefs-${index}`" tabindex="1" :class="['popup', popupDirection]" :style="{
+      <div
+v-if="(step.type !== stepTypesEnum.examSimulator || step.categoryInfo?.isWrong) && step.categoryInfo && step.status === 1 && activePopupIndex === index"
+        :id="`popupRefs-${index}`"
+        tabindex="1" :class="['popup', popupDirection]" :style="{
           left: `${pattern[index % pattern.length] - 80}px`,
           top: popupDirection === 'up' ? `${index * stepSpacing - 255}px` : `${index * stepSpacing + 90}px`
-        }">
+        }" @focusout="handlePopupFocusOut">
         <div class="popup-content p-[15px]">
           <div class="popup-inner !p-[0px_10px]">
             <h2 class="text-[16px] font-medium text-purple-78 !text-center m-0">
@@ -85,8 +94,9 @@
             </div>
             <app-overlay v-if="examLoading" />
 
-            <button @click="toTrining(step)"
-              class="w-[200px] h-[44px] rounded-[6px] bg-purple-78 text-white font-bold text-[16px] mt-[14px] cursor-pointer flex items-center justify-center justify-self-center">
+            <button
+class="w-[200px] h-[44px] rounded-[6px] bg-purple-78 text-white font-bold text-[16px] mt-[14px] cursor-pointer flex items-center justify-center justify-self-center"
+              @click="toTrining(step)">
               ابدأ التدريب
             </button>
           </div>
@@ -94,20 +104,22 @@
         </div>
       </div>
 
-      <div @focusout="handlePopupFocusOut"
-        v-if="(step.type === stepTypesEnum.examSimulator && !step.categoryInfo?.isWrong) && step.categoryInfo && step.status === 1 && activePopupIndex === index"
-        :id="`popupRefs-${index}`" tabindex="1" :class="['popup', popupDirection]" :style="{
+      <div
+v-if="(step.type === stepTypesEnum.examSimulator && !step.categoryInfo?.isWrong) && step.categoryInfo && step.status === 1 && activePopupIndex === index"
+        :id="`popupRefs-${index}`"
+        tabindex="1" :class="['popup', popupDirection]" :style="{
           left: `${pattern[index % pattern.length] - 80}px`,
           top: popupDirection === 'up' ? `${index * stepSpacing - 140}px` : `${index * stepSpacing + 90}px`
-        }">
+        }" @focusout="handlePopupFocusOut">
         <div class="popup-content p-[15px] !h-[120px]">
           <div class="popup-inner !p-[0px_10px]">
             <h2 class="text-[22px] font-bold text-purple-78 !text-center m-0">
               محاكي اختبار
             </h2>
             <app-overlay v-if="examLoading" />
-            <button @click="startExam(step)"
-              class="w-[200px] h-[44px] rounded-[6px] bg-purple-78 text-white font-bold text-[16px] mt-[14px] cursor-pointer flex items-center justify-center justify-self-center">
+            <button
+class="w-[200px] h-[44px] rounded-[6px] bg-purple-78 text-white font-bold text-[16px] mt-[14px] cursor-pointer flex items-center justify-center justify-self-center"
+              @click="startExam(step)">
               ابدأ الاختبار
             </button>
 
@@ -120,19 +132,20 @@
 
   </div>
   <!-- Help modal -->
-  <helpModal :show="toShowHelpModal" @continue="() => {
+  <help-modal
+:show="toShowHelpModal" @continue="() => {
     toShowHelpModal = false,
       helpModalSeen = true,
       onStepClick(pendingStepIndex, pendingStepData, pendingClickEvent)
   }" />
 
   <!-- Category selection modal -->
-  <selectCategoryModal v-if="pendingStepData" :stepId="pendingStepData?.id" :show="toShowSelectCategoryModal"
+  <select-category-modal
+v-if="pendingStepData" :stepId="pendingStepData?.id" :show="toShowSelectCategoryModal"
     @update:show="toShowSelectCategoryModal = $event" @continue="() => {
       toShowSelectCategoryModal = false,
         onStepClick(pendingStepIndex, pendingStepData, pendingClickEvent)
-    }">
-  </selectCategoryModal>
+    }"/>
 
 </template>
 

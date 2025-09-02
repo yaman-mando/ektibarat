@@ -1,6 +1,6 @@
 <template>
 
-    <app-data-wrapper :loading="loading" :data="form" loading-type="spinner" empty-text="لا توجد بيانات متاحة">
+    <app-data-wrapper :loading="loading" :data="form" loadingType="spinner" emptyText="لا توجد بيانات متاحة">
         <div class="px-[25px] hidden xl:block">
             <h2 class="text-[24px] font-bold text-gray-63 dark:text-gray-100 mb-4">التفضيلات</h2>
 
@@ -8,19 +8,20 @@
             <div class="flex flex-col gap-[20px] mb-6">
                 <div class="flex items-center justify-between">
                     <span class="text-dark-2b text-[18px] font-medium dark:text-gray-300">المؤثرات الصوتية</span>
-                    <input type="checkbox" v-model="form.soundEffects" class="toggle-switch">
+                    <input v-model="form.soundEffects" type="checkbox" class="toggle-switch"/>
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-dark-2b text-[18px] font-medium dark:text-gray-300">الرسائل التحفيزية</span>
-                    <input type="checkbox" v-model="form.motivationalMessages" class="toggle-switch">
+                    <input v-model="form.motivationalMessages" type="checkbox" class="toggle-switch"/>
                 </div>
             </div>
 
-            <hr class="border-gray-300 dark:border-gray-700 my-6">
+            <hr class="border-gray-300 dark:border-gray-700 my-6"/>
 
             <!-- Notification Options -->
             <h2 class="text-[24px] font-bold text-gray-63 dark:text-gray-100 mb-4">خصائص الإشعارات</h2>
-            <div v-for="(label, key) in notificationLabels" :key="key"
+            <div
+v-for="(label, key) in notificationLabels" :key="key"
                 class="flex items-center justify-between mb-[20px]">
                 <span class="text-dark-2b text-[18px] font-medium dark:text-gray-300">{{ label }}</span>
                 <div class="flex gap-[12px]">
@@ -37,7 +38,8 @@
 
             <!-- Save Button -->
             <div class="text-left mt-[30px]">
-                <button :disabled="!hasChanges()"
+                <button
+:disabled="!hasChanges()"
                     class=" bg-purple-78 disabled:opacity-50 text-white w-[140px] h-[44px] rounded-[8px] hover:bg-primary-dark cursor-pointer"
                     @click="saveChanges">
                     حفظ
@@ -45,7 +47,8 @@
             </div>
 
             <!-- Unsaved Changes Modal -->
-            <ConfirmDialog v-model:visible="showConfirmExit" :title="'تنبيه'"
+            <confirm-dialog
+v-model:visible="showConfirmExit" :title="'تنبيه'"
                 :message="'هل ترغب بحفظ التعديلات قبل الخروج؟'" :confirmText="'نعم، احفظ'" :cancelText="'لا، تجاهل'"
                 :onConfirm="saveChanges" :onCancel="discardChanges" />
         </div>
@@ -58,12 +61,12 @@
             <div class="mb-[30px] shadow-custom rounded-[8px]">
                 <div class="flex items-center justify-between h-[62px] px-[15px]">
                     <span class="text-dark-2b text-[18px] font-medium dark:text-gray-300">المؤثرات الصوتية</span>
-                    <input type="checkbox" v-model="form.soundEffects" class="toggle-switch">
+                    <input v-model="form.soundEffects" type="checkbox" class="toggle-switch"/>
                 </div>
-                <hr class="border-gray-300 dark:border-gray-700">
+                <hr class="border-gray-300 dark:border-gray-700"/>
                 <div class="flex items-center justify-between h-[62px] px-[15px]">
                     <span class="text-dark-2b text-[18px] font-medium dark:text-gray-300">الرسائل التحفيزية</span>
-                    <input type="checkbox" v-model="form.motivationalMessages" class="toggle-switch">
+                    <input v-model="form.motivationalMessages" type="checkbox" class="toggle-switch"/>
                 </div>
             </div>
 
@@ -84,13 +87,14 @@
                             </button>
                         </div>
                     </div>
-                    <hr class="border-gray-300 dark:border-gray-700">
+                    <hr class="border-gray-300 dark:border-gray-700"/>
                 </div>
             </div>
 
             <!-- Save Button -->
             <div class="w-full text-left mt-[20px]">
-                <button :disabled="!hasChanges()"
+                <button
+:disabled="!hasChanges()"
                     class=" bg-purple-78 disabled:opacity-50 text-white w-full h-[44px] rounded-[8px] hover:bg-primary-dark cursor-pointer"
                     @click="saveChanges">
                     حفظ
@@ -98,7 +102,8 @@
             </div>
 
             <!-- Unsaved Changes Modal -->
-            <ConfirmDialog v-model:visible="showConfirmExit" :title="'تنبيه'"
+            <confirm-dialog
+v-model:visible="showConfirmExit" :title="'تنبيه'"
                 :message="'هل ترغب بحفظ التعديلات قبل الخروج؟'" :confirmText="'نعم، احفظ'" :cancelText="'لا، تجاهل'"
                 :onConfirm="saveChanges" :onCancel="discardChanges" />
         </div>

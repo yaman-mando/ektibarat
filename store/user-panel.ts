@@ -248,7 +248,7 @@ export const useUserPanelStore = defineStore('userPanel', {
     },
 
 
-    async getCategoryInfo(catId: Number, stepId: Number): Promise<categoryInfoForStep | null> {
+    async getCategoryInfo(catId: number, stepId: number): Promise<categoryInfoForStep | null> {
       try {
         this.fetching.categoryInfo = true
         const { $axios } = useNuxtApp()
@@ -472,7 +472,7 @@ export const useUserPanelStore = defineStore('userPanel', {
     },
 
 
-    async getStudentAnalyzeChart(period: Number, parentId: any): Promise<studentAnalyzeChartResponse[] | null> {
+    async getStudentAnalyzeChart(period: number, parentId: any): Promise<studentAnalyzeChartResponse[] | null> {
       try {
         this.fetching.studentAnalyzeChart = true
         const { $axios } = useNuxtApp()
@@ -494,7 +494,7 @@ export const useUserPanelStore = defineStore('userPanel', {
     },
 
 
-    async getStudentAnalyzeChartForTeacher(period: Number, parentId: any, studentId): Promise<studentAnalyzeChartResponse[] | null> {
+    async getStudentAnalyzeChartForTeacher(period: number, parentId: any, studentId): Promise<studentAnalyzeChartResponse[] | null> {
       try {
         this.fetching.studentAnalyzeChartForTeacher = true
         const { $axios } = useNuxtApp()
