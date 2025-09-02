@@ -15,7 +15,7 @@ export type StudentsExamDataModel = {
   subjectId: number;
   subjectName: string;
   deviceId: string;
-  isManual: true;
+  isManual: boolean;
   examParts: StudentsExamPartDataModel[];
   totalPoints: number;
 };

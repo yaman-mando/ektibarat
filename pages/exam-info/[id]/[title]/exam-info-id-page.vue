@@ -220,7 +220,7 @@
   </div>
 </template>
 <script lang="ts">
-import { webAuthSignup } from '~/main/utils/web-routes.utils';
+import { webAuthPathUtil, webAuthSignup } from '~/main/utils/web-routes.utils';
 import { scrollToTopUtil } from '~/main/utils/shared-utils';
 import { ImagesFolderName } from '~/main/constants/images-folder-name';
 import { examLevel } from '~/main/constants/exam-level';
@@ -384,7 +384,7 @@ export default {
 
     toLogin() {
       this.appRouter.push({
-        path: '/auth/signup',
+        path: webAuthPathUtil(),
       });
     },
   },

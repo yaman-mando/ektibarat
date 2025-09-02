@@ -250,33 +250,31 @@ export class RouteHelper {
     return `/exam-questions/${id}`;
   }
 
-  static userAnalytics(){
-    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}`
+  static userAnalytics() {
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}`;
   }
 
-  static userAnalyticsDetails(catId,stdId:any=null){
-    if(stdId){
-    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}/${catId}?stdId=${stdId}`  
+  static userAnalyticsDetails(catId, stdId: any = null) {
+    if (stdId) {
+      return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}/${catId}?stdId=${stdId}`;
     }
-    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}/${catId}`
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.analytics.root}/${catId}`;
   }
 
-  static schoolPanel(){
-    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.school.root}`
+  static schoolPanel() {
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.school.root}`;
   }
 
-
-  static studentAnalytics(id){
-    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.school.root}/${APP_ROUTES.userDashboard.school.studentAnalytics.root}/${id}`
+  static studentAnalytics(id) {
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.school.root}/${APP_ROUTES.userDashboard.school.studentAnalytics.root}/${id}`;
   }
 
-
-  static teacherPanel(){
-    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.teacher.root}`
+  static teacherPanel() {
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.teacher.root}`;
   }
-  
-  static studentAnalyticsForTeacher(id){
-    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.teacher.root}/${APP_ROUTES.userDashboard.teacher.studentAnalytics.root}/${id}`
+
+  static studentAnalyticsForTeacher(id) {
+    return `/${APP_ROUTES.userDashboard.root}/${APP_ROUTES.userDashboard.teacher.root}/${APP_ROUTES.userDashboard.teacher.studentAnalytics.root}/${id}`;
   }
 
   static webExamQuestionToday(id, socialType = [], isAdmin = false) {
@@ -296,10 +294,6 @@ export class RouteHelper {
     return `/question-today/${id}${queryString}`;
   }
 
-  static userSignUp() {
-    return `/auth/signup`;
-  }
-
   static adminPanel() {
     return `/ekht-admin`;
   }
@@ -314,7 +308,7 @@ export class RouteHelper {
   static adminSurveysDetails(id) {
     return `/${adminPrefix}/${APP_ROUTES.admin.surveys.root}/${APP_ROUTES.admin.surveys.show}/${id}`;
   }
-  static userInformationSteps(){
+  static userInformationSteps() {
     return `/${APP_ROUTES.userInformation.root}`;
   }
 }

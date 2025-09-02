@@ -233,19 +233,34 @@
                   </div>
                   <div
                     class="qu-count order-10 lg:order-none font-bold text-[#4B5363] !justify-between"
+                    :class="[{ '!justify-start': isWrongQuestionCase }]"
                   >
                     <span class="la">عدد الأسئلة</span>
-                    <form-select
-                      v-model:selectedValues="form.totalQuestionsCount"
-                      inputId="questionCount"
-                      class="w-[130px] h-[45px]"
-                      :isDisabled="!subscriptionsStore.isPremiumSub"
-                      :list="questionCountOptions"
-                      :placeholder="'سؤال'"
-                      :isMulti="false"
-                      :clearable="false"
-                      :searchable="false"
-                    />
+                    <template v-if="isWrongQuestionCase">
+                      <app-spinner
+                        v-if="isLoadingCount"
+                        class="!m-0"
+                      />
+                      <span
+                        v-else
+                        class="font-bold text-[18px]"
+                      >
+                        {{ totalWrongQuestionsCaseCount }}
+                      </span>
+                    </template>
+                    <template v-else>
+                      <form-select
+                        v-model:selectedValues="form.totalQuestionsCount"
+                        inputId="questionCount"
+                        class="w-[130px] h-[45px]"
+                        :isDisabled="!subscriptionsStore.isPremiumSub"
+                        :list="questionCountOptions"
+                        :placeholder="'سؤال'"
+                        :isMulti="false"
+                        :clearable="false"
+                        :searchable="false"
+                      />
+                    </template>
                   </div>
                   <div
                     class="relative lg:col-start-3 lg:row-start-1 lg:row-end-3"
@@ -342,7 +357,7 @@
         <div class="pa-fo__en">
           <app-button
             :isDisabled="selectedLists.length === 0 || getQuestionCount == 0"
-            :isLoading="examLoading"
+            :isLoading="examLoading || isLoadingCount"
             :label="texts.btnText"
             colorType="blue"
             iconEndClass="fa fa-chevron-left"
@@ -378,7 +393,7 @@ import {
   UserPanelItemsRecord,
 } from '~/main/constants/user-panel-items';
 import type { ServiceBlockModal } from '#components';
-import { debounceUtil } from '~/main/utils/lodash.utils';
+import { debounceUtil, deepCloneUtil } from '~/main/utils/lodash.utils';
 import { RouteHelper } from '~/main/utils/route-helper';
 import { useSubscriptionsStore } from '~/main/modules/subscriptions/services/useSubscriptionsStore';
 import { appEvents } from '~/main/shared/events/app.events';
@@ -387,6 +402,7 @@ import {
   webPricesPathUtil,
   webUserDashboardPlan,
 } from '~/main/utils/web-routes.utils';
+import { Max_Question_Batch_Size } from '~/main/constants/max-question-batch-size';
 
 const SIMULATE_START_DELAY = 600;
 const TOGGLE_DELAY_GAP = 500;
@@ -463,7 +479,7 @@ export class examForm {
   onlyFlaggedQuestions = false;
   randomQuestionsSettings = [] as any[];
   questionsLevelsMin = 0;
-  totalQuestionsCount=24;
+  totalQuestionsCount = 24;
   questionsLevelsMax = 10;
   customerId: any | null = null;
   sessionId: any | null = null;
@@ -615,6 +631,7 @@ export default {
       advancedFilter: new advancedFilterForm(),
       activeAdvanced: false,
       customQuestionsCount: null as any | null,
+      isLoadingCount: false,
       isCreated: false,
       tourModel: {
         isShownOnce: false,
@@ -1191,15 +1208,20 @@ export default {
       if (this.selectedType === examTypes.exams) {
         this.appRouter.push(`/student/exams/${id}`);
       } else {
-        let query = null as any | null;
-        if (
-          this.advancedFilter.onlyTakfelQuestions ||
-          this.advancedFilter.onlyFlaggedQuestions ||
-          this.advancedFilter.onlyWrongQuestions
-        ) {
-          query = {
-            isFilteredTraining: true,
-          };
+        //clear previous values in storage for other cases
+        AppLocalStorage.removeTrainingFilters();
+        AppLocalStorage.removeTrainingTotalQuestionCount();
+        AppLocalStorage.removeTrainingCompletedQuestionCount();
+
+        //if passed max allowed batch for wrong update storage
+        if (this.isWrongQuestionPassedMaxBatch) {
+          AppLocalStorage.setTrainingFilters(this.getPayload());
+          AppLocalStorage.setTrainingTotalQuestionCount(
+            this.totalWrongQuestionsCaseCount
+          );
+          AppLocalStorage.setTrainingCompletedQuestionCount(
+            Max_Question_Batch_Size
+          );
         }
         this.appRouter.push({
           path: `/student/training/${id}`,
@@ -1272,7 +1294,26 @@ export default {
         return null;
       }
     },
+    getPayload() {
+      const form = deepCloneUtil(this.form);
 
+      //exam
+      if (this.isExams) return form;
+
+      //general training
+      if (!this.isWrongQuestionCase) return form;
+
+      //training wrong question
+      if (this.isWrongQuestionCase) {
+        form.totalQuestionsCount = this.isWrongQuestionPassedMaxBatch
+          ? Max_Question_Batch_Size
+          : this.totalWrongQuestionsCaseCount;
+
+        return form;
+      }
+
+      return form;
+    },
     async startExam() {
       try {
         this.examLoading = true;
@@ -1284,8 +1325,10 @@ export default {
         this.form.subjectId = this.isTahsele
           ? this.runtimeConfig.public.defaultSubjectIdTahsele
           : this.runtimeConfig.public.defaultSubjectId;
+
+        const payload = this.getPayload();
         const { data: res } = await this.$axios
-          .post(url, this.form)
+          .post(url, payload)
           .finally(() => {
             this.examLoading = false;
           });
@@ -1361,6 +1404,7 @@ export default {
 
     async getCustomCount() {
       try {
+        this.isLoadingCount = true;
         const _formData = new customExamCountsForm();
         _formData.onlyFlaggedQuestions = this.form.onlyFlaggedQuestions;
         _formData.onlyWrongQuestions = this.form.onlyWrongQuestions;
@@ -1372,8 +1416,11 @@ export default {
           _formData
         );
         this.customQuestionsCount = this.calcQuestionsCount(res);
+        this.isLoadingCount = false;
       } catch (e) {
         console.log(e);
+      } finally {
+        this.isLoadingCount = false;
       }
     },
 
@@ -1464,6 +1511,24 @@ export default {
   },
 
   computed: {
+    isWrongQuestionPassedMaxBatch() {
+      return (
+        this.isWrongQuestionCase &&
+        this.totalWrongQuestionsCaseCount > Max_Question_Batch_Size
+      );
+    },
+    totalWrongQuestionsCaseCount() {
+      if (!this.isWrongQuestionCase || this.isLoadingCount) return null;
+      return this.customQuestionsCount;
+    },
+    isWrongQuestionCase() {
+      return (
+        this.advancedFilter.onlyWrongQuestions &&
+        !this.advancedFilter.onlyFlaggedQuestions &&
+        !this.advancedFilter.onlyTakfelQuestions &&
+        this.advancedFilter.oBankMinValue === 1
+      );
+    },
     remainMessage() {
       if (!this.isExams) {
         return `

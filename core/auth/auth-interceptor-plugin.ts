@@ -1,13 +1,20 @@
+import { useAuthStore } from '~/core/auth/data-access/services/useAuthStore';
+
 export default defineNuxtPlugin(() => {
-  const authState = useAuthState();
+  const authStore = useAuthStore();
 
   globalThis.$fetch = $fetch.create({
-    onRequest({ options }) {
-      const token = authState.token.value;
-      if (token) {
-        // console.log(authState.rawToken.value);
-        // console.log(authState.rawRefreshToken.value);
-        options.headers.set('Authorization', token);
+    async onRequest({ options, request }) {
+      // const reqUrl = request as string | null;
+
+      //handle refresh
+      if (import.meta.client) {
+        await authStore.tokenRefreshInterceptorHandler();
+      }
+
+      //set token in the header
+      if (authStore.getToken()) {
+        options.headers.set('Authorization', `Bearer ${authStore.getToken()}`);
       }
     },
   });
