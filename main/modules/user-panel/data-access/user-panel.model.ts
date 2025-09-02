@@ -405,6 +405,7 @@ export type subscriptionsParents = {
   id: number;
   isBestPrice: boolean;  
   title: string;         
+  subTitle:string;
   currentPrice: number;  
   oldPrice?: number;     
   features: string[];    
@@ -412,3 +413,48 @@ export type subscriptionsParents = {
 }
 
 export type subscriptionsParentsResponse = subscriptionsParents[]
+
+export type subscriptionFeature = {
+  id: number;
+  title: string;
+  description: string;
+  isExist: boolean;
+}
+
+export type subscriptionService = {
+  serviceId: number;
+  serviceName: string;
+  serviceDisplayName: string;
+  serviceValue: string | null;
+  subscriptionId: number;
+  isHasValue: boolean;
+}
+
+export type subscriptionPacket = {
+  id: number;
+  title: string;
+  description: string | null;
+  pictureUrl: string | null;
+  color: string | null;
+  createdDate: string; // ISO date string
+  currentPrice: number;
+  oldPrice: number;
+  discountReason: string | null;
+  freeType: string | null;
+  grades: number[];
+  isDailyPeriod: boolean;
+  isRecommended: boolean;
+  period: number; // e.g. number of months/days
+  sort: number;
+  status: boolean;
+  subscriptionParentId: number | null;
+  features: subscriptionFeature[];
+  subscriptionsServices: subscriptionService[];
+}
+
+export type subscriptionsResponse = {
+  id: number;
+  title: string;         
+  features: string[];    
+  subscriptions: subscriptionPacket[];
+}

@@ -9,6 +9,7 @@
     <app-mobile-header
       v-if="showMobileHeader && pageTitle"
       :title="pageTitle"
+      @backToEvent="toBack"
     />
     <!-- sidebar button in mobile -->
     <!-- <button class="md:hidden fixed top-4 right-4 z-50 bg-gray-700 text-white p-2 rounded shadow-md"
@@ -20,12 +21,10 @@
       class="w-full h-[60px] flex items-center px-[19px] shadow-custom sticky top-0 bg-white"
     >
       <i
-        class="fa fa-chevron-right cursor-pointer text-gray-8f"
+        class="fa fa-chevron-right cursor-pointer  text-red-5e"
         @click="toBack"
       ></i>
-      <span class="!text-center text-dark-63 text-[18px] font-bold flex-auto">
-        {{ pageName }}
-      </span>
+     
     </div>
 
     <div class="flex flex-1">
@@ -35,7 +34,7 @@
       </aside>
 
       <div
-        v-if="isSidebarOpen && !isDesktop"
+        v-if="isSidebarOpen && !windowSize.isDesktop"
         class="fixed inset-0 bg-black opacity-40 z-30"
         @click="isSidebarOpen = false"
       ></div>
@@ -109,7 +108,7 @@
 
     <!-- dark light button -->
     <button
-      :class="{ '!bottom-[90px]': !isDesktop && !hasPrev }"
+      :class="{ '!bottom-[90px]': !windowSize.isDesktop && !hasPrev }"
       class="fixed bottom-4 left-4 bg-gray-700 text-white p-2 rounded-full shadow-md hover:bg-gray-600 z-50 cursor-pointer"
       @click="toggleDarkMode"
     >
@@ -121,9 +120,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import userSidebar from '~/components/user/userSidebar.vue';
-import appDropdown from '~/components/shared/app-dropdown.vue';
 import { useUserPanelStore } from '~/store/user-panel';
-import { globalSubList } from '~/main/modules/user-panel/data-access/user-panel.enum';
 
 useHead({
   htmlAttrs: {
@@ -142,6 +139,7 @@ const props = withDefaults(
     showMobileHeader?: boolean;
     pageTitle?: string;
     withBackPage?: boolean;
+    innerBack?:boolean;
     hasPrev?: boolean;
     noSpaces?: boolean;
     pageName?: string;
@@ -152,34 +150,31 @@ const props = withDefaults(
     hasRInfo: true,
     hasLInfo: true,
     hasPrev: false,
+    innerBack:false,
     noSpaces: false,
     withBackPage: false,
     pageName: '',
   }
 );
+const emit = defineEmits<{
+    (e: 'backToEvent'): void
+}>()
 const router = useRouter();
 const colorMode = useColorMode();
 const userPanelStore = useUserPanelStore();
 const windowSize = useWindowSize();
 const isSidebarOpen = ref(false);
-const isDesktop = ref(false);
 
-//enums
-const globalOptions = globalSubList;
-
-const selectedGlobal = computed(() => {
-  return userPanelStore.globalType;
-});
-
-const handleSelectGlobal = (item) => {
-  userPanelStore.setGlobalType(item.value);
-};
 
 function toggleDarkMode() {
   colorMode.preference = colorMode.preference === 'dark' ? 'light' : 'dark';
 }
 
 function toBack() {
+  if(props.innerBack){
+    emit('backToEvent')
+    return;
+  }
   if (props.withBackPage) {
     router.go(-1);
     return;
@@ -188,14 +183,7 @@ function toBack() {
 }
 
 onMounted(() => {
-  const checkScreen = () => {
-    isDesktop.value = window.innerWidth >= 768;
-    if (isDesktop.value) isSidebarOpen.value = false;
-  };
-
-  checkScreen();
-  window.addEventListener('resize', checkScreen);
-
+  
   if (import.meta.client) {
     userPanelStore.loadGlobalTypeFromStorage();
   }

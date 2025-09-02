@@ -1,5 +1,407 @@
 <template>
-  
+  <user-panel-wrapper :hasLInfo="windowSize.isDesktop" :hasRInfo="windowSize.isDesktop" :showMobileHeader="true"
+    :pageTitle="pageTitle" :innerBack="activeStep != steps.subscriptions" @backToEvent="toBack"
+    contentClass="max-w-[1060px] !mx-auto lg:px-0 px-[5px]" contentWrapperClass="!mb-0">
+    <div class="subscriptions-part" :class="{ 'is-sub': activeStep == steps.subscriptions }">
+      <div v-if="fetchLoading" class="b-overly">
+        <app-overlay />
+      </div>
+      <template v-else>
+        <lazy-vee-validate-provider>
+
+          <template v-if="activeStep == steps.subscriptions">
+            
+            <div class="subscriptions-step bg-white shadow-custom rounded-[8px] py-[30px] px-[25px] xl:mt-[50px]">
+              <span class=" font-bold text-[24px] text-gray-63">الاشتراكات</span>
+              <div v-if="subscriptions" class="_sub_list">
+                <div v-for="sub of subscriptions.filter(k => k.subjectId !== 3)" :key="sub.id" class="_sub">
+                  <div class="_rp">
+                    <div class="c_title">
+                      <span class="_title">
+                        <template v-if="sub.subjectId == defaultSub">
+                          اختبار القدرات العامة
+                        </template>
+                        <template v-else-if="sub.subjectId == defaultSubTahsele">
+                          اختبار التحصيلي
+                        </template>
+                        <template v-else>غير معروف</template>
+                      </span>
+                      <span class="_type" :class="{ 'is-free': sub.freeType != null }">
+                        <template v-if="sub.freeType == null">
+                          {{ sub.title }}
+                        </template>
+                        <template v-else>الأساسية</template>
+                      </span>
+                    </div>
+                    <div v-if="sub.freeType == null && sub.endDate" class="c_date">
+                      <span>
+                        ينتهي اشتراكك بتاريخ
+                        {{ getDataModal(sub.endDate) }}
+                      </span>
+                    </div>
+                    <div v-if="sub.freeType != null" class="c_free">
+                      <span class="_t1">ميزات اشتراكك محدودة الآن</span>
+                      <span class="_t2">
+                        اشترك في باقات اختبارات
+                        <br v-if="windowSize.isMobileSize" />
+                        للحصول على المزيد من المزايا
+                      </span>
+                    </div>
+                  </div>
+                  <div class="_lp">
+                    <app-button size="md" :label="sub.freeType == null ? 'تجديد' : 'اشترك'" @click="
+                      sub.freeType == null
+                        ? reNewSubscription(sub.id, sub.subjectId)
+                        : goToPrice(sub.subjectId)
+                      " />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <lazy-complete-info-modal :key="completeInfoModalKey" v-model:isOpenModal="isOpenCompleteInfoModal"
+              @onCompleteInfo="onCompleteInfo" />
+          </template>
+          <template v-if="activeStep == steps.offersParent">
+            <div class="">
+              <div v-if="windowSize.isDesktop" @click="toBack"
+                class="flex items-center gap-x-[10px] cursor-pointer mt-[-30px] mb-[28px]">
+                <i class="fa fa-chevron-right"></i>
+                <span>رجوع للخلف</span>
+              </div>
+              <div class="flex justify-center" v-if="windowSize.isDesktop">
+                <span class="text-orange-39 text-[30px] font-bold">اختيار الباقة</span>
+              </div>
+              <section class="py-[15px]">
+                <app-subscription-parent-cards :packets="subscriptionsParentList"
+                  @select="id => goToSubscriptions(id)" />
+              </section>
+            </div>
+
+          </template>
+          <template v-if="activeStep === steps.offers && subscriptionsList">
+            <div v-if="windowSize.isDesktop" @click="toBack"
+              class="flex items-center gap-x-[10px] cursor-pointer mt-[-30px] mb-[28px]">
+              <i class="fa fa-chevron-right"></i>
+              <span>رجوع للخلف</span>
+            </div>
+            <subscription-offers @select="id => selectPacket(id)" :parent="subscriptionsList" />
+          </template>
+          <template v-if="activeStep == steps.payment">
+            <div v-if="windowSize.isDesktop" @click="toBack"
+              class="flex items-center gap-x-[10px] cursor-pointer mt-[-30px] mb-[28px]">
+              <i class="fa fa-chevron-right"></i>
+              <span>رجوع للخلف</span>
+            </div>
+            <div v-if="selectedPacket" class="payment-step">
+              <div v-if="windowSize.isDesktop" class="grid gap-y-[10px]">
+                <span class=" text-blue-d6 font-bold text-[24px]">الدفع</span>
+                <span class="p-selected text-dark-63 text-[18px] font-medium">
+                  الباقة:
+                  <span class="p-name">{{ selectedPacket.title }}</span>
+                </span>
+              </div>
+              <div class="s1-info relative">
+                <app-overlay v-if="!appleIsLoaded" />
+                <div :style="{ opacity: !appleIsLoaded ? 0 : 1 }" class="s1-p1-info relative"
+                  :class="{ free: total <= 0 }">
+                  <template v-if="!selectedPacket.freeType">
+                    <div class="s1-p1-rw-1">
+                      <span>معلومات الدفع</span>
+                    </div>
+                    <div class="flex justify-center">
+                      <span class=" text-dark-63 font-medium text-[16px]">
+                        سيتم تفعيل اشتراكك على هذا الحساب تلقائيا بعد إتمامك
+                        لعملية الدفع
+                      </span>
+                    </div>
+                    <div class="s1-p1-rw-2">
+                      <div class="r-part hide-to-tablet">
+                        <span>كود الخصم</span>
+                      </div>
+                      <div class="l-part">
+                        <vee-form v-slot="{ meta }" tag="div" class="a-discount-form w-full">
+                          <form-input v-model:inputValue="discountCodeInput" :rules="{ required: true }"
+                            inputId="codeInputSm" :isDisabled="coupon.hasCoupon" :hideLabel="true"
+                            :hideErrorLabel="true" />
+                          <app-button v-if="coupon.hasCoupon" size="md" label="إزالة" @click="removeCoupon()" />
+                          <app-button v-else class="!w-[90px] !h-[36px]" size="md" colorType="success"
+                            :isLoading="couponLoad" :isDisabled="!meta.valid" label="تطبيق" @click="requestCoupon" />
+                        </vee-form>
+                      </div>
+                    </div>
+                    <hr style="border-width: 1px;border-color: #8F8F8F" />
+                  </template>
+                  <div v-show="total > 0">
+                    <div class="s1-p1-rw-3">
+                      <span class="title">وسيلة الدفع</span>
+                      <div class="s1-p1-rw-3-rw-2 relative">
+                        <div :class="{
+                          active: activePaymentType === paymentTypes.cards,
+                        }" class="s1-p1-rw-3-rw-2-cl-1" @click="changePaymentMethod(paymentTypes.cards)">
+                          <span class="c-check"></span>
+                          <div class="c-content">
+                            <img src="/images/svg/payment-credit.svg" alt="اختبارات" />
+                          </div>
+                        </div>
+                        <app-overlay v-if="!appleIsLoaded" />
+
+                        <div class="s1-p1-rw-3-rw-2-cl-2" :class="{
+                          active: activePaymentType === paymentTypes.apple,
+                          disabled: disableApple,
+                        }" @click="changePaymentMethod(paymentTypes.apple)">
+                          <span class="c-check"></span>
+                          <div class="c-content">
+                            <img src="/images/svg/payment-apple-pay.svg" alt="apple-pay" />
+                            <span>أبل باي</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card-info relative">
+                      <form v-show="activePaymentType == paymentTypes.cards" id="form-container" class="relative"
+                        method="post" action="/charge">
+                        <div id="element-container" class="relative" style="min-height: 176px">
+                          <app-overlay v-if="loadPaymentForm" />
+                        </div>
+                        <div id="error-handler" role="alert"></div>
+                        <div id="success" style="display: none; position: relative; float: left">
+                          <i class="fa fa-check-circle" style="color: var(--green-8c)"></i>
+                          <span id="token"></span>
+                        </div>
+                      </form>
+
+                      <div v-if="activePaymentType == paymentTypes.apple" class="card-apple-info">
+                        <span>
+                          تأكد من استخدامك لمتصفح سفاري
+                          <br class="hide-from-tablet" />
+                          لإتمام عملية الدفع عبر أبل
+                        </span>
+                      </div>
+                      <app-overlay v-if="paymentLoad" />
+                      <div class="flex justify-center items-center">
+                        <app-g-button v-if="activePaymentType == paymentTypes.cards" @click="payByCard4()" width="250px"
+                          height="48px" radius="8px" bg-class="bg-purple-78" text-color="text-white">
+                          إتمام عملية الدفع
+                        </app-g-button>
+                      </div>
+                      <div id="apple-pay-button" :style="{
+                        display:
+                          activePaymentType == paymentTypes.apple
+                            ? 'flex'
+                            : 'none',
+                      }"></div>
+                    </div>
+                  </div>
+                  <template v-if="total <= 0">
+                    <app-overlay v-if="paymentLoad" />
+                    <app-button class="normal-btn payment-free-btn" label="إتمام التسجيل" @click="payByFree()" />
+                  </template>
+                </div>
+                <div class="s1-p2-info">
+                  <div class="s1-p2-rw-1">
+                    <span>ملخص الطلب</span>
+                  </div>
+                  <div class="s1-p2-info-data">
+                    <div class="info-item">
+                      <span class="title">الباقة</span>
+                      <span class="caption">{{ selectedPacket.title }}</span>
+                    </div>
+                    <div class="info-item">
+                      <span class="title">مدة الاشتراك</span>
+                      <span class="caption">
+                        {{ selectedPacket.period }}
+                        <span v-if="selectedPacket.period < 11">أشهر</span>
+                        <span v-else>شهر</span>
+                      </span>
+                    </div>
+                    <template v-if="!selectedPacket.freeType">
+                      <div class="info-item">
+                        <span class="title">السعر</span>
+                        <span class="caption">
+                          {{ selectedPacket.oldPrice.toFixed(2) }} ريال
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="title">تخفيض الباقة</span>
+                        <span class="caption red" style="
+                            display: flex;
+                            align-items: center;
+                            column-gap: 3px;
+                          ">
+                          <span style="direction: ltr">{{ discount }}</span>
+                          <span>ريال</span>
+                        </span>
+                      </div>
+                    </template>
+                    <div v-if="coupon.hasCoupon" class="info-item">
+                      <span class="title">كود الخصم</span>
+                      <span class="caption red">
+                        <!--                    {{ Number(coupon.couponAmount).toFixed(2) }}- ريال-->
+                        {{ '%' + coupon.couponAmount }}
+                      </span>
+                    </div>
+                  </div>
+                  <hr />
+                  <div class="s1-p2-toplam">
+                    <span class="title">السعر الإجمالي</span>
+                    <div v-if="total > 0" class="price">
+                      <span class="total">{{ total }}</span>
+                      <img src="/images/svg/s-riyal-purple.svg" />
+                    </div>
+                    <div v-else class="price">
+                      <span class="total">مجاناً</span>
+                    </div>
+                  </div>
+                  <span v-if="total > 0" class="s1-p2-note">
+                    شامل ضريبة القيمة المضافة
+                  </span>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template v-if="activeStep == steps.successPayment">
+            <client-only>
+              <div class="confirm-payment">
+                <div class="r-part">
+                  <span class="c-title">حيّاك الله في اختبارات!</span>
+                  <span class="c-msg">
+                    <i class="fa fa-check-circle"></i>
+                    <span>تم تفعيل اشتراكك بنجاح</span>
+                  </span>
+                  <span class="c-date">
+                    ينتهي اشتراكك بتاريخ
+                    <span>
+                      {{ currentSubEndDateModel }}
+                    </span>
+                  </span>
+                  <span class="c-mail">
+                    أرسلنا نسخة من إيصال الدفع إلى بريدك الإلكتروني
+                    <a :href="`'mailto:' + ${appAuth.user.email}`">
+                      {{ appAuth.user.email }}
+                    </a>
+                  </span>
+
+                  <div class="mt-[20px] flex justify-between items-center">
+                    <span v-if="windowSize.isDesktop" class=" text-purple-78 font-bold text-[26px]">جاهز تبدأ
+                      تدريبك؟</span>
+                    <app-g-button @click="router.push(webUserTrainWithUs())" bg-class="bg-purple-78"
+                      text-color="text-white" radius="8px" :width="windowSize.isDesktop ? '160px' : '100%'"
+                      height="46px">ابدأ تدريبك الآن!</app-g-button>
+                  </div>
+                  <div class="grid">
+                    <span class="text-purple-78 font-bold text-[26px] mb-[10px]">انضم لقنوات اختبارات</span>
+                    <span class="text-dark-2b font-medium text-[16px]">محتوى إثرائي مميز، ومسابقات وعروض حصريّة لأعضاء
+                      اختبارات</span>
+                    <div class="flex items-center gap-[15px] sm:gap-[25px] mt-[25px]">
+                      <app-g-button bg-class="bg-[#25D366]" text-color="text-white" radius="8px"
+                        :width="windowSize.isDesktop ? '140px' : '100%'" height="46px">
+                        <div class="flex items-center gap-x-[10px]">
+                          <i class="fab fa-whatsapp"></i>
+                          <span>واتساب</span>
+                        </div>
+                      </app-g-button>
+                      <app-g-button bg-class="bg-[#25A3E1]" text-color="text-white" radius="8px"
+                        :width="windowSize.isDesktop ? '140px' : '100%'" height="46px">
+                        <div class="flex items-center gap-x-[10px]">
+                          <i class="fab fa-telegram"></i>
+                          <span>تلغرام</span>
+                        </div>
+                      </app-g-button>
+                    </div>
+
+                  </div>
+                </div>
+                <div v-if="paymentData" class="l-part w-full">
+                  <div class="s1-p2-info">
+                    <div class="s1-p2-rw-1">
+                      <span>ملخص الطلب</span>
+                    </div>
+                    <div class="s1-p2-info-data">
+                      <div class="info-item">
+                        <span class="title">الباقة</span>
+                        <span class="caption">{{ paymentData.subscriptionTitle }}</span>
+                      </div>
+                      <div class="info-item">
+                        <span class="title">مدة الاشتراك</span>
+                        <span class="caption">
+                          {{ paymentData.subscriptionPeriod }}
+                          <!--              <span v-if="selectedPacket.period < 11">أشهر</span>-->
+                          <span v-if="paymentData.subscriptionPeriod < 11">أشهر</span>
+                          <span v-else>شهراً</span>
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <span class="title">السعر</span>
+                        <span class="caption">
+                          {{ paymentData.subscriptionOldPrice.toFixed(2) }} ريال
+                        </span>
+                      </div>
+                      <div class="discount-group">
+                        <div class="info-item sm">
+                          <span class="title">تخفيض الباقة</span>
+                          <span class="caption red" style="display: flex; align-items: center; column-gap: 3px">
+                            <span style="direction: ltr">
+                              {{
+                                (
+                                  paymentData.subscriptionCurrentPrice -
+                                  paymentData.subscriptionOldPrice
+                                ).toFixed(2)
+                              }}
+                            </span>
+                            <span>ريال</span>
+                          </span>
+                        </div>
+                        <div v-if="
+                          paymentData.couponDiscount && paymentData.couponDiscount > 0
+                        " class="info-item sm">
+                          <span class="title">كود الخصم</span>
+                          <span class="caption red">
+                            {{ '%' + paymentData.couponDiscount }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="s1-p2-toplam">
+                      <span class="title">السعر الإجمالي</span>
+                      <div class="price">
+                        <span class="total">{{ paymentData.amount }}</span>
+                        <img src="/images/svg/s-riyal-purple.svg" />
+                      </div>
+                    </div>
+                    <span class="s1-p2-note">شامل ضريبة القيمة المضافة</span>
+                    <app-g-button class="mt-[15px]" :border="true" border-color="border-purple-78"
+                      bg-class="bg-transparent" text-color="text-purple-78" radius="8px" width="100%"
+                      @click="downloadInvoice()" height="46px">
+                      تحميل الإيصال
+                    </app-g-button>
+                  </div>
+                </div>
+              </div>
+            </client-only>
+          </template>
+          <template v-if="activeStep == steps.failPayment">
+            <div class="grid justify-center gap-x-[20px]">
+              <p class=" text-red-5e text-[16px] font-bold">فشلت عملية الدفع</p>
+              <app-g-button class="mt-[15px]" :border="true" border-color="border-purple-78" bg-class="bg-transparent"
+                text-color="text-purple-78" radius="8px" width="100%" @click="activeStep = steps.subscriptions"
+                height="46px">
+                العودة للاشتراكات
+              </app-g-button>
+            </div>
+          </template>
+
+        </lazy-vee-validate-provider>
+      </template>
+
+      <prime-dialog id="my-modal" :modal="true" :showHeader="false" :closable="true">
+        <iframe :src="frameLink" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-top-navigation"
+          name="iframe_a" height="700px" width="700px" allowfullscreen frameborder="0" scrolling="no"
+          title="Iframe Example"></iframe>
+      </prime-dialog>
+    </div>
+  </user-panel-wrapper>
 </template>
 <script lang="ts">
 import { useSetupAuth } from '~/main/services/setup/useSetupAuth';
@@ -23,6 +425,7 @@ import { appEvents } from '~/main/shared/events/app.events';
 import { defineRule, Form as VeeForm } from 'vee-validate';
 import { useUserPanelStore } from '~/store/user-panel';
 import type { SubscriptionsResponse } from '~/main/modules/subscriptions/data-access/subscriptions.model';
+import { webUserTrainWithUs } from '~/main/utils/web-routes.utils';
 
 defineRule('verify_cready', (value: string, [email]: [string]) => {
   return RegExp(`[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}`).test(value);
@@ -103,8 +506,11 @@ export class customer {
 
 const steps = {
   subscriptions: 0,
-  offers: 1,
-  payment: 2,
+  offersParent: 1,
+  offers: 2,
+  payment: 3,
+  successPayment: 4,
+  failPayment: 5
 };
 
 const paymentTypes = {
@@ -136,6 +542,7 @@ export default {
         () => subscriptionsStore.state.userCurrentSubVal!
       ),
       subscriptionsParentList: computed(() => panelStore.subscriptionsParents),
+      subscriptionsList: computed(() => panelStore.subscriptions),
       defaultSub: runtimeConfig.public.defaultSubjectId,
       defaultSubTahsele: runtimeConfig.public.defaultSubjectIdTahsele,
     };
@@ -178,8 +585,7 @@ export default {
           },
         }*/
       },
-      //activeStep: steps.subscriptions,
-      activeStep: steps.offers,
+      activeStep: steps.subscriptions,
       activePaymentType: paymentTypes.cards,
       paymentLoad: false,
       couponLoad: false,
@@ -203,7 +609,7 @@ export default {
       cardForm: new cardForm(),
       coupon: new couponItem(),
       discountCodeInput: null,
-      successPaymentCase: false,
+      successPaymentCase: true,
       isFreePayment: false,
       tap: null as any,
       elements: null,
@@ -230,6 +636,10 @@ export default {
       isLoadingCurrentSub: false,
       isOpenCompleteInfoModal: false,
       completeInfoModalKey: 1,
+      paymentData: null as any,
+      invoiceId: null as any,
+      prevStep: null as any,
+      webUserTrainWithUs
     };
   },
 
@@ -327,6 +737,19 @@ export default {
     },
     subscriptionsParent() {
       return this.panelStore.subscriptionsParents
+    },
+
+    pageTitle() {
+      switch (this.activeStep) {
+        case this.steps.offersParent:
+          return 'اختيار باقة';
+        case this.steps.offers:
+          return 'اختيار مدة الاشتراك';
+        case this.steps.payment:
+          return 'الدفع';
+        default:
+          return 'الاشتراكات';
+      }
     }
   },
 
@@ -338,6 +761,17 @@ export default {
           this.selectPacket(newVal);
         }
       },
+    },
+
+    activeStep: {
+      handler(newVal, oldVal) {
+        if (newVal > oldVal) this.prevStep = oldVal
+        else {
+          if (this.prevStep) {
+            this.prevStep -= 1
+          }
+        }
+      }
     },
 
     globalTypeUser: {
@@ -366,6 +800,11 @@ export default {
           query: { ...this.appRoute.query, id: undefined },
         });
       }
+      this.invoiceId = this.appRoute.query['tap_id'] ?? this.appRoute.query['tab_id'];
+      if (this.invoiceId) {
+        this.checkCharge()
+      }
+
     }
     this.getUserCurrentSub();
   },
@@ -377,6 +816,22 @@ export default {
   },
 
   methods: {
+
+    async checkCharge() {
+      try {
+        this.paymentData = await this.$axios.get(
+          `/payment/checkCharge/${this.invoiceId}`
+        );
+        if (this.paymentData.status != 8) {
+          this.activeStep = steps.failPayment
+        }
+
+        this.activeStep = steps.successPayment
+      } catch (e) {
+
+      }
+    },
+
     async getUserCurrentSub() {
       try {
         this.isLoadingCurrentSub = true;
@@ -503,6 +958,15 @@ export default {
     async goToSubscriptionsParent() {
       try {
         await this.panelStore.getStudentSubscriptionsParent()
+        this.activeStep = steps.offersParent
+      } catch (e) {
+        console.log(e)
+      }
+    },
+
+    async goToSubscriptions(id) {
+      try {
+        await this.panelStore.getStudentSubscriptions(id)
         this.activeStep = steps.offers
       } catch (e) {
         console.log(e)
@@ -945,15 +1409,42 @@ export default {
       });
     },
 
+
+    toBack() {
+      if (this.prevStep !== null)
+        this.activeStep = this.prevStep
+      // if (this.activeStep == steps.offersParent) {
+      //   this.activeStep = steps.subscriptions
+      // }
+      // if (this.activeStep == steps.offers) {
+      //   this.activeStep = steps.offersParent
+      // }
+      // if (this.activeStep == steps.payment) {
+      //   this.activeStep = steps.offers
+      // }
+    },
+
+    async downloadInvoice() {
+      try {
+        const url = `${this.runtimeConfig.public.apiUrl}/payment/exportInvoice/${this.invoiceId}`;
+        const link = document.createElement('a');
+        link.setAttribute('download', 'ekhtibaratInvoice');
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        console.log(link);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
     async changePaymentMethod(id) {
       if (id != this.activePaymentType) {
         this.activePaymentType = id;
       }
     },
 
-    test() {
-      // this.$bvModal.show('my-modal');
-    },
 
     getDataModal(date) {
       if (!date) return null;
@@ -966,7 +1457,7 @@ export default {
 @use '@/assets/scss/mixin' as *;
 
 .subscriptions-part {
-  padding: 0 25px;
+  //padding: 0 25px;
   width: 100%;
   margin-left: auto !important;
   margin-right: auto !important;
@@ -1142,6 +1633,8 @@ export default {
 
   .subscriptions-step {
     ._sub_list {
+      background: white;
+
       ._sub {
         display: flex;
         align-items: flex-end;
@@ -1240,7 +1733,7 @@ export default {
   }
 
   .payment-step {
-    padding: 20px 18px;
+    //padding: 20px 18px;
 
     .s1-rw-1 {
       display: flex;
@@ -1275,11 +1768,14 @@ export default {
 
     .s1-info {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 330px;
       grid-row-gap: 15px;
-      column-gap: 4.61%;
+      column-gap: 20px;
       align-items: center;
-      margin-top: 21px;
+
+      @media (min-width:960px) {
+        margin-top: 21px;
+      }
 
       .s1-p1-info {
         box-shadow: 0px 0px 15px #00000033;
@@ -1315,8 +1811,8 @@ export default {
           .l-part {
             .a-discount-form {
               display: grid;
-              grid-template-columns: 150px 80px;
-              column-gap: 10px;
+              grid-template-columns: 200px 90px;
+              column-gap: 15px;
               align-items: center;
 
               .discountCode {
@@ -1522,6 +2018,9 @@ export default {
           .price {
             font-size: 16px;
             color: var(--purple-8c);
+            display: flex;
+            column-gap: 6px;
+            align-items: center;
 
             .total {
               font-size: 20px;
@@ -1682,10 +2181,10 @@ export default {
 
   .confirm-payment {
     display: grid;
-    grid-row-gap: 15px;
-    row-gap: 15px;
-    padding: 20% 15px;
-    justify-items: center;
+    grid-row-gap: 40px;
+    row-gap: 40px;
+    //padding: 20% 15px;
+    //justify-items: center;
 
     .c-title {
       color: var(--purple-8c);
@@ -1716,7 +2215,6 @@ export default {
       font-size: 16px;
       color: var(--black-24);
       font-weight: 500;
-      text-align: center;
     }
 
     @include normal-btn() {
@@ -1743,8 +2241,8 @@ export default {
   }
 
   @include web-mobile-only() {
-    padding: 0 15px;
-    margin: 0 0 50px;
+    //padding: 0 15px;
+    margin: 0 0 100px;
 
     .rw-1 {
       margin-inline-start: 15px;
@@ -1988,7 +2486,198 @@ export default {
   }
 }
 
+.confirm-payment {
+  display: grid;
+  column-gap: 30px;
+  grid-template-columns: 1fr 330px;
+  align-items: center;
+  justify-content: center;
+  min-height: 475px;
+
+  .r-part {
+    display: grid;
+    row-gap: 15px;
+
+    .c-title {
+      color: var(--purple-8c);
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .c-msg {
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+
+      i {
+        margin-inline-end: 10px;
+        color: var(--green-8c);
+        font-size: 14px;
+      }
+
+      span {
+        color: var(--green-8c);
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+
+    .c-date,
+    .c-mail {
+      font-size: 16px;
+      color: var(--black-24);
+      font-weight: 500;
+    }
+
+    @include normal-btn() {
+      margin-top: 25px;
+      background: var(--purple-8c);
+      color: white;
+      border-radius: 10px;
+      width: 221px;
+      height: 45px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+
+  .l-part {
+    .s1-p2-info {
+      box-shadow: 0px 0px 15px #00000033;
+      border-radius: 20px;
+      min-height: 348px;
+      padding: 15px;
+
+      .s1-p2-rw-1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+          font-size: 18px;
+          font-weight: bold;
+          color: var(--purple-8c);
+          height: 26px;
+        }
+      }
+
+      .s1-p2-info-data {
+        margin-top: 20px;
+        display: grid;
+        row-gap: 10px;
+
+        .info-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 22px;
+
+          .title {
+            font-size: 16px;
+            color: var(--gray-63);
+          }
+
+          .caption {
+            font-size: 16px;
+            color: var(--purple-8c);
+
+            &.red {
+              color: var(--red-63);
+            }
+          }
+
+          &.sm {
+            height: 19px;
+
+            .title,
+            .caption {
+              font-size: 14px;
+            }
+          }
+        }
+
+        .discount-group {
+          display: grid;
+          row-gap: 6px;
+        }
+      }
+
+      hr {
+        margin-top: 15px;
+        margin-bottom: 10px;
+        border-top: 2px solid #000000;
+        opacity: 0.2;
+      }
+
+      .s1-p2-toplam {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 24px;
+
+        .title {
+          font-size: 16px;
+          color: var(--purple-8c);
+          font-weight: bold;
+        }
+
+        .price {
+          font-size: 16px;
+          color: var(--purple-8c);
+          display: flex;
+          align-items: center;
+          column-gap: 6px;
+
+          .total {
+            font-size: 20px;
+            font-weight: bold;
+          }
+        }
+      }
+
+      .s1-p2-note {
+        font-size: 12px;
+        color: var(--gray-63);
+      }
+
+      @include outline-btn() {
+        border: 1px solid var(--purple-8c);
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        width: 274px;
+        height: 45px;
+        color: var(--purple-8c);
+        margin-top: 13px;
+      }
+    }
+  }
+
+  @include ipad-down() {
+    grid-template-columns: none;
+    row-gap: 25px;
+    padding: 15px 15px 10px;
+
+    .r-part {
+      .c-title {
+        text-align: center;
+      }
+
+      .c-date,
+      .c-mail {
+        font-weight: normal;
+      }
+    }
+  }
+}
+
 ::v-deep #my-modal {
   max-width: max-content;
+}
+
+::v-deep #codeInputSm {
+  height: 36px;
 }
 </style>

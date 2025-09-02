@@ -132,7 +132,7 @@ const accountItems = [
   {
     key: 'subscriptions',
     label: 'الاشتراكات',
-    link: '/user-dashboard/personal-setting?section=subscriptions',
+    link: '/user-dashboard/subscriptions',
   },
   {
     key: 'preferences',

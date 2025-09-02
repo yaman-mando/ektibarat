@@ -201,7 +201,7 @@
                           <span class="c-check"></span>
                           <div class="c-content">
                             <img
-                              src="/images/svg/apple-pay.svg"
+                              src="/images/svg/payment-apple-pay.svg"
                               alt="apple-pay"
                             />
                             <span>أبل باي</span>

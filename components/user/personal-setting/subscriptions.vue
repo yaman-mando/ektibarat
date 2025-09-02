@@ -66,8 +66,10 @@
                 <i class="fa fa-chevron-right"></i>
                 <span>رجوع للخلف</span>
               </div>
+              <div class="flex justify-center">
               <span class=" text-blue-d6 text-[24px] font-bold">اختيار الباقة</span>
-              <section class="py-10">
+              </div>
+              <section class="py-[15px]">
                 <app-subscription-cards :packets="subscriptionsParentList" @select="id => console.log('اخترت الباقة رقم:', id)" />
               </section>
             </div>
@@ -76,12 +78,10 @@
           <template v-if="activeStep == steps.payment">
             <div v-if="selectedPacket" class="payment-step">
               <div class="s1-rw-1">
-                <span class="p-selected">
-                  الباقة المختارة:
+                <span class=" text-blue-d6 font-bold text-[24px]">الدفع</span>
+                <span class="p-selected text-dark-63 text-[18px] font-medium">
+                  الباقة:
                   <span class="p-name">{{ selectedPacket.title }}</span>
-                </span>
-                <span class="p-change" @click="goToPrice()">
-                  تغيير الباقة
                 </span>
               </div>
               <hr class="hide-to-tablet" />
@@ -132,7 +132,7 @@
                         }" @click="changePaymentMethod(paymentTypes.apple)">
                           <span class="c-check"></span>
                           <div class="c-content">
-                            <img src="/images/svg/apple-pay.svg" alt="apple-pay" />
+                            <img src="/images/svg/payment-apple-pay.svg" alt="apple-pay" />
                             <span>أبل باي</span>
                           </div>
                         </div>

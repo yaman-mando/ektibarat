@@ -8,7 +8,7 @@
     >
       <i
         class="fa fa-chevron-right cursor-pointer"
-        @click="router.back()"
+        @click="emit('backToEvent')"
       ></i>
       <h1 class="!m-0 text-center text-[#4B5363] text-[18px] font-bold">
         {{ title }}
@@ -24,6 +24,9 @@ const props = withDefaults(
   }>(),
   {}
 );
+const emit = defineEmits<{
+    (e: 'backToEvent'): void
+}>()
 
 const router = useRouter();
 const windowSize = useWindowSize();

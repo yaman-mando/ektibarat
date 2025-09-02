@@ -7,6 +7,7 @@ import type {
   stepCategoryInfo, studentAnalyzeChartResponse, studentAnalyzeForTeacherResponse, studentAnalyzeResponse, studentStages,
   studentSubscriptionResponse,
   subscriptionsParentsResponse,
+  subscriptionsResponse,
   teachersFinancialResponse,
   TPstudentDataResponse,
   trainingAnalyzeSimpleResponse, trainingPlanInfoSimpleResponse, trainingPlanSummaryResponse
@@ -41,7 +42,8 @@ interface UserPanelState {
     planInfoSimple: boolean,
     teachersFinancial:boolean,
     studentSubscriptionDetails:boolean,
-    subscriptionsParents:boolean
+    subscriptionsParents:boolean,
+    subscriptions:boolean
   }
   globalType: number,
   lessonsCategories: lessonsCategoriesDataModel[] | null,
@@ -71,6 +73,7 @@ interface UserPanelState {
   teachersFinancial:teachersFinancialResponse | null,
   studentSubscriptionDetails:studentSubscriptionResponse | null
   subscriptionsParents:subscriptionsParentsResponse | null
+  subscriptions:subscriptionsResponse | null
 }
 
 
@@ -102,7 +105,8 @@ export const useUserPanelStore = defineStore('userPanel', {
       planInfoSimple: false,
       teachersFinancial:false,
       studentSubscriptionDetails:false,
-      subscriptionsParents:false
+      subscriptionsParents:false,
+      subscriptions:false,
     },
     globalType: GlobalSub.kudrat,
     lessonsCategories: null,
@@ -131,7 +135,8 @@ export const useUserPanelStore = defineStore('userPanel', {
     planInfoSimple: null,
     teachersFinancial:null,
     studentSubscriptionDetails:null,
-    subscriptionsParents:null
+    subscriptionsParents:null,
+    subscriptions:null,
   }),
 
   actions: {
@@ -674,6 +679,22 @@ export const useUserPanelStore = defineStore('userPanel', {
         return null
       } finally {
         this.fetching.subscriptionsParents = false
+      }
+    },
+
+    async getStudentSubscriptions(parentId): Promise<subscriptionsResponse | null> {
+      try {
+        this.fetching.subscriptions = true
+        const { $axios } = useNuxtApp()
+        const { data } = await $axios.get(`/subscriptions/all?grades=${this.globalType}&parentId=${parentId}`)
+        this.subscriptions = data
+        return data
+      } catch (e) {
+        this.subscriptions = null
+        console.error(e)
+        return null
+      } finally {
+        this.fetching.subscriptions = false
       }
     },
 
